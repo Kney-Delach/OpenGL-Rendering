@@ -1,0 +1,12 @@
+[submodule "OpenGL-Rendering-Engine/Exalted/Dependencies/spdlog"]
+	path = OpenGL-Rendering-Engine/Exalted/Dependencies/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "OpenGL-Rendering-Engine/Exalted/Dependencies/GLFW"]
+	path = OpenGL-Rendering-Engine/Exalted/Dependencies/GLFW
+	url = https://github.com/Kney-Delach/glfw
+[submodule "OpenGL-Rendering-Engine/Exalted/Dependencies/imgui"]
+	path = OpenGL-Rendering-Engine/Exalted/Dependencies/imgui
+	url = https://github.com/Kney-Delach/imgui
+[submodule "OpenGL-Rendering-Engine/Exalted/Dependencies/glm"]
+	path = OpenGL-Rendering-Engine/Exalted/Dependencies/glm
+	url = https://github.com/g-truc/glm
