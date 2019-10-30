@@ -12,8 +12,9 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#pragma once
-
+#pragma once 
+#pragma warning (disable : 1169 )
+#pragma warning (disable : 4098 )
 #ifdef EX_PLATFORM_WINDOWS
 
 extern Exalted::Application* Exalted::CreateApplication();
@@ -30,6 +31,6 @@ int main(int argc, char** argv)
 	EX_CORE_ASSERT(app, "Client Application shouldn't be null!");
 	app->Run();
 	delete app;
+	EX_CORE_INFO("Application Shutdown Successfully!");
 }
-
 #endif

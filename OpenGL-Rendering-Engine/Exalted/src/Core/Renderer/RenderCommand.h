@@ -35,8 +35,12 @@ namespace Exalted
 		{
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
+
+		inline static void DrawMesh(const Ref<Mesh>& mesh)
+		{
+			s_RendererAPI->DrawMesh(mesh);
+		}
 	private:
 		static RendererAPI* s_RendererAPI;
 	};
-
 }

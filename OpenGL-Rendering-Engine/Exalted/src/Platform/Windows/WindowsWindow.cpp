@@ -124,24 +124,24 @@ namespace Exalted
 
 			switch (action)
 			{
-			case GLFW_PRESS:
-			{
-				KeyPressedEvent event(key, 0);
-				windowData.EventCallback(event);
-				break;
-			}
-			case GLFW_RELEASE:
-			{
-				KeyReleasedEvent event(key);
-				windowData.EventCallback(event);
-				break;
-			}
-			case GLFW_REPEAT:
-			{
-				KeyPressedEvent event(key, 1);
-				windowData.EventCallback(event);
-				break;
-			}
+				case GLFW_PRESS:
+				{
+					KeyPressedEvent event(key, 0);
+					windowData.EventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					KeyReleasedEvent event(key);
+					windowData.EventCallback(event);
+					break;
+				}
+				case GLFW_REPEAT:
+				{
+					KeyPressedEvent event(key, 1);
+					windowData.EventCallback(event);
+					break;
+				}
 			}
 		});
 

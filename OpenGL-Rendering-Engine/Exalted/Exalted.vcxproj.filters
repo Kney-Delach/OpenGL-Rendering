@@ -1209,6 +1209,9 @@
     <ClInclude Include="src\Core\Renderer\Cameras.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Mesh.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Renderer\RenderCommand.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
@@ -1239,7 +1242,13 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLConfigurations.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLMesh.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLRenderer.h">
@@ -1286,6 +1295,9 @@
     <ClCompile Include="src\Core\Renderer\Cameras.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Renderer\Mesh.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Renderer\RenderCommand.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
@@ -1305,6 +1317,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLMesh.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLRenderer.cpp">

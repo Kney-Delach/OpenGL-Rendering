@@ -20,11 +20,16 @@
 
 namespace Exalted 
 {
-	OpenGLShader::OpenGLShader(const std::string& filepath)
-		: m_FilePath(filepath), m_RendererID(0)
+	OpenGLShader::OpenGLShader(const std::string& vertexFilePath, const std::string& fragmentFilePath, const std::string& geometryFilePath)
+		: m_RendererID(0)
 	{
-		const ShaderProgramSource source = ParseShader(filepath);
-		m_RendererID = CreateShader(source.VertexSource, source.FragmentSource);
+		const std::string vertexSource = ParseShader(vertexFilePath);
+		const std::string fragmentSource = ParseShader(fragmentFilePath);
+		std::string geometrySource = "";
+		if(!geometryFilePath.empty())
+			geometrySource = ParseShader(geometryFilePath);
+
+		m_RendererID = CreateShader(vertexSource, fragmentSource, geometrySource);
 	}
 
 	OpenGLShader::~OpenGLShader()
@@ -102,38 +107,35 @@ namespace Exalted
 		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
 	}
 
-	ShaderProgramSource OpenGLShader::ParseShader(const std::string& filepath) const
+	std::string OpenGLShader::ParseShader(const std::string& filepath) const
 	{
 		std::ifstream inputFileStream(filepath);
+		if(!inputFileStream)
+		{
+			EX_CORE_CRITICAL("Shader file does not exist!  Path given: {0}", filepath);
+			return "";
+		}
 		std::string line;
-		std::stringstream ss[2];
+		std::stringstream ss;
 		ShaderType type = ShaderType::NONE;
 		while (getline(inputFileStream, line))
 		{
-			if (line.find("#shader") != std::string::npos)
-			{
-				if (line.find("vertex") != std::string::npos)
-				{
-					type = ShaderType::VERTEX;
-				}
-				else if (line.find("fragment") != std::string::npos)
-				{
-					type = ShaderType::FRAGMENT;
-				}
-			}
-			else
-			{
-				ss[(int)type] << line << '\n';
-			}
+			ss << line << '\n';
 		}
-		return { ss[0].str(), ss[1].str() };
+		return ss.str();
 	}
 
-	uint32_t OpenGLShader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
+	uint32_t OpenGLShader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader)
 	{
 		const unsigned int program = glCreateProgram();
 		const unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
 		const unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+		unsigned int gs;
+		if (!geometryShader.empty())
+		{
+			gs = CompileShader(GL_GEOMETRY_SHADER, geometryShader);
+			glAttachShader(program, gs);
+		}
 
 		glAttachShader(program, vs);
 		glAttachShader(program, fs);
@@ -141,7 +143,9 @@ namespace Exalted
 		glValidateProgram(program);
 		glDeleteShader(vs);
 		glDeleteShader(fs);
-
+		if (!geometryShader.empty())
+			glDeleteShader(gs);
+		
 		return program;
 	}
 
@@ -163,8 +167,8 @@ namespace Exalted
 			std::vector<GLchar> infoLog(messageLength);
 			glGetShaderInfoLog(id, messageLength, &messageLength, &infoLog[0]);
 
-			EX_CORE_ERROR("{0}", infoLog.data());
-			EX_CORE_CRITICAL("Failed to compile shader! Type: {0}", (GL_VERTEX_SHADER ? "vertex\n" : "fragment"));
+			EX_CORE_CRITICAL("{0}", infoLog.data());
+			EX_CORE_ERROR("Failed to compile shader! Type: {0}\n------------------------\nShader Source Code:\n------------------------\n{1}", (GL_VERTEX_SHADER ? "VERTEX\n" : GL_FRAGMENT_SHADER ? "FRAGMENT\n" : GL_GEOMETRY_SHADER ? "GEOMETRY\n" : "UNKNOWN SHADER TYPE\n"), source);
 			EX_CORE_ASSERT(false, "Shader compilation failure!");
 
 			glDeleteShader(id);

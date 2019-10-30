@@ -96,5 +96,4 @@ namespace Exalted
 		//static bool show = true;
 		//ImGui::ShowDemoWindow(&show);
 	}
-
 }

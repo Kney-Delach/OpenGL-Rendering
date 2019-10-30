@@ -16,10 +16,10 @@
 #include "OpenGLRenderer.h"
 
 #include <glad/glad.h>
+#include "OpenGLShader.h" //todo Remove from here.
 
 namespace Exalted 
 {
-
 	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)
 	{
 		glClearColor(color.r, color.g, color.b, color.a);
@@ -33,5 +33,10 @@ namespace Exalted
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray)
 	{
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+	}
+
+	void OpenGLRendererAPI::DrawMesh(const Ref<Mesh>& mesh)
+	{
+		glDrawElements(GL_TRIANGLES, mesh->GetVertexArray()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 }

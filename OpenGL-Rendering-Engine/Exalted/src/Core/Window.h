@@ -25,9 +25,7 @@ namespace Exalted
 		unsigned int Width;
 		unsigned int Height;
 
-		WindowProperties(const std::string& title = "Exalted Engine",
-			unsigned int width = 1280,
-			unsigned int height = 720)
+		WindowProperties(const std::string& title = "OpenGL Rendering Showcase", unsigned int width = 1280, unsigned int height = 720)
 			: Title(title), Width(width), Height(height) {}
 
 		WindowProperties(const WindowProperties& copy) {

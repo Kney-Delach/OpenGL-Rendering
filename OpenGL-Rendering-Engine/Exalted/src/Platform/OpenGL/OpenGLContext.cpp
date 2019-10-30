@@ -32,9 +32,6 @@ namespace Exalted
 		const int status = gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)); 
 		EX_CORE_ASSERT(status, "Failed to initialize Glad!");
 		OpenGLContext::GetInfo();
-		glfwWindowHint(GLFW_SAMPLES, 4);
-		glEnable(GL_MULTISAMPLE);
-
 	}
 
 	void OpenGLContext::SwapBuffers()
@@ -44,6 +41,6 @@ namespace Exalted
 
 	void OpenGLContext::GetInfo()
 	{
-		EX_CORE_INFO("-----------------------------------------\nRendering Information:\n GPU Vendor	: {0}\n GPU Renderer	: {1}\n GPU Driver	: Version {2}\n-----------------------------------------", glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION));
+		EX_CORE_INFO("\n-----------------------------------------\nRendering Information:\n GPU Vendor	: {0}\n GPU Renderer	: {1}\n GPU Driver	: Version {2}\n-----------------------------------------", glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION));
 	}
 }

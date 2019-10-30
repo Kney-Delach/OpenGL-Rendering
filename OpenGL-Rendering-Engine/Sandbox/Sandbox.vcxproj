@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\src;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\src;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -95,7 +95,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\src;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\src;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -115,7 +115,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\src;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\src;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -137,6 +137,9 @@
     <ProjectReference Include="..\Exalted\Exalted.vcxproj">
       <Project>{8C8535E2-F864-B47D-017D-3F546DDB1ADF}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\1-Your_First_Triangle\TriangleRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

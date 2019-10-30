@@ -121,7 +121,8 @@ project "Sandbox"
 		"Exalted/Dependencies/spdlog/include",
 		"Exalted/src",
 		"Exalted/Dependencies",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.Glad}"
 	}
 
 	links

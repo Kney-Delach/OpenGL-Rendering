@@ -2,10 +2,7 @@
  * Filename		: TriangleRenderer.cpp
  * Name			: Ori Lazar
  * Date			: 30/10/2019
- * Description	: Contains the code for rendering a simple triangle to the screen.
- * Useful Links	: For map buffering: https://learnopengl.com/Advanced-OpenGL/Advanced-Data
- *                For primitive drawing: https://www.khronos.org/opengl/wiki/Primitive
- *                Buffered object drawing: https://www.khronos.org/opengl/wiki/Buffer_Object#Buffer_Object_Usage
+ * Description	: Contains the code for rendering vertex transformations to the screen.
      .---.
    .'_:___".
    |__ --==|
@@ -15,13 +12,13 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#include "1-Your_First_Triangle/TriangleRenderer.h"
+#include "VertexTransformRenderer.h"
 #include "imgui/imgui.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Sandbox
 {
-	TriangleLayer::TriangleLayer()
+	VertexTransformLayer::VertexTransformLayer()
 		: Layer("Triangle Layer"), m_SceneCamera(-1.f, 1.f, -1.f, 1.f)
 	{
 		// ------------------------ Mesh Setup ------------------------ // 
@@ -43,7 +40,7 @@ namespace Sandbox
 		m_QuadTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.0f, 0.0f));
 	}
 
-	void TriangleLayer::OnUpdate(Exalted::Timestep deltaTime)
+	void VertexTransformLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
 		Exalted::OpenGLConfigurations::SetPointSize(m_PointSize);
 
@@ -92,7 +89,7 @@ namespace Sandbox
 		Exalted::Renderer::EndScene();
 	}
 
-	void TriangleLayer::OnImGuiRender()
+	void VertexTransformLayer::OnImGuiRender()
 	{
 		ImGui::Begin("Triangle Render Scene Settings");
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
@@ -123,7 +120,7 @@ namespace Sandbox
 		ImGui::End();
 	}
 
-	void TriangleLayer::OnEvent(Exalted::Event& event)
+	void VertexTransformLayer::OnEvent(Exalted::Event& event)
 	{
 		if (event.GetEventType() == Exalted::EventType::KeyPressed)
 		{
@@ -147,28 +144,28 @@ namespace Sandbox
 		}
 	}
 
-	void TriangleLayer::OnAttach()
+	void VertexTransformLayer::OnAttach()
 	{
-		EX_INFO("Tutorial 1 - Layer Attached");
+		EX_INFO("Tutorial 2 - Layer Attached");
 	}
 
-	void TriangleLayer::OnDetach()
+	void VertexTransformLayer::OnDetach()
 	{
-		EX_INFO("Tutorial 1 - Layer Detached");
+		EX_INFO("Tutorial 2 - Layer Detached");
 	}
 
-	//class OpenGLRenderingApplication : public Exalted::Application
-	//{
-	//public:
-	//	OpenGLRenderingApplication()
-	//	{
-	//		PushLayer(new TriangleLayer());
-	//	}
-	//	virtual ~OpenGLRenderingApplication() { EX_INFO("OpenGL Rendering Application Destroyed"); }
-	//};
+	class OpenGLRenderingApplication : public Exalted::Application
+	{
+	public:
+		OpenGLRenderingApplication()
+		{
+			PushLayer(new VertexTransformLayer());
+		}
+		virtual ~OpenGLRenderingApplication() { EX_INFO("OpenGL Rendering Application Destroyed"); }
+	};
 }
 
-//Exalted::Application* Exalted::CreateApplication()
-//{
-//	return new Sandbox::OpenGLRenderingApplication();
-//}
+Exalted::Application* Exalted::CreateApplication()
+{
+	return new Sandbox::OpenGLRenderingApplication();
+}

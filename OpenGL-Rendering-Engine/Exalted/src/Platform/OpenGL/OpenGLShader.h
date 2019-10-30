@@ -22,18 +22,12 @@
 
 namespace Exalted 
 {
-	struct ShaderProgramSource
-	{
-		std::string VertexSource;
-		std::string FragmentSource;
-	};
-
-	enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1 };
+	enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2 };
 
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const std::string& filepath);
+		OpenGLShader(const std::string& vertexFilePath, const std::string& fragmentFilePath, const std::string& geometryFilePath = "");
 		virtual ~OpenGLShader();
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
@@ -58,13 +52,12 @@ namespace Exalted
 
 		void SetUniformMatFloat4(const std::string& name, const glm::mat4& matrix);
 	private:
-		ShaderProgramSource ParseShader(const std::string& filepath) const;
-		uint32_t CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
+		std::string ParseShader(const std::string& filepath) const;
+		uint32_t CreateShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader);
 		uint32_t CompileShader(uint32_t shaderType, const std::string& source);
 
 		int GetUniformLocation(const std::string& uniformName);
 	private:
-		std::string m_FilePath;
 		uint32_t m_RendererID;
 		std::unordered_map<std::string, int> m_UniformLocationCache;
 	};

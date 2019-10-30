@@ -42,6 +42,22 @@ namespace Exalted
 		RenderCommand::DrawIndexed(vertexArray);
 	}
 
+	void Renderer::Submit(const Ref<Mesh>& mesh)
+	{
+		mesh->GetVertexArray()->Bind();
+		RenderCommand::DrawMesh(mesh);
+	}
+
+	void Renderer::Submit(const Ref<Shader>& shader, const Ref<Mesh>& mesh, const glm::mat4& transform)
+	{
+		shader->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMatFloat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMatFloat4("u_Transform", transform);
+
+		mesh->GetVertexArray()->Bind();
+		RenderCommand::DrawMesh(mesh);
+	}
+
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
 		shader->Bind();
