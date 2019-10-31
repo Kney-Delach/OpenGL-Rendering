@@ -15,6 +15,7 @@
 #include "1-Your_First_Triangle/TriangleRenderer.h"
 #include "2-Vertex_Transformations/VertexTransformRenderer.h"
 #include "3-Editor_Camera_Showcase/EditorShowcaseLayer.h"
+#include "4-Texture_Mapping/TextureMappingLayer.h"
 
 #include "Core/EntryPoint.h"
 
@@ -28,6 +29,7 @@ namespace Sandbox
 			PushLayer(new TriangleLayer());
 			PushLayer(new VertexTransformLayer());
 			PushLayer(new EditorShowcaseLayer());
+			PushLayer(new TextureMappingLayer());
 		}
 		virtual ~OpenGLRenderingApplication() { EX_INFO("OpenGL Rendering Application Destroyed"); }
 	};

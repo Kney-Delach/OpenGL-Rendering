@@ -19,6 +19,16 @@
 
 namespace Exalted 
 {
+	struct RenderAPICapabilities
+	{
+		std::string Vendor;
+		std::string Renderer;
+		std::string Version;
+
+		int MaxSamples;
+		float MaxAnisotropy;
+	};
+
 	class RendererAPI
 	{
 	public:
@@ -27,10 +37,18 @@ namespace Exalted
 			None = 0, OpenGL = 1
 		};
 	public:
+		static void Init();
+		virtual void SetViewport(const int xOffset, const int yOffset, const unsigned windowWidth, const unsigned windowHeight) = 0;
 		virtual void SetClearColor(const glm::vec4& color) = 0;
 		virtual void Clear() = 0;
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) = 0;
 		virtual void DrawMesh(const Ref<Mesh>& mesh) = 0;
+	public:
+		static RenderAPICapabilities& GetCapabilities()
+		{
+			static RenderAPICapabilities capabilities;
+			return capabilities;
+		}
 		inline static API GetAPI() { return s_API; }
 	private:
 		static API s_API;

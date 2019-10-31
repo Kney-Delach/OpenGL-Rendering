@@ -16,6 +16,7 @@
       <Filter>2-Vertex_Transformations</Filter>
     </ClInclude>
     <ClInclude Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.h" />
+    <ClInclude Include="src\4-Texture_Mapping\TextureMappingLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -26,5 +27,6 @@
     </ClCompile>
     <ClCompile Include="src\SandboxEntry.cpp" />
     <ClCompile Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.cpp" />
+    <ClCompile Include="src\4-Texture_Mapping\TextureMappingLayer.cpp" />
   </ItemGroup>
 </Project>

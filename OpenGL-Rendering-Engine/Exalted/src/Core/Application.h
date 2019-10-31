@@ -37,7 +37,7 @@ namespace Exalted
 		_NODISCARD inline Window& GetWindow() const { return *m_Window; } 
 	private:
 		bool OnWindowClosed(WindowClosedEvent& closedEvent);
-		bool OnWindowResized(WindowResizeEvent& resizedEvent);
+		bool OnWindowResize(WindowResizeEvent& resizeEvent);
 	private:
 		static Application* s_Instance;
 	private:
@@ -45,7 +45,8 @@ namespace Exalted
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
-		Timestep m_LastFrameTime;	
+		Timestep m_LastFrameTime;
+		bool m_Minimized = false;
 	};
 
 	/** This should be defined in the client-side application project. */

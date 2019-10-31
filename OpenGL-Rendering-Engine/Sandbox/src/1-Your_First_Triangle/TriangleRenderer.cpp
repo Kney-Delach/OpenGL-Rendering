@@ -164,11 +164,12 @@ namespace Sandbox
 
 	void TriangleLayer::OnAttach()
 	{
-		EX_INFO("Tutorial 1 - Layer Attached");
+		EX_INFO("Primitive Triangles layer attached successfully. ");
+
 	}
 
 	void TriangleLayer::OnDetach()
 	{
-		EX_INFO("Tutorial 1 - Layer Detached");
+		EX_INFO("Primitive Triangles layer detached successfully. ");
 	}
 }

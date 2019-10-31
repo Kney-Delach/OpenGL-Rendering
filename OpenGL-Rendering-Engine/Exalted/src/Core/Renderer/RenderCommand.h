@@ -23,6 +23,11 @@ namespace Exalted
 	class RenderCommand
 	{
 	public:
+		inline static void SetViewport(const int xOffset, const int yOffset, const unsigned windowWidth, const unsigned windowHeight)
+		{
+			s_RendererAPI->SetViewport(xOffset, yOffset, windowWidth, windowHeight);
+		}
+
 		inline static void SetClearColor(const glm::vec4& color)
 		{
 			s_RendererAPI->SetClearColor(color);

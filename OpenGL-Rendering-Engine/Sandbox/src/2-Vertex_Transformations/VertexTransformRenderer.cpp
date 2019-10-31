@@ -23,6 +23,10 @@ namespace Sandbox
 		m_OrthoCamera(-640.f, 640.f, -360.f, 360.f, -1.0f, 10000.0f),
 		m_PerspCamera(45.f, 1280.f/720.f, 1.0f, 10000.0f)
 	{
+		const float windowWidth = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth());
+		const float windowHeight = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight());
+		m_PerspCamera.SetAspectRatio(windowWidth / windowHeight);
+
 		// ------------------------ Mesh Setup ------------------------ // 
 
 		m_MeshTriangle.reset(Exalted::Mesh::Create());
@@ -138,8 +142,20 @@ namespace Sandbox
 		ImGui::End();
 	}
 
+	void Sandbox::VertexTransformLayer::OnWindowResize(Exalted::WindowResizeEvent& resizeEvent)
+	{
+		const auto windowWidth = resizeEvent.GetWidth();
+		const auto windowHeight = resizeEvent.GetHeight();
+		m_PerspCamera.OnWindowResize(windowWidth, windowHeight);
+	}
+
 	void VertexTransformLayer::OnEvent(Exalted::Event& event)
 	{
+		if (event.GetEventType() == Exalted::EventType::WindowResize)
+		{
+			OnWindowResize(static_cast<Exalted::WindowResizeEvent&>(event));
+		}
+
 		if (event.GetEventType() == Exalted::EventType::KeyPressed)
 		{
 			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
@@ -163,11 +179,11 @@ namespace Sandbox
 
 	void VertexTransformLayer::OnAttach()
 	{
-		EX_INFO("Tutorial 2 - Layer Attached");
+		EX_INFO("Vertex Transformation layer attached successfully. ");
 	}
 
 	void VertexTransformLayer::OnDetach()
 	{
-		EX_INFO("Tutorial 2 - Layer Detached");
+		EX_INFO("Vertex Transformation layer detached successfully. ");
 	}
 }

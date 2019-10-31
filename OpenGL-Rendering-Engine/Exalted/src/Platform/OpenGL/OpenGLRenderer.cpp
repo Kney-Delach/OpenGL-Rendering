@@ -20,6 +20,21 @@
 
 namespace Exalted 
 {
+	void RendererAPI::Init()
+	{
+		auto& capabilities = GetCapabilities();
+		capabilities.Vendor = (const char*) glGetString(GL_VENDOR);
+		capabilities.Renderer = (const char*)glGetString(GL_RENDERER);
+		capabilities.Version = (const char*) glGetString(GL_VERSION);
+		glGetIntegerv(GL_MAX_SAMPLES, &capabilities.MaxSamples);
+		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, &capabilities.MaxAnisotropy);
+	}
+
+	void OpenGLRendererAPI::SetViewport(const int xOffset, const int yOffset, const unsigned windowWidth, const unsigned windowHeight)
+	{
+		glViewport(xOffset, yOffset, windowWidth, windowHeight);
+	}
+
 	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)
 	{
 		glClearColor(color.r, color.g, color.b, color.a);

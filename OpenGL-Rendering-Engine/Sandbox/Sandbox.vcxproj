@@ -134,11 +134,13 @@
     <ClInclude Include="src\1-Your_First_Triangle\TriangleRenderer.h" />
     <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h" />
     <ClInclude Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.h" />
+    <ClInclude Include="src\4-Texture_Mapping\TextureMappingLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp" />
     <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp" />
     <ClCompile Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.cpp" />
+    <ClCompile Include="src\4-Texture_Mapping\TextureMappingLayer.cpp" />
     <ClCompile Include="src\SandboxEntry.cpp" />
   </ItemGroup>
   <ItemGroup>

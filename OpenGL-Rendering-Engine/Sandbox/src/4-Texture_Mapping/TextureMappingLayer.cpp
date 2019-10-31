@@ -1,9 +1,9 @@
 /***************************************************************************
- * Filename		: EditorShowcaseLayer.h
+ * Filename		: EditorShowcaseLayer.cpp
  * Name			: Ori Lazar
  * Date			: 31/10/2019
- * Description	: This layer showcases the Editor FPS camera implementation.
-     .---.
+ * Description	: This layer contains a scene showcasing texture mapping capabilities 
+	 .---.
    .'_:___".
    |__ --==|
    [  ]  :[|
@@ -12,22 +12,22 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#include "EditorShowcaseLayer.h"
+#include "TextureMappingLayer.h"
 #include "imgui/imgui.h"
 
 namespace Sandbox
 {
-	EditorShowcaseLayer::EditorShowcaseLayer()
-		: Layer("3D EditorCamera Showcase", false)
+	TextureMappingLayer::TextureMappingLayer()
+		: Layer("Texture Mapping Layer", true)
 	{
 		const float windowWidth = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth());
 		const float windowHeight = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight());
 		m_EditorCamera.SetAspectRatio(windowWidth / windowHeight);
 	}
 
-	void EditorShowcaseLayer::OnAttach()
+	void TextureMappingLayer::OnAttach()
 	{
-		EX_INFO("Editor Showcase Layer attached successfully.");
+		EX_INFO("Texture MappingLayer attached successfully.");
 
 		m_MeshCube.reset(Exalted::Mesh::Create());
 		m_MeshCube->CreateCube();
@@ -36,12 +36,12 @@ namespace Sandbox
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
 	}
 
-	void EditorShowcaseLayer::OnDetach()
+	void TextureMappingLayer::OnDetach()
 	{
-		EX_INFO("Editor Showcase Layer deatched successfully.");
+		EX_INFO("Texture Mapping Layer deatched successfully.");
 	}
 
-	void EditorShowcaseLayer::OnUpdate(Exalted::Timestep deltaTime)
+	void TextureMappingLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
 		if (m_ProcessingCameraMovement)
 		{
@@ -56,33 +56,33 @@ namespace Sandbox
 		Exalted::Renderer::EndScene();
 	}
 
-	void EditorShowcaseLayer::OnImGuiRender()
+	void TextureMappingLayer::OnImGuiRender()
 	{
-		ImGui::Begin("EditorCamera Showcase Scene Settings");
+		ImGui::Begin("Texture Mapping Scene Settings");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::End();
 	}
 
-	void EditorShowcaseLayer::OnInactiveImGuiRender()
+	void TextureMappingLayer::OnInactiveImGuiRender()
 	{
 		ImGui::Begin("Disabled Scenes Settings");
-		if (ImGui::Button("Enable Scene [3] -> 3D EditorCamera Showcase"))
+		if (ImGui::Button("Enable Scene [4] -> Texture Mapping"))
 		{
 			m_IsActive = true;
 		}
 		ImGui::End();
 	}
 
-	void EditorShowcaseLayer::OnWindowResize(Exalted::WindowResizeEvent& resizeEvent)
+	void TextureMappingLayer::OnWindowResize(Exalted::WindowResizeEvent& resizeEvent)
 	{
 		const auto windowWidth = resizeEvent.GetWidth();
 		const auto windowHeight = resizeEvent.GetHeight();
 		m_EditorCamera.OnWindowResize(windowWidth, windowHeight);
 	}
 
-	void EditorShowcaseLayer::OnEvent(Exalted::Event& event)
+	void TextureMappingLayer::OnEvent(Exalted::Event& event)
 	{
 		if (event.GetEventType() == Exalted::EventType::WindowResize)
 		{

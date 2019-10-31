@@ -25,7 +25,7 @@
 
 namespace Exalted
 {
-	enum class CameraMovement { FORWARD, BACKWARD, LEFT, RIGHT };
+	enum class CameraMovement { FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN };
 	
 	class EditorCamera : public PerspectiveCamera
 	{
@@ -47,6 +47,10 @@ namespace Exalted
 				ProcessKeyboard(CameraMovement::BACKWARD, deltaTime);
 			if (Input::IsKeyPressed(EX_KEY_D))
 				ProcessKeyboard(CameraMovement::RIGHT, deltaTime);
+			if (Input::IsKeyPressed(EX_KEY_Q))
+				ProcessKeyboard(CameraMovement::UP, deltaTime);
+			if (Input::IsKeyPressed(EX_KEY_E))
+				ProcessKeyboard(CameraMovement::DOWN, deltaTime);
 		}
 
 		inline void ProcessRotationEvent(float xOffset, float yOffset)
@@ -94,6 +98,10 @@ namespace Exalted
 				m_Position -= m_Right * velocity;
 			if (direction == CameraMovement::RIGHT)
 				m_Position += m_Right * velocity;
+			if (direction == CameraMovement::UP)
+				m_Position += m_WorldUp * velocity;
+			if (direction == CameraMovement::DOWN)
+				m_Position -= m_WorldUp * velocity;
 			RecalculateViewMatrix();
 		}
 		_NODISCARD inline glm::mat4 BuildViewMatrix() const

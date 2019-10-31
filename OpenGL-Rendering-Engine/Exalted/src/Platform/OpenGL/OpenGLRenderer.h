@@ -20,6 +20,7 @@ namespace Exalted
 	class OpenGLRendererAPI : public RendererAPI
 	{
 	public:
+		virtual void SetViewport(const int xOffset, const int yOffset, const unsigned windowWidth, const unsigned windowHeight) override;
 		virtual void SetClearColor(const glm::vec4& color) override;
 		virtual void Clear() override;
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;

@@ -28,7 +28,8 @@ namespace Sandbox
 		virtual void OnEvent(Exalted::Event& event) override;
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
-		
+	private:
+		void OnWindowResize(Exalted::WindowResizeEvent& resizeEvent);
 	private:
 		Exalted::Ref<Exalted::Mesh> m_MeshTriangle;
 		Exalted::Ref<Exalted::Mesh> m_MeshTriangle2;

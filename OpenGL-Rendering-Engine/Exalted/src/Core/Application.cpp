@@ -19,6 +19,7 @@
 
 #include <GLFW/glfw3.h>
 #include "glad/glad.h" //todo: Abstract me 
+#include "imgui.h"
 
 namespace Exalted 
 {
@@ -34,6 +35,8 @@ namespace Exalted
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
+
+		RendererAPI::Init();
 	}
 
 	void Application::PushLayer(Layer* layer)
@@ -50,7 +53,7 @@ namespace Exalted
 	{
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowClosedEvent>(BIND_EVENT_FN(OnWindowClosed));
-		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResized));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
 
 		/** Iterate through layer stack backwards until the event is handled. */
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
@@ -65,17 +68,27 @@ namespace Exalted
 	{
 		while (m_Running)
 		{
-			const float time = static_cast<float>(glfwGetTime());
-			Timestep deltaTime = time - m_LastFrameTime;
-			m_LastFrameTime = time;
-			
-			for (Layer* layer : m_LayerStack)
+			if (!m_Minimized)
 			{
-				if(layer->IsActive())
-					layer->OnUpdate(deltaTime);
+				const float time = static_cast<float>(glfwGetTime());
+				Timestep deltaTime = time - m_LastFrameTime;
+				m_LastFrameTime = time;
+
+				for (Layer* layer : m_LayerStack)
+				{
+					if (layer->IsActive())
+						layer->OnUpdate(deltaTime);
+				}
 			}
 
 			m_ImGuiLayer->Begin();
+			ImGui::Begin("Renderer");
+			auto& caps = RendererAPI::GetCapabilities();
+			ImGui::Text("GPU Vendor: %s", caps.Vendor.c_str());
+			ImGui::Text("GPU Renderer: %s", caps.Renderer.c_str());
+			ImGui::Text("GPU Driver: %s", caps.Version.c_str());
+			ImGui::Text("Application Runtime: %.2fms\n", static_cast<float>(m_LastFrameTime));
+			ImGui::End();
 			for (Layer* layer : m_LayerStack)
 			{
 				if (layer->IsActive())
@@ -95,9 +108,17 @@ namespace Exalted
 		return true;
 	}
 
-	bool Application::OnWindowResized(WindowResizeEvent& resizedEvent)
+	bool Application::OnWindowResize(WindowResizeEvent& resizeEvent)
 	{
-		glViewport(0, 0, resizedEvent.GetWidth(), resizedEvent.GetHeight());
+		const unsigned width = resizeEvent.GetWidth();
+		const unsigned height = resizeEvent.GetHeight();
+		if (width == 0 || height == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
+		m_Minimized = false;
+		RenderCommand::SetViewport(0, 0, width, height);
 		return false;
 	}
 }

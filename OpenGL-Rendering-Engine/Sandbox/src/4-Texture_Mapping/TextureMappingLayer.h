@@ -1,9 +1,9 @@
 /***************************************************************************
- * Filename		: EditorShowcaseLayer.h
+ * Filename		: TextureMappingLayer.h
  * Name			: Ori Lazar
  * Date			: 31/10/2019
- * Description	: Contains a scene showcasing the editor camera. 
-     .---.
+ * Description	: This layer contains a scene showcasing texture mapping capabilities 
+	 .---.
    .'_:___".
    |__ --==|
    [  ]  :[|
@@ -17,11 +17,11 @@
 
 namespace Sandbox
 {
-	class EditorShowcaseLayer : public Exalted::Layer
+	class TextureMappingLayer : public Exalted::Layer
 	{
 	public:
-		EditorShowcaseLayer();
-		virtual ~EditorShowcaseLayer() = default;
+		TextureMappingLayer();
+		virtual ~TextureMappingLayer() = default;
 		virtual void OnUpdate(Exalted::Timestep deltaTime) override;
 		virtual void OnImGuiRender() override;
 		virtual void OnInactiveImGuiRender() override;
