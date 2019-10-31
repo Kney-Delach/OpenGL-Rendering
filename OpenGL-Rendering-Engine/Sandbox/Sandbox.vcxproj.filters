@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="1-Your_First_Triangle">
+      <UniqueIdentifier>{8E4CBAF0-FAB8-75EB-C3AC-0D492FD89753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2-Vertex_Transformations">
+      <UniqueIdentifier>{4B774CCE-379C-9B4E-60E7-80DE4C6B9A6C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\1-Your_First_Triangle\TriangleRenderer.h">
+      <Filter>1-Your_First_Triangle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h">
+      <Filter>2-Vertex_Transformations</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
+      <Filter>1-Your_First_Triangle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp">
+      <Filter>2-Vertex_Transformations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SandboxEntry.cpp" />
+  </ItemGroup>
+</Project>

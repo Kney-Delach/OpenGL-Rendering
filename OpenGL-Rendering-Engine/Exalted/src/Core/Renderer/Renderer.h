@@ -27,7 +27,7 @@ namespace Exalted
 	{
 	public:
 		static void BeginScene();
-		static void BeginScene(OrthographicCamera& camera);
+		static void BeginScene(Camera& camera);
 		static void EndScene();
 
 		static void Submit(const Ref<VertexArray>& vertexArray);

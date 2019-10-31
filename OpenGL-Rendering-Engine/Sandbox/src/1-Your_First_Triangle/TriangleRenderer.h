@@ -25,6 +25,10 @@ namespace Sandbox
 		virtual void OnUpdate(Exalted::Timestep deltaTime) override;
 		virtual void OnImGuiRender() override;
 		virtual void OnInactiveImGuiRender() override;
+		//virtual void ProcessResizeEvent()
+		//{
+		//	m_SceneCamera->ResizeViewport();
+		//}
 		virtual void OnEvent(Exalted::Event& event) override;
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;

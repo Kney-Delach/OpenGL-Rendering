@@ -19,23 +19,24 @@
 namespace Sandbox
 {
 	VertexTransformLayer::VertexTransformLayer()
-		: Layer("[2]: Vertex Transformation Layer", false), m_SceneCamera(-1.f, 1.f, -1.f, 1.f)
+		: Layer("[2]: Vertex Transformation Layer", true),
+		m_OrthoCamera(-640.f, 640.f, -360.f, 360.f, -1.0f, 10000.0f),
+		m_PerspCamera(45.f, 1280.f/720.f, 1.0f, 10000.0f)
 	{
 		// ------------------------ Mesh Setup ------------------------ // 
 
 		m_MeshTriangle.reset(Exalted::Mesh::Create());
 		m_MeshTriangle->CreateTriangle();
+		m_MeshTriangle2.reset(Exalted::Mesh::Create());
+		m_MeshTriangle2->CreateTriangle();
+		m_MeshTriangle3.reset(Exalted::Mesh::Create());
+		m_MeshTriangle3->CreateTriangle();
 		m_MeshQuad.reset(Exalted::Mesh::Create());
 		m_MeshQuad->CreateQuad();
 
 		// ------------------------ Shader setup ------------------------ // 
 
 		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/Tutorial-1/VBasicShaderSMOOTH.glsl", "Resources/Shaders/Tutorial-1/FBasicShaderSMOOTH.glsl"));
-
-		// ------------------------ Transform setup ------------------------ // 
-
-		m_TriangleTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.5f, 0.0f, 0.0f));
-		m_QuadTransform = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.0f, 0.0f));
 	}
 
 	void VertexTransformLayer::OnUpdate(Exalted::Timestep deltaTime)
@@ -45,8 +46,40 @@ namespace Sandbox
 		Exalted::RenderCommand::SetClearColor({ .1f, 0.1f, 0.3f, 1 });
 		Exalted::RenderCommand::Clear();
 
-		Exalted::Renderer::BeginScene(m_SceneCamera);
+		m_TriangleTransform = glm::translate(glm::mat4(1.f), m_TrianglePosition);
+		m_TriangleTransform = glm::scale(m_TriangleTransform, m_TriangleScale);
+
+		m_TriangleTransform2 = glm::translate(glm::mat4(1.f), m_TrianglePosition2);
+		m_TriangleTransform2 = glm::scale(m_TriangleTransform2, m_TriangleScale2);
+
+		m_TriangleTransform3 = glm::translate(glm::mat4(1.f), m_TrianglePosition3);
+		m_TriangleTransform3 = glm::scale(m_TriangleTransform3, m_TriangleScale3);
+
+		m_QuadTransform = glm::translate(glm::mat4(1.f), m_QuadPosition);
+		m_QuadTransform = glm::scale(m_QuadTransform, m_QuadScale);
+
+		if(m_CameraType)
+		{
+			m_OrthoCamera.SetPosition(m_OrthoCameraPosition);
+			m_OrthoCamera.SetRotation(m_OrthoCameraRotation);
+
+			m_CameraString = "Current Camera: Orthographic";
+			Exalted::Renderer::BeginScene(m_OrthoCamera);
+		}
+		else
+		{
+			m_PerspCamera.SetFOV(m_PerspectiveFOV);
+			m_PerspCamera.SetPosition(m_PerspCameraPosition);
+			m_PerspCamera.SetRotation(m_PerspCameraRotation);
+
+			m_CameraString = "Current Camera: Perspective";
+			Exalted::Renderer::BeginScene(m_PerspCamera);
+		}
+
 		Exalted::Renderer::Submit(m_Shader, m_MeshTriangle, m_TriangleTransform);
+		Exalted::Renderer::Submit(m_Shader, m_MeshTriangle2, m_TriangleTransform2);
+		Exalted::Renderer::Submit(m_Shader, m_MeshTriangle3, m_TriangleTransform3);
+
 		Exalted::Renderer::Submit(m_Shader, m_MeshQuad, m_QuadTransform);
 
 		Exalted::Renderer::EndScene();
@@ -55,13 +88,43 @@ namespace Sandbox
 	void VertexTransformLayer::OnImGuiRender()
 	{
 		ImGui::Begin("Vertex Transformation Scene Settings");
-		if (ImGui::Button("Disable Scene"))
-		{
-			m_IsActive = false;
-		}
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
+		ImGui::Text("----------------------------------------------------");
+		if (ImGui::Button("Disable Scene"))
+			m_IsActive = false;
+		ImGui::Text("----------------------------------------------------");
 		ImGui::Text(m_DrawMode.c_str());
 		ImGui::SliderInt("Point Size", &m_PointSize, 1, 240);
+		ImGui::Text("----------------------------------------------------");
+		ImGui::Text(m_CameraString.c_str());
+		if (ImGui::Button("Switch Camera Type"))
+			m_CameraType = !m_CameraType;
+		ImGui::Text("----------------------------------------------------");
+		ImGui::Text(" Orthographic Camera Settings");
+		ImGui::Text("----------------------------------------------------");
+		ImGui::InputFloat3("Orthographic Position", (float*)&m_OrthoCameraPosition);
+		ImGui::SliderFloat("Orthographic Rotation", (float*)& m_OrthoCameraRotation, 1.0f, 360.0f);
+		ImGui::Text("----------------------------------------------------");
+		ImGui::Text(" Perspective Camera Settings");
+		ImGui::Text("----------------------------------------------------");
+		ImGui::InputFloat3("Perspective Position", (float*)& m_PerspCameraPosition);
+		ImGui::SliderFloat("Perspective Rotation", (float*)& m_PerspCameraRotation, 1.0f, 360.0f);
+		ImGui::SliderFloat("Perspective FOV", (float*)&m_PerspectiveFOV, 45.f, 100.f);
+
+		ImGui::Text("----------------------------------------------------");
+		ImGui::Text(" Mesh Settings");
+		ImGui::Text("----------------------------------------------------");
+		ImGui::InputFloat3("Triangle Position", (float*)& m_TrianglePosition);
+		ImGui::InputFloat3("Triangle Scale", (float*)& m_TriangleScale);
+
+		ImGui::InputFloat3("Triangle 2 Position", (float*)& m_TrianglePosition2);
+		ImGui::InputFloat3("Triangle 2 Scale", (float*)& m_TriangleScale2);
+
+		ImGui::InputFloat3("Triangle 3 Position", (float*)& m_TrianglePosition3);
+		ImGui::InputFloat3("Triangle 3 Scale", (float*)& m_TriangleScale3);
+
+		ImGui::InputFloat3("Quad Position", (float*)& m_QuadPosition);
+		ImGui::InputFloat3("Quad Scale", (float*)& m_QuadScale);
 
 		ImGui::End();
 	}
@@ -76,6 +139,7 @@ namespace Sandbox
 		}
 		ImGui::End();
 	}
+
 	void VertexTransformLayer::OnEvent(Exalted::Event& event)
 	{
 		if (event.GetEventType() == Exalted::EventType::KeyPressed)

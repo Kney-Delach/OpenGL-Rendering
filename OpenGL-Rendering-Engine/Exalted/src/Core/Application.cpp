@@ -98,7 +98,6 @@ namespace Exalted
 	bool Application::OnWindowResized(WindowResizeEvent& resizedEvent)
 	{
 		glViewport(0, 0, resizedEvent.GetWidth(), resizedEvent.GetHeight());
-
 		return false;
 	}
 }

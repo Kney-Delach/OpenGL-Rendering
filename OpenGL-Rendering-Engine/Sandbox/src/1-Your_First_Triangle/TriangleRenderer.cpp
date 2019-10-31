@@ -22,7 +22,7 @@
 namespace Sandbox
 {
 	TriangleLayer::TriangleLayer()
-		: Layer("[1]: Triangle Layer", true), m_SceneCamera(-1.f, 1.f, -1.f, 1.f)
+		: Layer("[1]: Triangle Layer", false), m_SceneCamera(-1.f, 1.f, -1.f, 1.f)
 	{
 		// ------------------------ Mesh Setup ------------------------ // 
 
