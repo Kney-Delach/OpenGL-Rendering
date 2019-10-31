@@ -27,7 +27,7 @@
 namespace Exalted
 {
 	ImGuiLayer::ImGuiLayer() 
-		: Layer("ImGui Layer")
+		: Layer("ImGui Layer", true)
 	{
 	}
 

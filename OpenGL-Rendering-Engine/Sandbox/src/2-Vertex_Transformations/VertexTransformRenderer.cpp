@@ -1,5 +1,5 @@
 /***************************************************************************
- * Filename		: TriangleRenderer.cpp
+ * Filename		: VertexTransformRenderer.cpp
  * Name			: Ori Lazar
  * Date			: 30/10/2019
  * Description	: Contains the code for rendering vertex transformations to the screen.
@@ -19,7 +19,7 @@
 namespace Sandbox
 {
 	VertexTransformLayer::VertexTransformLayer()
-		: Layer("Triangle Layer"), m_SceneCamera(-1.f, 1.f, -1.f, 1.f)
+		: Layer("[2]: Vertex Transformation Layer", false), m_SceneCamera(-1.f, 1.f, -1.f, 1.f)
 	{
 		// ------------------------ Mesh Setup ------------------------ // 
 
@@ -30,9 +30,7 @@ namespace Sandbox
 
 		// ------------------------ Shader setup ------------------------ // 
 
-		m_ShaderFlat.reset(Exalted::Shader::Create("Resources/Shaders/Tutorial-1/VBasicShaderFLAT.glsl", "Resources/Shaders/Tutorial-1/FBasicShaderFLAT.glsl"));
-		m_ShaderSmooth.reset(Exalted::Shader::Create("Resources/Shaders/Tutorial-1/VBasicShaderSMOOTH.glsl", "Resources/Shaders/Tutorial-1/FBasicShaderSMOOTH.glsl"));
-		m_ShaderNoPerspective.reset(Exalted::Shader::Create("Resources/Shaders/Tutorial-1/VBasicShaderNP.glsl", "Resources/Shaders/Tutorial-1/FBasicShaderNP.glsl"));
+		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/Tutorial-1/VBasicShaderSMOOTH.glsl", "Resources/Shaders/Tutorial-1/FBasicShaderSMOOTH.glsl"));
 
 		// ------------------------ Transform setup ------------------------ // 
 
@@ -48,84 +46,41 @@ namespace Sandbox
 		Exalted::RenderCommand::Clear();
 
 		Exalted::Renderer::BeginScene(m_SceneCamera);
-
-		if (m_SmoothInterpolation)
-		{
-			Exalted::Renderer::Submit(m_ShaderSmooth, m_MeshTriangle, m_TriangleTransform);
-			Exalted::Renderer::Submit(m_ShaderSmooth, m_MeshQuad, m_QuadTransform);
-		}
-		else if (m_FlatInterpolation)
-		{
-			Exalted::Renderer::Submit(m_ShaderFlat, m_MeshTriangle, m_TriangleTransform);
-			Exalted::Renderer::Submit(m_ShaderFlat, m_MeshQuad, m_QuadTransform);
-		}
-		else if (m_NoPerspInterpolation)
-		{
-			Exalted::Renderer::Submit(m_ShaderNoPerspective, m_MeshTriangle, m_TriangleTransform);
-			Exalted::Renderer::Submit(m_ShaderNoPerspective, m_MeshQuad, m_QuadTransform);
-		}
-
-		// ------------------------ glMapBuffer Segment ------------------------ // 
-
-		if (m_RecolourTriangle)
-		{
-			m_MeshTriangle->GetVertexArray()->GetVertexBuffers()[0]->Bind();
-			void* ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE); // getting the buffer pointer from opengl
-			float* currentBufferVertices = static_cast<float*>(ptr);
-			for (int i = 0; i < 3; i++)
-			{
-				float randomFloat = static_cast <float> (rand()) / static_cast <float> (RAND_MAX / 1.f);
-				currentBufferVertices[3 + i] = 1.0f * sin(randomFloat);
-				randomFloat = static_cast <float> (rand()) / static_cast <float> (RAND_MAX / 1.f);
-				currentBufferVertices[11 + i] = 1.0f * sin(randomFloat);
-				randomFloat = static_cast <float> (rand()) / static_cast <float> (RAND_MAX / 1.f);
-				currentBufferVertices[19 + i] = 1.0f * sin(randomFloat);
-			}
-			memcpy(ptr, currentBufferVertices, sizeof(currentBufferVertices));
-			glUnmapBuffer(GL_ARRAY_BUFFER); // informing opengl that done with pointer
-			m_MeshTriangle->GetVertexArray()->GetVertexBuffers()[0]->Unbind();
-		}
+		Exalted::Renderer::Submit(m_Shader, m_MeshTriangle, m_TriangleTransform);
+		Exalted::Renderer::Submit(m_Shader, m_MeshQuad, m_QuadTransform);
 
 		Exalted::Renderer::EndScene();
 	}
 
 	void VertexTransformLayer::OnImGuiRender()
 	{
-		ImGui::Begin("Triangle Render Scene Settings");
+		ImGui::Begin("Vertex Transformation Scene Settings");
+		if (ImGui::Button("Disable Scene"))
+		{
+			m_IsActive = false;
+		}
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text(m_DrawMode.c_str());
 		ImGui::SliderInt("Point Size", &m_PointSize, 1, 240);
-		if (ImGui::Button("Color Interpolation: SMOOTH"))
-		{
-			m_SmoothInterpolation = true;
-			m_FlatInterpolation = false;
-			m_NoPerspInterpolation = false;
-		}
-		if (ImGui::Button("Color Interpolation: FLAT"))
-		{
-			m_SmoothInterpolation = false;
-			m_FlatInterpolation = true;
-			m_NoPerspInterpolation = false;
-		}
-		if (ImGui::Button("Color Interpolation: NO PERSPECTIVE"))
-		{
-			m_SmoothInterpolation = false;
-			m_FlatInterpolation = false;
-			m_NoPerspInterpolation = true;
-		}
-		if (ImGui::Button("Generate Triangle Mesh Color"))
-		{
-			m_RecolourTriangle = !m_RecolourTriangle;
-		}
+
 		ImGui::End();
 	}
 
+
+	void VertexTransformLayer::OnInactiveImGuiRender()
+	{
+		ImGui::Begin("Disabled Scenes Settings");
+		if (ImGui::Button("Enable Scene [2] -> Vertex Transformation"))
+		{
+			m_IsActive = true;
+		}
+		ImGui::End();
+	}
 	void VertexTransformLayer::OnEvent(Exalted::Event& event)
 	{
 		if (event.GetEventType() == Exalted::EventType::KeyPressed)
 		{
 			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
-			/** controls to switch between line, fill and point rendering */
 			if (e.GetKeyCode() == EX_KEY_1)
 			{
 				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::POINT);
@@ -153,19 +108,4 @@ namespace Sandbox
 	{
 		EX_INFO("Tutorial 2 - Layer Detached");
 	}
-
-	class OpenGLRenderingApplication : public Exalted::Application
-	{
-	public:
-		OpenGLRenderingApplication()
-		{
-			PushLayer(new VertexTransformLayer());
-		}
-		virtual ~OpenGLRenderingApplication() { EX_INFO("OpenGL Rendering Application Destroyed"); }
-	};
-}
-
-Exalted::Application* Exalted::CreateApplication()
-{
-	return new Sandbox::OpenGLRenderingApplication();
 }

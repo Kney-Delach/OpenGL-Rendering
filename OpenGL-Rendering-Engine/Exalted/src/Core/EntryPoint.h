@@ -13,8 +13,7 @@
  /___\ /___\
 ***************************************************************************/
 #pragma once 
-#pragma warning (disable : 1169 )
-#pragma warning (disable : 4098 )
+
 #ifdef EX_PLATFORM_WINDOWS
 
 extern Exalted::Application* Exalted::CreateApplication();

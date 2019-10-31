@@ -17,8 +17,8 @@
 
 namespace Exalted 
 {
-	Layer::Layer(const std::string& debugName)
-		: m_DebugName(debugName)
+	Layer::Layer(const std::string& debugName, bool startupActive)
+		: m_DebugName(debugName), m_IsActive(startupActive)
 	{
 	}
 }

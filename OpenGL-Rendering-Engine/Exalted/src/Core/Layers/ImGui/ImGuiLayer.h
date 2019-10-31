@@ -23,6 +23,7 @@ namespace Exalted
 		ImGuiLayer();
 		~ImGuiLayer() = default;
 		virtual void OnImGuiRender() override;
+		virtual void OnInactiveImGuiRender() override { EX_CORE_ASSERT(false, "ImGui layer should always be active!"); }
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 		void Begin();

@@ -23,17 +23,19 @@ namespace Exalted
 	class Layer
 	{
 	public:
-		Layer(const std::string& name = "Layer");
+		Layer(const std::string& name = "Layer", bool startupActive = false);
 		virtual ~Layer() = default;
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
 		virtual void OnUpdate(Timestep deltaTime) {}
 		virtual void OnImGuiRender() {}
+		virtual void OnInactiveImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
-
-		inline const std::string& GetName() const { return m_DebugName; } //todo: Remove from distribution build.
+		_NODISCARD inline const bool IsActive() { return m_IsActive;  }
+		_NODISCARD inline const std::string& GetName() const { return m_DebugName; } //todo: Remove from distribution build.
 	protected:
 		std::string m_DebugName;
+		bool m_IsActive = true;
 	};
 }

@@ -132,6 +132,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp" />
+    <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp" />
+    <ClCompile Include="src\SandboxEntry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Exalted\Exalted.vcxproj">
@@ -140,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\1-Your_First_Triangle\TriangleRenderer.h" />
+    <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

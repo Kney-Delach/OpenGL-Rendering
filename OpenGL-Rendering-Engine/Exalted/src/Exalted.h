@@ -43,6 +43,4 @@
 
 #include "Core/Renderer/Cameras.h"
 
-#include "Core/EntryPoint.h"
-
 #include "Platform/OpenGL/OpenGLConfigurations.h" //todo: abstract this

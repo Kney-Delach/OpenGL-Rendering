@@ -22,7 +22,7 @@
 namespace Sandbox
 {
 	TriangleLayer::TriangleLayer()
-		: Layer("Triangle Layer"), m_SceneCamera(-1.f, 1.f, -1.f, 1.f)
+		: Layer("[1]: Triangle Layer", true), m_SceneCamera(-1.f, 1.f, -1.f, 1.f)
 	{
 		// ------------------------ Mesh Setup ------------------------ // 
 
@@ -95,6 +95,10 @@ namespace Sandbox
 	void TriangleLayer::OnImGuiRender()
 	{
 		ImGui::Begin("Triangle Render Scene Settings");
+		if (ImGui::Button("Disable Scene"))
+		{
+			m_IsActive = false;
+		}
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text(m_DrawMode.c_str());
 		ImGui::SliderInt("Point Size", &m_PointSize, 1, 240);
@@ -119,6 +123,17 @@ namespace Sandbox
 		if (ImGui::Button("Generate Triangle Mesh Color"))
 		{
 			m_RecolourTriangle = !m_RecolourTriangle;
+		}
+
+		ImGui::End();
+	}
+
+	void TriangleLayer::OnInactiveImGuiRender()
+	{
+		ImGui::Begin("Disabled Scenes Settings");
+		if (ImGui::Button("Enable Scene [1] -> Triangle Rendering"))
+		{
+			m_IsActive = true;
 		}
 		ImGui::End();
 	}
@@ -156,19 +171,4 @@ namespace Sandbox
 	{
 		EX_INFO("Tutorial 1 - Layer Detached");
 	}
-
-	//class OpenGLRenderingApplication : public Exalted::Application
-	//{
-	//public:
-	//	OpenGLRenderingApplication()
-	//	{
-	//		PushLayer(new TriangleLayer());
-	//	}
-	//	virtual ~OpenGLRenderingApplication() { EX_INFO("OpenGL Rendering Application Destroyed"); }
-	//};
 }
-
-//Exalted::Application* Exalted::CreateApplication()
-//{
-//	return new Sandbox::OpenGLRenderingApplication();
-//}

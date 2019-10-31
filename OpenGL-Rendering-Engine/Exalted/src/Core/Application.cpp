@@ -70,11 +70,19 @@ namespace Exalted
 			m_LastFrameTime = time;
 			
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate(deltaTime);
+			{
+				if(layer->IsActive())
+					layer->OnUpdate(deltaTime);
+			}
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
+			{
+				if (layer->IsActive())
+					layer->OnImGuiRender();
+				else
+					layer->OnInactiveImGuiRender();
+			}
 			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();

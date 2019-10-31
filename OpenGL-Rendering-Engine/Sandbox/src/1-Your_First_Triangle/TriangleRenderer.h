@@ -24,6 +24,7 @@ namespace Sandbox
 		virtual ~TriangleLayer() = default;
 		virtual void OnUpdate(Exalted::Timestep deltaTime) override;
 		virtual void OnImGuiRender() override;
+		virtual void OnInactiveImGuiRender() override;
 		virtual void OnEvent(Exalted::Event& event) override;
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
