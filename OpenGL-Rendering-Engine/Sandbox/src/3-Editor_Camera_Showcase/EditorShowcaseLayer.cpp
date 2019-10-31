@@ -108,6 +108,6 @@ void Sandbox::EditorShowcaseLayer::OnEvent(Exalted::Event& event)
 
 		m_LastMouseX = e.GetX();
 		m_LastMouseY = e.GetY();
-		m_EditorCamera.ProcessMouseMoveEvent(xOffset, yOffset);
+		m_EditorCamera.ProcessRotationEvent(xOffset, yOffset);
 	}
 }

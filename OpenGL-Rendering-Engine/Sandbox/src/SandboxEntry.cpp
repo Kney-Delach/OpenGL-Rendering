@@ -12,10 +12,11 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#include "Core/EntryPoint.h"
 #include "1-Your_First_Triangle/TriangleRenderer.h"
 #include "2-Vertex_Transformations/VertexTransformRenderer.h"
 #include "3-Editor_Camera_Showcase/EditorShowcaseLayer.h"
+
+#include "Core/EntryPoint.h"
 
 namespace Sandbox
 {

@@ -20,10 +20,13 @@
 
 namespace Exalted 
 {
+	// ---------------------------- Orthographic Camera ---------------------------- //
+
 	OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top, float zNear, float zFar)
 	{
 		m_ProjectionMatrix = glm::ortho(left, right, bottom, top, zNear, zFar);
-		RecalculateProjectionMatrix();
+		RecalculateViewMatrix();
+		RecalculateViewProjectionMatrix();
 	}
 
 	OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top)
@@ -31,31 +34,74 @@ namespace Exalted
 	{
 	}
 
-	void OrthographicCamera::RecalculateProjectionMatrix()
+	void OrthographicCamera::RecalculateViewMatrix()
+	{
+		m_ViewMatrix = glm::translate(glm::mat4(1.0f), m_Position) *
+			glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation), glm::vec3(0, 0, 1));
+	}
+
+	void OrthographicCamera::RecalculateViewProjectionMatrix()
 	{
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position) *
 			glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation), glm::vec3(0, 0, 1));
-		m_ViewProjectionMatrix = m_ProjectionMatrix * transform;
+		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}
+
+	// ---------------------------- Perspective Camera ---------------------------- //
 
 	PerspectiveCamera::PerspectiveCamera(float horizontalFov, float aspectRatio, float zNear, float zFar)
 		: m_FOV(horizontalFov), m_AspectRatio(aspectRatio)
 	{
 		m_zNear = zNear;
 		m_zFar = zFar;
-		m_ProjectionMatrix = glm::perspective(glm::radians(horizontalFov), aspectRatio, zNear, zFar);
+		RecalculateProjectionMatrix();
+	}
+
+	void PerspectiveCamera::RecalculateProjectionMatrix()
+	{
+		m_ProjectionMatrix = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_zNear, m_zFar);
+		RecalculateViewProjectionMatrix();
+	}
+
+	void PerspectiveCamera::RecalculateViewMatrix()
+	{
+		m_ViewMatrix = glm::translate(glm::mat4(1.0f), m_Position);
+		RecalculateViewProjectionMatrix();
+	}
+
+	void PerspectiveCamera::RecalculateViewProjectionMatrix()
+	{
+		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}
 
 	void PerspectiveCamera::SetFOV(float horizontalFOV)
 	{
 		if (m_FOV == horizontalFOV) return;
 		m_FOV = horizontalFOV;
-		m_ProjectionMatrix = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_zNear, m_zFar);
+		RecalculateProjectionMatrix();
+		RecalculateViewProjectionMatrix();
 	}
 
-	void PerspectiveCamera::RecalculateProjectionMatrix()
+	void PerspectiveCamera::SetAspectRatio(const float aspectRatio)
 	{
-		m_ViewMatrix = glm::translate(glm::mat4(1.0f), m_Position);
-		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
+		if(aspectRatio > 0)
+		{
+			m_AspectRatio = aspectRatio;
+			RecalculateProjectionMatrix();
+		}
+		else
+			EX_ERROR("Attempting to insert invalid aspect ratio to perspective camera: -> Value: {0} ", aspectRatio);
+	}
+
+	void PerspectiveCamera::SetNearZ(const float zNear)
+	{
+		m_zNear = zNear;
+		RecalculateProjectionMatrix();
+	}
+
+	void PerspectiveCamera::SetFarZ(const float zFar)
+	{
+		m_zFar = zFar;
+		RecalculateProjectionMatrix();
 	}
 }

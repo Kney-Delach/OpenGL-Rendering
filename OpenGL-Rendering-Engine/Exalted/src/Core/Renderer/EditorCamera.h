@@ -21,6 +21,8 @@
 #include "Core/Input.h"
 #include "Core/KeyCodes.h"
 
+//todo:, I created a custom lookAt function in "BuildViewMatrix",to  allow myself to abstract it to the Mathex math library at a later date. 
+
 namespace Exalted
 {
 	enum class CameraMovement { FORWARD, BACKWARD, LEFT, RIGHT };
@@ -32,6 +34,7 @@ namespace Exalted
 			: PerspectiveCamera(horizontalFOV,aspectRatio, zNear, zFar)
 		{
 			UpdateCameraVectors();
+			RecalculateViewMatrix();
 		}
 
 		inline void UpdateCamera(Timestep deltaTime)
@@ -45,20 +48,17 @@ namespace Exalted
 			if (Input::IsKeyPressed(EX_KEY_D))
 				ProcessKeyboard(CameraMovement::RIGHT, deltaTime);
 		}
-		inline void ProcessMouseMoveEvent(float xOffset, float yOffset, unsigned char constrainPitch = true)
+
+		inline void ProcessRotationEvent(float xOffset, float yOffset)
 		{
 			xOffset *= m_MouseSensitivity;
 			yOffset *= m_MouseSensitivity;
 			m_Yaw += xOffset;
 			m_Pitch += yOffset;
-			if (constrainPitch)
-			{
-				if (m_Pitch > 89.0f)
-					m_Pitch = 89.0f;
-				if (m_Pitch < -89.0f)
-					m_Pitch = -89.0f;
-			}
+			glm::clamp(m_Pitch, -89.0f, 89.0f);
+
 			UpdateCameraVectors();
+			RecalculateViewMatrix();
 		}
 
 		inline void ProcessMouseScrollEvent(float yOffset)
@@ -69,24 +69,16 @@ namespace Exalted
 				m_FOV = 1.0f;
 			if (m_FOV >= 90.0f)
 				m_FOV = 90.0f;
-		}
-		void RecalculateProjectionMatrix() override
-		{
-			m_ProjectionMatrix = glm::perspective(glm::radians(m_FOV), m_AspectRatio, m_zNear, m_zFar);
-			m_ViewProjectionMatrix = m_ProjectionMatrix * BuildViewMatrix();
-		}
-		_NODISCARD virtual const glm::mat4& GetViewProjectionMatrix() override
-		{
 			RecalculateProjectionMatrix();
-			return m_ViewProjectionMatrix;
 		}
+
 	private:
 		inline void UpdateCameraVectors()
 		{
 			glm::vec3 front;
-			front.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch)); // cos pitch from y direction rotation
-			front.y = sin(glm::radians(m_Pitch));  // sin pitch from y direction rotation
-			front.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));  // cos pitch from y direction rotation
+			front.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
+			front.y = sin(glm::radians(m_Pitch));
+			front.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
 			m_Front = glm::normalize(front);
 			m_Right = glm::normalize(glm::cross(m_Front, m_WorldUp));
 			m_Up = glm::normalize(glm::cross(m_Right, m_Front));
@@ -102,6 +94,7 @@ namespace Exalted
 				m_Position -= m_Right * velocity;
 			if (direction == CameraMovement::RIGHT)
 				m_Position += m_Right * velocity;
+			RecalculateViewMatrix();
 		}
 		_NODISCARD inline glm::mat4 BuildViewMatrix() const
 		{
@@ -128,10 +121,17 @@ namespace Exalted
 			return rotation * translation;
 		}
 
-	public:
-		glm::vec3 m_Front = glm::vec3(0.0f, 0.0f, -1.0f); // Z axis
-		glm::vec3 m_Up; // Y axis
-		glm::vec3 m_Right; // X axis
+		inline void RecalculateViewMatrix() override
+		{
+			m_ViewMatrix = BuildViewMatrix();
+			RecalculateViewProjectionMatrix();
+		}
+
+		inline void RecalculateViewProjectionMatrix() override { m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix; }
+	private:
+		glm::vec3 m_Front = glm::vec3(0.0f, 0.0f, -1.0f);
+		glm::vec3 m_Up;
+		glm::vec3 m_Right;
 		glm::vec3 m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 		float m_Yaw = 90.f;
 		float m_Pitch = 0.f;
