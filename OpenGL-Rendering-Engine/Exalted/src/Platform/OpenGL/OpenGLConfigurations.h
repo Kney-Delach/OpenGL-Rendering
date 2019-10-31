@@ -26,5 +26,7 @@ namespace Exalted
 		~OpenGLConfigurations() = default;
 		static inline void SetPolygonMode(PolygonMode polygonMode) { glPolygonMode(GL_FRONT_AND_BACK, polygonMode); }
 		static inline void SetPointSize(unsigned int pointSize) { if(pointSize > 0) glPointSize(pointSize); }
+		static inline void EnableDepthTesting() { glEnable(GL_DEPTH_TEST); }
+		static inline void DisableDepthTesting() { glDisable(GL_DEPTH_TEST); }
 	};
 }

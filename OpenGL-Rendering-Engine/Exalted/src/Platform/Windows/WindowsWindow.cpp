@@ -18,7 +18,7 @@
 #include "Core/Events/MouseEvent.h"
 #include "Core/Events/KeyEvent.h"
 #include "Platform/OpenGL/OpenGLContext.h"
-
+#include "Core/MouseButtonCodes.h"
 #include <GLFW/glfw3.h>
 
 namespace Exalted
@@ -162,12 +162,20 @@ namespace Exalted
 			{
 			case GLFW_PRESS:
 			{
+				if(button == EX_MOUSE_BUTTON_2)
+				{
+					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+				}
 				MouseButtonPressedEvent event(button, 0);
 				data.EventCallback(event);
 				break;
 			}
 			case GLFW_RELEASE:
 			{
+				if (button == EX_MOUSE_BUTTON_2)
+				{
+					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+				}
 				MouseButtonReleasedEvent event(button);
 				data.EventCallback(event);
 				break;

@@ -52,7 +52,7 @@ namespace Exalted
 
 		void SetUniformMatFloat4(const std::string& name, const glm::mat4& matrix);
 	private:
-		std::string ParseShader(const std::string& filepath) const;
+		_NODISCARD std::string ParseShader(const std::string& filepath) const;
 		uint32_t CreateShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader);
 		uint32_t CompileShader(uint32_t shaderType, const std::string& source);
 

@@ -19,7 +19,7 @@
 namespace Sandbox
 {
 	VertexTransformLayer::VertexTransformLayer()
-		: Layer("[2]: Vertex Transformation Layer", true),
+		: Layer("[2]: Vertex Transformation Layer", false),
 		m_OrthoCamera(-640.f, 640.f, -360.f, 360.f, -1.0f, 10000.0f),
 		m_PerspCamera(45.f, 1280.f/720.f, 1.0f, 10000.0f)
 	{
@@ -70,7 +70,6 @@ namespace Sandbox
 		{
 			m_PerspCamera.SetFOV(m_PerspectiveFOV);
 			m_PerspCamera.SetPosition(m_PerspCameraPosition);
-			m_PerspCamera.SetRotation(m_PerspCameraRotation);
 
 			m_CameraString = "Current Camera: Perspective";
 			Exalted::Renderer::BeginScene(m_PerspCamera);
@@ -108,7 +107,6 @@ namespace Sandbox
 		ImGui::Text(" Perspective Camera Settings");
 		ImGui::Text("----------------------------------------------------");
 		ImGui::InputFloat3("Perspective Position", (float*)& m_PerspCameraPosition);
-		ImGui::SliderFloat("Perspective Rotation", (float*)& m_PerspCameraRotation, 1.0f, 360.0f);
 		ImGui::SliderFloat("Perspective FOV", (float*)&m_PerspectiveFOV, 45.f, 100.f);
 
 		ImGui::Text("----------------------------------------------------");

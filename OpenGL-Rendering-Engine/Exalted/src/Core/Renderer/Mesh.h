@@ -24,6 +24,7 @@ namespace Exalted
 		virtual ~Mesh() = default;
 		virtual void CreateTriangle() = 0;
 		virtual void CreateQuad() = 0;
+		virtual void CreateCube() = 0;
 		virtual const Ref<VertexArray>& GetVertexArray() const = 0;
 	public:
 		static Mesh* Create();

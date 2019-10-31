@@ -52,7 +52,6 @@ namespace Sandbox
 		float m_OrthoCameraRotation = 0.f;
 
 		glm::vec3 m_PerspCameraPosition = glm::vec3(0.0f, 0.0f, -1500.0f);
-		float m_PerspCameraRotation = 0.f;
 		float m_PerspectiveFOV = 45.f;
 
 		glm::vec3 m_TrianglePosition = glm::vec3(0.f, 0.f, 0.f);

@@ -66,4 +66,53 @@ namespace Exalted
 		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 	}
+
+	void OpenGLMesh::CreateCube()
+	{
+		m_VertexArray.reset(VertexArray::Create());
+		float vertices[8*7] = {
+			// front
+			-1.0, -1.0,  1.0,	1.0, 0.0, 0.0f, 1.0f,
+			 1.0, -1.0,  1.0,	0.0, 1.0, 0.0f, 1.0f,
+			 1.0,  1.0,  1.0,	0.0, 0.0, 1.0f, 1.0f,
+			-1.0,  1.0,  1.0,	1.0, 0.0, 1.0f, 1.0f,
+			// back
+			-1.0, -1.0, -1.0,	1.0, 0.0, 0.0f, 1.0f,
+			 1.0, -1.0, -1.0,	0.0, 1.0, 0.0f, 1.0f,
+			 1.0,  1.0, -1.0,	0.0, 0.0, 1.0f, 1.0f,
+			-1.0,  1.0, -1.0,	1.0, 0.0, 1.0f , 1.0f
+		};
+		Ref<VertexBuffer> vertexBuffer;
+		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		const BufferLayout layout =
+		{
+			{ShaderDataType::Float3, "a_Position"},
+			{ShaderDataType::Float4, "a_Colour" }
+		};
+		vertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(vertexBuffer);
+		uint32_t indices[12*3] = {
+			// front
+			0, 1, 2,
+			2, 3, 0,
+			// right
+			1, 5, 6,
+			6, 2, 1,
+			// back
+			7, 6, 5,
+			5, 4, 7,
+			// left
+			4, 0, 3,
+			3, 7, 4,
+			// bottom
+			4, 5, 1,
+			1, 0, 4,
+			// top
+			3, 2, 6,
+			6, 7, 3
+		};
+		Ref<IndexBuffer> indexBuffer;
+		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		m_VertexArray->SetIndexBuffer(indexBuffer);
+	}
 }

@@ -41,6 +41,7 @@
 #include "Core/Renderer/VertexArray.h"
 #include "Core/Renderer/Mesh.h"
 
-#include "Core/Renderer/Cameras.h"
+#include "Core/Renderer/Cameras.h" //todo: Rename this ? 
+#include "Core/Renderer/EditorCamera.h"
 
 #include "Platform/OpenGL/OpenGLConfigurations.h" //todo: abstract this
