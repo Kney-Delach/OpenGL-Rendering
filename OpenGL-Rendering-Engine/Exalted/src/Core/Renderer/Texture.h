@@ -13,25 +13,39 @@
  /___\ /___\
 ***************************************************************************/
 #pragma once
-
 #include <string>
 
-#include "Core/Core.h"
+//todo: Set read and storage type configurable seperatly (rgb vs rgba) 
 
 namespace Exalted 
 {
+	enum class TextureFormat { RGB = 1, RGBA = 2 };
+	enum class TextureWrap { CLAMP = 1, REPEAT = 2 };
+	enum class TextureMagFilter { NEAREST = 1, LINEAR = 2 };
+	enum class TextureMinFilter
+	{
+		NEAREST = 1, LINEAR = 2,
+		NEAR_NEAR = 3, NEAR_LINEAR = 4, LINEAR_NEAR = 5, LINEAR_LINEAR = 6
+	};
+
 	class Texture
 	{
 	public:
 		virtual ~Texture() = default;
-		virtual uint32_t GetWidth() const = 0;
-		virtual uint32_t GetHeight() const = 0;
 		virtual void Bind(uint32_t slot = 0) const = 0;
+		virtual void Unbind() const = 0;
+		virtual uint32_t GetRendererID() const = 0;
+		static uint32_t GetBytesPerPixel(TextureFormat format);
 	};
 
 	class Texture2D : public Texture
 	{
 	public:
-		static Ref<Texture2D> Create(const std::string& path);
+		static Texture2D* Create(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap = TextureWrap::REPEAT, 
+			TextureMagFilter textureMagFilter = TextureMagFilter::LINEAR, TextureMinFilter textureMinFilter = TextureMinFilter::LINEAR, bool isRGB = false, unsigned int mipMapLevel = 0);
+		_NODISCARD virtual TextureFormat GetFormat() const = 0;
+		_NODISCARD virtual uint32_t GetWidth() const = 0;
+		_NODISCARD virtual uint32_t GetHeight() const = 0;
+		_NODISCARD virtual const std::string& GetPath() const = 0;
 	};
 }

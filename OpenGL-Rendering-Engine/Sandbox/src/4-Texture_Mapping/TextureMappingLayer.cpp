@@ -1,9 +1,9 @@
 /***************************************************************************
- * Filename		: EditorShowcaseLayer.cpp
+ * Filename		: TextureMappingLayer.cpp
  * Name			: Ori Lazar
  * Date			: 31/10/2019
  * Description	: This layer contains a scene showcasing texture mapping capabilities 
-	 .---.
+     .---.
    .'_:___".
    |__ --==|
    [  ]  :[|
@@ -14,6 +14,7 @@
 ***************************************************************************/
 #include "TextureMappingLayer.h"
 #include "imgui/imgui.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Sandbox
 {
@@ -29,11 +30,19 @@ namespace Sandbox
 	{
 		EX_INFO("Texture MappingLayer attached successfully.");
 
-		m_MeshCube.reset(Exalted::Mesh::Create());
-		m_MeshCube->CreateCube();
+		m_Mesh.reset(Exalted::Mesh::Create());
+		m_Mesh->CreateTexturedQuad();
 
-		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/Tutorial-1/VBasicShaderSMOOTH.glsl", "Resources/Shaders/Tutorial-1/FBasicShaderSMOOTH.glsl"));
+		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/TexturedVertex.glsl", "Resources/Shaders/TexturedFragment.glsl"));
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
+		m_BrickTexture2D.reset(Exalted::Texture2D::Create("Resources/Textures/brick.tga",
+			Exalted::TextureFormat::RGBA, Exalted::TextureWrap::REPEAT, Exalted::TextureMagFilter::NEAREST, Exalted::TextureMinFilter::NEAREST, false, 0));
+		m_ChessBoardTexture2D.reset(Exalted::Texture2D::Create("Resources/Textures/BarrenReds.JPG", 
+			Exalted::TextureFormat::RGBA, Exalted::TextureWrap::REPEAT, Exalted::TextureMagFilter::NEAREST, Exalted::TextureMinFilter::NEAREST, false, 0));
+
+		m_Shader->Bind();
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_DiffuseTexture", 0);
+		m_Shader->Unbind();
 	}
 
 	void TextureMappingLayer::OnDetach()
@@ -52,8 +61,18 @@ namespace Sandbox
 		Exalted::RenderCommand::Clear();
 
 		Exalted::Renderer::BeginScene(m_EditorCamera);
-		Exalted::Renderer::Submit(m_Shader, m_MeshCube, glm::mat4(1.0f));
+
+		m_BrickTexture2D->Bind(0);
+		Exalted::Renderer::Submit(m_Shader, m_Mesh, glm::mat4(1.0f));
+		m_ChessBoardTexture2D->Bind(0);
+		const glm::mat4 transform = glm::translate(glm::mat4(1.f), glm::vec3(1.0f, 0.0f, 0.0f));
+		Exalted::Renderer::Submit(m_Shader, m_Mesh, transform);
+
 		Exalted::Renderer::EndScene();
+
+		m_ChessBoardTexture2D->Unbind();
+		m_BrickTexture2D->Unbind();
+	
 	}
 
 	void TextureMappingLayer::OnImGuiRender()

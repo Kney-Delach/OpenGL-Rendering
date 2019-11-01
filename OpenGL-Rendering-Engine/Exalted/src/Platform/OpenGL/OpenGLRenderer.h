@@ -24,6 +24,7 @@ namespace Exalted
 		virtual void SetClearColor(const glm::vec4& color) override;
 		virtual void Clear() override;
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
+		void DrawTriangles(const unsigned numberOfVertices) override;
 		virtual void DrawMesh(const Ref<Mesh>& mesh) override;
 	};
 }

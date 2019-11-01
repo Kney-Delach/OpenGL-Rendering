@@ -1209,6 +1209,9 @@
     <ClInclude Include="src\Core\Renderer\Cameras.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Renderer\EditorCamera.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Renderer\Mesh.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
@@ -1257,6 +1260,9 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture2D.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
@@ -1269,7 +1275,6 @@
     <ClInclude Include="src\expch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Renderer\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1311,6 +1316,9 @@
     <ClCompile Include="src\Core\Renderer\Shader.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Renderer\Texture.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
@@ -1327,6 +1335,9 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture2D.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">

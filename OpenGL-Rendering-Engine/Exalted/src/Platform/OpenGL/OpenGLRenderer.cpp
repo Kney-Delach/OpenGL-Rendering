@@ -50,6 +50,11 @@ namespace Exalted
 		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
+	void OpenGLRendererAPI::DrawTriangles(const unsigned numberOfVertices)
+	{
+		glDrawArrays(GL_LINES, 0, numberOfVertices);
+	}
+
 	void OpenGLRendererAPI::DrawMesh(const Ref<Mesh>& mesh)
 	{
 		glDrawElements(GL_TRIANGLES, mesh->GetVertexArray()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);

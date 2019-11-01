@@ -3,7 +3,7 @@
  * Name			: Ori Lazar
  * Date			: 31/10/2019
  * Description	: This layer contains a scene showcasing texture mapping capabilities 
-	 .---.
+     .---.
    .'_:___".
    |__ --==|
    [  ]  :[|
@@ -31,8 +31,10 @@ namespace Sandbox
 	private:
 		void OnWindowResize(Exalted::WindowResizeEvent& resizeEvent);
 	private:
-		Exalted::Ref<Exalted::Mesh> m_MeshCube;
+		Exalted::Ref<Exalted::Mesh> m_Mesh;
 		Exalted::Ref<Exalted::Shader> m_Shader;
+		Exalted::Ref<Exalted::Texture2D> m_BrickTexture2D;
+		Exalted::Ref<Exalted::Texture2D> m_ChessBoardTexture2D;
 		Exalted::EditorCamera m_EditorCamera;
 		bool m_ProcessingMouseMovement = false;
 		bool m_MouseMoving = false;

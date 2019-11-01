@@ -40,6 +40,10 @@ namespace Exalted
 		{
 			s_RendererAPI->DrawIndexed(vertexArray);
 		}
+		inline static void DrawTriangles(const unsigned numberOfVertices)
+		{
+			s_RendererAPI->DrawTriangles(numberOfVertices);
+		}
 
 		inline static void DrawMesh(const Ref<Mesh>& mesh)
 		{
