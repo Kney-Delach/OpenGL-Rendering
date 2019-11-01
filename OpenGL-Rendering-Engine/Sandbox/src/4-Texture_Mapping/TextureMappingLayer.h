@@ -43,5 +43,7 @@ namespace Sandbox
 		bool m_ProcessingCameraMovement = true;
 		bool m_FirstMouseMovement = true;
 		float m_LastMouseX, m_LastMouseY;
+		bool m_AnimateCube = false;
+		bool m_AnimatePositiveDirection = true;
 	};
 }

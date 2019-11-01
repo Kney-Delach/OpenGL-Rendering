@@ -15,10 +15,13 @@
 ***************************************************************************/
 #include "expch.h"
 #include "OpenGLTexture2D.h"
+#include "Core/Renderer/RendererAPI.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 namespace Exalted
 {
@@ -26,14 +29,23 @@ namespace Exalted
 	{
 		switch (format)
 		{
-		case TextureFormat::RGB:       return GL_RGB;
-		case TextureFormat::RGBA:      return GL_RGBA;
+			case TextureFormat::RGB:       return GL_RGB;
+			case TextureFormat::RGBA:      return GL_RGBA;
 		}
 		EX_CORE_ASSERT(false, "Unknown OpenGL Texture Format!");
 		EX_CORE_ERROR("Unknown OpenGL Texture Format!");
 		return 0;
 	}
 
+	static int CalculateMipMapCount(int width, int height)
+	{
+		int levels = 1;
+		while ((width | height) >> levels) 
+			levels++;
+		return levels;
+	}
+
+	//todo: Implement error handling for failing stb read!
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap, TextureMagFilter textureMagFilter, TextureMinFilter textureMinFilter, bool isRGB, unsigned int mipMapLevel)
 		: m_RendererID(0), m_FilePath(filepath), m_TextureFormat(textureFormat),  m_TextureWrap(textureWrap), m_TextureMagFilter(textureMagFilter), m_TextureMinFilter(textureMinFilter)
 	{
@@ -45,13 +57,30 @@ namespace Exalted
 		m_Width = width;
 		m_Height = height;
 
+		EX_CORE_INFO("Texture MipMap Capability Level: {0}", CalculateMipMapCount(m_Width, m_Height));
+
 		glGenTextures(1, &m_RendererID);
 		glBindTexture(GL_TEXTURE_2D, m_RendererID);
+		glTexImage2D(GL_TEXTURE_2D, mipMapLevel, OpenGLTextureFormat(m_TextureFormat), m_Width, m_Height, 0, OpenGLTextureFormat(m_TextureFormat), GL_UNSIGNED_BYTE, m_LocalDataBuffer);
+		glGenerateMipmap(GL_TEXTURE_2D);
 		SetTextureWrap();
 		SetMagFilter();
 		SetMinFilter();
-		glTexImage2D(GL_TEXTURE_2D, mipMapLevel, OpenGLTextureFormat(m_TextureFormat), m_Width, m_Height, 0, OpenGLTextureFormat(m_TextureFormat), GL_UNSIGNED_BYTE, m_LocalDataBuffer);
-		glGenerateMipmap(GL_TEXTURE_2D);
+
+		//todo: Make this segment configurable 
+		if (!glfwExtensionSupported("GL_EXT_texture_filter_anisotropic") == GLFW_TRUE)
+		{
+			EX_CORE_ERROR("Anisotropic filtering extension not supported by the current hardware!");
+		}
+		else
+		{
+			float amount = 16.f;
+			auto& capabilities = RendererAPI::GetCapabilities();
+			if (amount < 0 || amount > capabilities.MaxAnisotropy)
+				amount = capabilities.MaxAnisotropy;
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0); 
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, amount);
+		}
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		stbi_image_free(m_LocalDataBuffer);

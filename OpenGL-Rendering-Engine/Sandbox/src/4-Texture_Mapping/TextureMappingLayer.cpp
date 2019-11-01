@@ -32,6 +32,7 @@ namespace Sandbox
 		EX_INFO("Texture MappingLayer attached successfully.");
 
 		// ------------------------- Initialize Meshes ------------------------- //
+
 		m_Meshes.reserve(10);
 		for (int i = 0; i < 10; i++)
 		{
@@ -51,22 +52,22 @@ namespace Sandbox
 			{
 				for (int textureMinFilter = 0; textureMinFilter < 6; textureMinFilter++)
 				{
-					m_Textures.emplace_back(Exalted::Texture2D::Create("Resources/Textures/TexGrid.png",
+					m_Textures.emplace_back(Exalted::Texture2D::Create("Resources/Textures/tex_BrickWall.jpg",
 						Exalted::TextureFormat::RGBA, 
-						static_cast<Exalted::TextureWrap>(textureWrap), 
+						static_cast<Exalted::TextureWrap>(textureWrap), //Exalted::TextureWrap::REPEAT,
 						static_cast<Exalted::TextureMagFilter>(textureMagFilter), 
-						static_cast<Exalted::TextureMinFilter>(textureMinFilter), 
+						static_cast<Exalted::TextureMinFilter>(textureMinFilter), //Exalted::TextureMinFilter::LINEAR_LINEAR,
 						false, 
 						0));
 				}
 			}
 		}
 
-		m_Texture3D.reset(Exalted::Texture2D::Create("Resources/Textures/TexContainer.png",
+		m_Texture3D.reset(Exalted::Texture2D::Create("Resources/Textures/TexLava.jpg",//TexContainer.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
-			Exalted::TextureMinFilter::LINEAR,
+			Exalted::TextureMinFilter::NEAR_LINEAR,
 			false,
 			0));
 
@@ -110,11 +111,7 @@ namespace Sandbox
 
 		Exalted::Renderer::BeginScene(m_EditorCamera);
 
-		glm::mat4 cubeTransform = glm::mat4(1.0f);
-		cubeTransform = glm::translate(cubeTransform, glm::vec3(0.f, 0.0f, 5.f));
-		m_Texture3D->Bind();
-		Exalted::Renderer::Submit(m_Shader, m_Mesh3D, 6*6*9, cubeTransform);
-		m_Texture3D->Unbind();
+		// ----------------------- Quads ----------------------- //
 
 		unsigned transformCount = 0;
 		for (unsigned i = 0; i < m_Meshes.size(); i++)
@@ -125,9 +122,44 @@ namespace Sandbox
 				Exalted::Renderer::Submit(m_Shader, m_Meshes[i], meshTransforms[transformCount++]);
 			}
 		}
-		Exalted::Renderer::EndScene();
-		
+		// --------------------- Cube Animation ----------------------- //
+
+		if (m_AnimateCube)
+		{
+			m_Mesh3D->GetVertexArray()->GetVertexBuffers()[0]->Bind();
+			void* ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE); // getting the buffer pointer from opengl
+			float* currentBufferVertices = static_cast<float*>(ptr);
+			for (int i = 0; i < 36; i++)
+			{
+				//EX_ERROR("texture co-ordinate 1: {0}   -  value: {1} ", 7 + i*9, currentBufferVertices[7 + i * 9]);
+				//EX_ERROR("texture co-ordinate 2: {0}   -  value: {1} ", 8 + i * 9, currentBufferVertices[8 + i * 9]);
+				if(m_AnimatePositiveDirection)
+				{
+					currentBufferVertices[7 + i * 9] = currentBufferVertices[7 + i * 9] + deltaTime * 0.1f;
+					currentBufferVertices[8 + i * 9] = currentBufferVertices[8 + i * 9] + deltaTime * 0.1f;
+				}
+				else
+				{
+					currentBufferVertices[7 + i * 9] = currentBufferVertices[7 + i * 9] - deltaTime * 0.1f;
+					currentBufferVertices[8 + i * 9] = currentBufferVertices[8 + i * 9] - deltaTime * 0.1f;
+				}
+			}
+			memcpy(ptr, currentBufferVertices, sizeof(currentBufferVertices));
+			glUnmapBuffer(GL_ARRAY_BUFFER); // informing opengl that done with pointer
+			m_Mesh3D->GetVertexArray()->GetVertexBuffers()[0]->Unbind();
+		}
+
+		// --------------------- Cube ----------------------- //
+		glm::mat4 cubeTransform = glm::mat4(1.0f);
+		cubeTransform = glm::translate(cubeTransform, glm::vec3(0.f, 0.0f, 5.f));
+		m_Texture3D->Bind();
+		Exalted::Renderer::Submit(m_Shader, m_Mesh3D, 6 * 6 * 9, cubeTransform);
+		m_Texture3D->Unbind();
+
+
+		// ------------ cleanup 
 		m_Textures[0]->Unbind();
+		Exalted::Renderer::EndScene();
 	}
 
 	void TextureMappingLayer::OnImGuiRender()
@@ -148,7 +180,16 @@ namespace Sandbox
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
+		if (ImGui::Button("Animate Lava Cube!"))
+		{
+			m_AnimateCube = !m_AnimateCube;
+		}
+		if (ImGui::Button("Toggle Animation Direction!"))
+		{
+			m_AnimatePositiveDirection = !m_AnimatePositiveDirection;
+		}
 		ImGui::End();
+
 	}
 
 	void TextureMappingLayer::OnInactiveImGuiRender()
@@ -214,7 +255,6 @@ namespace Sandbox
 			m_LastMouseY = e.GetY();
 			m_EditorCamera.ProcessRotationEvent(xOffset, yOffset);
 		}
-
 		if (event.GetEventType() == Exalted::EventType::KeyPressed)
 		{
 			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);

@@ -90,7 +90,10 @@ namespace Exalted
 			ImGui::Text("GPU Vendor: %s", caps.Vendor.c_str());
 			ImGui::Text("GPU Renderer: %s", caps.Renderer.c_str());
 			ImGui::Text("GPU Driver: %s", caps.Version.c_str());
-			ImGui::Text("Application Runtime: %.2fms\n", static_cast<float>(m_LastFrameTime));
+			ImGui::Text("Application Runtime: %.2fms", static_cast<float>(m_LastFrameTime));
+			ImGui::Text("Maximum Multi-Sample Samples: %i", caps.MaxSamples);
+			ImGui::Text("Maximum Anisotropic Filtering: %i", static_cast<int>(caps.MaxAnisotropy));
+
 			ImGui::End();
 			for (Layer* layer : m_LayerStack)
 			{
