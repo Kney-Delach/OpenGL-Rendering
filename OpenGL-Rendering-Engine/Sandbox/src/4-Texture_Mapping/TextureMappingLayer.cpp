@@ -39,6 +39,9 @@ namespace Sandbox
 			m_Meshes[i]->CreateTexturedQuad(static_cast<float>(i+1));
 		}
 
+		m_Mesh3D.reset(Exalted::Mesh::Create());
+		m_Mesh3D->CreateTexturedCube(1);
+
 		// ------------------------- Initialize Textures ------------------------- //
 
 		m_Textures.reserve(24);
@@ -58,6 +61,14 @@ namespace Sandbox
 				}
 			}
 		}
+
+		m_Texture3D.reset(Exalted::Texture2D::Create("Resources/Textures/TexContainer.png",
+			Exalted::TextureFormat::RGBA,
+			Exalted::TextureWrap::REPEAT,
+			Exalted::TextureMagFilter::LINEAR,
+			Exalted::TextureMinFilter::LINEAR,
+			false,
+			0));
 
 		// ------------------------- Initialize Block Transformations ------------------------- //
 
@@ -98,6 +109,12 @@ namespace Sandbox
 		Exalted::RenderCommand::Clear();
 
 		Exalted::Renderer::BeginScene(m_EditorCamera);
+
+		glm::mat4 cubeTransform = glm::mat4(1.0f);
+		cubeTransform = glm::translate(cubeTransform, glm::vec3(0.f, 0.0f, 5.f));
+		m_Texture3D->Bind();
+		Exalted::Renderer::Submit(m_Shader, m_Mesh3D, 6*6*9, cubeTransform);
+		m_Texture3D->Unbind();
 
 		unsigned transformCount = 0;
 		for (unsigned i = 0; i < m_Meshes.size(); i++)
@@ -196,6 +213,19 @@ namespace Sandbox
 			m_LastMouseX = e.GetX();
 			m_LastMouseY = e.GetY();
 			m_EditorCamera.ProcessRotationEvent(xOffset, yOffset);
+		}
+
+		if (event.GetEventType() == Exalted::EventType::KeyPressed)
+		{
+			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
+			if (e.GetKeyCode() == EX_KEY_1)
+				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::POINT);
+
+			if (e.GetKeyCode() == EX_KEY_2)
+				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::LINE);
+
+			if (e.GetKeyCode() == EX_KEY_3)
+				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::FILL);
 		}
 	}
 }

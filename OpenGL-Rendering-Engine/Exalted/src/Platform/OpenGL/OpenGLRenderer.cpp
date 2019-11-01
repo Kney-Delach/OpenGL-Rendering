@@ -52,7 +52,7 @@ namespace Exalted
 
 	void OpenGLRendererAPI::DrawTriangles(const unsigned numberOfVertices)
 	{
-		glDrawArrays(GL_LINES, 0, numberOfVertices);
+		glDrawArrays(GL_TRIANGLES, 0, numberOfVertices);
 	}
 
 	void OpenGLRendererAPI::DrawMesh(const Ref<Mesh>& mesh)

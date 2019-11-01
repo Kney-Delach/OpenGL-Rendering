@@ -31,8 +31,10 @@ namespace Sandbox
 	private:
 		void OnWindowResize(Exalted::WindowResizeEvent& resizeEvent);
 	private:
+		Exalted::Ref<Exalted::Mesh> m_Mesh3D;
+		Exalted::Ref<Exalted::Texture2D> m_Texture3D; 
 		std::vector<Exalted::Ref<Exalted::Mesh>> m_Meshes;
-		std::vector<Exalted::Scope<Exalted::Texture2D>> m_Textures;
+		std::vector<Exalted::Ref<Exalted::Texture2D>> m_Textures;
 		std::vector<glm::mat4> meshTransforms; 
 		Exalted::Ref<Exalted::Shader> m_Shader;
 		Exalted::EditorCamera m_EditorCamera;
