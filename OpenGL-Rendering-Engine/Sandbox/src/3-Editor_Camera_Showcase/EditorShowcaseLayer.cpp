@@ -13,7 +13,6 @@
  /___\ /___\
 ***************************************************************************/
 #include "EditorShowcaseLayer.h"
-#include "imgui/imgui.h"
 
 namespace Sandbox
 {
@@ -32,7 +31,7 @@ namespace Sandbox
 		m_MeshCube.reset(Exalted::Mesh::Create());
 		m_MeshCube->CreateCube();
 
-		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/Tutorial-1/VBasicShaderSMOOTH.glsl", "Resources/Shaders/Tutorial-1/FBasicShaderSMOOTH.glsl"));
+		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/VBasicShaderSMOOTH.glsl", "Resources/Shaders/FBasicShaderSMOOTH.glsl"));
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
 	}
 
@@ -58,6 +57,17 @@ namespace Sandbox
 
 	void EditorShowcaseLayer::OnImGuiRender()
 	{
+		ImGui::Begin("Camera Transform");
+		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
+		ImGui::InputFloat3("Position", (float*)& m_EditorCamera.GetPosition());
+		ImGui::InputFloat("Yaw", (float*)& m_EditorCamera.GetYaw());
+		ImGui::InputFloat("Pitch", (float*)& m_EditorCamera.GetPitch());
+		ImGui::PopItemFlag();
+		ImGui::PopStyleVar();
+		ImGui::InputFloat("Movement Speed", (float*)& m_EditorCamera.GetMovementSpeed(), 0.01f, 10.f);
+		ImGui::InputFloat("Mouse Sensitivity", (float*)& m_EditorCamera.GetSensitivitiy(), 0.01f, 10.f);
+		ImGui::End();
 		ImGui::Begin("EditorCamera Showcase Scene Settings");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;

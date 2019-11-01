@@ -20,12 +20,12 @@
 namespace Exalted 
 {
 	enum class TextureFormat { RGB = 1, RGBA = 2 };
-	enum class TextureWrap { CLAMP = 1, REPEAT = 2 };
-	enum class TextureMagFilter { NEAREST = 1, LINEAR = 2 };
+	enum class TextureWrap { CLAMP = 0, REPEAT = 1 };
+	enum class TextureMagFilter { NEAREST = 0, LINEAR = 1 };
 	enum class TextureMinFilter
 	{
-		NEAREST = 1, LINEAR = 2,
-		NEAR_NEAR = 3, NEAR_LINEAR = 4, LINEAR_NEAR = 5, LINEAR_LINEAR = 6
+		NEAREST = 0, LINEAR = 1,
+		NEAR_NEAR = 2, NEAR_LINEAR = 3, LINEAR_NEAR = 4, LINEAR_LINEAR = 5
 	};
 
 	class Texture

@@ -13,8 +13,9 @@
  /___\ /___\
 ***************************************************************************/
 #include "TextureMappingLayer.h"
-#include "imgui/imgui.h"
+//#include "imgui/imgui.h"
 #include "Platform/OpenGL/OpenGLShader.h"
+//#include "imgui/imgui_internal.h"
 
 namespace Sandbox
 {
@@ -30,15 +31,51 @@ namespace Sandbox
 	{
 		EX_INFO("Texture MappingLayer attached successfully.");
 
-		m_Mesh.reset(Exalted::Mesh::Create());
-		m_Mesh->CreateTexturedQuad();
+		// ------------------------- Initialize Meshes ------------------------- //
+		m_Meshes.reserve(10);
+		for (int i = 0; i < 10; i++)
+		{
+			m_Meshes.emplace_back(Exalted::Mesh::Create());
+			m_Meshes[i]->CreateTexturedQuad(static_cast<float>(i+1));
+		}
 
-		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/TexturedVertex.glsl", "Resources/Shaders/TexturedFragment.glsl"));
+		// ------------------------- Initialize Textures ------------------------- //
+
+		m_Textures.reserve(24);
+		for (int textureWrap = 0; textureWrap < 2; textureWrap++)
+		{
+			for (int textureMagFilter = 0; textureMagFilter < 2; textureMagFilter++)
+			{
+				for (int textureMinFilter = 0; textureMinFilter < 6; textureMinFilter++)
+				{
+					m_Textures.emplace_back(Exalted::Texture2D::Create("Resources/Textures/TexGrid.png",
+						Exalted::TextureFormat::RGBA, 
+						static_cast<Exalted::TextureWrap>(textureWrap), 
+						static_cast<Exalted::TextureMagFilter>(textureMagFilter), 
+						static_cast<Exalted::TextureMinFilter>(textureMinFilter), 
+						false, 
+						0));
+				}
+			}
+		}
+
+		// ------------------------- Initialize Block Transformations ------------------------- //
+
+		for (unsigned i = 0; i < m_Meshes.size(); i++)
+		{
+			glm::mat4 meshTransform = glm::mat4(1.0f);
+			meshTransform = glm::translate(meshTransform, glm::vec3(0.f, i * 1.0f, 0.f));
+			for (int j = 0; j < m_Textures.size(); j++)
+			{
+				meshTransform = glm::translate(meshTransform, glm::vec3(1.f, 0.0f, 0.f));
+				meshTransforms.push_back(meshTransform);
+			}
+		}
+
+		// ------------------------- Initialize Shader ------------------------- //
+
+		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl"));
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
-		m_BrickTexture2D.reset(Exalted::Texture2D::Create("Resources/Textures/brick.tga",
-			Exalted::TextureFormat::RGBA, Exalted::TextureWrap::REPEAT, Exalted::TextureMagFilter::NEAREST, Exalted::TextureMinFilter::NEAREST, false, 0));
-		m_ChessBoardTexture2D.reset(Exalted::Texture2D::Create("Resources/Textures/BarrenReds.JPG", 
-			Exalted::TextureFormat::RGBA, Exalted::TextureWrap::REPEAT, Exalted::TextureMagFilter::NEAREST, Exalted::TextureMinFilter::NEAREST, false, 0));
 
 		m_Shader->Bind();
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_DiffuseTexture", 0);
@@ -62,21 +99,34 @@ namespace Sandbox
 
 		Exalted::Renderer::BeginScene(m_EditorCamera);
 
-		m_BrickTexture2D->Bind(0);
-		Exalted::Renderer::Submit(m_Shader, m_Mesh, glm::mat4(1.0f));
-		m_ChessBoardTexture2D->Bind(0);
-		const glm::mat4 transform = glm::translate(glm::mat4(1.f), glm::vec3(1.0f, 0.0f, 0.0f));
-		Exalted::Renderer::Submit(m_Shader, m_Mesh, transform);
-
+		unsigned transformCount = 0;
+		for (unsigned i = 0; i < m_Meshes.size(); i++)
+		{
+			for (unsigned j = 0; j < m_Textures.size(); j++)
+			{
+				m_Textures[j]->Bind();
+				Exalted::Renderer::Submit(m_Shader, m_Meshes[i], meshTransforms[transformCount++]);
+			}
+		}
 		Exalted::Renderer::EndScene();
-
-		m_ChessBoardTexture2D->Unbind();
-		m_BrickTexture2D->Unbind();
-	
+		
+		m_Textures[0]->Unbind();
 	}
 
 	void TextureMappingLayer::OnImGuiRender()
 	{
+		ImGui::Begin("Camera Transform");
+		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
+		ImGui::InputFloat3("Position", (float*) &m_EditorCamera.GetPosition());
+		ImGui::InputFloat("Yaw", (float*) &m_EditorCamera.GetYaw());
+		ImGui::InputFloat("Pitch", (float*) &m_EditorCamera.GetPitch());
+		ImGui::PopItemFlag();
+		ImGui::PopStyleVar();
+		ImGui::InputFloat("Movement Speed", (float*) &m_EditorCamera.GetMovementSpeed(), 0.01f, 10.f);
+		ImGui::InputFloat("Mouse Sensitivity", (float*)& m_EditorCamera.GetSensitivitiy(), 0.01f, 10.f);
+		ImGui::End();
+
 		ImGui::Begin("Texture Mapping Scene Settings");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;

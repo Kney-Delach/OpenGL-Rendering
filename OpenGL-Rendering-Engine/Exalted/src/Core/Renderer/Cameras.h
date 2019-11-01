@@ -43,7 +43,7 @@ namespace Exalted
 		glm::mat4 m_ProjectionMatrix;
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ViewProjectionMatrix; // pass this to the shader
-		glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, 0.0f);	
+		mutable glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, .0f);	
 		float m_zNear;
 		float m_zFar;
 	};

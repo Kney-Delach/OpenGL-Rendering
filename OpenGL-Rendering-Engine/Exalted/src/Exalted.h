@@ -45,3 +45,6 @@
 #include "Core/Renderer/EditorCamera.h"
 
 #include "Platform/OpenGL/OpenGLConfigurations.h" //todo: abstract this
+
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>

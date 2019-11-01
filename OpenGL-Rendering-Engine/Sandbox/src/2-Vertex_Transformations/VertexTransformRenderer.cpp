@@ -13,7 +13,6 @@
  /___\ /___\
 ***************************************************************************/
 #include "VertexTransformRenderer.h"
-#include "imgui/imgui.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Sandbox
@@ -40,7 +39,7 @@ namespace Sandbox
 
 		// ------------------------ Shader setup ------------------------ // 
 
-		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/Tutorial-1/VBasicShaderSMOOTH.glsl", "Resources/Shaders/Tutorial-1/FBasicShaderSMOOTH.glsl"));
+		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/VBasicShaderSMOOTH.glsl", "Resources/Shaders/FBasicShaderSMOOTH.glsl"));
 	}
 
 	void VertexTransformLayer::OnUpdate(Exalted::Timestep deltaTime)

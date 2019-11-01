@@ -16,7 +16,6 @@
  /___\ /___\
 ***************************************************************************/
 #include "1-Your_First_Triangle/TriangleRenderer.h"
-#include "imgui/imgui.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Sandbox
@@ -33,9 +32,9 @@ namespace Sandbox
 
 		// ------------------------ Shader setup ------------------------ // 
 
-		m_ShaderFlat.reset(Exalted::Shader::Create("Resources/Shaders/Tutorial-1/VBasicShaderFLAT.glsl", "Resources/Shaders/Tutorial-1/FBasicShaderFLAT.glsl"));
-		m_ShaderSmooth.reset(Exalted::Shader::Create("Resources/Shaders/Tutorial-1/VBasicShaderSMOOTH.glsl", "Resources/Shaders/Tutorial-1/FBasicShaderSMOOTH.glsl"));
-		m_ShaderNoPerspective.reset(Exalted::Shader::Create("Resources/Shaders/Tutorial-1/VBasicShaderNP.glsl", "Resources/Shaders/Tutorial-1/FBasicShaderNP.glsl"));
+		m_ShaderFlat.reset(Exalted::Shader::Create("Resources/Shaders/VBasicShaderFLAT.glsl", "Resources/Shaders/FBasicShaderFLAT.glsl"));
+		m_ShaderSmooth.reset(Exalted::Shader::Create("Resources/Shaders/VBasicShaderSMOOTH.glsl", "Resources/Shaders/FBasicShaderSMOOTH.glsl"));
+		m_ShaderNoPerspective.reset(Exalted::Shader::Create("Resources/Shaders/VBasicShaderNP.glsl", "Resources/Shaders/FBasicShaderNP.glsl"));
 
 		// ------------------------ Transform setup ------------------------ // 
 

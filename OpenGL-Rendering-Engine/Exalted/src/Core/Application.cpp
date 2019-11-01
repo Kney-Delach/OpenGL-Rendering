@@ -58,9 +58,12 @@ namespace Exalted
 		/** Iterate through layer stack backwards until the event is handled. */
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
-			(*--it)->OnEvent(e);
-			if (e.m_Handled)
-				break;
+			if((*--it)->IsActive())
+			{
+				(*it)->OnEvent(e);
+				if (e.m_Handled)
+					break;
+			}
 		}
 	}
 

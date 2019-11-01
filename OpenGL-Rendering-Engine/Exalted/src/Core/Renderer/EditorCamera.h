@@ -59,7 +59,11 @@ namespace Exalted
 			yOffset *= m_MouseSensitivity;
 			m_Yaw += xOffset;
 			m_Pitch += yOffset;
-			glm::clamp(m_Pitch, -89.0f, 89.0f);
+
+			if (m_Pitch > 89.f)
+				m_Pitch = 89.f;
+			else if (m_Pitch < -89.f)
+				m_Pitch = -89.f;
 
 			UpdateCameraVectors();
 			RecalculateViewMatrix();
@@ -75,7 +79,10 @@ namespace Exalted
 				m_FOV = 90.0f;
 			RecalculateProjectionMatrix();
 		}
-
+		const float& GetMovementSpeed() const { return m_MovementSpeed; }
+		const float& GetSensitivitiy() const { return m_MouseSensitivity; }
+		const float& GetYaw() const { return m_Yaw; }
+		const float& GetPitch() const { return m_Pitch; }
 	private:
 		inline void UpdateCameraVectors()
 		{
@@ -141,7 +148,7 @@ namespace Exalted
 		glm::vec3 m_Up;
 		glm::vec3 m_Right;
 		glm::vec3 m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-		float m_Yaw = 90.f;
+		float m_Yaw = -90.f;
 		float m_Pitch = 0.f;
 		float m_MovementSpeed = 2.5f;
 		float m_MouseSensitivity = 0.1f;

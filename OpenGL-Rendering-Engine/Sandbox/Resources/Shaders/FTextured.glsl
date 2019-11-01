@@ -9,5 +9,5 @@ out vec4 gl_FragColor;
 
 void main()
 {
-	gl_FragColor = o_Colour * texture(u_DiffuseTexture, o_TexCoord);
+	gl_FragColor = texture(u_DiffuseTexture, o_TexCoord); // o_Colour
 }
