@@ -18,7 +18,7 @@
 namespace Sandbox
 {
 	DepthTestingLayer::DepthTestingLayer()
-		: Layer("Depth Testing Layer", true)
+		: Layer("Depth Testing Layer", false)
 	{
 		const float windowWidth = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth());
 		const float windowHeight = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight());
@@ -166,7 +166,7 @@ namespace Sandbox
 		Exalted::Renderer::Submit(m_DepthShader, m_MeshCube, 6 * 6 * 9, cubeTransform);
 		m_CubeTexture2->Unbind();
 
-		// ------------ cleanup 
+		// ------------ cleanup ------------ //
 		Exalted::Renderer::EndScene();
 	}
 
@@ -228,7 +228,7 @@ namespace Sandbox
 
 	void DepthTestingLayer::OnInactiveImGuiRender()
 	{
-		ImGui::Begin("Disabled Scene Settings");
+		ImGui::Begin("Disabled Scenes Settings");
 		if (ImGui::Button("Enable Scene [5] -> Depth Testing"))
 			m_IsActive = true;
 		ImGui::End();

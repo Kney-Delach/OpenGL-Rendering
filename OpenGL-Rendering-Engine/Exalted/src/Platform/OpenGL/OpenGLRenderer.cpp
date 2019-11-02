@@ -41,7 +41,7 @@ namespace Exalted
 
 	void OpenGLRendererAPI::Clear()
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //todo: Potentially set the depth buffer clearing flag to configurable? i.e, maybe we don't always want it.
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); //todo: Potentially set the different buffer clearing flags to configurable? i.e, maybe we don't always want it.
 	}
 
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray)

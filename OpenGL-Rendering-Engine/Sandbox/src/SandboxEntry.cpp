@@ -17,7 +17,7 @@
 #include "3-Editor_Camera_Showcase/EditorShowcaseLayer.h"
 #include "4-Texture_Mapping/TextureMappingLayer.h"
 #include "5-Depth_Testing/DepthTestingLayer.h"
-#include "6-Blending/BlendingLayer.h"
+#include "6-Stencil_Testing/StencilTestingLayer.h"
 
 #include "Core/EntryPoint.h"
 
@@ -28,12 +28,12 @@ namespace Sandbox
 	public:
 		OpenGLRenderingApplication()
 		{
-			//PushLayer(new TriangleLayer());
-			//PushLayer(new VertexTransformLayer());
-			//PushLayer(new EditorShowcaseLayer());
-			//PushLayer(new TextureMappingLayer());
+			PushLayer(new TriangleLayer());
+			PushLayer(new VertexTransformLayer());
+			PushLayer(new EditorShowcaseLayer());
+			PushLayer(new TextureMappingLayer());
 			PushLayer(new DepthTestingLayer());
-			//PushLayer(new BlendingLayer());
+			PushLayer(new StencilTestingLayer());
 
 		}
 		virtual ~OpenGLRenderingApplication() { EX_INFO("OpenGL Rendering Application Destroyed"); }

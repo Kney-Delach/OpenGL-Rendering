@@ -1,8 +1,8 @@
 /***************************************************************************
- * Filename		: BlendingLayer.h
+ * Filename		: StencilTestingLayer.h
  * Name			: Ori Lazar
- * Date			: 01/11/2019
- * Description	: This layer contains a scene showcasing blending capabilities.
+ * Date			: 02/11/2019
+ * Description	: This layer contains a scene showcasing stencil testing capabilities.
      .---.
    .'_:___".
    |__ --==|
@@ -17,11 +17,11 @@
 
 namespace Sandbox
 {
-	class BlendingLayer : public Exalted::Layer
+	class StencilTestingLayer : public Exalted::Layer
 	{
 	public:
-		BlendingLayer();
-		virtual ~BlendingLayer() = default;
+		StencilTestingLayer();
+		virtual ~StencilTestingLayer() = default;
 		virtual void OnUpdate(Exalted::Timestep deltaTime) override;
 		virtual void OnImGuiRender() override;
 		virtual void OnInactiveImGuiRender() override;
@@ -31,20 +31,26 @@ namespace Sandbox
 	private:
 		void OnWindowResize(Exalted::WindowResizeEvent& resizeEvent);
 	private:
-		Exalted::Ref<Exalted::Mesh> m_Mesh3D;
-		Exalted::Ref<Exalted::Texture2D> m_Texture3D;
-		std::vector<Exalted::Ref<Exalted::Mesh>> m_Meshes;
-		std::vector<Exalted::Ref<Exalted::Texture2D>> m_Textures;
-		std::vector<glm::mat4> meshTransforms;
+		Exalted::Ref<Exalted::Mesh> m_MeshCube;
+		Exalted::Ref<Exalted::Texture2D> m_CubeTexture;
+		Exalted::Ref<Exalted::Texture2D> m_CubeTexture2;
+		glm::mat4 m_CubeTransform1;
+		glm::mat4 m_CubeTransformOutline1;
+		glm::mat4 m_CubeTransform2;
+		glm::mat4 m_CubeTransformOutline2;
+		Exalted::Ref<Exalted::Mesh> m_MeshFloor;
+		Exalted::Ref<Exalted::Texture2D> m_FloorTexture;
+		std::vector<glm::mat4> m_FloorTransforms;
 		Exalted::Ref<Exalted::Shader> m_Shader;
+		Exalted::Ref<Exalted::Shader> m_OutlineShader;
 		Exalted::EditorCamera m_EditorCamera;
+		bool m_EnableStencilTesting = true;
 		bool m_ProcessingMouseMovement = false;
 		bool m_MouseMoving = false;
 		bool m_ProcessingCameraMovement = true;
 		bool m_FirstMouseMovement = true;
 		float m_LastMouseX, m_LastMouseY;
-
-		bool m_AnimateCube = false;
-		bool m_AnimatePositiveDirection = true;
+	private:
+		static const unsigned m_FloorTileCount = 10;
 	};
 }

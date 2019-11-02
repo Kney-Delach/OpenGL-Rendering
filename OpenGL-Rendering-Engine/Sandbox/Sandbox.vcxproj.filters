@@ -28,7 +28,7 @@
       <Filter>4-Texture_Mapping</Filter>
     </ClInclude>
     <ClInclude Include="src\5-Depth_Testing\DepthTestingLayer.h" />
-    <ClInclude Include="src\6-Blending\BlendingLayer.h" />
+    <ClInclude Include="src\6-Stencil_Testing\StencilTestingLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -45,10 +45,11 @@
     </ClCompile>
     <ClCompile Include="src\SandboxEntry.cpp" />
     <ClCompile Include="src\5-Depth_Testing\DepthTestingLayer.cpp" />
-    <ClCompile Include="src\6-Blending\BlendingLayer.cpp" />
+    <ClCompile Include="src\6-Stencil_Testing\StencilTestingLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\VDepthShader.glsl" />
     <None Include="Resources\Shaders\FDepthShader.glsl" />
+    <None Include="Resources\Shaders\FRedShader.glsl" />
   </ItemGroup>
 </Project>
