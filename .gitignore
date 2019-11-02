@@ -8,4 +8,3 @@ SOIL/
 *.user
 
 # OpenGL Specific dependencies 
-Glad/ 
