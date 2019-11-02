@@ -137,6 +137,7 @@
     <ClInclude Include="src\4-Texture_Mapping\TextureMappingLayer.h" />
     <ClInclude Include="src\5-Depth_Testing\DepthTestingLayer.h" />
     <ClInclude Include="src\6-Stencil_Testing\StencilTestingLayer.h" />
+    <ClInclude Include="src\7-Blending\BlendingLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp" />
@@ -145,12 +146,19 @@
     <ClCompile Include="src\4-Texture_Mapping\TextureMappingLayer.cpp" />
     <ClCompile Include="src\5-Depth_Testing\DepthTestingLayer.cpp" />
     <ClCompile Include="src\6-Stencil_Testing\StencilTestingLayer.cpp" />
+    <ClCompile Include="src\7-Blending\BlendingLayer.cpp" />
     <ClCompile Include="src\SandboxEntry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Exalted\Exalted.vcxproj">
       <Project>{8C8535E2-F864-B47D-017D-3F546DDB1ADF}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\Blending\GrassFragmentShader.glsl" />
+    <None Include="Resources\Shaders\Blending\GrassVertexShader.glsl" />
+    <None Include="Resources\Shaders\Blending\WindowFragmentShader.glsl" />
+    <None Include="Resources\Shaders\Blending\WindowVertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

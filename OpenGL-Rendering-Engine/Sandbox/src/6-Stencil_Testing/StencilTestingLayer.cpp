@@ -18,7 +18,7 @@
 namespace Sandbox
 {
 	StencilTestingLayer::StencilTestingLayer()
-		: Layer("Stencil Testing Layer", true)
+		: Layer("Stencil Testing Layer", false)
 	{
 		const float windowWidth = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth());
 		const float windowHeight = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight());
@@ -138,8 +138,6 @@ namespace Sandbox
 		Exalted::OpenGLConfigurations::SetStencilMaskWriteALL();
 		m_CubeTexture->Bind();
 		Exalted::Renderer::Submit(m_Shader, m_MeshCube, 6 * 6 * 9, m_CubeTransform1);
-		m_CubeTexture->Unbind();
-		m_CubeTexture->Bind();
 		Exalted::Renderer::Submit(m_Shader, m_MeshCube, 6 * 6 * 9, m_CubeTransform2);
 		m_CubeTexture->Unbind();
 
@@ -149,8 +147,6 @@ namespace Sandbox
 		Exalted::OpenGLConfigurations::SetStencilMaskReadOnly();
 		m_CubeTexture2->Bind();
 		Exalted::Renderer::Submit(m_OutlineShader, m_MeshCube, 6 * 6 * 9, m_CubeTransformOutline1); //todo: initialize these shaders
-		m_CubeTexture2->Unbind();
-		m_CubeTexture2->Bind();
 		Exalted::Renderer::Submit(m_OutlineShader, m_MeshCube, 6 * 6 * 9, m_CubeTransformOutline2);
 		m_CubeTexture2->Unbind();
 

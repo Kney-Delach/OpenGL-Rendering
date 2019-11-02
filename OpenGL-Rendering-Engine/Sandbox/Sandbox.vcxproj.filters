@@ -39,6 +39,7 @@
     <ClInclude Include="src\6-Stencil_Testing\StencilTestingLayer.h">
       <Filter>6-Stencil_Testing</Filter>
     </ClInclude>
+    <ClInclude Include="src\7-Blending\BlendingLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -60,5 +61,12 @@
       <Filter>6-Stencil_Testing</Filter>
     </ClCompile>
     <ClCompile Include="src\SandboxEntry.cpp" />
+    <ClCompile Include="src\7-Blending\BlendingLayer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\Blending\WindowVertexShader.glsl" />
+    <None Include="Resources\Shaders\Blending\WindowFragmentShader.glsl" />
+    <None Include="Resources\Shaders\Blending\GrassVertexShader.glsl" />
+    <None Include="Resources\Shaders\Blending\GrassFragmentShader.glsl" />
   </ItemGroup>
 </Project>

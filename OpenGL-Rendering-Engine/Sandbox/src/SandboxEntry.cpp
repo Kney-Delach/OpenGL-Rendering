@@ -18,6 +18,7 @@
 #include "4-Texture_Mapping/TextureMappingLayer.h"
 #include "5-Depth_Testing/DepthTestingLayer.h"
 #include "6-Stencil_Testing/StencilTestingLayer.h"
+#include "7-Blending/BlendingLayer.h"
 
 #include "Core/EntryPoint.h"
 
@@ -34,7 +35,7 @@ namespace Sandbox
 			PushLayer(new TextureMappingLayer());
 			PushLayer(new DepthTestingLayer());
 			PushLayer(new StencilTestingLayer());
-
+			PushLayer(new BlendingLayer());
 		}
 		virtual ~OpenGLRenderingApplication() { EX_INFO("OpenGL Rendering Application Destroyed"); }
 	};

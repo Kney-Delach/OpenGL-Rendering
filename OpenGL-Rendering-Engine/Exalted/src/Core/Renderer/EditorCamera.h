@@ -148,7 +148,7 @@ namespace Exalted
 		glm::vec3 m_Up;
 		glm::vec3 m_Right;
 		glm::vec3 m_WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-		float m_Yaw = -90.f;
+		float m_Yaw = 90.f;
 		float m_Pitch = 0.f;
 		float m_MovementSpeed = 2.5f;
 		float m_MouseSensitivity = 0.1f;
