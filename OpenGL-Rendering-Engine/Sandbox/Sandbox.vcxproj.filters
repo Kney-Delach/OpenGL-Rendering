@@ -47,4 +47,8 @@
     <ClCompile Include="src\5-Depth_Testing\DepthTestingLayer.cpp" />
     <ClCompile Include="src\6-Blending\BlendingLayer.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\VDepthShader.glsl" />
+    <None Include="Resources\Shaders\FDepthShader.glsl" />
+  </ItemGroup>
 </Project>

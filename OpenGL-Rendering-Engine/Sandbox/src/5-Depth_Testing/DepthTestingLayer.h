@@ -31,19 +31,22 @@ namespace Sandbox
 	private:
 		void OnWindowResize(Exalted::WindowResizeEvent& resizeEvent);
 	private:
-		Exalted::Ref<Exalted::Mesh> m_Mesh3D;
-		Exalted::Ref<Exalted::Texture2D> m_Texture3D;
-		std::vector<Exalted::Ref<Exalted::Mesh>> m_Meshes;
-		std::vector<Exalted::Ref<Exalted::Texture2D>> m_Textures;
-		std::vector<glm::mat4> meshTransforms;
+		Exalted::Ref<Exalted::Mesh> m_MeshCube;
+		Exalted::Ref<Exalted::Texture2D> m_CubeTexture;
+		Exalted::Ref<Exalted::Texture2D> m_CubeTexture2;
+		Exalted::Ref<Exalted::Mesh> m_MeshFloor;
+		Exalted::Ref<Exalted::Texture2D> m_FloorTexture;
+		std::vector<glm::mat4> m_FloorTransforms;
+		std::vector<glm::mat4> m_FloorTransformsDepth;
 		Exalted::Ref<Exalted::Shader> m_Shader;
+		Exalted::Ref<Exalted::Shader> m_DepthShader;
 		Exalted::EditorCamera m_EditorCamera;
 		bool m_ProcessingMouseMovement = false;
 		bool m_MouseMoving = false;
 		bool m_ProcessingCameraMovement = true;
 		bool m_FirstMouseMovement = true;
 		float m_LastMouseX, m_LastMouseY;
-		bool m_AnimateCube = false;
-		bool m_AnimatePositiveDirection = true;
+	private:
+		static const unsigned m_FloorTileCount = 10;
 	};
 }

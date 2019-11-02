@@ -152,6 +152,10 @@
       <Project>{8C8535E2-F864-B47D-017D-3F546DDB1ADF}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\FDepthShader.glsl" />
+    <None Include="Resources\Shaders\VDepthShader.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

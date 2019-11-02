@@ -28,12 +28,12 @@ namespace Sandbox
 	public:
 		OpenGLRenderingApplication()
 		{
-			PushLayer(new TriangleLayer());
-			PushLayer(new VertexTransformLayer());
-			PushLayer(new EditorShowcaseLayer());
-			PushLayer(new TextureMappingLayer());
+			//PushLayer(new TriangleLayer());
+			//PushLayer(new VertexTransformLayer());
+			//PushLayer(new EditorShowcaseLayer());
+			//PushLayer(new TextureMappingLayer());
 			PushLayer(new DepthTestingLayer());
-			PushLayer(new BlendingLayer());
+			//PushLayer(new BlendingLayer());
 
 		}
 		virtual ~OpenGLRenderingApplication() { EX_INFO("OpenGL Rendering Application Destroyed"); }

@@ -54,6 +54,11 @@ namespace Exalted
 		stbi_set_flip_vertically_on_load(1);
 		int width, height, channels;
 		m_LocalDataBuffer = stbi_load(filepath.c_str(), &width, &height, &channels, isRGB ? STBI_rgb : STBI_rgb_alpha);
+		if(!m_LocalDataBuffer)
+		{
+			EX_CORE_CRITICAL("Texture File Path Invalid! Path Given: {0}", filepath.c_str());
+			return;
+		}
 		m_Width = width;
 		m_Height = height;
 

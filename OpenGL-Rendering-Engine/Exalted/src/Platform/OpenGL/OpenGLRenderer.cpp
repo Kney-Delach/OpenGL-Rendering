@@ -16,7 +16,6 @@
 #include "OpenGLRenderer.h"
 
 #include <glad/glad.h>
-#include "OpenGLShader.h" //todo Remove from here.
 
 namespace Exalted 
 {
@@ -42,7 +41,7 @@ namespace Exalted
 
 	void OpenGLRendererAPI::Clear()
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //todo: Potentially set the depth buffer clearing flag to configurable? i.e, maybe we don't always want it.
 	}
 
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray)
