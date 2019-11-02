@@ -18,7 +18,7 @@
 namespace Sandbox
 {
 	VertexTransformLayer::VertexTransformLayer()
-		: Layer("[2]: Vertex Transformation Layer", false),
+		: Layer("Vertex Transformation Layer", false),
 		m_OrthoCamera(-640.f, 640.f, -360.f, 360.f, -1.0f, 10000.0f),
 		m_PerspCamera(45.f, 1280.f/720.f, 1.0f, 10000.0f)
 	{
@@ -90,10 +90,10 @@ namespace Sandbox
 	void VertexTransformLayer::OnImGuiRender()
 	{
 		ImGui::Begin("Vertex Transformation Scene Settings");
-		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
-		ImGui::Text("----------------------------------------------------");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;
+		ImGui::Text("----------------------------------------------------");
+		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------------------------------");
 		ImGui::Text(m_DrawMode.c_str());
 		ImGui::SliderInt("Point Size", &m_PointSize, 1, 240);

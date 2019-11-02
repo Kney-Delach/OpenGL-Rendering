@@ -17,7 +17,7 @@
 namespace Sandbox
 {
 	EditorShowcaseLayer::EditorShowcaseLayer()
-		: Layer("3D EditorCamera Showcase", false)
+		: Layer("Editor Camera Showcase", false)
 	{
 		const float windowWidth = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth());
 		const float windowHeight = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight());
@@ -57,7 +57,7 @@ namespace Sandbox
 
 	void EditorShowcaseLayer::OnImGuiRender()
 	{
-		ImGui::Begin("Camera Transform");
+		ImGui::Begin("Editor Camera Transform");
 		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
 		ImGui::InputFloat3("Position", (float*)& m_EditorCamera.GetPosition());
@@ -68,7 +68,7 @@ namespace Sandbox
 		ImGui::InputFloat("Movement Speed", (float*)& m_EditorCamera.GetMovementSpeed(), 0.01f, 10.f);
 		ImGui::InputFloat("Mouse Sensitivity", (float*)& m_EditorCamera.GetSensitivitiy(), 0.01f, 10.f);
 		ImGui::End();
-		ImGui::Begin("EditorCamera Showcase Scene Settings");
+		ImGui::Begin("Editor Camera Showcase Scene Settings");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);

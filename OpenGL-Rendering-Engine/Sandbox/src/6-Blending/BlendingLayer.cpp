@@ -1,8 +1,8 @@
 /***************************************************************************
- * Filename		: TextureMappingLayer.cpp
+ * Filename		: BlendingLayer.cpp
  * Name			: Ori Lazar
- * Date			: 31/10/2019
- * Description	: This layer contains a scene showcasing texture mapping capabilities 
+ * Date			: 01/11/2019
+ * Description	: This layer contains a scene showcasing blending capabilities.
      .---.
    .'_:___".
    |__ --==|
@@ -12,22 +12,22 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#include "TextureMappingLayer.h"
+#include "BlendingLayer.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Sandbox
 {
-	TextureMappingLayer::TextureMappingLayer()
-		: Layer("Texture Mapping Layer", false)
+	BlendingLayer::BlendingLayer()
+		: Layer("Blending Layer", false)
 	{
 		const float windowWidth = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth());
 		const float windowHeight = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight());
 		m_EditorCamera.SetAspectRatio(windowWidth / windowHeight);
 	}
 
-	void TextureMappingLayer::OnAttach()
+	void BlendingLayer::OnAttach()
 	{
-		EX_INFO("Texture MappingLayer attached successfully.");
+		EX_INFO("Blending layer attached successfully.");
 
 		// ------------------------- Initialize Meshes ------------------------- //
 
@@ -35,7 +35,7 @@ namespace Sandbox
 		for (int i = 0; i < 10; i++)
 		{
 			m_Meshes.emplace_back(Exalted::Mesh::Create());
-			m_Meshes[i]->CreateTexturedQuad(static_cast<float>(i+1));
+			m_Meshes[i]->CreateTexturedQuad(static_cast<float>(i + 1));
 		}
 
 		m_Mesh3D.reset(Exalted::Mesh::Create());
@@ -51,11 +51,11 @@ namespace Sandbox
 				for (int textureMinFilter = 0; textureMinFilter < 6; textureMinFilter++)
 				{
 					m_Textures.emplace_back(Exalted::Texture2D::Create("Resources/Textures/tex_BrickWall.jpg",
-						Exalted::TextureFormat::RGBA, 
+						Exalted::TextureFormat::RGBA,
 						static_cast<Exalted::TextureWrap>(textureWrap), //Exalted::TextureWrap::REPEAT,
-						static_cast<Exalted::TextureMagFilter>(textureMagFilter), 
+						static_cast<Exalted::TextureMagFilter>(textureMagFilter),
 						static_cast<Exalted::TextureMinFilter>(textureMinFilter), //Exalted::TextureMinFilter::LINEAR_LINEAR,
-						false, 
+						false,
 						0));
 				}
 			}
@@ -92,12 +92,12 @@ namespace Sandbox
 		m_Shader->Unbind();
 	}
 
-	void TextureMappingLayer::OnDetach()
+	void BlendingLayer::OnDetach()
 	{
-		EX_INFO("Texture Mapping Layer deatched successfully.");
+		EX_INFO("Blending Layer deatched successfully.");
 	}
 
-	void TextureMappingLayer::OnUpdate(Exalted::Timestep deltaTime)
+	void BlendingLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
 		if (m_ProcessingCameraMovement)
 		{
@@ -131,7 +131,7 @@ namespace Sandbox
 			{
 				//EX_ERROR("texture co-ordinate 1: {0}   -  value: {1} ", 7 + i*9, currentBufferVertices[7 + i * 9]);
 				//EX_ERROR("texture co-ordinate 2: {0}   -  value: {1} ", 8 + i * 9, currentBufferVertices[8 + i * 9]);
-				if(m_AnimatePositiveDirection)
+				if (m_AnimatePositiveDirection)
 				{
 					currentBufferVertices[7 + i * 9] = currentBufferVertices[7 + i * 9] + deltaTime * 0.1f;
 					currentBufferVertices[8 + i * 9] = currentBufferVertices[8 + i * 9] + deltaTime * 0.1f;
@@ -160,21 +160,21 @@ namespace Sandbox
 		Exalted::Renderer::EndScene();
 	}
 
-	void TextureMappingLayer::OnImGuiRender()
+	void BlendingLayer::OnImGuiRender()
 	{
-		ImGui::Begin("Texture Mapping Camera Transform");
+		ImGui::Begin("Blending Camera Transform");
 		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
-		ImGui::InputFloat3("Position", (float*) &m_EditorCamera.GetPosition());
-		ImGui::InputFloat("Yaw", (float*) &m_EditorCamera.GetYaw());
-		ImGui::InputFloat("Pitch", (float*) &m_EditorCamera.GetPitch());
+		ImGui::InputFloat3("Position", (float*)& m_EditorCamera.GetPosition());
+		ImGui::InputFloat("Yaw", (float*)& m_EditorCamera.GetYaw());
+		ImGui::InputFloat("Pitch", (float*)& m_EditorCamera.GetPitch());
 		ImGui::PopItemFlag();
 		ImGui::PopStyleVar();
-		ImGui::InputFloat("Movement Speed", (float*) &m_EditorCamera.GetMovementSpeed(), 0.01f, 10.f);
+		ImGui::InputFloat("Movement Speed", (float*)& m_EditorCamera.GetMovementSpeed(), 0.01f, 10.f);
 		ImGui::InputFloat("Mouse Sensitivity", (float*)& m_EditorCamera.GetSensitivitiy(), 0.01f, 10.f);
 		ImGui::End();
 
-		ImGui::Begin("Texture Mapping Scene Settings");
+		ImGui::Begin("Blending Scene Settings");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
@@ -190,24 +190,24 @@ namespace Sandbox
 
 	}
 
-	void TextureMappingLayer::OnInactiveImGuiRender()
+	void BlendingLayer::OnInactiveImGuiRender()
 	{
 		ImGui::Begin("Disabled Scenes Settings");
-		if (ImGui::Button("Enable Scene [4] -> Texture Mapping"))
+		if (ImGui::Button("Enable Scene [6] -> Blending"))
 		{
 			m_IsActive = true;
 		}
 		ImGui::End();
 	}
 
-	void TextureMappingLayer::OnWindowResize(Exalted::WindowResizeEvent& resizeEvent)
+	void BlendingLayer::OnWindowResize(Exalted::WindowResizeEvent& resizeEvent)
 	{
 		const auto windowWidth = resizeEvent.GetWidth();
 		const auto windowHeight = resizeEvent.GetHeight();
 		m_EditorCamera.OnWindowResize(windowWidth, windowHeight);
 	}
 
-	void TextureMappingLayer::OnEvent(Exalted::Event& event)
+	void BlendingLayer::OnEvent(Exalted::Event& event)
 	{
 		if (event.GetEventType() == Exalted::EventType::WindowResize)
 		{
