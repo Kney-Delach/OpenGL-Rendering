@@ -6,7 +6,6 @@ SOIL/
 
 # Files 
 *.user
-*.ini 
 
 # OpenGL Specific dependencies 
 Glad/ 
