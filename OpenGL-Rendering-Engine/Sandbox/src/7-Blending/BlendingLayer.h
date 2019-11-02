@@ -36,6 +36,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Texture2D> m_CubeTexture;
 		Exalted::Ref<Exalted::Texture2D> m_FloorTexture;
 		Exalted::Ref<Exalted::Texture2D> m_WindowTexture;
+		Exalted::Ref<Exalted::Texture2D> m_StainedWindowTexture;
 		Exalted::Ref<Exalted::Texture2D> m_GrassTexture;
 		glm::mat4 m_CubeTransform1;
 		glm::mat4 m_CubeTransform2;

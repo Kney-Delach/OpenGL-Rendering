@@ -73,6 +73,14 @@ namespace Sandbox
 			false,
 			0));
 
+		m_StainedWindowTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexTransparentGlassStained.tga",
+			Exalted::TextureFormat::RGBA,
+			Exalted::TextureWrap::CLAMP,
+			Exalted::TextureMagFilter::LINEAR,
+			Exalted::TextureMinFilter::LINEAR_LINEAR,
+			false,
+			0));
+		
 		// ------------------------- Initialize Transformations ------------------------- //
 
 		glm::mat4 cubeTransform = glm::mat4(1.0f);
@@ -81,6 +89,7 @@ namespace Sandbox
 		cubeTransform = glm::translate(cubeTransform, glm::vec3(2.f, 0.0f, 5.f));
 		m_CubeTransform2 = cubeTransform;
 		m_WindowTransforms.emplace_back(glm::vec3(2.f, 0.5f, 2.0f));
+		m_WindowTransforms.emplace_back(glm::vec3(4.f, 0.5f, 2.0f));
 		m_WindowTransforms.emplace_back(glm::vec3(0.f, 0.5f,7.0f));
 		m_GrassTransform = glm::translate(m_CubeTransform1, glm::vec3(-2.f, 0.0f, 0.0f));
 		m_FloorTransforms.reserve(m_FloorTileCount * m_FloorTileCount);
@@ -142,20 +151,17 @@ namespace Sandbox
 		m_FloorTexture->Bind();
 		for (unsigned i = 0; i < m_FloorTileCount * m_FloorTileCount; i++)
 			Exalted::Renderer::Submit(m_Shader, m_MeshQuad, m_FloorTransforms[i]);
-		m_FloorTexture->Unbind();
 
 		// --------------------- Draw the cubes --------------------- //
 
 		m_CubeTexture->Bind();
 		Exalted::Renderer::Submit(m_Shader, m_MeshCube, 6 * 6 * 9, m_CubeTransform1);
 		Exalted::Renderer::Submit(m_Shader, m_MeshCube, 6 * 6 * 9, m_CubeTransform2);
-		m_CubeTexture->Unbind();
 
 		// --------------------- Draw the transparent grass --------------------- //
 
 		m_GrassTexture->Bind();
 		Exalted::Renderer::Submit(m_GrassShader, m_MeshQuad, m_GrassTransform);
-		m_GrassTexture->Unbind();
 
 		// --------------------- Draw the transparent windows --------------------- //
 
@@ -167,12 +173,15 @@ namespace Sandbox
 			sortedWindows[distance] = m_WindowTransforms[i];
 		}
 
-		m_WindowTexture->Bind();
 		// Render from farthest to nearest. 
 		for(std::map<float, glm::vec3>::reverse_iterator  it = sortedWindows.rbegin(); it != sortedWindows.rend(); ++it)
 		{
 			glm::mat4 windowModelTransform = glm::mat4(1.f);
 			windowModelTransform = glm::translate(windowModelTransform, it->second);
+			if (it->second == m_WindowTransforms[0])
+				m_StainedWindowTexture->Bind();
+			else
+				m_WindowTexture->Bind();
 			Exalted::Renderer::Submit(m_WindowShader, m_MeshQuad, windowModelTransform);
 		}		
 		m_WindowTexture->Unbind();
