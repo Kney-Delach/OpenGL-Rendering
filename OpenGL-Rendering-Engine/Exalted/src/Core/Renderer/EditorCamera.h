@@ -25,7 +25,7 @@
 
 namespace Exalted
 {
-	enum class CameraMovement { FORWARD, BACKWARD, LEFT, RIGHT };
+	enum class CameraMovement { FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN };
 	
 	class EditorCamera : public PerspectiveCamera
 	{
@@ -47,6 +47,10 @@ namespace Exalted
 				ProcessKeyboard(CameraMovement::BACKWARD, deltaTime);
 			if (Input::IsKeyPressed(EX_KEY_D))
 				ProcessKeyboard(CameraMovement::RIGHT, deltaTime);
+			if (Input::IsKeyPressed(EX_KEY_Q))
+				ProcessKeyboard(CameraMovement::UP, deltaTime);
+			if (Input::IsKeyPressed(EX_KEY_E))
+				ProcessKeyboard(CameraMovement::DOWN, deltaTime);
 		}
 
 		inline void ProcessRotationEvent(float xOffset, float yOffset)
@@ -55,7 +59,11 @@ namespace Exalted
 			yOffset *= m_MouseSensitivity;
 			m_Yaw += xOffset;
 			m_Pitch += yOffset;
-			glm::clamp(m_Pitch, -89.0f, 89.0f);
+
+			if (m_Pitch > 89.f)
+				m_Pitch = 89.f;
+			else if (m_Pitch < -89.f)
+				m_Pitch = -89.f;
 
 			UpdateCameraVectors();
 			RecalculateViewMatrix();
@@ -71,7 +79,10 @@ namespace Exalted
 				m_FOV = 90.0f;
 			RecalculateProjectionMatrix();
 		}
-
+		const float& GetMovementSpeed() const { return m_MovementSpeed; }
+		const float& GetSensitivitiy() const { return m_MouseSensitivity; }
+		const float& GetYaw() const { return m_Yaw; }
+		const float& GetPitch() const { return m_Pitch; }
 	private:
 		inline void UpdateCameraVectors()
 		{
@@ -94,6 +105,10 @@ namespace Exalted
 				m_Position -= m_Right * velocity;
 			if (direction == CameraMovement::RIGHT)
 				m_Position += m_Right * velocity;
+			if (direction == CameraMovement::UP)
+				m_Position += m_WorldUp * velocity;
+			if (direction == CameraMovement::DOWN)
+				m_Position -= m_WorldUp * velocity;
 			RecalculateViewMatrix();
 		}
 		_NODISCARD inline glm::mat4 BuildViewMatrix() const

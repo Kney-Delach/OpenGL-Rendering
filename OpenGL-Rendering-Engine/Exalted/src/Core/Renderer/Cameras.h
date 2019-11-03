@@ -25,6 +25,7 @@ namespace Exalted
 	public:
 		Camera() = default;
 		virtual ~Camera() = default;
+		virtual void OnWindowResize(unsigned int newWidth, unsigned int newHeight) {};
 		inline void SetPosition(const glm::vec3& position)
 		{
 			m_Position = position;
@@ -42,7 +43,7 @@ namespace Exalted
 		glm::mat4 m_ProjectionMatrix;
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ViewProjectionMatrix; // pass this to the shader
-		glm::vec3 m_Position = glm::vec3(0.0f, 0.0f, 0.0f);	
+		mutable glm::vec3 m_Position = glm::vec3(0.0f, 1.0f, .0f);	
 		float m_zNear;
 		float m_zFar;
 	};
@@ -72,6 +73,12 @@ namespace Exalted
 	public:
 		PerspectiveCamera(const float horizontalFov = 45.0f, const float aspectRatio = 1280.f/720.f, const float zNear = 1.0f, const float zFar = 10000.f);
 		virtual ~PerspectiveCamera() = default;
+		inline virtual void OnWindowResize(unsigned int windowWidth, unsigned int windowHeight) override
+		{
+			if (windowWidth == 0 || windowHeight == 0)
+				return;
+			SetAspectRatio(static_cast<float>(windowWidth) / static_cast<float>(windowHeight));
+		};
 		void SetFOV(const float horizontalFOV);
 		void SetAspectRatio(const float aspectRatio);
 		void SetNearZ(const float zNear);

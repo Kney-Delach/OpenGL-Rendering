@@ -31,6 +31,8 @@ namespace Exalted
 		virtual void CreateTriangle() override;
 		virtual void CreateQuad() override;
 		virtual void CreateCube() override;
+		virtual void CreateTexturedQuad(float textureScale) override;
+		virtual void CreateTexturedCube(float textureScale) override; 
 		_NODISCARD inline virtual const Ref<VertexArray>& GetVertexArray() const override { return m_VertexArray; }
 	private:
 		Ref<VertexArray> m_VertexArray;

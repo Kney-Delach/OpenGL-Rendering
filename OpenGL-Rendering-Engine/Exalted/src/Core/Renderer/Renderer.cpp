@@ -52,7 +52,7 @@ namespace Exalted
 	{
 		shader->Bind();
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMatFloat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMatFloat4("u_Transform", transform);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMatFloat4("u_Model", transform);
 
 		mesh->GetVertexArray()->Bind();
 		RenderCommand::DrawMesh(mesh);
@@ -62,9 +62,20 @@ namespace Exalted
 	{
 		shader->Bind();
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMatFloat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMatFloat4("u_Transform", transform);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMatFloat4("u_Model", transform);
 
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
+	}
+
+
+	void Renderer::Submit(const Ref<Shader>& shader, const Ref<Mesh>& mesh, const unsigned numberOfVertices, const glm::mat4& transform)
+	{
+		shader->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMatFloat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMatFloat4("u_Model", transform);
+
+		mesh->GetVertexArray()->Bind();
+		RenderCommand::DrawTriangles(numberOfVertices);
 	}
 }

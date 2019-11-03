@@ -59,6 +59,8 @@ project "Exalted"
 	{
 		"%{prj.name}/src",
 		"%{prj.name}/Dependencies/spdlog/include",
+		"%{prj.name}/Dependencies/stb/include",
+		"Resources/",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
@@ -119,7 +121,9 @@ project "Sandbox"
 	{
 		"%{prj.name}/src",
 		"Exalted/Dependencies/spdlog/include",
+		"Exalted/Dependencies/stb/include",
 		"Exalted/src",
+		"Resources/",
 		"Exalted/Dependencies",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.Glad}"

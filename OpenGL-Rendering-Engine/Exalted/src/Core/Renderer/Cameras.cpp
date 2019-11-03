@@ -90,7 +90,7 @@ namespace Exalted
 			RecalculateProjectionMatrix();
 		}
 		else
-			EX_ERROR("Attempting to insert invalid aspect ratio to perspective camera: -> Value: {0} ", aspectRatio);
+			EX_ERROR("Attempting to insert invalid aspect ratio to perspective camera: -> Value: {0} ", 0);
 	}
 
 	void PerspectiveCamera::SetNearZ(const float zNear)

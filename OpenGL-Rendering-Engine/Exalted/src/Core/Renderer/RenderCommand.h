@@ -23,9 +23,18 @@ namespace Exalted
 	class RenderCommand
 	{
 	public:
+		inline static void SetViewport(const int xOffset, const int yOffset, const unsigned windowWidth, const unsigned windowHeight)
+		{
+			s_RendererAPI->SetViewport(xOffset, yOffset, windowWidth, windowHeight);
+		}
+
 		inline static void SetClearColor(const glm::vec4& color)
 		{
 			s_RendererAPI->SetClearColor(color);
+		}
+		inline static void SetClearStencil(const float stencilValue)
+		{
+			s_RendererAPI->SetClearStencil(stencilValue);
 		}
 		inline static void Clear()
 		{
@@ -34,6 +43,10 @@ namespace Exalted
 		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray)
 		{
 			s_RendererAPI->DrawIndexed(vertexArray);
+		}
+		inline static void DrawTriangles(const unsigned numberOfVertices)
+		{
+			s_RendererAPI->DrawTriangles(numberOfVertices);
 		}
 
 		inline static void DrawMesh(const Ref<Mesh>& mesh)

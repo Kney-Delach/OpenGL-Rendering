@@ -25,7 +25,10 @@ namespace Exalted
 		virtual void CreateTriangle() = 0;
 		virtual void CreateQuad() = 0;
 		virtual void CreateCube() = 0;
-		virtual const Ref<VertexArray>& GetVertexArray() const = 0;
+		virtual void CreateTexturedQuad(float textureScale) = 0;
+		virtual void CreateTexturedCube(float textureScale) = 0;
+
+		_NODISCARD virtual const Ref<VertexArray>& GetVertexArray() const = 0;
 	public:
 		static Mesh* Create();
 	};

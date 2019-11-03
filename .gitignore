@@ -2,10 +2,9 @@
 .vs/
 bin/
 bin-int/
+SOIL/
 
 # Files 
 *.user
-*.ini 
 
 # OpenGL Specific dependencies 
-Glad/ 
