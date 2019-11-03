@@ -46,13 +46,14 @@ namespace Sandbox
 		{
 			m_EditorCamera.UpdateCamera(deltaTime);
 		}
-
+		Exalted::OpenGLConfigurations::EnableDepthTesting();
 		Exalted::RenderCommand::SetClearColor({ .1f, 0.1f, 0.3f, 1 });
 		Exalted::RenderCommand::Clear();
 
 		Exalted::Renderer::BeginScene(m_EditorCamera);
 		Exalted::Renderer::Submit(m_Shader, m_MeshCube, glm::mat4(1.0f));
 		Exalted::Renderer::EndScene();
+		Exalted::OpenGLConfigurations::DisableDepthTesting();
 	}
 
 	void EditorShowcaseLayer::OnImGuiRender()

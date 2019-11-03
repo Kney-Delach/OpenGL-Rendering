@@ -63,6 +63,13 @@ namespace Sandbox
 			false,
 			0));
 
+		m_ChessboardTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexChessboard.tga",
+			Exalted::TextureFormat::RGBA,
+			Exalted::TextureWrap::CLAMP,
+			Exalted::TextureMagFilter::LINEAR,
+			Exalted::TextureMinFilter::LINEAR_LINEAR,
+			false,
+			0));
 		// ------------------------- Initialize Transformations ------------------------- //
 
 		// --------- Cube transforms --------- //
@@ -95,12 +102,14 @@ namespace Sandbox
 
 		// ------------------------- Initialize Shader ------------------------- //
 
+		m_ChessboardShader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/Blending/GrassFragmentShader.glsl"));
 		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl"));
 		m_OutlineShader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FRedShader.glsl"));
 
 		m_Shader->Bind();
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_DiffuseTexture", 0);
 		m_Shader->Unbind();
+
 	}
 
 	void StencilTestingLayer::OnDetach()
@@ -113,19 +122,8 @@ namespace Sandbox
 		if (m_ProcessingCameraMovement)
 			m_EditorCamera.UpdateCamera(deltaTime);
 
-		// ------------ Initialize Stencil Buffer Processing ------------ //
-		if(m_EnableStencilTesting)
-			Exalted::OpenGLConfigurations::EnableStencilTesting();
-		if (m_EnableScissorTesting)
-			Exalted::OpenGLConfigurations::EnableScissorTesting();
-
-		Exalted::OpenGLConfigurations::EnableDepthTesting();
-		Exalted::OpenGLConfigurations::SetStencilActions(Exalted::StencilAction::KEEP, Exalted::StencilAction::KEEP, Exalted::StencilAction::REPLACE);
-
-
 		Exalted::RenderCommand::SetClearColor({ .1f, 0.1f, 0.3f, 1 });
 		Exalted::RenderCommand::Clear();
-
 		Exalted::Renderer::BeginScene(m_EditorCamera);
 
 		// ------------ Draw the floor ------------ //
@@ -136,6 +134,17 @@ namespace Sandbox
 			Exalted::Renderer::Submit(m_Shader, m_MeshFloor, m_FloorTransforms[i]);
 		m_FloorTexture->Unbind();
 
+		// ------------ Initialize Stencil Buffer Processing ------------ //
+
+		if (m_EnableStencilTesting)
+			Exalted::OpenGLConfigurations::EnableStencilTesting();
+		if (m_EnableScissorTesting)
+			Exalted::OpenGLConfigurations::EnableScissorTesting();
+
+		Exalted::OpenGLConfigurations::EnableDepthTesting();
+		Exalted::OpenGLConfigurations::SetStencilActions(Exalted::StencilAction::KEEP, Exalted::StencilAction::KEEP, Exalted::StencilAction::REPLACE);
+
+
 		// --------------------- Draw the regular cubes --------------------- //
 		Exalted::OpenGLConfigurations::SetStencilFunction(Exalted::StencilAction::ALWAYS, 1, 0xFF);
 		Exalted::OpenGLConfigurations::SetStencilMaskWriteALL();
@@ -145,16 +154,30 @@ namespace Sandbox
 		m_CubeTexture->Unbind();
 
 		// --------------------- Draw Stencil outlines --------------------- //
-		Exalted::OpenGLConfigurations::DisableDepthTesting(); // disable depth testing 
+		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		Exalted::OpenGLConfigurations::SetStencilFunction(Exalted::StencilAction::NOT_EQUAL, 1, 0xFF);
 		Exalted::OpenGLConfigurations::SetStencilMaskReadOnly();
 		m_CubeTexture2->Bind();
-		Exalted::Renderer::Submit(m_OutlineShader, m_MeshCube, 6 * 6 * 9, m_CubeTransformOutline1); //todo: initialize these shaders
+		Exalted::Renderer::Submit(m_OutlineShader, m_MeshCube, 6 * 6 * 9, m_CubeTransformOutline1);
 		Exalted::Renderer::Submit(m_OutlineShader, m_MeshCube, 6 * 6 * 9, m_CubeTransformOutline2);
 		m_CubeTexture2->Unbind();
-
-		// ------------ cleanup ------------ //
 		Exalted::OpenGLConfigurations::SetStencilMaskWriteALL();
+
+		// ------------------------------ Draw Chess Board ------------------------------ //
+		Exalted::OpenGLConfigurations::SetColorMask(false, false, false, false);
+		Exalted::OpenGLConfigurations::SetStencilFunction(Exalted::StencilAction::ALWAYS, 2, 0xFF);
+		Exalted::OpenGLConfigurations::SetStencilActions(Exalted::StencilAction::REPLACE, Exalted::StencilAction::REPLACE, Exalted::StencilAction::REPLACE);
+		const glm::mat4 chessboardPosition = glm::translate(m_CubeTransform1, glm::vec3(0.f, 0.f, -2.f));
+		m_ChessboardTexture->Bind();
+		Exalted::Renderer::Submit(m_ChessboardShader, m_MeshFloor, chessboardPosition);
+		Exalted::OpenGLConfigurations::SetColorMask(true, true, true, true);
+		Exalted::OpenGLConfigurations::SetStencilFunction(Exalted::StencilAction::EQUAL, 2, 0xFF);
+		Exalted::OpenGLConfigurations::SetStencilActions(Exalted::StencilAction::KEEP, Exalted::StencilAction::KEEP, Exalted::StencilAction::KEEP);
+		Exalted::Renderer::Submit(m_ChessboardShader, m_MeshFloor, chessboardPosition);
+		m_ChessboardTexture->Unbind();
+
+		
+		// ------------ cleanup ------------ //
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		Exalted::OpenGLConfigurations::DisableStencilTesting();
 		Exalted::OpenGLConfigurations::DisableScissorTesting();
@@ -213,6 +236,8 @@ namespace Sandbox
 		const auto windowWidth = resizeEvent.GetWidth();
 		const auto windowHeight = resizeEvent.GetHeight();
 		m_EditorCamera.OnWindowResize(windowWidth, windowHeight);
+		Exalted::OpenGLConfigurations::SetScissorBox(static_cast<float>(windowWidth)/2.5f, static_cast<float>(windowHeight)/2.5f, static_cast<float>(windowWidth)/5.f, static_cast<float>(windowHeight)/5.f);
+
 	}
 
 	void StencilTestingLayer::OnEvent(Exalted::Event& event)

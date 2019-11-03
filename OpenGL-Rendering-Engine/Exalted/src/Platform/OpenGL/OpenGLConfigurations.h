@@ -37,6 +37,7 @@ namespace Exalted
 	enum class StencilAction
 	{
 		ALWAYS			= GL_ALWAYS,	// Stencil value is always replaced.
+		EQUAL			= GL_EQUAL,		// Stencil only kept when equal.
 		NOT_EQUAL		= GL_NOTEQUAL,	// Stencil value is only replaced when not equal.
 		KEEP			= GL_KEEP,		// The currently stored stencil value is kept.
 		ZERO			= GL_ZERO,		// The stencil value is set to 0.
@@ -93,6 +94,8 @@ namespace Exalted
 		static inline void SetStencilMaskReadOnly() { glStencilMask(0x00); }
 		static inline void SetStencilMaskWriteALL() { glStencilMask(0xFF); }
 		static inline void SetStencilMaskCustom(unsigned value) { glStencilMask(value); }
+
+		static inline void SetColorMask(bool red, bool green, bool blue, bool alpha) { glColorMask(red, green, blue, alpha);  }
 
 		static inline void EnableScissorTesting() { glEnable(GL_SCISSOR_TEST); }
 		static inline void DisableScissorTesting() { glDisable(GL_SCISSOR_TEST); }

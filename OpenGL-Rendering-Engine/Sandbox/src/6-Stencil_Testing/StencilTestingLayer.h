@@ -34,6 +34,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> m_MeshCube;
 		Exalted::Ref<Exalted::Texture2D> m_CubeTexture;
 		Exalted::Ref<Exalted::Texture2D> m_CubeTexture2;
+		Exalted::Ref<Exalted::Texture2D> m_ChessboardTexture;
 		glm::mat4 m_CubeTransform1;
 		glm::mat4 m_CubeTransformOutline1;
 		glm::mat4 m_CubeTransform2;
@@ -43,6 +44,7 @@ namespace Sandbox
 		std::vector<glm::mat4> m_FloorTransforms;
 		Exalted::Ref<Exalted::Shader> m_Shader;
 		Exalted::Ref<Exalted::Shader> m_OutlineShader;
+		Exalted::Ref<Exalted::Shader> m_ChessboardShader;
 		glm::vec4 m_ScissorTestRegion = glm::vec4(0,0,1280,720);
 		Exalted::EditorCamera m_EditorCamera;
 		bool m_EnableStencilTesting = true;
