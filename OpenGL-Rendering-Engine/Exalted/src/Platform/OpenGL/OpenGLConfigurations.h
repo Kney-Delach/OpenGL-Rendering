@@ -101,7 +101,7 @@ namespace Exalted
 		static inline void EnableBlending() { glEnable(GL_BLEND); }
 		static inline void DisableBlending() { glDisable(GL_BLEND); }
 		static inline void SetBlendFunction(BlendFactors sourceFactor, BlendFactors destinationFactor) { glBlendFunc(GL_ENUM(sourceFactor), GL_ENUM(destinationFactor)); }
-		static inline void SetBlendFunctionSeperate(BlendFactors sourceFactorRGB, BlendFactors destinationFactorRGB, BlendFactors sourceFactorAlpha, BlendFactors destinationFactorAlpha) { glBlendFuncSeparate(GL_ENUM(sourceFactorRGB), GL_ENUM(destinationFactorRGB), GL_ENUM(sourceFactorAlpha), GL_ENUM(destinationFactorAlpha)); }
+		static inline void SetBlendFunctionSeparate(BlendFactors sourceFactorRGB, BlendFactors destinationFactorRGB, BlendFactors sourceFactorAlpha, BlendFactors destinationFactorAlpha) { glBlendFuncSeparate(GL_ENUM(sourceFactorRGB), GL_ENUM(destinationFactorRGB), GL_ENUM(sourceFactorAlpha), GL_ENUM(destinationFactorAlpha)); }
 		static inline void SetBlendConstantColor(float red, float green, float blue, float alpha = 1.0f) { glBlendColor(red, green, blue, alpha); }
 		static inline void SetBlendEquation(BlendMode blendMode) { glBlendEquation(GL_ENUM(blendMode)); }
 	};

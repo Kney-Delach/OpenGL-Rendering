@@ -195,7 +195,7 @@ namespace Sandbox
 		if (ImGui::Button("Disable Scissor Testing"))
 			m_EnableScissorTesting = false;
 		if (ImGui::Button("Integrate new Scissor Region Values"))
-			Exalted::OpenGLConfigurations::SetScissorBox(m_ScissorTestRegion.x, m_ScissorTestRegion.y, m_ScissorTestRegion.z, m_ScissorTestRegion.w);
+			Exalted::OpenGLConfigurations::SetScissorBox(static_cast<int>(m_ScissorTestRegion.x), static_cast<int>(m_ScissorTestRegion.y), static_cast<int>(m_ScissorTestRegion.z), static_cast<int>(m_ScissorTestRegion.w));
 		ImGui::DragFloat4("Scissor Region Values (x position,y position,width,height)", (float*)& m_ScissorTestRegion,1,0,1440);
 		ImGui::End();
 	}
