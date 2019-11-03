@@ -22,6 +22,8 @@ namespace Exalted
 	public:
 		virtual void SetViewport(const int xOffset, const int yOffset, const unsigned windowWidth, const unsigned windowHeight) override;
 		virtual void SetClearColor(const glm::vec4& color) override;
+		virtual void SetClearStencil(const float stencilValue) override;
+
 		virtual void Clear() override;
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
 		void DrawTriangles(const unsigned numberOfVertices) override;

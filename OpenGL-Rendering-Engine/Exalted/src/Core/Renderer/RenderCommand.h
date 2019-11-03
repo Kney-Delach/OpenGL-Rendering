@@ -32,6 +32,10 @@ namespace Exalted
 		{
 			s_RendererAPI->SetClearColor(color);
 		}
+		inline static void SetClearStencil(const float stencilValue)
+		{
+			s_RendererAPI->SetClearStencil(stencilValue);
+		}
 		inline static void Clear()
 		{
 			s_RendererAPI->Clear();

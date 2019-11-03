@@ -94,6 +94,10 @@ namespace Exalted
 		static inline void SetStencilMaskWriteALL() { glStencilMask(0xFF); }
 		static inline void SetStencilMaskCustom(unsigned value) { glStencilMask(value); }
 
+		static inline void EnableScissorTesting() { glEnable(GL_SCISSOR_TEST); }
+		static inline void DisableScissorTesting() { glDisable(GL_SCISSOR_TEST); }
+		static inline void SetScissorBox(int x, int y, int width, int height) { glScissor(x, y, width, height); }
+
 		static inline void EnableBlending() { glEnable(GL_BLEND); }
 		static inline void DisableBlending() { glDisable(GL_BLEND); }
 		static inline void SetBlendFunction(BlendFactors sourceFactor, BlendFactors destinationFactor) { glBlendFunc(GL_ENUM(sourceFactor), GL_ENUM(destinationFactor)); }

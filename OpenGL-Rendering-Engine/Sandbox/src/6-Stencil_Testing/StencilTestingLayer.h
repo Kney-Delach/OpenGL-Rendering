@@ -43,8 +43,10 @@ namespace Sandbox
 		std::vector<glm::mat4> m_FloorTransforms;
 		Exalted::Ref<Exalted::Shader> m_Shader;
 		Exalted::Ref<Exalted::Shader> m_OutlineShader;
+		glm::vec4 m_ScissorTestRegion = glm::vec4(0,0,1280,720);
 		Exalted::EditorCamera m_EditorCamera;
 		bool m_EnableStencilTesting = true;
+		bool m_EnableScissorTesting = true;
 		bool m_ProcessingMouseMovement = false;
 		bool m_MouseMoving = false;
 		bool m_ProcessingCameraMovement = true;

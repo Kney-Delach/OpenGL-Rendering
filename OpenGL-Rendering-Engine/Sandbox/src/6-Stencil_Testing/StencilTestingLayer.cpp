@@ -116,6 +116,9 @@ namespace Sandbox
 		// ------------ Initialize Stencil Buffer Processing ------------ //
 		if(m_EnableStencilTesting)
 			Exalted::OpenGLConfigurations::EnableStencilTesting();
+		if (m_EnableScissorTesting)
+			Exalted::OpenGLConfigurations::EnableScissorTesting();
+
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
 		Exalted::OpenGLConfigurations::SetStencilActions(Exalted::StencilAction::KEEP, Exalted::StencilAction::KEEP, Exalted::StencilAction::REPLACE);
 
@@ -152,8 +155,9 @@ namespace Sandbox
 
 		// ------------ cleanup ------------ //
 		Exalted::OpenGLConfigurations::SetStencilMaskWriteALL();
-		Exalted::OpenGLConfigurations::EnableDepthTesting();
+		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		Exalted::OpenGLConfigurations::DisableStencilTesting();
+		Exalted::OpenGLConfigurations::DisableScissorTesting();
 
 		Exalted::Renderer::EndScene();
 	}
@@ -179,10 +183,20 @@ namespace Sandbox
 		ImGui::Text("----------------------------");
 		ImGui::Text("Toggle Stencil Testing:");
 		ImGui::Text("----------------------------");
-		if (ImGui::Button("Enable"))
+		if (ImGui::Button("Enable Stencil"))
 			m_EnableStencilTesting = true;
-		if (ImGui::Button("Disable"))
+		if (ImGui::Button("Disable Stencil"))
 			m_EnableStencilTesting = false;
+		ImGui::Text("----------------------------");
+		ImGui::Text("Toggle Scissor Testing:");
+		ImGui::Text("----------------------------");
+		if (ImGui::Button("Enable Scissor Testing"))
+			m_EnableScissorTesting = true;
+		if (ImGui::Button("Disable Scissor Testing"))
+			m_EnableScissorTesting = false;
+		if (ImGui::Button("Integrate new Scissor Region Values"))
+			Exalted::OpenGLConfigurations::SetScissorBox(m_ScissorTestRegion.x, m_ScissorTestRegion.y, m_ScissorTestRegion.z, m_ScissorTestRegion.w);
+		ImGui::DragFloat4("Scissor Region Values (x position,y position,width,height)", (float*)& m_ScissorTestRegion,1,0,1440);
 		ImGui::End();
 	}
 

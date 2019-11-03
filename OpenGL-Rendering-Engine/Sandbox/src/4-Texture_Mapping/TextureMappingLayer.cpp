@@ -100,10 +100,9 @@ namespace Sandbox
 	void TextureMappingLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
 		if (m_ProcessingCameraMovement)
-		{
 			m_EditorCamera.UpdateCamera(deltaTime);
-		}
-
+		
+		Exalted::OpenGLConfigurations::EnableDepthTesting();
 		Exalted::RenderCommand::SetClearColor({ .1f, 0.1f, 0.3f, 1 });
 		Exalted::RenderCommand::Clear();
 
@@ -157,6 +156,7 @@ namespace Sandbox
 
 		// ------------ cleanup 
 		m_Textures[0]->Unbind();
+		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		Exalted::Renderer::EndScene();
 	}
 

@@ -187,10 +187,9 @@ namespace Sandbox
 		m_WindowTexture->Unbind();
 
 		// ------------ cleanup ------------ //
-
-		Exalted::Renderer::EndScene();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		Exalted::OpenGLConfigurations::DisableBlending();
+		Exalted::Renderer::EndScene();
 	}
 
 	void BlendingLayer::OnImGuiRender()

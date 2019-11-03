@@ -109,10 +109,6 @@ namespace Sandbox
 		m_DepthShader->Bind();
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_DepthShader)->SetUniformInt1("u_DiffuseTexture", 0);
 		m_DepthShader->Unbind();
-
-		// ------------- Enable depth testing ------------- //
-
-		Exalted::OpenGLConfigurations::EnableDepthTesting();
 	}
 
 	void DepthTestingLayer::OnDetach()
@@ -124,7 +120,9 @@ namespace Sandbox
 	{
 		if (m_ProcessingCameraMovement)	
 			m_EditorCamera.UpdateCamera(deltaTime);
-		
+
+		Exalted::OpenGLConfigurations::EnableDepthTesting();
+
 		Exalted::RenderCommand::SetClearColor({ .1f, 0.1f, 0.3f, 1 });
 		Exalted::RenderCommand::Clear();
 
@@ -166,8 +164,11 @@ namespace Sandbox
 		Exalted::Renderer::Submit(m_DepthShader, m_MeshCube, 6 * 6 * 9, cubeTransform);
 		m_CubeTexture2->Unbind();
 
+		Exalted::OpenGLConfigurations::DisableDepthTesting();
+
 		// ------------ cleanup ------------ //
 		Exalted::Renderer::EndScene();
+
 	}
 
 	void DepthTestingLayer::OnImGuiRender()
