@@ -43,6 +43,9 @@
     <Filter Include="src\Core\Renderer">
       <UniqueIdentifier>{EB009555-5717-93EB-A08E-1E0D0CE46373}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Core\SceneGraph">
+      <UniqueIdentifier>{34445DDA-A0A5-3AE8-2913-819A957371A7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
     </Filter>
@@ -1236,6 +1239,15 @@
     <ClInclude Include="src\Core\Renderer\VertexArray.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\SceneGraph\GameComponent.h">
+      <Filter>src\Core\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\SceneGraph\GameObject.h">
+      <Filter>src\Core\SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\SceneGraph\GameTransform.h">
+      <Filter>src\Core\SceneGraph</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Window.h">
       <Filter>src\Core</Filter>
     </ClInclude>
@@ -1275,9 +1287,6 @@
     <ClInclude Include="src\expch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\SceneGraph\GameComponent.h" />
-    <ClInclude Include="src\Core\SceneGraph\GameObject.h" />
-    <ClInclude Include="src\Core\SceneGraph\GameTransform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1316,6 +1325,9 @@
     <ClCompile Include="src\Core\Renderer\RendererAPI.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Renderer\RenderingContext.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Renderer\Shader.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
@@ -1324,6 +1336,9 @@
     </ClCompile>
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp">
       <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\SceneGraph\GameObject.cpp">
+      <Filter>src\Core\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
@@ -1355,7 +1370,5 @@
     <ClCompile Include="src\expch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\SceneGraph\GameObject.cpp" />
-    <ClCompile Include="src\Core\Renderer\RenderingContext.cpp" />
   </ItemGroup>
 </Project>

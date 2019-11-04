@@ -41,7 +41,7 @@ namespace Exalted
 
 	void OpenGLRendererAPI::SetClearStencil(const float stencilValue)
 	{
-		glClearStencil(stencilValue);
+		glClearStencil(static_cast<int>(stencilValue));
 	}
 
 	void OpenGLRendererAPI::Clear()

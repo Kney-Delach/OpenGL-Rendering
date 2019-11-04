@@ -236,7 +236,7 @@ namespace Sandbox
 		const auto windowWidth = resizeEvent.GetWidth();
 		const auto windowHeight = resizeEvent.GetHeight();
 		m_EditorCamera.OnWindowResize(windowWidth, windowHeight);
-		Exalted::OpenGLConfigurations::SetScissorBox(static_cast<float>(windowWidth)/2.5f, static_cast<float>(windowHeight)/2.5f, static_cast<float>(windowWidth)/5.f, static_cast<float>(windowHeight)/5.f);
+		Exalted::OpenGLConfigurations::SetScissorBox(static_cast<int>(static_cast<float>(windowWidth)/2.5f), static_cast<int>(static_cast<float>(windowHeight)/2.5f), static_cast<int>(static_cast<float>(windowWidth)/5.f), static_cast<int>(static_cast<float>(windowHeight)/5.f));
 
 	}
 
@@ -244,11 +244,11 @@ namespace Sandbox
 	{
 		if (event.GetEventType() == Exalted::EventType::WindowResize)
 		{
-			OnWindowResize(static_cast<Exalted::WindowResizeEvent&>(event));
+			OnWindowResize(dynamic_cast<Exalted::WindowResizeEvent&>(event));
 		}
 		if ((event.GetEventType() == Exalted::EventType::MouseButtonPressed) && !m_MouseMoving)
 		{
-			auto& e = static_cast<Exalted::MouseButtonPressedEvent&>(event);
+			auto& e = dynamic_cast<Exalted::MouseButtonPressedEvent&>(event);
 			if (e.GetMouseButton() == EX_MOUSE_BUTTON_2)
 			{
 				m_FirstMouseMovement = true;
@@ -258,7 +258,7 @@ namespace Sandbox
 		}
 		if (event.GetEventType() == Exalted::EventType::MouseButtonReleased)
 		{
-			auto& e = static_cast<Exalted::MouseButtonReleasedEvent&>(event);
+			auto& e = dynamic_cast<Exalted::MouseButtonReleasedEvent&>(event);
 			if (e.GetMouseButton() == EX_MOUSE_BUTTON_2)
 			{
 				m_ProcessingMouseMovement = false;
@@ -267,20 +267,20 @@ namespace Sandbox
 		}
 		if (event.GetEventType() == Exalted::EventType::MouseScrolled)
 		{
-			auto& e = static_cast<Exalted::MouseScrolledEvent&>(event);
+			auto& e = dynamic_cast<Exalted::MouseScrolledEvent&>(event);
 			m_EditorCamera.ProcessMouseScrollEvent(e.GetYOffset());
 		}
 		if (m_ProcessingMouseMovement && (event.GetEventType() == Exalted::EventType::MouseMoved))
 		{
-			auto& e = static_cast<Exalted::MouseMovedEvent&>(event);
+			auto& e = dynamic_cast<Exalted::MouseMovedEvent&>(event);
 			if (m_FirstMouseMovement)
 			{
 				m_LastMouseX = e.GetX();
 				m_LastMouseY = e.GetY();
 				m_FirstMouseMovement = false;
 			}
-			float xOffset = e.GetX() - m_LastMouseX;
-			float yOffset = m_LastMouseY - e.GetY();
+			const float xOffset = e.GetX() - m_LastMouseX;
+			const float yOffset = m_LastMouseY - e.GetY();
 
 			m_LastMouseX = e.GetX();
 			m_LastMouseY = e.GetY();
@@ -288,7 +288,7 @@ namespace Sandbox
 		}
 		if (event.GetEventType() == Exalted::EventType::KeyPressed)
 		{
-			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
+			auto& e = dynamic_cast<Exalted::KeyPressedEvent&>(event);
 			if (e.GetKeyCode() == EX_KEY_1)
 				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::POINT);
 

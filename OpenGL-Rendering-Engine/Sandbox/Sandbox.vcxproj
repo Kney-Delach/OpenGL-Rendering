@@ -156,14 +156,6 @@
       <Project>{8C8535E2-F864-B47D-017D-3F546DDB1ADF}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Shaders\Blending\GrassFragmentShader.glsl" />
-    <None Include="Resources\Shaders\Blending\GrassVertexShader.glsl" />
-    <None Include="Resources\Shaders\Blending\WindowFragmentShader.glsl" />
-    <None Include="Resources\Shaders\Blending\WindowVertexShader.glsl" />
-    <None Include="Resources\Shaders\DEFAULT_FRAGMENT_SHADER.glsl" />
-    <None Include="Resources\Shaders\DEFAULT_VERTEX_SHADER.glsl" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
