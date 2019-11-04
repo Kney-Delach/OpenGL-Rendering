@@ -19,7 +19,7 @@
 
 namespace Exalted 
 {
-	void RendererAPI::Init()
+	void OpenGLRendererAPI::Init()
 	{
 		auto& capabilities = GetCapabilities();
 		capabilities.Vendor = (const char*) glGetString(GL_VENDOR);

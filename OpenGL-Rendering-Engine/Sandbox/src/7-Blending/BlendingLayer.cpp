@@ -19,7 +19,7 @@
 namespace Sandbox
 {
 	BlendingLayer::BlendingLayer()
-		: Layer("Blending Layer", true)
+		: Layer("Blending Layer", false)
 	{
 		const float windowWidth = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth());
 		const float windowHeight = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight());
@@ -32,54 +32,54 @@ namespace Sandbox
 
 		// ------------------------- Initialize Meshes ------------------------- //
 
-		m_MeshQuad.reset(Exalted::Mesh::Create());
+		m_MeshQuad = Exalted::Mesh::Create();
 		m_MeshQuad->CreateTexturedQuad(1);
 
-		m_MeshCube.reset(Exalted::Mesh::Create());
+		m_MeshCube = Exalted::Mesh::Create();
 		m_MeshCube->CreateTexturedCube(1);
 
 		// ------------------------- Initialize Textures ------------------------- //
 
 
-		m_CubeTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexContainer.png",
+		m_CubeTexture = Exalted::Texture2D::Create("Resources/Textures/TexContainer.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_FloorTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexGridOrange.png",
+		m_FloorTexture = Exalted::Texture2D::Create("Resources/Textures/TexGridOrange.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_WindowTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexTransparentWindow.png",
+		m_WindowTexture = Exalted::Texture2D::Create("Resources/Textures/TexTransparentWindow.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::CLAMP,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_GrassTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexGrass.png",
+		m_GrassTexture = Exalted::Texture2D::Create("Resources/Textures/TexGrass.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::CLAMP, // note, transparent textures should be clamped, as when repeating, the border values get interpolated. 
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_StainedWindowTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexTransparentGlassStained.tga",
+		m_StainedWindowTexture = Exalted::Texture2D::Create("Resources/Textures/TexTransparentGlassStained.tga",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::CLAMP,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 		
 		// ------------------------- Initialize Transformations ------------------------- //
 
@@ -110,9 +110,9 @@ namespace Sandbox
 
 		// ------------------------- Initialize Shader ------------------------- //
 
-		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl"));
-		m_WindowShader.reset(Exalted::Shader::Create("Resources/Shaders/Blending/WindowVertexShader.glsl", "Resources/Shaders/Blending/WindowFragmentShader.glsl"));
-		m_GrassShader.reset(Exalted::Shader::Create("Resources/Shaders/Blending/GrassVertexShader.glsl", "Resources/Shaders/Blending/GrassFragmentShader.glsl"));
+		m_Shader = Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl");
+		m_WindowShader = Exalted::Shader::Create("Resources/Shaders/Blending/WindowVertexShader.glsl", "Resources/Shaders/Blending/WindowFragmentShader.glsl");
+		m_GrassShader = Exalted::Shader::Create("Resources/Shaders/Blending/GrassVertexShader.glsl", "Resources/Shaders/Blending/GrassFragmentShader.glsl");
 
 		m_Shader->Bind();
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_DiffuseTexture", 0);

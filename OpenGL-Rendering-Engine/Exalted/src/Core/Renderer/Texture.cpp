@@ -19,14 +19,15 @@
 
 namespace Exalted
 {
-	Texture2D* Texture2D::Create(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap,
+	Ref<Texture2D> Texture2D::Create(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap,
 		TextureMagFilter textureMagFilter, TextureMinFilter textureMinFilter, bool isRGB, unsigned int mipMapLevel)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None: return nullptr;
-		case RendererAPI::API::OpenGL: return new OpenGLTexture2D(filepath, textureFormat, textureWrap, textureMagFilter, textureMinFilter, isRGB, mipMapLevel);
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLTexture2D>(filepath, textureFormat, textureWrap, textureMagFilter, textureMinFilter, isRGB, mipMapLevel);
 		}
+		EX_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 
@@ -37,6 +38,7 @@ namespace Exalted
 		case TextureFormat::RGB:    return 3;
 		case TextureFormat::RGBA:   return 4;
 		}
+		EX_CORE_ASSERT(false, "Unknown Texture Format!");
 		return 0;
 	}
 }

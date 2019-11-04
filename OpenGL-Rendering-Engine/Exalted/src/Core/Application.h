@@ -34,14 +34,14 @@ namespace Exalted
 		void OnEvent(Event& e);
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
-		_NODISCARD inline Window& GetWindow() const { return *m_Window; } 
+		inline Window& GetWindow() const { return *m_Window; } 
 	private:
 		bool OnWindowClosed(WindowClosedEvent& closedEvent);
 		bool OnWindowResize(WindowResizeEvent& resizeEvent);
 	private:
 		static Application* s_Instance;
 	private:
-		Scope<Window> m_Window;
+		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
@@ -51,7 +51,4 @@ namespace Exalted
 
 	/** This should be defined in the client-side application project. */
 	Application* CreateApplication();
-
-	/** Macro used to bind events to application callback functions. */
-#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 }

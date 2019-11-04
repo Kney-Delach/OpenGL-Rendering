@@ -1275,6 +1275,9 @@
     <ClInclude Include="src\expch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\SceneGraph\GameComponent.h" />
+    <ClInclude Include="src\Core\SceneGraph\GameObject.h" />
+    <ClInclude Include="src\Core\SceneGraph\GameTransform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1352,5 +1355,7 @@
     <ClCompile Include="src\expch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\SceneGraph\GameObject.cpp" />
+    <ClCompile Include="src\Core\Renderer\RenderingContext.cpp" />
   </ItemGroup>
 </Project>

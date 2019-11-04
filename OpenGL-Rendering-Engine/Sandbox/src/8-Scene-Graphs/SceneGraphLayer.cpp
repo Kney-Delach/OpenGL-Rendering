@@ -1,8 +1,9 @@
 /***************************************************************************
- * Filename		: EditorShowcaseLayer.h
+ * Filename		: SceneGraphLayer.cpp
  * Name			: Ori Lazar
- * Date			: 31/10/2019
- * Description	: This layer showcases the Editor FPS camera implementation.
+ * Date			: 03/11/2019
+ * Description	: This layer contains a scene which utilizes this engines 
+                  scene graph storage structure.
      .---.
    .'_:___".
    |__ --==|
@@ -12,53 +13,63 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#include "EditorShowcaseLayer.h"
+#include "SceneGraphLayer.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Sandbox
 {
-	EditorShowcaseLayer::EditorShowcaseLayer()
-		: Layer("Editor Camera Showcase", false)
+	SceneGraphLayer::SceneGraphLayer()
+		: Layer("Scene Graph Layer", true)
 	{
 		const float windowWidth = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth());
 		const float windowHeight = static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight());
 		m_EditorCamera.SetAspectRatio(windowWidth / windowHeight);
 	}
 
-	void EditorShowcaseLayer::OnAttach()
+	void SceneGraphLayer::OnAttach()
 	{
-		EX_INFO("Editor Showcase Layer attached successfully.");
+		EX_INFO("Scene Graph layer attached successfully.");
+		m_SceneRoot = Exalted::CreateRef<Exalted::GameObject>("Root object");
+		Exalted::Ref<Exalted::Mesh> rootMesh = Exalted::Mesh::Create();
+		rootMesh->CreateQuad();
+		m_SceneRoot->SetMesh(rootMesh);
 
-		m_MeshCube = Exalted::Mesh::Create();
-		m_MeshCube->CreateCube();
+		m_pBoxObject = new Exalted::GameObject("Box GameObject");
+		Exalted::Ref<Exalted::Mesh> boxMesh = Exalted::Mesh::Create();
+		boxMesh->CreateCube();
+		m_pBoxObject->SetMesh(boxMesh);
+		glm::mat4 localTransformBox = glm::translate(glm::mat4(1.f), glm::vec3(5.0f, 2.0f, 2.0f));
+		m_pBoxObject->GetTransform()->SetLocalTransform(localTransformBox);
+		m_pBoxObject->GetTransform()->SetScaleTransform(glm::vec3(2.f));
 
-		m_Shader = Exalted::Shader::Create("Resources/Shaders/VBasicShaderSMOOTH.glsl", "Resources/Shaders/FBasicShaderSMOOTH.glsl");
-		Exalted::OpenGLConfigurations::EnableDepthTesting();
+		m_SceneRoot->AddChildObject(m_pBoxObject);
 	}
 
-	void EditorShowcaseLayer::OnDetach()
+	void SceneGraphLayer::OnDetach()
 	{
-		EX_INFO("Editor Showcase Layer deatched successfully.");
+		EX_INFO("Scene Graph Layer detached successfully.");
 	}
 
-	void EditorShowcaseLayer::OnUpdate(Exalted::Timestep deltaTime)
+	void SceneGraphLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
 		if (m_ProcessingCameraMovement)
-		{
 			m_EditorCamera.UpdateCamera(deltaTime);
-		}
-		Exalted::OpenGLConfigurations::EnableDepthTesting();
-		Exalted::RenderCommand::SetClearColor({ .1f, 0.1f, 0.3f, 1 });
-		Exalted::RenderCommand::Clear();
 
+		Exalted::RenderCommand::SetClearColor({ .05f, 0.2f, 0.5f, 1 });
+		Exalted::RenderCommand::Clear();
+		Exalted::OpenGLConfigurations::EnableDepthTesting();
 		Exalted::Renderer::BeginScene(m_EditorCamera);
-		Exalted::Renderer::Submit(m_Shader, m_MeshCube, glm::mat4(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f)); // hard constructing the identity matrix in glm for analysis purposes.
+
+		m_SceneRoot->Update(deltaTime);
+		m_SceneRoot->Draw();
+
 		Exalted::Renderer::EndScene();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
 	}
 
-	void EditorShowcaseLayer::OnImGuiRender()
+	void SceneGraphLayer::OnImGuiRender()
 	{
-		ImGui::Begin("Editor Camera Transform");
+		ImGui::Begin("Scene Graph Camera Transform");
 		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
 		ImGui::InputFloat3("Position", (float*)& m_EditorCamera.GetPosition());
@@ -69,31 +80,33 @@ namespace Sandbox
 		ImGui::InputFloat("Movement Speed", (float*)& m_EditorCamera.GetMovementSpeed(), 0.01f, 10.f);
 		ImGui::InputFloat("Mouse Sensitivity", (float*)& m_EditorCamera.GetSensitivitiy(), 0.01f, 10.f);
 		ImGui::End();
-		ImGui::Begin("Editor Camera Showcase Scene Settings");
+
+		ImGui::Begin("Scene Graph Scene Settings");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
+		ImGui::Text("----------------------------");
+		if (ImGui::Button("Remove Cube From Root"))
+			m_SceneRoot->RemoveChildObject(m_pBoxObject);
 		ImGui::End();
 	}
 
-	void EditorShowcaseLayer::OnInactiveImGuiRender()
+	void SceneGraphLayer::OnInactiveImGuiRender()
 	{
 		ImGui::Begin("Disabled Scenes Settings");
-		if (ImGui::Button("Enable Scene [3] -> 3D EditorCamera Showcase"))
-		{
+		if (ImGui::Button("Enable Scene [8] -> Scene Graph"))
 			m_IsActive = true;
-		}
 		ImGui::End();
 	}
 
-	void EditorShowcaseLayer::OnWindowResize(Exalted::WindowResizeEvent& resizeEvent)
+	void SceneGraphLayer::OnWindowResize(Exalted::WindowResizeEvent& resizeEvent)
 	{
 		const auto windowWidth = resizeEvent.GetWidth();
 		const auto windowHeight = resizeEvent.GetHeight();
 		m_EditorCamera.OnWindowResize(windowWidth, windowHeight);
 	}
 
-	void EditorShowcaseLayer::OnEvent(Exalted::Event& event)
+	void SceneGraphLayer::OnEvent(Exalted::Event& event)
 	{
 		if (event.GetEventType() == Exalted::EventType::WindowResize)
 		{
@@ -138,6 +151,18 @@ namespace Sandbox
 			m_LastMouseX = e.GetX();
 			m_LastMouseY = e.GetY();
 			m_EditorCamera.ProcessRotationEvent(xOffset, yOffset);
+		}
+		if (event.GetEventType() == Exalted::EventType::KeyPressed)
+		{
+			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
+			if (e.GetKeyCode() == EX_KEY_1)
+				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::POINT);
+
+			if (e.GetKeyCode() == EX_KEY_2)
+				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::LINE);
+
+			if (e.GetKeyCode() == EX_KEY_3)
+				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::FILL);
 		}
 	}
 }

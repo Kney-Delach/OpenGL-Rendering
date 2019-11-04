@@ -16,6 +16,8 @@
 #pragma once
 #include "Core/Renderer/VertexArray.h"
 
+//todo: Maybe make this a GameComponent in the future.
+
 namespace Exalted
 {
 	class Mesh
@@ -30,6 +32,6 @@ namespace Exalted
 
 		_NODISCARD virtual const Ref<VertexArray>& GetVertexArray() const = 0;
 	public:
-		static Mesh* Create();
+		static Ref<Mesh> Create();
 	};
 }

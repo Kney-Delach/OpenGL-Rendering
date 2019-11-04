@@ -23,5 +23,7 @@ namespace Exalted
 		virtual void Init() = 0;
 		virtual void SwapBuffers() = 0;
 		virtual void GetInfo() = 0;
+
+		static Scope<RenderingContext> Create(void* window);
 	};
 }

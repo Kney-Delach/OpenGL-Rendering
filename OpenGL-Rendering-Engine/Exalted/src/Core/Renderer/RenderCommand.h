@@ -23,11 +23,14 @@ namespace Exalted
 	class RenderCommand
 	{
 	public:
+		inline static void Init()
+		{
+			s_RendererAPI->Init();
+		}
 		inline static void SetViewport(const int xOffset, const int yOffset, const unsigned windowWidth, const unsigned windowHeight)
 		{
 			s_RendererAPI->SetViewport(xOffset, yOffset, windowWidth, windowHeight);
 		}
-
 		inline static void SetClearColor(const glm::vec4& color)
 		{
 			s_RendererAPI->SetClearColor(color);
@@ -48,12 +51,11 @@ namespace Exalted
 		{
 			s_RendererAPI->DrawTriangles(numberOfVertices);
 		}
-
 		inline static void DrawMesh(const Ref<Mesh>& mesh)
 		{
 			s_RendererAPI->DrawMesh(mesh);
 		}
 	private:
-		static RendererAPI* s_RendererAPI;
+		static Scope<RendererAPI> s_RendererAPI;
 	};
 }

@@ -23,16 +23,16 @@
 
 namespace Exalted
 {
-	static bool s_GLFWInitialized = false;
+	static uint8_t s_GLFWWindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
 		EX_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	Window* Window::Create(const WindowProperties& properties)
+	Scope<Window> Window::Create(const WindowProperties& properties)
 	{
-		return new WindowsWindow(properties);
+		return CreateScope<WindowsWindow>(properties);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProperties& properties)
@@ -64,18 +64,23 @@ namespace Exalted
 	void WindowsWindow::Shutdown()
 	{
 		glfwDestroyWindow(m_Window);
+		--s_GLFWWindowCount;
+
+		if (s_GLFWWindowCount == 0)
+			glfwTerminate();
+		
+		EX_CORE_INFO("Shutting Down Windows OS Window");
 	}
 
 	void WindowsWindow::Init(const WindowProperties& properties)
 	{
 		m_WindowData.Properties = WindowProperties(properties);
 		EX_CORE_INFO("Creating window {0} ({1}, {2})", properties.Title, properties.Width, properties.Height);
-		if (!s_GLFWInitialized)
+		if (s_GLFWWindowCount == 0)
 		{
 			int success = glfwInit();
 			EX_CORE_ASSERT(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
-			s_GLFWInitialized = true;
 		}
 		InitGLFWWindow();
 		SetGLFWConfigurations();
@@ -85,8 +90,10 @@ namespace Exalted
 	void WindowsWindow::InitGLFWWindow()
 	{
 		m_Window = glfwCreateWindow(static_cast<int>(m_WindowData.Properties.Width), static_cast<int>(m_WindowData.Properties.Height), m_WindowData.Properties.Title.c_str(), nullptr, nullptr);
-		m_RenderingContext = new OpenGLContext(m_Window);
+		s_GLFWWindowCount++;
+		m_RenderingContext = RenderingContext::Create(m_Window);
 		m_RenderingContext->Init();
+
 		glfwSetWindowUserPointer(m_Window, &m_WindowData);
 	}
 

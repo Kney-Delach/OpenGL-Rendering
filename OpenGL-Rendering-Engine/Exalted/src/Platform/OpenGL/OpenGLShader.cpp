@@ -15,13 +15,12 @@
 #include "expch.h"
 #include "OpenGLShader.h"
 
-#include <glad/glad.h>
-#include <glm/gtc/type_ptr.hpp>
+
 
 namespace Exalted 
 {
 	OpenGLShader::OpenGLShader(const std::string& vertexFilePath, const std::string& fragmentFilePath, const std::string& geometryFilePath)
-		: m_RendererID(0)
+		: m_RendererID(0) // Shader("OpenGL Shader"), 
 	{
 		const std::string vertexSource = ParseShader(vertexFilePath);
 		const std::string fragmentSource = ParseShader(fragmentFilePath);
@@ -32,80 +31,7 @@ namespace Exalted
 		m_RendererID = CreateShader(vertexSource, fragmentSource, geometrySource);
 	}
 
-	OpenGLShader::~OpenGLShader()
-	{
-		glDeleteProgram(m_RendererID);
-	}
 
-	void OpenGLShader::Bind() const
-	{
-		glUseProgram(m_RendererID);
-	}
-
-	void OpenGLShader::Unbind() const
-	{
-		glUseProgram(0);
-	}
-
-	void OpenGLShader::SetUniformBool1(const std::string& name, bool value)
-	{
-		glUniform1i(GetUniformLocation(name), static_cast<int>(value));
-	}
-
-	void OpenGLShader::SetUniformInt1(const std::string& name, int value)
-	{
-		glUniform1i(GetUniformLocation(name), value);
-	}
-
-	void OpenGLShader::SetUniformFloat1(const std::string& name, float value)
-	{
-		glUniform1f(GetUniformLocation(name), value);
-	}
-
-	void OpenGLShader::SetUniformFloat2(const std::string& name, const glm::vec2& value)
-	{
-		glUniform2fv(GetUniformLocation(name), 1, &value[0]);
-	}
-
-	void OpenGLShader::SetUniformFloat2(const std::string& name, float v0, float v1)
-	{
-		glUniform2f(GetUniformLocation(name), v0, v1);
-	}
-
-	void OpenGLShader::SetUniformFloat3(const std::string& name, const glm::vec3& value)
-	{
-		glUniform3fv(GetUniformLocation(name), 1, &value[0]);
-	}
-
-	void OpenGLShader::SetUniformFloat3(const std::string& name, float v0, float v1, float v2)
-	{
-		glUniform3f(GetUniformLocation(name), v0, v1, v2);
-	}
-
-	void OpenGLShader::SetUniformFloat4(const std::string& name, const glm::vec4& value)
-	{
-		glUniform4fv(GetUniformLocation(name), 1, &value[0]);
-	}
-
-	void OpenGLShader::SetUniformFloat4(const std::string& name, float v0, float v1, float v2, float v3)
-	{
-		glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
-	}
-
-	void OpenGLShader::SetUniformMatFloat2(const std::string& name, const glm::mat2& matrix)
-	{
-		glUniformMatrix2fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
-	}
-
-	void OpenGLShader::SetUniformMatFloat3(const std::string& name, const glm::mat3& matrix)
-	{
-		glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
-	}
-
-	void OpenGLShader::SetUniformMatFloat4(const std::string& name, const glm::mat4& matrix)
-	{
-		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &matrix[0][0]);
-	}
 
 	std::string OpenGLShader::ParseShader(const std::string& filepath) const
 	{

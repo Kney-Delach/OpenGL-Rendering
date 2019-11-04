@@ -98,13 +98,14 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;EX_BUILD_DLL;EX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>Full</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -531,9 +532,12 @@
     <ClInclude Include="src\Core\Renderer\Renderer.h" />
     <ClInclude Include="src\Core\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Core\Renderer\RenderingContext.h" />
+    <ClInclude Include="src\Core\SceneGraph\GameComponent.h" />
+    <ClInclude Include="src\Core\SceneGraph\GameObject.h" />
     <ClInclude Include="src\Core\Renderer\Shader.h" />
     <ClInclude Include="src\Core\Renderer\Texture.h" />
     <ClInclude Include="src\Core\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Core\SceneGraph\GameTransform.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Exalted.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
@@ -561,6 +565,8 @@
     <ClCompile Include="src\Core\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Core\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Core\Renderer\RendererAPI.cpp" />
+    <ClCompile Include="src\Core\Renderer\RenderingContext.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\GameObject.cpp" />
     <ClCompile Include="src\Core\Renderer\Shader.cpp" />
     <ClCompile Include="src\Core\Renderer\Texture.cpp" />
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp" />

@@ -1,8 +1,9 @@
 /***************************************************************************
- * Filename		: DepthTestingLayer.h
+ * Filename		: SceneGraphLayer.h
  * Name			: Ori Lazar
- * Date			: 01/11/2019
- * Description	: This layer contains a scene showcasing depth testing capabilities
+ * Date			: 03/11/2019
+ * Description	: This layer contains a scene which utilizes this engines 
+                  scene graph storage structure.
      .---.
    .'_:___".
    |__ --==|
@@ -17,11 +18,11 @@
 
 namespace Sandbox
 {
-	class DepthTestingLayer : public Exalted::Layer
+	class SceneGraphLayer : public Exalted::Layer
 	{
 	public:
-		DepthTestingLayer();
-		virtual ~DepthTestingLayer() = default;
+		SceneGraphLayer();
+		virtual ~SceneGraphLayer() = default;
 		virtual void OnUpdate(Exalted::Timestep deltaTime) override;
 		virtual void OnImGuiRender() override;
 		virtual void OnInactiveImGuiRender() override;
@@ -31,17 +32,9 @@ namespace Sandbox
 	private:
 		void OnWindowResize(Exalted::WindowResizeEvent& resizeEvent);
 	private:
-		Exalted::Ref<Exalted::Mesh> m_MeshCube;
-		Exalted::Ref<Exalted::Texture2D> m_CubeTexture;
-		Exalted::Ref<Exalted::Texture2D> m_CubeTexture2;
-		Exalted::Ref<Exalted::Mesh> m_MeshFloor;
-		Exalted::Ref<Exalted::Texture2D> m_FloorTexture;
-		std::vector<glm::mat4> m_FloorTransforms;
-		std::vector<glm::mat4> m_FloorTransformsDepth;
-		Exalted::Ref<Exalted::Shader> m_Shader;
-		Exalted::Ref<Exalted::Shader> m_DepthShader;
+		Exalted::Ref<Exalted::GameObject> m_SceneRoot; 
 		Exalted::EditorCamera m_EditorCamera;
-		bool m_EnableDepthTest = true;
+		Exalted::GameObject* m_pBoxObject;
 		bool m_ProcessingMouseMovement = false;
 		bool m_MouseMoving = false;
 		bool m_ProcessingCameraMovement = true;

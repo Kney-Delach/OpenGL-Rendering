@@ -20,7 +20,7 @@ namespace Exalted
 {
 	void OpenGLMesh::CreateTriangle()
 	{
-		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray = VertexArray::Create();
 		float vertices[3 * 7] =
 		{
 			 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
@@ -28,7 +28,7 @@ namespace Exalted
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
 		};
 		Ref<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		const BufferLayout layout =
 		{
 			{ShaderDataType::Float3, "a_Position" },
@@ -38,13 +38,13 @@ namespace Exalted
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 		uint32_t indices[3] = { 0, 1, 2 };
 		Ref<IndexBuffer> indexBuffer;
-		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 	}
 
 	void OpenGLMesh::CreateQuad()
 	{
-		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray = VertexArray::Create();
 		float vertices[4 * 7] =
 		{
 			 -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.75f, 1.0f,
@@ -53,7 +53,7 @@ namespace Exalted
 			 -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 0.25f, 1.0f
 		};
 		Ref<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		const BufferLayout layout =
 		{ 
 			{ShaderDataType::Float3, "a_Position"},
@@ -63,13 +63,13 @@ namespace Exalted
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 		uint32_t indices[6] = { 0, 1, 2, 2, 3, 0 };
 		Ref<IndexBuffer> indexBuffer;
-		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 	}
 
 	void OpenGLMesh::CreateCube()
 	{
-		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray = VertexArray::Create();
 		float vertices[8*7] = {
 			// front
 			-1.0, -1.0,  1.0,	1.0, 0.0, 0.0f, 1.0f,
@@ -83,7 +83,7 @@ namespace Exalted
 			-1.0,  1.0, -1.0,	1.0, 0.0, 1.0f , 1.0f
 		};
 		Ref<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		const BufferLayout layout =
 		{
 			{ShaderDataType::Float3, "a_Position"},
@@ -112,13 +112,13 @@ namespace Exalted
 			6, 7, 3
 		};
 		Ref<IndexBuffer> indexBuffer;
-		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 	}
 
 	void OpenGLMesh::CreateTexturedQuad(float textureScale)
 	{
-		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray = VertexArray::Create();
 		float vertices[4*9] = {
 			// positions          // colors           // texture coords
 			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,   textureScale*1.0f, textureScale*1.f, // top right
@@ -127,7 +127,7 @@ namespace Exalted
 			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f, 1.0f,   0.0f, textureScale*1.0f  // top left 
 		};
 		Ref<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		const BufferLayout layout =
 		{
 			{ShaderDataType::Float3, "a_Position"},
@@ -138,13 +138,13 @@ namespace Exalted
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 		uint32_t indices[6] = { 0, 1, 3, 1, 2, 3 };
 		Ref<IndexBuffer> indexBuffer;
-		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 	}
 
 	void OpenGLMesh::CreateTexturedCube(float textureScale)
 	{
-		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray = VertexArray::Create();
 		float vertices[6*6*9] = 
 		{
 		-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, textureScale * 0.0f, textureScale * 0.0f,
@@ -190,7 +190,7 @@ namespace Exalted
 		-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, textureScale * 0.0f, textureScale * 1.0f
 		};
 		Ref<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
 		const BufferLayout layout =
 		{
 			{ShaderDataType::Float3, "a_Position"},

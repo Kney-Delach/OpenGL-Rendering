@@ -41,7 +41,7 @@ namespace Exalted
 	class Texture2D : public Texture
 	{
 	public:
-		static Texture2D* Create(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap = TextureWrap::REPEAT, 
+		static Ref<Texture2D> Create(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap = TextureWrap::REPEAT, 
 			TextureMagFilter textureMagFilter = TextureMagFilter::LINEAR, TextureMinFilter textureMinFilter = TextureMinFilter::LINEAR, bool isRGB = false, unsigned int mipMapLevel = 0);
 		_NODISCARD virtual TextureFormat GetFormat() const = 0;
 		_NODISCARD virtual uint32_t GetWidth() const = 0;

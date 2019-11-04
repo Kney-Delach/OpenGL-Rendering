@@ -31,37 +31,37 @@ namespace Sandbox
 
 		// ------------------------- Initialize Meshes ------------------------- //
 
-		m_MeshFloor.reset(Exalted::Mesh::Create());
+		m_MeshFloor = Exalted::Mesh::Create();
 		m_MeshFloor->CreateTexturedQuad(1);
 		
-		m_MeshCube.reset(Exalted::Mesh::Create());
+		m_MeshCube = Exalted::Mesh::Create();
 		m_MeshCube->CreateTexturedCube(1);
 
 		// ------------------------- Initialize Textures ------------------------- //
 
-		m_FloorTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexGridOrange.png",
+		m_FloorTexture = Exalted::Texture2D::Create("Resources/Textures/TexGridOrange.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_CubeTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexContainer.png",
+		m_CubeTexture = Exalted::Texture2D::Create("Resources/Textures/TexContainer.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_CubeTexture2.reset(Exalted::Texture2D::Create("Resources/Textures/TexGridBW.png",
+		m_CubeTexture2 = Exalted::Texture2D::Create("Resources/Textures/TexGridBW.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
 		// ------------------------- Initialize Block Transformations ------------------------- //
 		
@@ -99,8 +99,8 @@ namespace Sandbox
 
 		// ------------------------- Initialize Shader ------------------------- //
 
-		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl"));
-		m_DepthShader.reset(Exalted::Shader::Create("Resources/Shaders/VDepthShader.glsl", "Resources/Shaders/FDepthShader.glsl"));
+		m_Shader = Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl");
+		m_DepthShader = Exalted::Shader::Create("Resources/Shaders/VDepthShader.glsl", "Resources/Shaders/FDepthShader.glsl");
 
 		m_Shader->Bind();
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_DiffuseTexture", 0);
@@ -121,8 +121,9 @@ namespace Sandbox
 		if (m_ProcessingCameraMovement)	
 			m_EditorCamera.UpdateCamera(deltaTime);
 
-		Exalted::OpenGLConfigurations::EnableDepthTesting();
-
+		if(m_EnableDepthTest)
+			Exalted::OpenGLConfigurations::EnableDepthTesting();
+		
 		Exalted::RenderCommand::SetClearColor({ .1f, 0.1f, 0.3f, 1 });
 		Exalted::RenderCommand::Clear();
 
@@ -164,11 +165,9 @@ namespace Sandbox
 		Exalted::Renderer::Submit(m_DepthShader, m_MeshCube, 6 * 6 * 9, cubeTransform);
 		m_CubeTexture2->Unbind();
 
-		Exalted::OpenGLConfigurations::DisableDepthTesting();
-
 		// ------------ cleanup ------------ //
 		Exalted::Renderer::EndScene();
-
+		Exalted::OpenGLConfigurations::DisableDepthTesting();
 	}
 
 	void DepthTestingLayer::OnImGuiRender()
@@ -193,9 +192,9 @@ namespace Sandbox
 		ImGui::Text("Toggle Depth Testing:");
 		ImGui::Text("----------------------------");
 		if (ImGui::Button("Enable"))
-			Exalted::OpenGLConfigurations::EnableDepthTesting();
+			m_EnableDepthTest = true;
 		if (ImGui::Button("Disable"))
-			Exalted::OpenGLConfigurations::DisableDepthTesting();
+			m_EnableDepthTest = false;
 		ImGui::Text("----------------------------");
 		ImGui::Text("Set Depth Testing Function:");
 		ImGui::Text("----------------------------");

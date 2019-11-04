@@ -38,7 +38,7 @@ namespace Sandbox
 			m_Meshes[i]->CreateTexturedQuad(static_cast<float>(i+1));
 		}
 
-		m_Mesh3D.reset(Exalted::Mesh::Create());
+		m_Mesh3D = Exalted::Mesh::Create();
 		m_Mesh3D->CreateTexturedCube(1);
 
 		// ------------------------- Initialize Textures ------------------------- //
@@ -61,13 +61,13 @@ namespace Sandbox
 			}
 		}
 
-		m_Texture3D.reset(Exalted::Texture2D::Create("Resources/Textures/TexLava.jpg",//TexContainer.png",
+		m_Texture3D = Exalted::Texture2D::Create("Resources/Textures/TexLava.jpg",//TexContainer.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::NEAR_LINEAR,
 			false,
-			0));
+			0);
 
 		// ------------------------- Initialize Block Transformations ------------------------- //
 
@@ -84,7 +84,7 @@ namespace Sandbox
 
 		// ------------------------- Initialize Shader ------------------------- //
 
-		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl"));
+		m_Shader = Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl");
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
 
 		m_Shader->Bind();

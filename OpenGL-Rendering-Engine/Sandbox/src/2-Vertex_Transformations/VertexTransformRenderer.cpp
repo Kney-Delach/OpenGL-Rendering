@@ -28,18 +28,18 @@ namespace Sandbox
 
 		// ------------------------ Mesh Setup ------------------------ // 
 
-		m_MeshTriangle.reset(Exalted::Mesh::Create());
+		m_MeshTriangle = Exalted::Mesh::Create();
 		m_MeshTriangle->CreateTriangle();
-		m_MeshTriangle2.reset(Exalted::Mesh::Create());
+		m_MeshTriangle2 = Exalted::Mesh::Create();
 		m_MeshTriangle2->CreateTriangle();
-		m_MeshTriangle3.reset(Exalted::Mesh::Create());
+		m_MeshTriangle3 = Exalted::Mesh::Create();
 		m_MeshTriangle3->CreateTriangle();
-		m_MeshQuad.reset(Exalted::Mesh::Create());
+		m_MeshQuad = Exalted::Mesh::Create();
 		m_MeshQuad->CreateQuad();
 
 		// ------------------------ Shader setup ------------------------ // 
 
-		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/VBasicShaderSMOOTH.glsl", "Resources/Shaders/FBasicShaderSMOOTH.glsl"));
+		m_Shader = Exalted::Shader::Create("Resources/Shaders/VBasicShaderSMOOTH.glsl", "Resources/Shaders/FBasicShaderSMOOTH.glsl");
 	}
 
 	void VertexTransformLayer::OnUpdate(Exalted::Timestep deltaTime)

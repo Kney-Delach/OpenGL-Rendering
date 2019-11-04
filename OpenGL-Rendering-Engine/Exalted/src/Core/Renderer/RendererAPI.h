@@ -37,7 +37,7 @@ namespace Exalted
 			None = 0, OpenGL = 1
 		};
 	public:
-		static void Init();
+		virtual void Init() = 0;
 		virtual void SetViewport(const int xOffset, const int yOffset, const unsigned windowWidth, const unsigned windowHeight) = 0;
 		virtual void SetClearColor(const glm::vec4& color) = 0;
 		virtual void SetClearStencil(const float stencilValue) = 0;
@@ -52,6 +52,7 @@ namespace Exalted
 			return capabilities;
 		}
 		inline static API GetAPI() { return s_API; }
+		static Scope<RendererAPI> Create();
 	private:
 		static API s_API;
 	};

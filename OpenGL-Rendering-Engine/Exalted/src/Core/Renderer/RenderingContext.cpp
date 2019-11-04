@@ -1,8 +1,8 @@
 /***************************************************************************
- * Filename		: Mesh.cpp
+ * Filename		: RenderingContext.cpp
  * Name			: Ori Lazar
- * Date			: 29/10/2019
- * Description	: Implementation which decides which rendering api to use.
+ * Date			: 03/11/2019
+ * Description	: Implements the Rendering context, calls platform specific creation.
      .---.
    .'_:___".
    |__ --==|
@@ -13,19 +13,18 @@
  /___\ /___\
 ***************************************************************************/
 #include "expch.h"
-#include "Mesh.h"
-#include "Renderer.h"
-
-#include "Platform/OpenGL/OpenGLMesh.h"
+#include "RenderingContext.h"
+#include "Core/Renderer/Renderer.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace Exalted
 {
-	Ref<Mesh> Mesh::Create()
+	Scope<RenderingContext> RenderingContext::Create(void* window)
 	{
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None:    EX_CORE_ASSERT(false, "RendererAPI::None is currently not supported!"); return nullptr;
-		case RendererAPI::API::OpenGL:  return CreateRef<OpenGLMesh>();
+		case RendererAPI::API::OpenGL:  return CreateScope<OpenGLContext>(static_cast<GLFWwindow*>(window));
 		}
 		EX_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;

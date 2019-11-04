@@ -31,45 +31,45 @@ namespace Sandbox
 
 		// ------------------------- Initialize Meshes ------------------------- //
 
-		m_MeshFloor.reset(Exalted::Mesh::Create());
+		m_MeshFloor = Exalted::Mesh::Create();
 		m_MeshFloor->CreateTexturedQuad(1);
 
-		m_MeshCube.reset(Exalted::Mesh::Create());
+		m_MeshCube = Exalted::Mesh::Create();
 		m_MeshCube->CreateTexturedCube(1);
 
 		// ------------------------- Initialize Textures ------------------------- //
 
-		m_FloorTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexGridOrange.png",
+		m_FloorTexture = Exalted::Texture2D::Create("Resources/Textures/TexGridOrange.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_CubeTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexContainer.png",
+		m_CubeTexture = Exalted::Texture2D::Create("Resources/Textures/TexContainer.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_CubeTexture2.reset(Exalted::Texture2D::Create("Resources/Textures/TexGridBW.png",
+		m_CubeTexture2 = Exalted::Texture2D::Create("Resources/Textures/TexGridBW.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_ChessboardTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexChessboard.tga",
+		m_ChessboardTexture = Exalted::Texture2D::Create("Resources/Textures/TexChessboard.tga",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::CLAMP,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 		// ------------------------- Initialize Transformations ------------------------- //
 
 		// --------- Cube transforms --------- //
@@ -102,9 +102,9 @@ namespace Sandbox
 
 		// ------------------------- Initialize Shader ------------------------- //
 
-		m_ChessboardShader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/Blending/GrassFragmentShader.glsl"));
-		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl"));
-		m_OutlineShader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FRedShader.glsl"));
+		m_ChessboardShader = Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/Blending/GrassFragmentShader.glsl");
+		m_Shader = Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl");
+		m_OutlineShader = Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FRedShader.glsl");
 
 		m_Shader->Bind();
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_DiffuseTexture", 0);
@@ -151,7 +151,7 @@ namespace Sandbox
 		m_CubeTexture->Bind();
 		Exalted::Renderer::Submit(m_Shader, m_MeshCube, 6 * 6 * 9, m_CubeTransform1);
 		Exalted::Renderer::Submit(m_Shader, m_MeshCube, 6 * 6 * 9, m_CubeTransform2);
-		m_CubeTexture->Unbind();
+		//m_CubeTexture->Unbind();
 
 		// --------------------- Draw Stencil outlines --------------------- //
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
@@ -160,7 +160,7 @@ namespace Sandbox
 		m_CubeTexture2->Bind();
 		Exalted::Renderer::Submit(m_OutlineShader, m_MeshCube, 6 * 6 * 9, m_CubeTransformOutline1);
 		Exalted::Renderer::Submit(m_OutlineShader, m_MeshCube, 6 * 6 * 9, m_CubeTransformOutline2);
-		m_CubeTexture2->Unbind();
+		//m_CubeTexture2->Unbind();
 		Exalted::OpenGLConfigurations::SetStencilMaskWriteALL();
 
 		// ------------------------------ Draw Chess Board ------------------------------ //
