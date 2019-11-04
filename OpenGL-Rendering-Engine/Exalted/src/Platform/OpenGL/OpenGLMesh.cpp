@@ -16,6 +16,11 @@
 #include "expch.h"
 #include "OpenGLMesh.h"
 
+//todo: Assimp is currently linked under a single threaded implementation, in the future it will be wise to swap this with the multi-threaded one. 
+//#include <assimp/Importer.hpp>
+//#include <assimp/scene.h>
+//#include <assimp/postprocess.h>
+
 namespace Exalted
 {
 	void OpenGLMesh::CreateTriangle()
@@ -72,15 +77,15 @@ namespace Exalted
 		m_VertexArray = VertexArray::Create();
 		float vertices[8*7] = {
 			// front
-			-1.0, -1.0,  1.0,	1.0, 0.0, 0.0f, 1.0f,
-			 1.0, -1.0,  1.0,	0.0, 1.0, 0.0f, 1.0f,
-			 1.0,  1.0,  1.0,	0.0, 0.0, 1.0f, 1.0f,
-			-1.0,  1.0,  1.0,	1.0, 0.0, 1.0f, 1.0f,
+			-.5, -.5,  .5,		1.0, 0.0, 0.0f, 1.0f,
+			 0.5, -0.5,  0.5,	0.0, 1.0, 0.0f, 1.0f,
+			 0.5,  0.5,  0.5,	0.0, 0.0, 1.0f, 1.0f,
+			-0.5,  0.5,  0.5,	1.0, 0.0, 1.0f, 1.0f,
 			// back
-			-1.0, -1.0, -1.0,	1.0, 0.0, 0.0f, 1.0f,
-			 1.0, -1.0, -1.0,	0.0, 1.0, 0.0f, 1.0f,
-			 1.0,  1.0, -1.0,	0.0, 0.0, 1.0f, 1.0f,
-			-1.0,  1.0, -1.0,	1.0, 0.0, 1.0f , 1.0f
+			-0.5, -0.5, -0.5,	1.0, 0.0, 0.0f, 1.0f,
+			 0.5, -0.5, -0.5,	0.0, 1.0, 0.0f, 1.0f,
+			 0.5,  0.5, -0.5,	0.0, 0.0, 1.0f, 1.0f,
+			-0.5,  0.5, -0.5,	1.0, 0.0, 1.0f , 1.0f
 		};
 		Ref<VertexBuffer> vertexBuffer;
 		vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));

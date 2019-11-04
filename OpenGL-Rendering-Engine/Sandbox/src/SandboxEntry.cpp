@@ -22,7 +22,6 @@
 #include "8-Scene_Graphs/SceneGraphLayer.h"
 
 #include "Core/EntryPoint.h"
-
 namespace Sandbox
 {
 	class OpenGLRenderingApplication : public Exalted::Application

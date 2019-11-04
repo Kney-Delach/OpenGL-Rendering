@@ -32,24 +32,34 @@ namespace Exalted
 	class GameObject
 	{
 	public:
-		GameObject() : m_ObjectName("GameObject")
+		GameObject()
+			: m_ObjectName("Default GameObject")
 		{
-			m_Transform = Exalted::CreateRef<GameTransform>();
-			m_Shader = Shader::Create(DEFAULT_VERTEX_SHADER,	DEFAULT_FRAGMENT_SHADER);
-			EX_CORE_INFO("Default GameObject Constructed with no shader.");
+			static uint32_t id = 0;
+			m_Id = id++;
+			EX_CORE_INFO("Default GameObject Constructor Called");
 		}
 		GameObject(std::string objectName);
-		GameObject(std::string objectName, std::string& shaderVertex, std::string& shaderFragment);
+		GameObject(std::string objectName, Ref<Shader>& shader);
 		~GameObject()
 		{
 			DestroyGameObject();
 			EX_CORE_WARN("Destroyed {0} GamObject.", m_ObjectName);
 		}
-		void Update(Timestep deltaTime);
-		void Draw();
 		void AddChildObject(GameObject* pGameObject)
 		{
-			m_ChildrenObjectsList.emplace_back(pGameObject);
+			const std::vector<GameObject*>::iterator objectPosition = std::find(m_ChildrenObjectsList.begin(), m_ChildrenObjectsList.end(), pGameObject);
+			if (objectPosition != m_ChildrenObjectsList.end())
+			{
+				EX_CORE_CRITICAL("You are attempting to add {0} to {1}, but it already contains it!", pGameObject->m_ObjectName, m_ObjectName);
+				return;
+			}
+			if(pGameObject == this)
+			{
+				EX_CORE_CRITICAL("You are attempting to add {0} to itself, illegal operation.", m_ObjectName);
+				return;
+			}
+			m_ChildrenObjectsList.emplace_back(&(*pGameObject));
 			pGameObject->SetParentObject(this);
 			EX_CORE_WARN("Added {0} as a child of {1}.", pGameObject->m_ObjectName, m_ObjectName);
 		}
@@ -59,13 +69,29 @@ namespace Exalted
 		void RemoveGameComponent(GameComponent* pGameComponent);
 		std::vector<GameObject*>::const_iterator GetChildIteratorStart() { return m_ChildrenObjectsList.begin(); }
 		std::vector<GameObject*>::const_iterator GetChildIteratorEnd() { return m_ChildrenObjectsList.end(); }
+
+		void Update(Timestep deltaTime);
+		void Draw();
+
 		inline Ref<GameTransform>& GetTransform() { return m_Transform; }
-		inline void SetTransform(Ref<GameTransform>& transform) { m_Transform = std::move(transform); }
+		inline void SetShader(Ref<Shader>& shader) { m_Shader = shader; }
 		inline Ref<Mesh>& GetMesh() { return m_Mesh; }
-		void SetMesh(Ref<Mesh>& mesh) { m_Mesh = std::move(mesh); }
+		void SetMesh(Ref<Mesh>& mesh) { m_Mesh = mesh; }
+
+		void RenderHierarchyGUI();
+		void OnImGuiRender(); //todo: Implement imgui rendering
+		uint32_t id() const;
+
+		std::string GetUiText(std::string label)
+		{
+			std::string id = std::to_string(m_Id);
+			std::string separator = "##";
+			return (label + separator + id);
+		}
 	private:
 		void DestroyGameObject();
-		void RemoveChildObjectPointer(GameObject* pGameObject);
+	private:
+		static int s_GAME_OBJECT_COUNT;
 	private:
 		Ref<GameTransform> m_Transform;
 		Ref<Mesh> m_Mesh;
@@ -74,5 +100,6 @@ namespace Exalted
 		std::vector<GameComponent*> m_GameComponents;
 		std::vector<GameObject*> m_ChildrenObjectsList;
 		std::string m_ObjectName;
+		uint32_t m_Id;
 	};
 }

@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -95,7 +95,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -115,7 +115,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

@@ -21,6 +21,7 @@ IncludeDir["GLFW"] = "Exalted/Dependencies/GLFW/include"
 IncludeDir["Glad"] = "Exalted/Dependencies/Glad/include"
 IncludeDir["ImGui"] = "Exalted/Dependencies/imgui"
 IncludeDir["glm"] = "Exalted/Dependencies/glm"
+IncludeDir["Assimp"] = "Exalted/Dependencies/Assimp/include"
 
 group "Dependencies"
 	include "Exalted/Dependencies/GLFW"
@@ -47,7 +48,11 @@ project "Exalted"
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/Dependencies/glm/glm/**.hpp",
-		"%{prj.name}/Dependencies/glm/glm/**.inl"
+		"%{prj.name}/Dependencies/glm/glm/**.inl",
+		"%{prj.name}/Dependencies/Assimp/include/assimp/**.hpp",
+		"%{prj.name}/Dependencies/Assimp/include/assimp/**.inl",
+		"%{prj.name}/Dependencies/Assimp/include/assimp/**.h"
+
 	}
 
 	defines
@@ -64,7 +69,8 @@ project "Exalted"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.Assimp}"
 	}
 
 	links
@@ -72,6 +78,7 @@ project "Exalted"
 		"GLFW",
 		"Glad",
 		"ImGui",
+		"OpenGL-Rendering-Engine/Exalted/Dependencies/assimp/lib/assimp-vc142-mtd.lib",
 		"opengl32.lib"
 	}
 	
@@ -126,7 +133,8 @@ project "Sandbox"
 		"Resources/",
 		"Exalted/Dependencies",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.Glad}"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.Assimp}"
 	}
 
 	links
