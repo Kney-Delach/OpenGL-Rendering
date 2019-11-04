@@ -138,7 +138,7 @@
     <ClInclude Include="src\5-Depth_Testing\DepthTestingLayer.h" />
     <ClInclude Include="src\6-Stencil_Testing\StencilTestingLayer.h" />
     <ClInclude Include="src\7-Blending\BlendingLayer.h" />
-    <ClInclude Include="src\8-Scene-Graphs\SceneGraphLayer.h" />
+    <ClInclude Include="src\8-Scene_Graphs\SceneGraphLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp" />
@@ -148,7 +148,7 @@
     <ClCompile Include="src\5-Depth_Testing\DepthTestingLayer.cpp" />
     <ClCompile Include="src\6-Stencil_Testing\StencilTestingLayer.cpp" />
     <ClCompile Include="src\7-Blending\BlendingLayer.cpp" />
-    <ClCompile Include="src\8-Scene-Graphs\SceneGraphLayer.cpp" />
+    <ClCompile Include="src\8-Scene_Graphs\SceneGraphLayer.cpp" />
     <ClCompile Include="src\SandboxEntry.cpp" />
   </ItemGroup>
   <ItemGroup>

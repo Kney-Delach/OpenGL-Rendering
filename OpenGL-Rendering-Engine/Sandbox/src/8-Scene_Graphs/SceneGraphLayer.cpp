@@ -14,7 +14,6 @@
  /___\ /___\
 ***************************************************************************/
 #include "SceneGraphLayer.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Sandbox
 {

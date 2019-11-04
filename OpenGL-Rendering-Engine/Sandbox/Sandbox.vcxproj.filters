@@ -21,7 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\8-Scene-Graphs\SceneGraphLayer.h" />
     <ClInclude Include="src\7-Blending\BlendingLayer.h" />
     <ClInclude Include="src\6-Stencil_Testing\StencilTestingLayer.h" />
     <ClInclude Include="src\5-Depth_Testing\DepthTestingLayer.h" />
@@ -29,10 +28,10 @@
     <ClInclude Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.h" />
     <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h" />
     <ClInclude Include="src\1-Your_First_Triangle\TriangleRenderer.h" />
+    <ClInclude Include="src\8-Scene_Graphs\SceneGraphLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\SandboxEntry.cpp" />
-    <ClCompile Include="src\8-Scene-Graphs\SceneGraphLayer.cpp" />
     <ClCompile Include="src\7-Blending\BlendingLayer.cpp" />
     <ClCompile Include="src\6-Stencil_Testing\StencilTestingLayer.cpp" />
     <ClCompile Include="src\5-Depth_Testing\DepthTestingLayer.cpp" />
@@ -40,6 +39,7 @@
     <ClCompile Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.cpp" />
     <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp" />
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp" />
+    <ClCompile Include="src\8-Scene_Graphs\SceneGraphLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Blending\WindowVertexShader.glsl" />

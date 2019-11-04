@@ -19,7 +19,7 @@
 #include "5-Depth_Testing/DepthTestingLayer.h"
 #include "6-Stencil_Testing/StencilTestingLayer.h"
 #include "7-Blending/BlendingLayer.h"
-#include "8-Scene-Graphs/SceneGraphLayer.h"
+#include "8-Scene_Graphs/SceneGraphLayer.h"
 
 #include "Core/EntryPoint.h"
 
