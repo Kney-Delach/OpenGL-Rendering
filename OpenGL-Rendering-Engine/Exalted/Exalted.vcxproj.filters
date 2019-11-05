@@ -1644,5 +1644,6 @@
     <ClCompile Include="src\Core\SceneGraph\FrustumCulling\Frustum.cpp" />
     <ClCompile Include="src\Core\SceneGraph\Scene.cpp" />
     <ClCompile Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.cpp" />
+    <ClCompile Include="src\Core\Renderer\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

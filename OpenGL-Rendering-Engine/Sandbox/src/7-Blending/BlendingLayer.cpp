@@ -132,8 +132,7 @@ namespace Sandbox
 
 	void BlendingLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
-		if (m_ProcessingCameraMovement)
-			m_EditorCamera.UpdateCamera(deltaTime);
+		m_EditorCamera.UpdateCamera(deltaTime);
 
 		// ------------ Initialize Blending  Buffer Processing ------------ //
 
@@ -194,17 +193,7 @@ namespace Sandbox
 
 	void BlendingLayer::OnImGuiRender()
 	{
-		ImGui::Begin("Blending Camera Transform");
-		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
-		ImGui::InputFloat3("Position", (float*)& m_EditorCamera.GetPosition());
-		ImGui::InputFloat("Yaw", (float*)& m_EditorCamera.GetYaw());
-		ImGui::InputFloat("Pitch", (float*)& m_EditorCamera.GetPitch());
-		ImGui::PopItemFlag();
-		ImGui::PopStyleVar();
-		ImGui::InputFloat("Movement Speed", (float*)& m_EditorCamera.GetMovementSpeed(), 0.01f, 10.f);
-		ImGui::InputFloat("Mouse Sensitivity", (float*)& m_EditorCamera.GetSensitivitiy(), 0.01f, 10.f);
-		ImGui::End();
+		m_EditorCamera.OnImGuiRender();
 
 		ImGui::Begin("Blending Scene Settings");
 		if (ImGui::Button("Disable Scene"))
@@ -226,59 +215,9 @@ namespace Sandbox
 		ImGui::End();
 	}
 
-	void BlendingLayer::OnWindowResize(Exalted::WindowResizeEvent& resizeEvent)
-	{
-		const auto windowWidth = resizeEvent.GetWidth();
-		const auto windowHeight = resizeEvent.GetHeight();
-		m_EditorCamera.OnWindowResize(windowWidth, windowHeight);
-	}
-
 	void BlendingLayer::OnEvent(Exalted::Event& event)
 	{
-		if (event.GetEventType() == Exalted::EventType::WindowResize)
-		{
-			OnWindowResize(static_cast<Exalted::WindowResizeEvent&>(event));
-		}
-		if ((event.GetEventType() == Exalted::EventType::MouseButtonPressed) && !m_MouseMoving)
-		{
-			auto& e = static_cast<Exalted::MouseButtonPressedEvent&>(event);
-			if (e.GetMouseButton() == EX_MOUSE_BUTTON_2)
-			{
-				m_FirstMouseMovement = true;
-				m_ProcessingMouseMovement = true;
-				m_MouseMoving = true;
-			}
-		}
-		if (event.GetEventType() == Exalted::EventType::MouseButtonReleased)
-		{
-			auto& e = static_cast<Exalted::MouseButtonReleasedEvent&>(event);
-			if (e.GetMouseButton() == EX_MOUSE_BUTTON_2)
-			{
-				m_ProcessingMouseMovement = false;
-				m_MouseMoving = false;
-			}
-		}
-		if (event.GetEventType() == Exalted::EventType::MouseScrolled)
-		{
-			auto& e = static_cast<Exalted::MouseScrolledEvent&>(event);
-			m_EditorCamera.ProcessMouseScrollEvent(e.GetYOffset());
-		}
-		if (m_ProcessingMouseMovement && (event.GetEventType() == Exalted::EventType::MouseMoved))
-		{
-			auto& e = static_cast<Exalted::MouseMovedEvent&>(event);
-			if (m_FirstMouseMovement)
-			{
-				m_LastMouseX = e.GetX();
-				m_LastMouseY = e.GetY();
-				m_FirstMouseMovement = false;
-			}
-			float xOffset = e.GetX() - m_LastMouseX;
-			float yOffset = m_LastMouseY - e.GetY();
-
-			m_LastMouseX = e.GetX();
-			m_LastMouseY = e.GetY();
-			m_EditorCamera.ProcessRotationEvent(xOffset, yOffset);
-		}
+		m_EditorCamera.OnEvent(event);
 		if (event.GetEventType() == Exalted::EventType::KeyPressed)
 		{
 			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);

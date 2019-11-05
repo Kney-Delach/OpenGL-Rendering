@@ -42,12 +42,6 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Shader> m_Shader;
 		Exalted::Ref<Exalted::Shader> m_WindowShader;
 		std::vector<glm::mat4> m_FloorTransforms;
-
-		bool m_ProcessingMouseMovement = false;
-		bool m_MouseMoving = false;
-		bool m_ProcessingCameraMovement = true;
-		bool m_FirstMouseMovement = true;
-		float m_LastMouseX, m_LastMouseY;
 	private:
 		static const unsigned m_FloorTileCount = 10;
 	};

@@ -60,3 +60,19 @@ namespace Exalted
 		std::vector<GameObject*> m_TransparentObjects;
 	};
 }
+
+
+//todo: 
+// implement an on event function with the following 
+//if (event.GetEventType() == Exalted::EventType::KeyPressed)
+//{
+//	auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
+//	if (e.GetKeyCode() == EX_KEY_1)
+//		Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::POINT);
+//
+//	if (e.GetKeyCode() == EX_KEY_2)
+//		Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::LINE);
+//
+//	if (e.GetKeyCode() == EX_KEY_3)
+//		Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::FILL);
+//}

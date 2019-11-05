@@ -48,11 +48,6 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Shader> m_GrassShader;
 		Exalted::EditorCamera m_EditorCamera;
 		bool m_EnableBlending = true;
-		bool m_ProcessingMouseMovement = false;
-		bool m_MouseMoving = false;
-		bool m_ProcessingCameraMovement = true;
-		bool m_FirstMouseMovement = true;
-		float m_LastMouseX, m_LastMouseY;
 	private:
 		static const unsigned m_FloorTileCount = 10;
 	};

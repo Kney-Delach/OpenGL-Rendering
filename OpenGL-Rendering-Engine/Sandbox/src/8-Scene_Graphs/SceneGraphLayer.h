@@ -35,17 +35,10 @@ namespace Sandbox
 		Exalted::Ref<Exalted::GameObject> m_SceneRoot; 
 		Exalted::EditorCamera m_EditorCamera;
 		Exalted::GameObject* m_pBoxObject;
-		// floor requirements
 		Exalted::Ref<Exalted::Texture2D> m_FloorTexture;
 		Exalted::Ref<Exalted::Mesh> m_MeshQuad;
 		Exalted::Ref<Exalted::Shader> m_Shader;
 		std::vector<glm::mat4> m_FloorTransforms;
-
-		bool m_ProcessingMouseMovement = false;
-		bool m_MouseMoving = false;
-		bool m_ProcessingCameraMovement = true;
-		bool m_FirstMouseMovement = true;
-		float m_LastMouseX, m_LastMouseY;
 	private:
 		static const unsigned m_FloorTileCount = 10;
 	};

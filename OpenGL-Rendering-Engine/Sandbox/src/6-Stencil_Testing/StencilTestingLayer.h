@@ -29,8 +29,6 @@ namespace Sandbox
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 	private:
-		void OnWindowResize(Exalted::WindowResizeEvent& resizeEvent);
-	private:
 		Exalted::Ref<Exalted::Mesh> m_MeshCube;
 		Exalted::Ref<Exalted::Texture2D> m_CubeTexture;
 		Exalted::Ref<Exalted::Texture2D> m_CubeTexture2;
@@ -49,11 +47,6 @@ namespace Sandbox
 		Exalted::EditorCamera m_EditorCamera;
 		bool m_EnableStencilTesting = true;
 		bool m_EnableScissorTesting = true;
-		bool m_ProcessingMouseMovement = false;
-		bool m_MouseMoving = false;
-		bool m_ProcessingCameraMovement = true;
-		bool m_FirstMouseMovement = true;
-		float m_LastMouseX, m_LastMouseY;
 	private:
 		static const unsigned m_FloorTileCount = 10;
 	};

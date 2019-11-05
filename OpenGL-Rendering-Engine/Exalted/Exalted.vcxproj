@@ -649,6 +649,7 @@
     <ClCompile Include="src\Core\Log.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Core\Renderer\Cameras.cpp" />
+    <ClCompile Include="src\Core\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Core\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Core\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Core\Renderer\Renderer.cpp" />
