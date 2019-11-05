@@ -1,9 +1,9 @@
 /***************************************************************************
- * Filename		: SceneGraphLayer.cpp
+ * Filename		: SceneClassLayer.cpp
  * Name			: Ori Lazar
  * Date			: 05/11/2019
- * Description	: This layer contains a scene which utilizes this engines 
-                  scene graph storage structure.
+ * Description	: This layer contains a scene which utilizes this engines
+				  scene storage structure.
      .---.
    .'_:___".
    |__ --==|
@@ -13,21 +13,22 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#include "SceneGraphLayer.h"
+#include "SceneClassLayer.h"
 
 namespace Sandbox
 {
-	SceneGraphLayer::SceneGraphLayer()
-		: Layer("Scene Graph Layer", false), 
-		m_EditorCamera(45.f,
-			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
-			0.1f, 10000.f)
+	SceneClassLayer::SceneClassLayer()
+		: Layer("Scene Class Layer", true)
 	{
+		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f, 
+			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
+			0.1f,
+			10000.f);
 	}
 
-	void SceneGraphLayer::OnAttach()
+	void SceneClassLayer::OnAttach()
 	{
-		EX_INFO("Scene Graph layer attached successfully.");
+		EX_INFO("Scene Class layer attached successfully.");
 
 		// initialize shaders
 		m_Shader = Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl");
@@ -35,6 +36,7 @@ namespace Sandbox
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_DiffuseTexture", 0);
 		m_Shader->Unbind();
 
+		// ------------------------ 
 		Exalted::Ref<Exalted::Shader> redHeadShader = Exalted::Shader::Create("Resources/Shaders/DEFAULT_VERTEX_RED.glsl", "Resources/Shaders/DEFAULT_FRAGMENT_SHADER.glsl");
 		Exalted::Ref<Exalted::Shader> blueBodyShader = Exalted::Shader::Create("Resources/Shaders/DEFAULT_VERTEX_BLUE.glsl", "Resources/Shaders/DEFAULT_FRAGMENT_SHADER.glsl");
 		Exalted::Ref<Exalted::Shader> greenLeftArmShader = Exalted::Shader::Create("Resources/Shaders/DEFAULT_VERTEX_GREEN.glsl", "Resources/Shaders/DEFAULT_FRAGMENT_SHADER.glsl");
@@ -49,7 +51,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> cubeMesh = Exalted::Mesh::Create();
 		cubeMesh->CreateCube();
 
-		// initialize scene
+		// initialize scene objects
 		m_SceneRoot = Exalted::CreateRef<Exalted::GameObject>("Scene Root");
 		m_SceneRoot->SetMesh(m_MeshQuad);
 
@@ -68,11 +70,11 @@ namespace Sandbox
 		robotBody->SetMesh(cubeMesh);
 		robotBody->SetShader(blueBodyShader);
 		robotBody->SetBoundingRadius(2.f); // set bounding radius the same as its largest scale. 
-		
+
 		//todo: IMPLEMENT BOUNDING RADIUS ASSIGNMENT AUTOMATICALLY THROUGH ITS TRANSOFRM.
 
 		Exalted::GameObject* robotHead = new Exalted::GameObject("Robot Head");
-		robotHead->GetTransform()->Scale = glm::vec3(.5f,.25f, .5f);
+		robotHead->GetTransform()->Scale = glm::vec3(.5f, .25f, .5f);
 		robotHead->GetTransform()->Position = glm::vec3(0, 1.f, 0);
 		robotHead->SetMesh(cubeMesh);
 		robotHead->SetShader(redHeadShader);
@@ -109,24 +111,73 @@ namespace Sandbox
 		robotRightLeg->SetShader(yellowRightLegShader);
 		robotRightLeg->SetBoundingRadius(1.f); // set bounding radius the same as its largest scale.
 
-		robotBody->AddChildObject(robotBody); // This should report a critical error
 		robotBody->AddChildObject(robotHead);
-		robotBody->AddChildObject(robotHead); // This should report a critical error 
 		robotBody->AddChildObject(robotLeftArm);
 		robotBody->AddChildObject(robotRightArm);
 		robotBody->AddChildObject(robotLeftLeg);
 		robotBody->AddChildObject(robotRightLeg);
 		m_SceneRoot->AddChildObject(robotBody);
 
-		// ----------------- Floor ----------------- //
-		m_FloorTexture = Exalted::Texture2D::Create("Resources/Textures/TexGridOrange.png",
+		// ---------------- Transparent Objects Initialization ---------------- //
+		m_StainedWindowTexture = Exalted::Texture2D::Create("Resources/Textures/TexTransparentGlassStained.tga",
 			Exalted::TextureFormat::RGBA,
-			Exalted::TextureWrap::REPEAT,
+			Exalted::TextureWrap::CLAMP,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
 			0);
 
+		m_WindowShader = Exalted::Shader::Create("Resources/Shaders/Blending/WindowVertexShader.glsl", "Resources/Shaders/Blending/WindowFragmentShader.glsl");
+		m_WindowShader->Bind();
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_WindowShader)->SetUniformInt1("u_DiffuseTexture", 0);
+		m_WindowShader->Unbind();
+
+		Exalted::GameObject* transparentWindowA = new Exalted::GameObject("Window [A]");
+		transparentWindowA->GetTransform()->Position = glm::vec3(1, 0, 1);
+		transparentWindowA->SetShader(m_WindowShader);
+		transparentWindowA->SetTexture(m_StainedWindowTexture);
+		transparentWindowA->SetMesh(m_MeshQuad);
+		transparentWindowA->SetBoundingRadius(1.f);
+
+		Exalted::GameObject* transparentWindowB = new Exalted::GameObject("Window [B]");
+		transparentWindowB->GetTransform()->Position = glm::vec3(2, 0, 2);
+		transparentWindowB->SetShader(m_WindowShader);
+		transparentWindowB->SetTexture(m_StainedWindowTexture);
+		transparentWindowB->SetMesh(m_MeshQuad);
+		transparentWindowB->SetBoundingRadius(1.f);
+
+		Exalted::GameObject* transparentWindowC = new Exalted::GameObject("Window [C]");
+		transparentWindowC->GetTransform()->Position = glm::vec3(-1, 0, 3);
+		transparentWindowC->SetShader(m_WindowShader);
+		transparentWindowC->SetTexture(m_StainedWindowTexture);
+		transparentWindowC->SetMesh(m_MeshQuad);
+		transparentWindowC->SetBoundingRadius(1.f);
+
+		Exalted::GameObject* transparentWindowD = new Exalted::GameObject("Window [D]");
+		transparentWindowD->GetTransform()->Position = glm::vec3(0, 1., 0);
+		transparentWindowD->SetShader(m_WindowShader);
+		transparentWindowD->SetTexture(m_StainedWindowTexture);
+		transparentWindowD->SetMesh(m_MeshQuad);
+		transparentWindowD->SetBoundingRadius(1.f);
+
+		m_SceneRoot->AddChildObject(transparentWindowA);
+		m_SceneRoot->AddChildObject(transparentWindowB);
+		m_SceneRoot->AddChildObject(transparentWindowC);
+		robotBody->AddChildObject(transparentWindowD); //todo: Verify that D was added to the robot body and still sorted successfully.
+
+		// -------------- Scene manager stuff ------------ //
+		m_SceneManager = Exalted::CreateRef<Exalted::Scene>(m_EditorCamera);
+		m_SceneManager->SetSceneRoot(m_SceneRoot);
+
+		// ----------------- Floor ----------------- //
+		m_FloorTexture = Exalted::Texture2D::Create("Resources/Textures/TexGridOrange.png",
+			Exalted::TextureFormat::RGB,
+			Exalted::TextureWrap::REPEAT,
+			Exalted::TextureMagFilter::LINEAR,
+			Exalted::TextureMinFilter::LINEAR_LINEAR,
+			true,
+			0);
+		
 		m_FloorTransforms.reserve(m_FloorTileCount * m_FloorTileCount);
 		unsigned rowLength = 0;
 		unsigned column = 0;
@@ -139,54 +190,58 @@ namespace Sandbox
 			}
 			glm::mat4 meshTransform = glm::mat4(1.0f);
 			meshTransform = glm::translate(meshTransform, glm::vec3(column++ * 1.0f, 0.f, rowLength));
-			meshTransform = glm::rotate(meshTransform, glm::radians(90.f), glm::vec3(-1.f, 0.f, 0.f));
 			m_FloorTransforms.push_back(meshTransform);
 		}
 	}
 
-	void SceneGraphLayer::OnDetach()
+	void SceneClassLayer::OnDetach()
 	{
-		EX_INFO("Scene Graph Layer detached successfully.");
+		EX_INFO("Scene Class Layer detached successfully.");
 	}
 
-	void SceneGraphLayer::OnUpdate(Exalted::Timestep deltaTime)
+	void SceneClassLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
-		if (m_ProcessingCameraMovement)
-			m_EditorCamera.UpdateCamera(deltaTime);
+		//todo: abstract to camera.OnUpdate method
+		if (m_ProcessingCameraMovement) 
+			m_EditorCamera->UpdateCamera(deltaTime);
 
 		Exalted::RenderCommand::SetClearColor({ .05f, 0.2f, 0.5f, 1 });
 		Exalted::RenderCommand::Clear();
+
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
-		Exalted::Renderer::BeginScene(m_EditorCamera);
+		Exalted::OpenGLConfigurations::EnableBlending();
+		Exalted::OpenGLConfigurations::SetBlendFunction(Exalted::BlendFactors::SOURCE_ALPHA, Exalted::BlendFactors::SOURCE_ALPHA_MINUS);
+
+		Exalted::Renderer::BeginScene(*m_EditorCamera);
 
 		m_FloorTexture->Bind();
 		for (unsigned i = 0; i < m_FloorTileCount * m_FloorTileCount; i++)
 			Exalted::Renderer::Submit(m_Shader, m_MeshQuad, m_FloorTransforms[i]);
+		m_FloorTexture->Unbind();
 
-		m_SceneRoot->Update(deltaTime);
-		m_SceneRoot->Draw();
+		m_SceneManager->UpdateScene(deltaTime);
+		m_SceneManager->RenderScene();
 
 		Exalted::Renderer::EndScene();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
-		m_FloorTexture->Unbind();
-
+		Exalted::OpenGLConfigurations::DisableBlending();
 	}
 
-	void SceneGraphLayer::OnImGuiRender()
+	void SceneClassLayer::OnImGuiRender()
 	{
-		ImGui::Begin("Scene Graph Camera Transform");
+		ImGui::Begin("Scene Class Camera Transform");
 		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
-		ImGui::InputFloat3("Position", (float*)& m_EditorCamera.GetPosition());
-		ImGui::InputFloat("Yaw", (float*)& m_EditorCamera.GetYaw());
-		ImGui::InputFloat("Pitch", (float*)& m_EditorCamera.GetPitch());
+		ImGui::InputFloat3("Position", (float*)& m_EditorCamera->GetPosition());
+		ImGui::InputFloat("Yaw", (float*)& m_EditorCamera->GetYaw());
+		ImGui::InputFloat("Pitch", (float*)& m_EditorCamera->GetPitch());
 		ImGui::PopItemFlag();
 		ImGui::PopStyleVar();
-		ImGui::InputFloat("Movement Speed", (float*)& m_EditorCamera.GetMovementSpeed(), 0.01f, 10.f);
-		ImGui::InputFloat("Mouse Sensitivity", (float*)& m_EditorCamera.GetSensitivitiy(), 0.01f, 10.f);
+		ImGui::InputFloat("Movement Speed", (float*)& m_EditorCamera->GetMovementSpeed(), 0.01f, 10.f);
+		ImGui::InputFloat("Mouse Sensitivity", (float*)& m_EditorCamera->GetSensitivitiy(), 0.01f, 10.f);
 		ImGui::End();
 
-		ImGui::Begin("Scene Graph Scene Settings");
+		ImGui::Begin("Scene Class Scene Settings");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
@@ -198,22 +253,22 @@ namespace Sandbox
 		m_SceneRoot->RenderHierarchyGUI();
 	}
 
-	void SceneGraphLayer::OnInactiveImGuiRender()
+	void SceneClassLayer::OnInactiveImGuiRender()
 	{
 		ImGui::Begin("Disabled Scenes Settings");
-		if (ImGui::Button("Enable Scene [8] -> Scene Graph"))
+		if (ImGui::Button("Enable Scene [8] -> Scene Class"))
 			m_IsActive = true;
 		ImGui::End();
 	}
 
-	void SceneGraphLayer::OnWindowResize(Exalted::WindowResizeEvent& resizeEvent)
+	void SceneClassLayer::OnWindowResize(Exalted::WindowResizeEvent& resizeEvent)
 	{
 		const auto windowWidth = resizeEvent.GetWidth();
 		const auto windowHeight = resizeEvent.GetHeight();
-		m_EditorCamera.OnWindowResize(windowWidth, windowHeight);
+		m_EditorCamera->OnWindowResize(windowWidth, windowHeight);
 	}
 
-	void SceneGraphLayer::OnEvent(Exalted::Event& event)
+	void SceneClassLayer::OnEvent(Exalted::Event& event)
 	{
 		if (event.GetEventType() == Exalted::EventType::WindowResize)
 		{
@@ -241,7 +296,7 @@ namespace Sandbox
 		if (event.GetEventType() == Exalted::EventType::MouseScrolled)
 		{
 			auto& e = static_cast<Exalted::MouseScrolledEvent&>(event);
-			m_EditorCamera.ProcessMouseScrollEvent(e.GetYOffset());
+			m_EditorCamera->ProcessMouseScrollEvent(e.GetYOffset());
 		}
 		if (m_ProcessingMouseMovement && (event.GetEventType() == Exalted::EventType::MouseMoved))
 		{
@@ -257,7 +312,7 @@ namespace Sandbox
 
 			m_LastMouseX = e.GetX();
 			m_LastMouseY = e.GetY();
-			m_EditorCamera.ProcessRotationEvent(xOffset, yOffset);
+			m_EditorCamera->ProcessRotationEvent(xOffset, yOffset);
 		}
 		if (event.GetEventType() == Exalted::EventType::KeyPressed)
 		{

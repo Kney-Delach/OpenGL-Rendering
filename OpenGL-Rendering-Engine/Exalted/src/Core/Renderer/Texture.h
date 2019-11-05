@@ -36,6 +36,9 @@ namespace Exalted
 		virtual void Unbind() const = 0;
 		virtual uint32_t GetRendererID() const = 0;
 		static uint32_t GetBytesPerPixel(TextureFormat format);
+		_NODISCARD bool IsTransparent() const { return m_Transparent; }
+	protected:
+		bool m_Transparent = false;
 	};
 
 	class Texture2D : public Texture
@@ -47,5 +50,6 @@ namespace Exalted
 		_NODISCARD virtual uint32_t GetWidth() const = 0;
 		_NODISCARD virtual uint32_t GetHeight() const = 0;
 		_NODISCARD virtual const std::string& GetPath() const = 0;
+
 	};
 }

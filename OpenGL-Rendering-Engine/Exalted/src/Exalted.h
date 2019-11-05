@@ -47,6 +47,12 @@
 #include "Platform/OpenGL/OpenGLConfigurations.h" //todo: abstract this
 
 #include "Core/SceneGraph/GameObject.h"
+#include "Core/SceneGraph/GameTransform.h"
+#include "Core/SceneGraph/GameComponent.h"
+#include "Core/SceneGraph/Scene.h"
+
+#include "Core/SceneGraph/FrustumCulling/Frustum.h"
+#include "Core/SceneGraph/FrustumCulling/FrustumPlane.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>

@@ -20,6 +20,7 @@
 #include "6-Stencil_Testing/StencilTestingLayer.h"
 #include "7-Blending/BlendingLayer.h"
 #include "8-Scene_Graphs/SceneGraphLayer.h"
+#include "9-Scene_Class/SceneClassLayer.h"
 
 #include "Core/EntryPoint.h"
 namespace Sandbox
@@ -36,7 +37,8 @@ namespace Sandbox
 			PushLayer(new DepthTestingLayer());
 			PushLayer(new StencilTestingLayer());
 			PushLayer(new BlendingLayer());
-			PushLayer(new SceneGraphLayer());
+			//PushLayer(new SceneGraphLayer()); //todo: For however is reading this, this scene no longer displays anything as the gameobjects themselves are organised by a scene class which is shown in the scene class layer.
+			PushLayer(new SceneClassLayer());
 		}
 		virtual ~OpenGLRenderingApplication()
 		{

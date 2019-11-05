@@ -16,7 +16,7 @@
 #pragma once
 #include <glm/gtc/matrix_transform.hpp>
 
-// todo: Implement local rotation options + recalculate local transform from gui render function (to be implemented)
+//todo: Optimize this class
 
 namespace Exalted
 {
@@ -37,7 +37,7 @@ namespace Exalted
 
 		__forceinline void SetWorldTransform()
 		{
-			glm::mat4 temporaryTransform = glm::mat4(1.f);
+			glm::mat4 temporaryTransform(1.f); //todo: verify this works correctly. 
 			temporaryTransform = glm::translate(temporaryTransform, Position);
 			temporaryTransform = glm::rotate(temporaryTransform, glm::radians(Rotation.x), glm::vec3(1, 0, 0));
 			temporaryTransform = glm::rotate(temporaryTransform, glm::radians(Rotation.y), glm::vec3(0, 1, 0));

@@ -24,7 +24,7 @@
 namespace Exalted
 {
 	GameObject::GameObject(std::string objectName) 
-	: m_ObjectName(objectName)
+	: m_ObjectName(objectName), m_BoundingRadius(1.f), m_DistanceFromCamera(0.f), m_IsTransparent(false)
 	{
 		static uint32_t id = 0;
 		m_Id = id++;
@@ -35,7 +35,7 @@ namespace Exalted
 	}
 
 	GameObject::GameObject(std::string objectName, Ref<Shader>& shader)
-		: m_ObjectName(objectName)
+		: m_ObjectName(objectName), m_BoundingRadius(1.f), m_DistanceFromCamera(0.f), m_IsTransparent(false)
 	{
 		static uint32_t id = 0;
 		m_Id = id++;
@@ -65,15 +65,28 @@ namespace Exalted
 		}
 	}
 
-	void GameObject::Draw()
-	{
-		if(m_Mesh)
-			Renderer::Submit(m_Shader, m_Mesh, m_Transform->GetWorldTransform());
-		for (std::vector<GameObject*>::iterator i = m_ChildrenObjectsList.begin(); i != m_ChildrenObjectsList.end(); ++i)
-		{
-			(*i)->Draw();
-		}
-	}
+	//void GameObject::Draw() //todo: Verify correct draw ordering
+	//{
+	//	//for (std::vector<GameObject*>::iterator i = m_ChildrenObjectsList.begin(); i != m_ChildrenObjectsList.end(); ++i)
+	//	//{
+	//	//	(*i)->Draw();
+	//	//}
+	//	//todo: Instance materials so we don't have to iterate one by one like this for each mesh, also instance draw calls....
+
+	//	if (m_Mesh)
+	//	{
+	//		if(m_Texture)
+	//		{
+	//			m_Texture->Bind();
+	//			Renderer::Submit(m_Shader, m_Mesh, m_Transform->GetWorldTransform());
+	//			m_Texture->Unbind();
+	//		}
+	//		else
+	//		{
+	//			Renderer::Submit(m_Shader, m_Mesh, m_Transform->GetWorldTransform());
+	//		}
+	//	}
+	//}
 
 	void GameObject::RemoveGameComponent(GameComponent* pGameComponent)
 	{

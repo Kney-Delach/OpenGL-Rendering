@@ -114,7 +114,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>assimp-vc142-mtd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\OpenGL-Rendering-Engine\Exalted\Dependencies\assimp\lib;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>Dependencies\assimp\lib;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -620,9 +620,12 @@
     <ClInclude Include="src\Core\Renderer\Shader.h" />
     <ClInclude Include="src\Core\Renderer\Texture.h" />
     <ClInclude Include="src\Core\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Core\SceneGraph\FrustumCulling\Frustum.h" />
+    <ClInclude Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.h" />
     <ClInclude Include="src\Core\SceneGraph\GameComponent.h" />
     <ClInclude Include="src\Core\SceneGraph\GameObject.h" />
     <ClInclude Include="src\Core\SceneGraph\GameTransform.h" />
+    <ClInclude Include="src\Core\SceneGraph\Scene.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Exalted.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
@@ -654,7 +657,10 @@
     <ClCompile Include="src\Core\Renderer\Shader.cpp" />
     <ClCompile Include="src\Core\Renderer\Texture.cpp" />
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\FrustumCulling\Frustum.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.cpp" />
     <ClCompile Include="src\Core\SceneGraph\GameObject.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\Scene.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLMesh.cpp" />

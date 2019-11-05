@@ -1555,6 +1555,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\Shader.h" />
+    <ClInclude Include="src\Core\SceneGraph\FrustumCulling\Frustum.h" />
+    <ClInclude Include="src\Core\SceneGraph\Scene.h" />
+    <ClInclude Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1638,5 +1641,8 @@
     <ClCompile Include="src\expch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\SceneGraph\FrustumCulling\Frustum.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\Scene.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.cpp" />
   </ItemGroup>
 </Project>

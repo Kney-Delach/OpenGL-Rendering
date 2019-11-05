@@ -54,6 +54,7 @@ namespace Exalted
 		stbi_set_flip_vertically_on_load(1);
 		int width, height, channels;
 		m_LocalDataBuffer = stbi_load(filepath.c_str(), &width, &height, &channels, isRGB ? STBI_rgb : STBI_rgb_alpha);
+		m_Transparent = !isRGB; // assign transparency of texture
 		if(!m_LocalDataBuffer)
 		{
 			EX_CORE_CRITICAL("Texture File Path Invalid! Path Given: {0}", filepath.c_str());
@@ -86,8 +87,8 @@ namespace Exalted
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0); 
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, amount);
 		}
-		glBindTexture(GL_TEXTURE_2D, 0);
 
+		glBindTexture(GL_TEXTURE_2D, 0);
 		stbi_image_free(m_LocalDataBuffer);
 	}
 

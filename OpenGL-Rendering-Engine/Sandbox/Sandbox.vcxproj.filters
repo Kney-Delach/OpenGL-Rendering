@@ -51,6 +51,7 @@
     <ClInclude Include="src\8-Scene_Graphs\SceneGraphLayer.h">
       <Filter>8-Scene_Graphs</Filter>
     </ClInclude>
+    <ClInclude Include="src\9-Scene_Class\SceneClassLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -78,5 +79,6 @@
       <Filter>8-Scene_Graphs</Filter>
     </ClCompile>
     <ClCompile Include="src\SandboxEntry.cpp" />
+    <ClCompile Include="src\9-Scene_Class\SceneClassLayer.cpp" />
   </ItemGroup>
 </Project>
