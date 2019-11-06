@@ -56,22 +56,23 @@ namespace Sandbox
 		m_pBoxObject->GetTransform()->Position = glm::vec3(2.f,0.f,0.f);
 		m_SceneRoot->AddChildObject(m_pBoxObject);
 
-		//const std::string path = "Resources/Textures/terrain.raw";
-		//Exalted::Ref<Exalted::Mesh> heightMap = Exalted::Mesh::Create();
-		//heightMap->CreateHeightMap(path);
+		const std::string path = "Resources/Textures/terrain.raw";
+		heightMap = Exalted::Mesh::Create();
+		heightMap->CreateHeightMap(path);
 
-		//Exalted::GameObject* terrainGameObject = new Exalted::GameObject("Terrain");
-		//terrainGameObject->SetMesh(heightMap);
-		//terrainGameObject->SetShader(m_TerrainShader);
-		//terrainGameObject->SetTexture(m_TerrainTexture);
-		//terrainGameObject->SetBoundingRadius(1.f);
-		//m_SceneRoot->AddChildObject(terrainGameObject);
+		terrainGameObject = new Exalted::GameObject("Terrain");
+		terrainGameObject->SetMesh(heightMap);
+		terrainGameObject->SetShader(m_TerrainShader);
+		terrainGameObject->SetTexture(m_TerrainTexture);
+		terrainGameObject->SetBoundingRadius(1.f);
+	//	m_SceneRoot->AddChildObject(terrainGameObject);
 
 	}
 
 	void HeightMapLayer::OnDetach()
 	{
 		EX_INFO("Height Map Layer detached successfully.");
+		delete terrainGameObject;
 	}
 
 	void HeightMapLayer::OnUpdate(Exalted::Timestep deltaTime)
@@ -81,17 +82,21 @@ namespace Sandbox
 		Exalted::RenderCommand::SetClearColor({ .05f, 0.2f, 0.5f, 1 });
 		Exalted::RenderCommand::Clear();
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
-		//Exalted::OpenGLConfigurations::EnableFaceCulling();
-		//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::BACK);
+		Exalted::OpenGLConfigurations::EnableFaceCulling();
+		Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::BACK);
 		Exalted::Renderer::BeginScene(*m_EditorCamera);
 
 
-		m_SceneManager->UpdateScene(deltaTime);
-		m_SceneManager->RenderScene();
+		//m_SceneManager->UpdateScene(deltaTime);
+		//m_SceneManager->RenderScene();
+		m_TerrainTexture->Bind();
+		Exalted::Renderer::Submit(m_TerrainShader, heightMap, glm::mat4(1.f));
+		m_TerrainTexture->Unbind();
+
 
 		Exalted::Renderer::EndScene();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
-		//Exalted::OpenGLConfigurations::DisableFaceCulling();
+		Exalted::OpenGLConfigurations::DisableFaceCulling();
 
 	}
 

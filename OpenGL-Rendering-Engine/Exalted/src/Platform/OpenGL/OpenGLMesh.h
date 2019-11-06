@@ -40,6 +40,5 @@ namespace Exalted
 		virtual void CreateTexturedQuad(float textureScale) override;
 		virtual void CreateTexturedCube(float textureScale) override;
 		virtual void CreateHeightMap(const std::string path) override;
-
 	};
 }

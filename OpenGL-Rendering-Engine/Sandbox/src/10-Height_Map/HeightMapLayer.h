@@ -37,5 +37,7 @@ namespace Sandbox
 		//Exalted::Ref<Exalted::Mesh> m_TerrainMesh;
 		Exalted::Ref<Exalted::Shader> m_TerrainShader;
 		Exalted::Ref<Exalted::Texture2D> m_TerrainTexture;
+		Exalted::GameObject* terrainGameObject;
+		Exalted::Ref<Exalted::Mesh> heightMap;
 	};
 }
