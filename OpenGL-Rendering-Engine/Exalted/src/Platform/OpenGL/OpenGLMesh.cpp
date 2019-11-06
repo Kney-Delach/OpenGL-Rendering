@@ -217,15 +217,14 @@ namespace Exalted
 			EX_CORE_ERROR("Attempting to read heightmap from invalid file: {0}", path.c_str());
 			return;
 		}
-		const float vertCount = RAW_WIDTH * RAW_HEIGHT;
-		const float indCount = (RAW_WIDTH - 1) * (RAW_HEIGHT - 1) * 6;
+		float vertCount = RAW_WIDTH * RAW_HEIGHT;
+		float indCount = (RAW_WIDTH - 1) * (RAW_HEIGHT - 1) * 6;
 
-		float* positionVertices = new float[(float)vertCount * 3];
-		float* textureVertices = new float[(float)vertCount * 2];
-		uint32_t* indices = new uint32_t[(float)indCount];
+		float* allVertices = new float[(int)vertCount * 5];
+		uint32_t* indices = new uint32_t[(int)indCount];
 
 		unsigned char* data = new unsigned char[vertCount];
-		file.read((char*)data, vertCount * sizeof(unsigned char));
+		file.read((char*)data, (float)vertCount * sizeof(unsigned char));
 		file.close();
 
 		for (int x = 0; x < RAW_WIDTH; ++x)
@@ -233,62 +232,45 @@ namespace Exalted
 			for (int z = 0; z < RAW_HEIGHT; ++z)
 			{
 				int offset = (x * RAW_WIDTH) + z;
-
-				positionVertices[0 + offset * 3] = x * HEIGHTMAP_TEX_X;
-				positionVertices[1 + offset * 3] = data[offset] * HEIGHTMAP_Y;
-				positionVertices[2 + offset * 3] = z * HEIGHTMAP_Z;
-				
-				textureVertices[0 + offset * 2] = x * HEIGHTMAP_TEX_X;
-				textureVertices[1 + offset * 2] = z * HEIGHTMAP_TEX_Z;
+				allVertices[0 + offset * 5] = x * HEIGHTMAP_X;
+				allVertices[1 + offset * 5] = data[offset] * HEIGHTMAP_Y;
+				allVertices[2 + offset * 5] = z * HEIGHTMAP_Z;
+				allVertices[3 + offset * 5] = x * HEIGHTMAP_TEX_X * 10;
+				allVertices[4 + offset * 5] = z * HEIGHTMAP_TEX_Z * 10;
 			}
 		}
-
-		delete[] data;
 
 		int numIndices = 0;
 		for (int x = 0; x < RAW_WIDTH - 1; ++x)
 		{
 			for (int z = 0; z < RAW_HEIGHT - 1; ++z)
 			{
-				uint32_t a = (x * (RAW_WIDTH)) + z;
-				uint32_t b = ((x + 1) * (RAW_WIDTH)) + z;
-				uint32_t c = ((x + 1) * (RAW_WIDTH)) + (z + 1);
-				uint32_t d = (x * (RAW_WIDTH)) + (z + 1);
+				int a = (x * (RAW_WIDTH)) + z;
+				int b = ((x + 1) * (RAW_WIDTH)) + z;
+				int c = ((x + 1) * (RAW_WIDTH)) + (z + 1);
+				int  d = (x * (RAW_WIDTH)) + (z + 1);
 
 				indices[numIndices++] = c;
 				indices[numIndices++] = b;
 				indices[numIndices++] = a;
-
 				indices[numIndices++] = a;
 				indices[numIndices++] = d;
 				indices[numIndices++] = c;
 
 			}		}
-
 		m_VertexArray = VertexArray::Create();
-		Ref<VertexBuffer> positionVertexBuffer = VertexBuffer::Create(positionVertices, sizeof(positionVertices));
-		const BufferLayout posLayout =
+		Ref<VertexBuffer> allVertexBuffer = VertexBuffer::Create(allVertices, sizeof(float) * vertCount * 5);
+		const BufferLayout layout =
 		{
 			{ShaderDataType::Float3, "a_Position" },
+			{ShaderDataType::Float2, "a_TexCoord" }
 		};
-		positionVertexBuffer->SetLayout(posLayout);
+		allVertexBuffer->SetLayout(layout);
 
-		Ref<VertexBuffer> textureVertexBuffer = VertexBuffer::Create(textureVertices, sizeof(textureVertices));
-		const BufferLayout texLayout =
-		{
-		{ShaderDataType::Float2, "a_TexCoord" }
-		};
-		textureVertexBuffer->SetLayout(texLayout);
-
-
-		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, indCount / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
-
-		m_VertexArray->AddVertexBuffer(positionVertexBuffer);
-		m_VertexArray->AddVertexBuffer(textureVertexBuffer);
-
-		delete[] positionVertices;
-		delete[] textureVertices;
+		m_VertexArray->AddVertexBuffer(allVertexBuffer);
 		delete[] indices;
+		delete[] data;
 	}
 }

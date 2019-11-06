@@ -23,6 +23,7 @@ namespace Sandbox
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
 			0.1f,
 			10000.f);
+		m_EditorCamera->SetPosition(glm::vec3(-2000,3000,3000));
 	}
 
 	void HeightMapLayer::OnAttach()
@@ -37,12 +38,12 @@ namespace Sandbox
 		m_TerrainShader->Bind();
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_TerrainShader)->SetUniformInt1("u_DiffuseTexture", 0);
 		m_TerrainShader->Unbind();
-		m_TerrainTexture = Exalted::Texture2D::Create("Resources/Textures/TexGridOrange.png",//"Resources/Textures/BarrenReds.JPG",
-			Exalted::TextureFormat::RGB,
+		m_TerrainTexture = Exalted::Texture2D::Create("Resources/Textures/BarrenReds.JPG",
+			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
-			true,
+			false,
 			0);
 
 		// -------------- Scene manager Setup ------------ //
@@ -51,28 +52,20 @@ namespace Sandbox
 		m_SceneRoot->SetMesh(cubeMesh); //todo: Automatically implement this as a sphere
 		m_SceneManager->SetSceneRoot(m_SceneRoot);
 
-		Exalted::GameObject* m_pBoxObject = new Exalted::GameObject("Cube");
-		m_pBoxObject->SetMesh(cubeMesh);
-		m_pBoxObject->GetTransform()->Position = glm::vec3(2.f,0.f,0.f);
-		m_SceneRoot->AddChildObject(m_pBoxObject);
+		heightMap = Exalted::HeightMap::Create("Resources/Textures/terrain.raw");
 
-		const std::string path = "Resources/Textures/terrain.raw";
-		heightMap = Exalted::Mesh::Create();
-		heightMap->CreateHeightMap(path);
-
-		terrainGameObject = new Exalted::GameObject("Terrain");
+		Exalted::GameObject* terrainGameObject = new Exalted::GameObject("Terrain");
 		terrainGameObject->SetMesh(heightMap);
 		terrainGameObject->SetShader(m_TerrainShader);
 		terrainGameObject->SetTexture(m_TerrainTexture);
-		terrainGameObject->SetBoundingRadius(1.f);
-	//	m_SceneRoot->AddChildObject(terrainGameObject);
-
+		terrainGameObject->GetTransform()->Scale = glm::vec3(10.f, 1.5f, 10.f);
+		terrainGameObject->SetBoundingRadius(1000000.f);
+		m_SceneRoot->AddChildObject(terrainGameObject);
 	}
 
 	void HeightMapLayer::OnDetach()
 	{
 		EX_INFO("Height Map Layer detached successfully.");
-		delete terrainGameObject;
 	}
 
 	void HeightMapLayer::OnUpdate(Exalted::Timestep deltaTime)
@@ -86,18 +79,12 @@ namespace Sandbox
 		Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::BACK);
 		Exalted::Renderer::BeginScene(*m_EditorCamera);
 
-
-		//m_SceneManager->UpdateScene(deltaTime);
-		//m_SceneManager->RenderScene();
-		m_TerrainTexture->Bind();
-		Exalted::Renderer::Submit(m_TerrainShader, heightMap, glm::mat4(1.f));
-		m_TerrainTexture->Unbind();
-
+		m_SceneManager->UpdateScene(deltaTime);
+		m_SceneManager->RenderScene();
 
 		Exalted::Renderer::EndScene();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		Exalted::OpenGLConfigurations::DisableFaceCulling();
-
 	}
 
 	void HeightMapLayer::OnImGuiRender()

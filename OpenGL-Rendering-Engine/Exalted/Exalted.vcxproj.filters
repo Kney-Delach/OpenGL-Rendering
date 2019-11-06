@@ -1558,6 +1558,8 @@
     <ClInclude Include="src\Core\SceneGraph\FrustumCulling\Frustum.h" />
     <ClInclude Include="src\Core\SceneGraph\Scene.h" />
     <ClInclude Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.h" />
+    <ClInclude Include="src\Core\Renderer\HeightMap.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLHeightMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1645,5 +1647,7 @@
     <ClCompile Include="src\Core\SceneGraph\Scene.cpp" />
     <ClCompile Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.cpp" />
     <ClCompile Include="src\Core\Renderer\EditorCamera.cpp" />
+    <ClCompile Include="src\Core\Renderer\HeightMap.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLHeightMap.cpp" />
   </ItemGroup>
 </Project>

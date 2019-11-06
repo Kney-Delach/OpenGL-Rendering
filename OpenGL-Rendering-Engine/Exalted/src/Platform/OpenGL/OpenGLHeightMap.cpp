@@ -23,17 +23,19 @@ namespace Exalted
 	OpenGLHeightMap::OpenGLHeightMap(const std::string path)
 	{
 		std::ifstream file(path.c_str(), std::ios::binary);
-		if(!file)
+		if (!file)
 		{
 			EX_CORE_ERROR("Attempting to read heightmap from invalid file: {0}", path.c_str());
 			return;
 		}
-		const float numVertices = RAW_WIDTH * RAW_HEIGHT;
-		float vertices[RAW_WIDTH * RAW_HEIGHT * 5];
-		uint32_t indices[(RAW_WIDTH - 1) * (RAW_HEIGHT - 1) * 6];
+		float vertCount = RAW_WIDTH * RAW_HEIGHT;
+		float indCount = (RAW_WIDTH - 1) * (RAW_HEIGHT - 1) * 6;
 
-		unsigned char* data = new unsigned char[numVertices];
-		file.read((char*)data, numVertices * sizeof(unsigned char));
+		float* allVertices = new float[(int)vertCount * 5];
+		uint32_t* indices = new uint32_t[(int)indCount];
+
+		unsigned char* data = new unsigned char[vertCount];
+		file.read((char*)data, (float)vertCount * sizeof(unsigned char));
 		file.close();
 
 		for (int x = 0; x < RAW_WIDTH; ++x)
@@ -41,46 +43,45 @@ namespace Exalted
 			for (int z = 0; z < RAW_HEIGHT; ++z)
 			{
 				int offset = (x * RAW_WIDTH) + z;
-
-				vertices[0 + offset * 5] = x * HEIGHTMAP_TEX_X;
-				vertices[1 + offset * 5] = data[offset] * HEIGHTMAP_Y;
-				vertices[2 + offset * 5] = z * HEIGHTMAP_Z;
-				vertices[3 + offset * 5] = x * HEIGHTMAP_TEX_X;
-				vertices[4 + offset * 5] = z * HEIGHTMAP_TEX_Z;
+				allVertices[0 + offset * 5] = x * HEIGHTMAP_X;
+				allVertices[1 + offset * 5] = data[offset] * HEIGHTMAP_Y;
+				allVertices[2 + offset * 5] = z * HEIGHTMAP_Z;
+				allVertices[3 + offset * 5] = x * HEIGHTMAP_TEX_X * 10;
+				allVertices[4 + offset * 5] = z * HEIGHTMAP_TEX_Z * 10;
 			}
 		}
 
-		delete data; 
-
 		int numIndices = 0;
-		for (int x = 0; x < RAW_WIDTH - 1; ++x) 
+		for (int x = 0; x < RAW_WIDTH - 1; ++x)
 		{
-			for (int z = 0; z < RAW_HEIGHT - 1; ++z) 
+			for (int z = 0; z < RAW_HEIGHT - 1; ++z)
 			{
 				int a = (x * (RAW_WIDTH)) + z;
 				int b = ((x + 1) * (RAW_WIDTH)) + z;
 				int c = ((x + 1) * (RAW_WIDTH)) + (z + 1);
-				int d = (x * (RAW_WIDTH)) + (z + 1);
-				
+				int  d = (x * (RAW_WIDTH)) + (z + 1);
+
 				indices[numIndices++] = c;
 				indices[numIndices++] = b;
 				indices[numIndices++] = a;
-				
 				indices[numIndices++] = a;
 				indices[numIndices++] = d;
 				indices[numIndices++] = c;
-				
-			}		}
 
+			}		}
 		m_VertexArray = VertexArray::Create();
-		Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
+		Ref<VertexBuffer> allVertexBuffer = VertexBuffer::Create(allVertices, sizeof(float) * vertCount * 5);
 		const BufferLayout layout =
 		{
 			{ShaderDataType::Float3, "a_Position" },
 			{ShaderDataType::Float2, "a_TexCoord" }
 		};
-		vertexBuffer->SetLayout(layout);
-		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+		allVertexBuffer->SetLayout(layout);
+
+		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, indCount / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
+		m_VertexArray->AddVertexBuffer(allVertexBuffer);
+		delete[] indices;
+		delete[] data;
 	}
 }
