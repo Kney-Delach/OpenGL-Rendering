@@ -21,8 +21,10 @@
 #include "7-Blending/BlendingLayer.h"
 #include "8-Scene_Graphs/SceneGraphLayer.h"
 #include "9-Scene_Class/SceneClassLayer.h"
+#include "10-Height_Map/HeightMapLayer.h"
 
 #include "Core/EntryPoint.h"
+
 namespace Sandbox
 {
 	class OpenGLRenderingApplication : public Exalted::Application
@@ -39,6 +41,7 @@ namespace Sandbox
 			PushLayer(new BlendingLayer());
 			//PushLayer(new SceneGraphLayer()); //todo: For however is reading this, this scene no longer displays anything as the gameobjects themselves are organised by a scene class which is shown in the scene class layer.
 			PushLayer(new SceneClassLayer());
+			PushLayer(new HeightMapLayer());
 		}
 		virtual ~OpenGLRenderingApplication()
 		{

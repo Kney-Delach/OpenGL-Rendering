@@ -52,6 +52,7 @@
       <Filter>8-Scene_Graphs</Filter>
     </ClInclude>
     <ClInclude Include="src\9-Scene_Class\SceneClassLayer.h" />
+    <ClInclude Include="src\10-Height_Map\HeightMapLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -80,5 +81,10 @@
     </ClCompile>
     <ClCompile Include="src\SandboxEntry.cpp" />
     <ClCompile Include="src\9-Scene_Class\SceneClassLayer.cpp" />
+    <ClCompile Include="src\10-Height_Map\HeightMapLayer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\VTerrain.glsl" />
+    <None Include="Resources\Shaders\FTerrain.glsl" />
   </ItemGroup>
 </Project>

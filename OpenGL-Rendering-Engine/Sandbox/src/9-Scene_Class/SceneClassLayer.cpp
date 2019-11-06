@@ -18,7 +18,7 @@
 namespace Sandbox
 {
 	SceneClassLayer::SceneClassLayer()
-		: Layer("Scene Class Layer", true)
+		: Layer("Scene Class Layer", false)
 	{
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f, 
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
@@ -244,7 +244,7 @@ namespace Sandbox
 	void SceneClassLayer::OnInactiveImGuiRender()
 	{
 		ImGui::Begin("Disabled Scenes Settings");
-		if (ImGui::Button("Enable Scene [8] -> Scene Class"))
+		if (ImGui::Button("Enable Scene [9] -> Scene Class"))
 			m_IsActive = true;
 		ImGui::End();
 	}

@@ -1,10 +1,9 @@
 /***************************************************************************
- * Filename		: SceneClassLayer.h
+ * Filename		: HeightMapLayer.h
  * Name			: Ori Lazar
- * Date			: 03/11/2019
- * Description	: This layer contains a scene which utilizes this engines
-				  scene storage structure.
-	 .---.
+ * Date			: 05/11/2019
+ * Description	: This layer contains a scene with a height map!
+     .---.
    .'_:___".
    |__ --==|
    [  ]  :[|
@@ -18,11 +17,11 @@
 
 namespace Sandbox
 {
-	class SceneClassLayer : public Exalted::Layer
+	class HeightMapLayer : public Exalted::Layer
 	{
 	public:
-		SceneClassLayer();
-		virtual ~SceneClassLayer() = default;
+		HeightMapLayer();
+		virtual ~HeightMapLayer() = default;
 		virtual void OnUpdate(Exalted::Timestep deltaTime) override;
 		virtual void OnImGuiRender() override;
 		virtual void OnInactiveImGuiRender() override;
@@ -33,14 +32,10 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Scene> m_SceneManager;
 		Exalted::Ref<Exalted::GameObject> m_SceneRoot;
 		Exalted::Ref<Exalted::EditorCamera> m_EditorCamera;
-		Exalted::GameObject* m_pBoxObject;
-		Exalted::Ref<Exalted::Texture2D> m_StainedWindowTexture;
-		Exalted::Ref<Exalted::Texture2D> m_FloorTexture;
-		Exalted::Ref<Exalted::Mesh> m_MeshQuad;
-		Exalted::Ref<Exalted::Shader> m_Shader;
-		Exalted::Ref<Exalted::Shader> m_WindowShader;
-		std::vector<glm::mat4> m_FloorTransforms;
-	private:
-		static const unsigned m_FloorTileCount = 10;
+
+		//Exalted::Ref<Exalted::HeightMap> m_HeightMap;
+		//Exalted::Ref<Exalted::Mesh> m_TerrainMesh;
+		Exalted::Ref<Exalted::Shader> m_TerrainShader;
+		Exalted::Ref<Exalted::Texture2D> m_TerrainTexture;
 	};
 }
