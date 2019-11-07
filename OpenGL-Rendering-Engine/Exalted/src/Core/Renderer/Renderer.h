@@ -18,6 +18,7 @@
 #include "RenderCommand.h"
 #include "Cameras.h"
 #include "Shader.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 //todo: Alter Submit functionality such that it processes render requests in a multi-threaded manner.
 
@@ -26,7 +27,8 @@ namespace Exalted
 	class Renderer
 	{
 	public:
-		static void BeginScene();
+		static void Init();
+		static void BeginScene() {};
 		static void BeginScene(Camera& camera);
 		static void EndScene();
 
@@ -43,6 +45,6 @@ namespace Exalted
 			glm::mat4 ViewProjectionMatrix;
 		};
 	private:
-		static SceneData* s_SceneData;
+		static Scope<SceneData> s_SceneData;
 	};
 }

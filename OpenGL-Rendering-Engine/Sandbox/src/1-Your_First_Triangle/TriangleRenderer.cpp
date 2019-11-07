@@ -25,16 +25,16 @@ namespace Sandbox
 	{
 		// ------------------------ Mesh Setup ------------------------ // 
 
-		m_MeshTriangle.reset(Exalted::Mesh::Create());
+		m_MeshTriangle = Exalted::Mesh::Create();
 		m_MeshTriangle->CreateTriangle();
-		m_MeshQuad.reset(Exalted::Mesh::Create());
+		m_MeshQuad = Exalted::Mesh::Create();
 		m_MeshQuad->CreateQuad();
 
 		// ------------------------ Shader setup ------------------------ // 
 
-		m_ShaderFlat.reset(Exalted::Shader::Create("Resources/Shaders/VBasicShaderFLAT.glsl", "Resources/Shaders/FBasicShaderFLAT.glsl"));
-		m_ShaderSmooth.reset(Exalted::Shader::Create("Resources/Shaders/VBasicShaderSMOOTH.glsl", "Resources/Shaders/FBasicShaderSMOOTH.glsl"));
-		m_ShaderNoPerspective.reset(Exalted::Shader::Create("Resources/Shaders/VBasicShaderNP.glsl", "Resources/Shaders/FBasicShaderNP.glsl"));
+		m_ShaderFlat = Exalted::Shader::Create("Resources/Shaders/VBasicShaderFLAT.glsl", "Resources/Shaders/FBasicShaderFLAT.glsl");
+		m_ShaderSmooth = Exalted::Shader::Create("Resources/Shaders/VBasicShaderSMOOTH.glsl", "Resources/Shaders/FBasicShaderSMOOTH.glsl");
+		m_ShaderNoPerspective = Exalted::Shader::Create("Resources/Shaders/VBasicShaderNP.glsl", "Resources/Shaders/FBasicShaderNP.glsl");
 
 		// ------------------------ Transform setup ------------------------ // 
 
@@ -164,7 +164,6 @@ namespace Sandbox
 	void TriangleLayer::OnAttach()
 	{
 		EX_INFO("Primitive Triangles layer attached successfully. ");
-
 	}
 
 	void TriangleLayer::OnDetach()

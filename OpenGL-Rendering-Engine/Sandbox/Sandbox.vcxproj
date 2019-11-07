@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -95,7 +95,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -115,7 +115,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -132,21 +132,29 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\1-Your_First_Triangle\TriangleRenderer.h" />
+    <ClInclude Include="src\10-Height_Map\HeightMapLayer.h" />
+    <ClInclude Include="src\11-Model_Loading\ModelLoadingLayer.h" />
     <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h" />
     <ClInclude Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.h" />
     <ClInclude Include="src\4-Texture_Mapping\TextureMappingLayer.h" />
     <ClInclude Include="src\5-Depth_Testing\DepthTestingLayer.h" />
     <ClInclude Include="src\6-Stencil_Testing\StencilTestingLayer.h" />
     <ClInclude Include="src\7-Blending\BlendingLayer.h" />
+    <ClInclude Include="src\8-Scene_Graphs\SceneGraphLayer.h" />
+    <ClInclude Include="src\9-Scene_Class\SceneClassLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp" />
+    <ClCompile Include="src\10-Height_Map\HeightMapLayer.cpp" />
+    <ClCompile Include="src\11-Model_Loading\ModelLoadingLayer.cpp" />
     <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp" />
     <ClCompile Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.cpp" />
     <ClCompile Include="src\4-Texture_Mapping\TextureMappingLayer.cpp" />
     <ClCompile Include="src\5-Depth_Testing\DepthTestingLayer.cpp" />
     <ClCompile Include="src\6-Stencil_Testing\StencilTestingLayer.cpp" />
     <ClCompile Include="src\7-Blending\BlendingLayer.cpp" />
+    <ClCompile Include="src\8-Scene_Graphs\SceneGraphLayer.cpp" />
+    <ClCompile Include="src\9-Scene_Class\SceneClassLayer.cpp" />
     <ClCompile Include="src\SandboxEntry.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,10 +163,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\Blending\GrassFragmentShader.glsl" />
-    <None Include="Resources\Shaders\Blending\GrassVertexShader.glsl" />
-    <None Include="Resources\Shaders\Blending\WindowFragmentShader.glsl" />
-    <None Include="Resources\Shaders\Blending\WindowVertexShader.glsl" />
+    <None Include="Resources\Shaders\FTerrain.glsl" />
+    <None Include="Resources\Shaders\VTerrain.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

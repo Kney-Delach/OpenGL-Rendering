@@ -19,6 +19,12 @@
     <Filter Include="6-Stencil_Testing">
       <UniqueIdentifier>{17F310FB-8309-0F91-CC80-9AB238D6DF18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="7-Blending">
+      <UniqueIdentifier>{0CA0F5E3-F857-3731-615F-108D4D36D221}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="8-Scene_Graphs">
+      <UniqueIdentifier>{3C414682-280F-3A88-11A3-AAAEFD0F16ED}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\1-Your_First_Triangle\TriangleRenderer.h">
@@ -39,7 +45,15 @@
     <ClInclude Include="src\6-Stencil_Testing\StencilTestingLayer.h">
       <Filter>6-Stencil_Testing</Filter>
     </ClInclude>
-    <ClInclude Include="src\7-Blending\BlendingLayer.h" />
+    <ClInclude Include="src\7-Blending\BlendingLayer.h">
+      <Filter>7-Blending</Filter>
+    </ClInclude>
+    <ClInclude Include="src\8-Scene_Graphs\SceneGraphLayer.h">
+      <Filter>8-Scene_Graphs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\9-Scene_Class\SceneClassLayer.h" />
+    <ClInclude Include="src\10-Height_Map\HeightMapLayer.h" />
+    <ClInclude Include="src\11-Model_Loading\ModelLoadingLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -60,13 +74,19 @@
     <ClCompile Include="src\6-Stencil_Testing\StencilTestingLayer.cpp">
       <Filter>6-Stencil_Testing</Filter>
     </ClCompile>
+    <ClCompile Include="src\7-Blending\BlendingLayer.cpp">
+      <Filter>7-Blending</Filter>
+    </ClCompile>
+    <ClCompile Include="src\8-Scene_Graphs\SceneGraphLayer.cpp">
+      <Filter>8-Scene_Graphs</Filter>
+    </ClCompile>
     <ClCompile Include="src\SandboxEntry.cpp" />
-    <ClCompile Include="src\7-Blending\BlendingLayer.cpp" />
+    <ClCompile Include="src\9-Scene_Class\SceneClassLayer.cpp" />
+    <ClCompile Include="src\10-Height_Map\HeightMapLayer.cpp" />
+    <ClCompile Include="src\11-Model_Loading\ModelLoadingLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\Blending\WindowVertexShader.glsl" />
-    <None Include="Resources\Shaders\Blending\WindowFragmentShader.glsl" />
-    <None Include="Resources\Shaders\Blending\GrassVertexShader.glsl" />
-    <None Include="Resources\Shaders\Blending\GrassFragmentShader.glsl" />
+    <None Include="Resources\Shaders\VTerrain.glsl" />
+    <None Include="Resources\Shaders\FTerrain.glsl" />
   </ItemGroup>
 </Project>

@@ -31,45 +31,45 @@ namespace Sandbox
 
 		// ------------------------- Initialize Meshes ------------------------- //
 
-		m_MeshFloor.reset(Exalted::Mesh::Create());
+		m_MeshFloor = Exalted::Mesh::Create();
 		m_MeshFloor->CreateTexturedQuad(1);
 
-		m_MeshCube.reset(Exalted::Mesh::Create());
+		m_MeshCube = Exalted::Mesh::Create();
 		m_MeshCube->CreateTexturedCube(1);
 
 		// ------------------------- Initialize Textures ------------------------- //
 
-		m_FloorTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexGridOrange.png",
+		m_FloorTexture = Exalted::Texture2D::Create("Resources/Textures/TexGridOrange.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_CubeTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexContainer.png",
+		m_CubeTexture = Exalted::Texture2D::Create("Resources/Textures/TexContainer.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_CubeTexture2.reset(Exalted::Texture2D::Create("Resources/Textures/TexGridBW.png",
+		m_CubeTexture2 = Exalted::Texture2D::Create("Resources/Textures/TexGridBW.png",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 
-		m_ChessboardTexture.reset(Exalted::Texture2D::Create("Resources/Textures/TexChessboard.tga",
+		m_ChessboardTexture = Exalted::Texture2D::Create("Resources/Textures/TexChessboard.tga",
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::CLAMP,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			false,
-			0));
+			0);
 		// ------------------------- Initialize Transformations ------------------------- //
 
 		// --------- Cube transforms --------- //
@@ -102,9 +102,9 @@ namespace Sandbox
 
 		// ------------------------- Initialize Shader ------------------------- //
 
-		m_ChessboardShader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/Blending/GrassFragmentShader.glsl"));
-		m_Shader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl"));
-		m_OutlineShader.reset(Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FRedShader.glsl"));
+		m_ChessboardShader = Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/Blending/GrassFragmentShader.glsl");
+		m_Shader = Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FTextured.glsl");
+		m_OutlineShader = Exalted::Shader::Create("Resources/Shaders/VTextured.glsl", "Resources/Shaders/FRedShader.glsl");
 
 		m_Shader->Bind();
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_DiffuseTexture", 0);
@@ -119,8 +119,7 @@ namespace Sandbox
 
 	void StencilTestingLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
-		if (m_ProcessingCameraMovement)
-			m_EditorCamera.UpdateCamera(deltaTime);
+		m_EditorCamera.UpdateCamera(deltaTime);
 
 		Exalted::RenderCommand::SetClearColor({ .1f, 0.1f, 0.3f, 1 });
 		Exalted::RenderCommand::Clear();
@@ -151,7 +150,7 @@ namespace Sandbox
 		m_CubeTexture->Bind();
 		Exalted::Renderer::Submit(m_Shader, m_MeshCube, 6 * 6 * 9, m_CubeTransform1);
 		Exalted::Renderer::Submit(m_Shader, m_MeshCube, 6 * 6 * 9, m_CubeTransform2);
-		m_CubeTexture->Unbind();
+		//m_CubeTexture->Unbind();
 
 		// --------------------- Draw Stencil outlines --------------------- //
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
@@ -160,7 +159,7 @@ namespace Sandbox
 		m_CubeTexture2->Bind();
 		Exalted::Renderer::Submit(m_OutlineShader, m_MeshCube, 6 * 6 * 9, m_CubeTransformOutline1);
 		Exalted::Renderer::Submit(m_OutlineShader, m_MeshCube, 6 * 6 * 9, m_CubeTransformOutline2);
-		m_CubeTexture2->Unbind();
+		//m_CubeTexture2->Unbind();
 		Exalted::OpenGLConfigurations::SetStencilMaskWriteALL();
 
 		// ------------------------------ Draw Chess Board ------------------------------ //
@@ -187,17 +186,7 @@ namespace Sandbox
 
 	void StencilTestingLayer::OnImGuiRender()
 	{
-		ImGui::Begin("Stencil Testing Camera Transform");
-		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
-		ImGui::InputFloat3("Position", (float*)& m_EditorCamera.GetPosition());
-		ImGui::InputFloat("Yaw", (float*)& m_EditorCamera.GetYaw());
-		ImGui::InputFloat("Pitch", (float*)& m_EditorCamera.GetPitch());
-		ImGui::PopItemFlag();
-		ImGui::PopStyleVar();
-		ImGui::InputFloat("Movement Speed", (float*)& m_EditorCamera.GetMovementSpeed(), 0.01f, 10.f);
-		ImGui::InputFloat("Mouse Sensitivity", (float*)& m_EditorCamera.GetSensitivitiy(), 0.01f, 10.f);
-		ImGui::End();
+		m_EditorCamera.OnImGuiRender();
 
 		ImGui::Begin("Stencil Testing Scene Settings");
 		if (ImGui::Button("Disable Scene"))
@@ -231,64 +220,13 @@ namespace Sandbox
 		ImGui::End();
 	}
 
-	void StencilTestingLayer::OnWindowResize(Exalted::WindowResizeEvent& resizeEvent)
-	{
-		const auto windowWidth = resizeEvent.GetWidth();
-		const auto windowHeight = resizeEvent.GetHeight();
-		m_EditorCamera.OnWindowResize(windowWidth, windowHeight);
-		Exalted::OpenGLConfigurations::SetScissorBox(static_cast<float>(windowWidth)/2.5f, static_cast<float>(windowHeight)/2.5f, static_cast<float>(windowWidth)/5.f, static_cast<float>(windowHeight)/5.f);
-
-	}
-
 	void StencilTestingLayer::OnEvent(Exalted::Event& event)
 	{
-		if (event.GetEventType() == Exalted::EventType::WindowResize)
-		{
-			OnWindowResize(static_cast<Exalted::WindowResizeEvent&>(event));
-		}
-		if ((event.GetEventType() == Exalted::EventType::MouseButtonPressed) && !m_MouseMoving)
-		{
-			auto& e = static_cast<Exalted::MouseButtonPressedEvent&>(event);
-			if (e.GetMouseButton() == EX_MOUSE_BUTTON_2)
-			{
-				m_FirstMouseMovement = true;
-				m_ProcessingMouseMovement = true;
-				m_MouseMoving = true;
-			}
-		}
-		if (event.GetEventType() == Exalted::EventType::MouseButtonReleased)
-		{
-			auto& e = static_cast<Exalted::MouseButtonReleasedEvent&>(event);
-			if (e.GetMouseButton() == EX_MOUSE_BUTTON_2)
-			{
-				m_ProcessingMouseMovement = false;
-				m_MouseMoving = false;
-			}
-		}
-		if (event.GetEventType() == Exalted::EventType::MouseScrolled)
-		{
-			auto& e = static_cast<Exalted::MouseScrolledEvent&>(event);
-			m_EditorCamera.ProcessMouseScrollEvent(e.GetYOffset());
-		}
-		if (m_ProcessingMouseMovement && (event.GetEventType() == Exalted::EventType::MouseMoved))
-		{
-			auto& e = static_cast<Exalted::MouseMovedEvent&>(event);
-			if (m_FirstMouseMovement)
-			{
-				m_LastMouseX = e.GetX();
-				m_LastMouseY = e.GetY();
-				m_FirstMouseMovement = false;
-			}
-			float xOffset = e.GetX() - m_LastMouseX;
-			float yOffset = m_LastMouseY - e.GetY();
+		m_EditorCamera.OnEvent(event);
 
-			m_LastMouseX = e.GetX();
-			m_LastMouseY = e.GetY();
-			m_EditorCamera.ProcessRotationEvent(xOffset, yOffset);
-		}
 		if (event.GetEventType() == Exalted::EventType::KeyPressed)
 		{
-			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
+			auto& e = dynamic_cast<Exalted::KeyPressedEvent&>(event);
 			if (e.GetKeyCode() == EX_KEY_1)
 				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::POINT);
 

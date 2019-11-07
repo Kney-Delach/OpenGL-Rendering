@@ -24,6 +24,7 @@ namespace Exalted
 
 	OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top, float zNear, float zFar)
 	{
+		m_Position = glm::vec3(0.f);
 		m_ProjectionMatrix = glm::ortho(left, right, bottom, top, zNear, zFar);
 		RecalculateViewMatrix();
 		RecalculateViewProjectionMatrix();

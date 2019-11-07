@@ -36,16 +36,20 @@ namespace Exalted
 		virtual void Unbind() const = 0;
 		virtual uint32_t GetRendererID() const = 0;
 		static uint32_t GetBytesPerPixel(TextureFormat format);
+		_NODISCARD bool IsTransparent() const { return m_Transparent; }
+	protected:
+		bool m_Transparent = false;
 	};
 
 	class Texture2D : public Texture
 	{
 	public:
-		static Texture2D* Create(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap = TextureWrap::REPEAT, 
+		static Ref<Texture2D> Create(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap = TextureWrap::REPEAT, 
 			TextureMagFilter textureMagFilter = TextureMagFilter::LINEAR, TextureMinFilter textureMinFilter = TextureMinFilter::LINEAR, bool isRGB = false, unsigned int mipMapLevel = 0);
 		_NODISCARD virtual TextureFormat GetFormat() const = 0;
 		_NODISCARD virtual uint32_t GetWidth() const = 0;
 		_NODISCARD virtual uint32_t GetHeight() const = 0;
 		_NODISCARD virtual const std::string& GetPath() const = 0;
+
 	};
 }

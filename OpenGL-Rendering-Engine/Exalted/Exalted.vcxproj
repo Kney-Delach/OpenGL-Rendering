@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>expch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;EX_BUILD_DLL;EX_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -88,7 +88,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc142-mtd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Dependencies\assimp\lib;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -97,7 +98,7 @@
       <PrecompiledHeaderFile>expch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;EX_BUILD_DLL;EX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -112,7 +113,8 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc142-mtd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Dependencies\assimp\lib;</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -121,7 +123,7 @@
       <PrecompiledHeaderFile>expch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;EX_BUILD_DLL;EX_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;Dependencies\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -136,10 +138,94 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\OpenGL-Rendering-Engine\Exalted\Dependencies\assimp\lib\assimp-vc142-mtd.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Dependencies\Assimp\include\assimp\BaseImporter.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Bitmap.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\BlobIOSystem.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\ByteSwapper.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Compiler\poppack1.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Compiler\pstdint.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Compiler\pushpack1.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\CreateAnimMesh.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\DefaultIOStream.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\DefaultIOSystem.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\DefaultLogger.hpp" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Defines.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Exceptional.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Exporter.hpp" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\GenericProperty.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Hash.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\IOStream.hpp" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\IOStreamBuffer.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\IOSystem.hpp" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Importer.hpp" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\LineSplitter.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\LogAux.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\LogStream.hpp" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Logger.hpp" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Macros.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\MathFunctions.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\MemoryIOWrapper.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\NullLogger.hpp" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\ParsingUtils.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Profiler.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\ProgressHandler.hpp" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\RemoveComments.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\SGSpatialSort.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\SceneCombiner.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\SkeletonMeshBuilder.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\SmoothingGroups.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\SmoothingGroups.inl" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\SpatialSort.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\StandardShapes.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\StreamReader.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\StreamWriter.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\StringComparison.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\StringUtils.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Subdivision.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\TinyFormatter.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\Vertex.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\XMLTools.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\ZipArchiveIOSystem.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\aabb.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\ai_assert.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\anim.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\camera.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\cexport.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\cfileio.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\cimport.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\color4.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\color4.inl" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\defs.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\fast_atof.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\importerdesc.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\irrXMLWrapper.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\light.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\material.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\material.inl" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\matrix3x3.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\matrix3x3.inl" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\matrix4x4.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\matrix4x4.inl" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\mesh.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\metadata.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\pbrmaterial.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\port\AndroidJNI\AndroidJNIIOSystem.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\postprocess.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\qnan.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\quaternion.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\quaternion.inl" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\scene.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\texture.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\types.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\vector2.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\vector2.inl" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\vector3.h" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\vector3.inl" />
+    <ClInclude Include="Dependencies\Assimp\include\assimp\version.h" />
     <ClInclude Include="Dependencies\glm\glm\common.hpp" />
     <ClInclude Include="Dependencies\glm\glm\detail\_features.hpp" />
     <ClInclude Include="Dependencies\glm\glm\detail\_fixes.hpp" />
@@ -534,6 +620,12 @@
     <ClInclude Include="src\Core\Renderer\Shader.h" />
     <ClInclude Include="src\Core\Renderer\Texture.h" />
     <ClInclude Include="src\Core\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Core\SceneGraph\FrustumCulling\Frustum.h" />
+    <ClInclude Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.h" />
+    <ClInclude Include="src\Core\SceneGraph\GameComponent.h" />
+    <ClInclude Include="src\Core\SceneGraph\GameObject.h" />
+    <ClInclude Include="src\Core\SceneGraph\GameTransform.h" />
+    <ClInclude Include="src\Core\SceneGraph\Scene.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Exalted.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
@@ -557,13 +649,19 @@
     <ClCompile Include="src\Core\Log.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Core\Renderer\Cameras.cpp" />
+    <ClCompile Include="src\Core\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Core\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Core\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Core\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Core\Renderer\RendererAPI.cpp" />
+    <ClCompile Include="src\Core\Renderer\RenderingContext.cpp" />
     <ClCompile Include="src\Core\Renderer\Shader.cpp" />
     <ClCompile Include="src\Core\Renderer\Texture.cpp" />
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\FrustumCulling\Frustum.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\GameObject.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\Scene.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLMesh.cpp" />

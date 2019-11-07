@@ -74,6 +74,12 @@ namespace Exalted
 		SUBTRACT			= GL_FUNC_SUBTRACT,			// Subtracts both components from each other.
 		REVERSE_SUBTRACT	= GL_FUNC_REVERSE_SUBTRACT	// Subtracts both components but reverses the order.
 	};
+
+	enum class FaceCullMode
+	{
+		BACK = GL_BACK,
+		FRONT = GL_FRONT
+	};
 	class OpenGLConfigurations
 	{
 	public:
@@ -107,5 +113,9 @@ namespace Exalted
 		static inline void SetBlendFunctionSeparate(BlendFactors sourceFactorRGB, BlendFactors destinationFactorRGB, BlendFactors sourceFactorAlpha, BlendFactors destinationFactorAlpha) { glBlendFuncSeparate(GL_ENUM(sourceFactorRGB), GL_ENUM(destinationFactorRGB), GL_ENUM(sourceFactorAlpha), GL_ENUM(destinationFactorAlpha)); }
 		static inline void SetBlendConstantColor(float red, float green, float blue, float alpha = 1.0f) { glBlendColor(red, green, blue, alpha); }
 		static inline void SetBlendEquation(BlendMode blendMode) { glBlendEquation(GL_ENUM(blendMode)); }
+
+		static inline void EnableFaceCulling() { glEnable(GL_CULL_FACE); }
+		static inline void DisableFaceCulling() { glDisable(GL_CULL_FACE); }
+		static inline void SetFaceCullingMode(FaceCullMode cullMode) { glCullFace(GL_ENUM(cullMode)); }
 	};
 }

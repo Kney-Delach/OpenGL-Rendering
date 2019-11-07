@@ -29,8 +29,6 @@ namespace Sandbox
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 	private:
-		void OnWindowResize(Exalted::WindowResizeEvent& resizeEvent);
-	private:
 		Exalted::Ref<Exalted::Mesh> m_Mesh3D;
 		Exalted::Ref<Exalted::Texture2D> m_Texture3D; 
 		std::vector<Exalted::Ref<Exalted::Mesh>> m_Meshes;
@@ -38,11 +36,6 @@ namespace Sandbox
 		std::vector<glm::mat4> meshTransforms; 
 		Exalted::Ref<Exalted::Shader> m_Shader;
 		Exalted::EditorCamera m_EditorCamera;
-		bool m_ProcessingMouseMovement = false;
-		bool m_MouseMoving = false;
-		bool m_ProcessingCameraMovement = true;
-		bool m_FirstMouseMovement = true;
-		float m_LastMouseX, m_LastMouseY;
 		bool m_AnimateCube = false;
 		bool m_AnimatePositiveDirection = true;
 	};

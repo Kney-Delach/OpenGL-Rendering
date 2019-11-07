@@ -30,10 +30,10 @@ namespace Exalted
 		void SetVSync(bool enabled) override;
 
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_WindowData.EventCallback = callback; }
-		_NODISCARD inline unsigned int GetWindowWidth() const override { return m_WindowData.Properties.Width; }
-		_NODISCARD inline unsigned int GetWindowHeight() const override { return m_WindowData.Properties.Height; }
-		_NODISCARD inline bool IsVSync() const override { return m_WindowData.VSync;  }
-		_NODISCARD inline void* GetNativeWindow() const override { return m_Window; }
+		inline unsigned int GetWindowWidth() const override { return m_WindowData.Properties.Width; }
+		inline unsigned int GetWindowHeight() const override { return m_WindowData.Properties.Height; }
+		inline bool IsVSync() const override { return m_WindowData.VSync;  }
+		inline void* GetNativeWindow() const override { return m_Window; }
 	private:
 		virtual void Shutdown();
 		virtual void Init(const WindowProperties& properties);
@@ -48,7 +48,7 @@ namespace Exalted
 			EventCallbackFn EventCallback;
 		};
 		GLFWwindow* m_Window;
-		RenderingContext* m_RenderingContext;
+		Scope<RenderingContext> m_RenderingContext;
 		WindowData m_WindowData;
 	};
 }

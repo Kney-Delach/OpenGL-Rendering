@@ -15,11 +15,10 @@
 ***************************************************************************/
 #include "expch.h"
 #include "RenderCommand.h"
-#include "Platform/OpenGL/OpenGLRenderer.h"
 
 //todo: Get the rendering api to configure automatically upon system start. 
 
 namespace Exalted 
 {
-	RendererAPI* RenderCommand::s_RendererAPI = new OpenGLRendererAPI;
+	Scope<RendererAPI> RenderCommand::s_RendererAPI = RendererAPI::Create();
 }

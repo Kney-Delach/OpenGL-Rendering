@@ -17,14 +17,15 @@
 #include "expch.h"
 #include "Renderer.h"
 
-#include "Platform/OpenGL/OpenGLShader.h"
+//#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Exalted 
 {
-	Renderer::SceneData* Renderer::s_SceneData = new SceneData;
+	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();
 
-	void Renderer::BeginScene()
+	void Renderer::Init()
 	{
+		RenderCommand::Init();
 	}
 
 	void Renderer::BeginScene(Camera& camera)

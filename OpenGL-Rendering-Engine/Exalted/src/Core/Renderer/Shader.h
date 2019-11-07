@@ -14,6 +14,7 @@
 ***************************************************************************/
 #pragma once
 #include <string>
+#include "Core/SceneGraph/GameComponent.h"
 
 namespace Exalted 
 {
@@ -23,6 +24,6 @@ namespace Exalted
 		virtual ~Shader() = default;
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
-		static Shader* Create(const std::string& vertexFilePath, const std::string& fragmentFilePath, const std::string& geometryFilePath = "");
+		static Ref<Shader> Create(const std::string& vertexFilePath, const std::string& fragmentFilePath, const std::string& geometryFilePath = "");
 	};
 }

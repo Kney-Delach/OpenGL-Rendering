@@ -40,11 +40,20 @@
 #include "Core/Renderer/Texture.h"
 #include "Core/Renderer/VertexArray.h"
 #include "Core/Renderer/Mesh.h"
+//#include "Core/Renderer/HeightMap.h"
 #include "Core/Renderer/Texture.h"
-#include "Core/Renderer/Cameras.h" //todo: Rename this ? 
+#include "Core/Renderer/Cameras.h"
 #include "Core/Renderer/EditorCamera.h"
 
 #include "Platform/OpenGL/OpenGLConfigurations.h" //todo: abstract this
+
+#include "Core/SceneGraph/GameObject.h"
+#include "Core/SceneGraph/GameTransform.h"
+#include "Core/SceneGraph/GameComponent.h"
+#include "Core/SceneGraph/Scene.h"
+
+#include "Core/SceneGraph/FrustumCulling/Frustum.h"
+#include "Core/SceneGraph/FrustumCulling/FrustumPlane.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>

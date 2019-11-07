@@ -60,6 +60,7 @@ namespace Exalted
 
 	void ImGuiLayer::OnDetach()
 	{
+		EX_CORE_INFO("ImGui layer detached successfully!");
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();

@@ -29,15 +29,8 @@ namespace Sandbox
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 	private:
-		void OnWindowResize(Exalted::WindowResizeEvent& resizeEvent);
-	private:
 		Exalted::Ref<Exalted::Mesh> m_MeshCube;
 		Exalted::Ref<Exalted::Shader> m_Shader;
 		Exalted::EditorCamera m_EditorCamera;
-		bool m_ProcessingMouseMovement = false;
-		bool m_MouseMoving = false;
-		bool m_ProcessingCameraMovement = true;
-		bool m_FirstMouseMovement = true;
-		float m_LastMouseX, m_LastMouseY;
 	};
 }

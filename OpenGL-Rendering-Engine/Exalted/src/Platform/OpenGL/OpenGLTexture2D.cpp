@@ -51,9 +51,10 @@ namespace Exalted
 	{
 		EX_CORE_INFO("Loading texture {0}, format {1}, wrapping {2}, magnification filtering {3}, minification filter {4}, isRGB {5}, mipMapLevel {6}", filepath, textureFormat, textureWrap, textureMagFilter, textureMinFilter, isRGB, mipMapLevel);
 		
-		stbi_set_flip_vertically_on_load(1);
+		stbi_set_flip_vertically_on_load(1); //todo: Verify how to set this correctly, as sometime textures need this and some dont....
 		int width, height, channels;
 		m_LocalDataBuffer = stbi_load(filepath.c_str(), &width, &height, &channels, isRGB ? STBI_rgb : STBI_rgb_alpha);
+		m_Transparent = !isRGB; // assign transparency of texture
 		if(!m_LocalDataBuffer)
 		{
 			EX_CORE_CRITICAL("Texture File Path Invalid! Path Given: {0}", filepath.c_str());
@@ -86,8 +87,8 @@ namespace Exalted
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, 0); 
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, amount);
 		}
-		glBindTexture(GL_TEXTURE_2D, 0);
 
+		glBindTexture(GL_TEXTURE_2D, 0);
 		stbi_image_free(m_LocalDataBuffer);
 	}
 

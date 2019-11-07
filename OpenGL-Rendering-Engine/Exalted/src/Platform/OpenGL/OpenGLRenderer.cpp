@@ -19,7 +19,7 @@
 
 namespace Exalted 
 {
-	void RendererAPI::Init()
+	void OpenGLRendererAPI::Init()
 	{
 		auto& capabilities = GetCapabilities();
 		capabilities.Vendor = (const char*) glGetString(GL_VENDOR);
@@ -41,7 +41,7 @@ namespace Exalted
 
 	void OpenGLRendererAPI::SetClearStencil(const float stencilValue)
 	{
-		glClearStencil(stencilValue);
+		glClearStencil(static_cast<int>(stencilValue));
 	}
 
 	void OpenGLRendererAPI::Clear()
