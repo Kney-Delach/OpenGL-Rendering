@@ -52,14 +52,14 @@ namespace Sandbox
 		cubeMesh->CreateCube();
 
 		// initialize scene objects
-		m_SceneRoot = Exalted::CreateRef<Exalted::GameObject>("Scene Root");
-		m_SceneRoot->SetMesh(m_MeshQuad);
 
 		m_pBoxObject = new Exalted::GameObject("Cube");
 		m_pBoxObject->SetMesh(cubeMesh);
 		m_pBoxObject->GetTransform()->Scale = glm::vec3(0.5f);
 		m_pBoxObject->GetTransform()->Position = glm::vec3(5.0f, 2.0f, 2.0f);
 
+		m_SceneRoot = Exalted::CreateRef<Exalted::GameObject>("Scene Root1");
+		m_SceneRoot->SetMesh(m_MeshQuad);
 		m_SceneRoot->AddChildObject(m_pBoxObject);
 		m_SceneRoot->SetShader(m_Shader);
 
@@ -202,6 +202,7 @@ namespace Sandbox
 	void SceneClassLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
 		m_EditorCamera->UpdateCamera(deltaTime);
+		m_SceneManager->UpdateScene(deltaTime);
 
 		Exalted::RenderCommand::SetClearColor({ .05f, 0.2f, 0.5f, 1 });
 		Exalted::RenderCommand::Clear();
@@ -217,7 +218,6 @@ namespace Sandbox
 			Exalted::Renderer::Submit(m_Shader, m_MeshQuad, m_FloorTransforms[i]);
 		m_FloorTexture->Unbind();
 
-		m_SceneManager->UpdateScene(deltaTime);
 		m_SceneManager->RenderScene();
 
 		Exalted::Renderer::EndScene();
@@ -252,17 +252,6 @@ namespace Sandbox
 	void SceneClassLayer::OnEvent(Exalted::Event& event)
 	{
 		m_EditorCamera->OnEvent(event);
-		if (event.GetEventType() == Exalted::EventType::KeyPressed)
-		{
-			auto& e = dynamic_cast<Exalted::KeyPressedEvent&>(event);
-			if (e.GetKeyCode() == EX_KEY_I)
-				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::POINT);
-
-			if (e.GetKeyCode() == EX_KEY_O)
-				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::LINE);
-
-			if (e.GetKeyCode() == EX_KEY_P)
-				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::FILL);
-		}
+		m_SceneManager->OnEvent(event);
 	}
 }

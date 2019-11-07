@@ -53,6 +53,7 @@
     </ClInclude>
     <ClInclude Include="src\9-Scene_Class\SceneClassLayer.h" />
     <ClInclude Include="src\10-Height_Map\HeightMapLayer.h" />
+    <ClInclude Include="src\11-Model_Loading\ModelLoadingLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -82,6 +83,7 @@
     <ClCompile Include="src\SandboxEntry.cpp" />
     <ClCompile Include="src\9-Scene_Class\SceneClassLayer.cpp" />
     <ClCompile Include="src\10-Height_Map\HeightMapLayer.cpp" />
+    <ClCompile Include="src\11-Model_Loading\ModelLoadingLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\VTerrain.glsl" />

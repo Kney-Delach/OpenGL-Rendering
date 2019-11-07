@@ -20,7 +20,6 @@ namespace Exalted
 	class HeightMap : public Mesh
 	{
 	public:
-		//HeightMap() = default;
 		virtual ~HeightMap() = default;
 		void CreateTriangle() override {}
 		void CreateQuad() override {}

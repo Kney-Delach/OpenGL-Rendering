@@ -28,9 +28,10 @@
 
 #include "FrustumCulling/FrustumPlane.h"
 
-
+//todo: Implement a check for if a mesh should be drawn with or without indicies.
 //todo: Implement a better gui hierarchy
 //todo: Implement bounding volume class for the frustum culling mechanism
+
 namespace Exalted
 {
 	static const char* DEFAULT_VERTEX_SHADER = "Resources/Shaders/DEFAULT_VERTEX_SHADER.glsl";

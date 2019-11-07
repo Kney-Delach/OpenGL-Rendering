@@ -40,5 +40,8 @@ namespace Exalted
 		virtual void CreateTexturedQuad(float textureScale) override;
 		virtual void CreateTexturedCube(float textureScale) override;
 		virtual void CreateHeightMap(const std::string path) override;
+		virtual const Ref<VertexArray>& GetVertexArray() const override { return m_VertexArray; }
+	private:
+		Ref<VertexArray> m_VertexArray;
 	};
 }

@@ -40,7 +40,7 @@
 #include "Core/Renderer/Texture.h"
 #include "Core/Renderer/VertexArray.h"
 #include "Core/Renderer/Mesh.h"
-#include "Core/Renderer/HeightMap.h"
+//#include "Core/Renderer/HeightMap.h"
 #include "Core/Renderer/Texture.h"
 #include "Core/Renderer/Cameras.h"
 #include "Core/Renderer/EditorCamera.h"

@@ -22,6 +22,7 @@
 #include "8-Scene_Graphs/SceneGraphLayer.h"
 #include "9-Scene_Class/SceneClassLayer.h"
 #include "10-Height_Map/HeightMapLayer.h"
+#include "11-Model_Loading/ModelLoadingLayer.h"
 
 #include "Core/EntryPoint.h"
 
@@ -40,8 +41,9 @@ namespace Sandbox
 			PushLayer(new StencilTestingLayer());
 			PushLayer(new BlendingLayer());
 			//PushLayer(new SceneGraphLayer()); //todo: For however is reading this, this scene no longer displays anything as the gameobjects themselves are organised by a scene class which is shown in the scene class layer.
+			PushLayer(new HeightMapLayer()); //todo: note I cheated and put this before scene class as it was breaking primitives.
 			PushLayer(new SceneClassLayer());
-			PushLayer(new HeightMapLayer());
+			PushLayer(new ModelLoadingLayer());
 		}
 		virtual ~OpenGLRenderingApplication()
 		{

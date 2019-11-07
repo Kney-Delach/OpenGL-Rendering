@@ -67,7 +67,6 @@ namespace Exalted
 				indices[numIndices++] = a;
 				indices[numIndices++] = d;
 				indices[numIndices++] = c;
-
 			}		}
 		m_VertexArray = VertexArray::Create();
 		Ref<VertexBuffer> allVertexBuffer = VertexBuffer::Create(allVertices, sizeof(float) * vertCount * 5);
@@ -77,11 +76,11 @@ namespace Exalted
 			{ShaderDataType::Float2, "a_TexCoord" }
 		};
 		allVertexBuffer->SetLayout(layout);
-
 		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, indCount / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 		m_VertexArray->AddVertexBuffer(allVertexBuffer);
 		delete[] indices;
+		delete[] allVertices;
 		delete[] data;
 	}
 }

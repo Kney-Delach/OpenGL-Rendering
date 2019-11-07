@@ -14,6 +14,9 @@
 ***************************************************************************/
 #include "expch.h"
 #include "Scene.h"
+#include "Core/Events/KeyEvent.h"
+#include "Core/KeyCodes.h"
+#include "Platform/OpenGL/OpenGLConfigurations.h" //todo: Abstract this into just "Configurations"
 
 namespace Exalted
 {
@@ -61,5 +64,22 @@ namespace Exalted
 	{
 		m_OpaqueObjects.clear();
 		m_TransparentObjects.clear();
+	}
+
+
+	void Scene::OnEvent(Exalted::Event& event)
+	{
+		if (event.GetEventType() == Exalted::EventType::KeyPressed)
+		{
+			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
+			if (e.GetKeyCode() == EX_KEY_I)
+				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::POINT);
+
+			if (e.GetKeyCode() == EX_KEY_O)
+				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::LINE);
+
+			if (e.GetKeyCode() == EX_KEY_P)
+				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::FILL);
+		}
 	}
 }

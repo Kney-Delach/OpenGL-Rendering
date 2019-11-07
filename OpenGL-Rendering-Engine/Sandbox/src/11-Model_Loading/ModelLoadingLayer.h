@@ -1,9 +1,9 @@
 /***************************************************************************
- * Filename		: HeightMapLayer.h
+ * Filename		: ModelLoadingLayer.h
  * Name			: Ori Lazar
  * Date			: 05/11/2019
- * Description	: This layer contains a scene with a height map!
-     .---.
+ * Description	: This layer contains a scene with 3D Model loading!
+	 .---.
    .'_:___".
    |__ --==|
    [  ]  :[|
@@ -17,11 +17,11 @@
 
 namespace Sandbox
 {
-	class HeightMapLayer : public Exalted::Layer
+	class ModelLoadingLayer : public Exalted::Layer
 	{
 	public:
-		HeightMapLayer();
-		virtual ~HeightMapLayer() = default;
+		ModelLoadingLayer();
+		virtual ~ModelLoadingLayer() = default;
 		virtual void OnUpdate(Exalted::Timestep deltaTime) override;
 		virtual void OnImGuiRender() override;
 		virtual void OnInactiveImGuiRender() override;
@@ -32,8 +32,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Scene> m_SceneManager;
 		Exalted::Ref<Exalted::GameObject> m_SceneRoot;
 		Exalted::Ref<Exalted::EditorCamera> m_EditorCamera;
-		Exalted::Ref<Exalted::Shader> m_TerrainShader;
-		Exalted::Ref<Exalted::Texture2D> m_TerrainTexture;
-		Exalted::Ref<Exalted::Mesh> m_HeightMap;
+		Exalted::Ref<Exalted::Shader> m_ModelShader;
+		Exalted::Ref<Exalted::Mesh> m_ModelMesh;
 	};
 }

@@ -30,10 +30,8 @@ namespace Exalted
 		virtual void CreateTexturedQuad(float textureScale) = 0;
 		virtual void CreateTexturedCube(float textureScale) = 0;
 		virtual void CreateHeightMap(const std::string path) = 0;
-		_NODISCARD inline virtual const Ref<VertexArray>& GetVertexArray() const { return m_VertexArray; }
+		virtual const Ref<VertexArray>& GetVertexArray() const = 0;
 	public:
 		static Ref<Mesh> Create();
-	protected:
-		Ref<VertexArray> m_VertexArray;
 	};
 }

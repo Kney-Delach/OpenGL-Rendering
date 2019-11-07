@@ -37,6 +37,8 @@ namespace Exalted
 		void UpdateCamera(Timestep deltaTime);
 		void OnImGuiRender();
 		void OnEvent(Exalted::Event& event);
+		void SetMouseSensitivity(const float sensitivity) { m_MouseSensitivity = sensitivity; }
+		void SetMouseSpeed(const float speed) { m_MovementSpeed = speed; }
 	private:
 		inline void RecalculateViewProjectionMatrix() override { m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix; }
 		void UpdateCameraVectors();
