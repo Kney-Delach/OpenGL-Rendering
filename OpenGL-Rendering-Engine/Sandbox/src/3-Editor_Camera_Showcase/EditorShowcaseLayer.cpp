@@ -32,7 +32,6 @@ namespace Sandbox
 		m_MeshCube->CreateCube();
 
 		m_Shader = Exalted::Shader::Create("Resources/Shaders/VBasicShaderSMOOTH.glsl", "Resources/Shaders/FBasicShaderSMOOTH.glsl");
-		Exalted::OpenGLConfigurations::EnableDepthTesting();
 	}
 
 	void EditorShowcaseLayer::OnDetach()

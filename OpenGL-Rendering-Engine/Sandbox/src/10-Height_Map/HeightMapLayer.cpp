@@ -79,7 +79,6 @@ namespace Sandbox
 		Exalted::Renderer::BeginScene(*m_EditorCamera);
 
 		m_SceneManager->RenderScene();
-		//Exalted::Renderer::Submit(m_TerrainShader, heightMap, glm::mat4(1.f));
 		Exalted::Renderer::EndScene();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		Exalted::OpenGLConfigurations::DisableFaceCulling();

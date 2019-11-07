@@ -41,9 +41,10 @@ namespace Sandbox
 			PushLayer(new StencilTestingLayer());
 			PushLayer(new BlendingLayer());
 			//PushLayer(new SceneGraphLayer()); //todo: For however is reading this, this scene no longer displays anything as the gameobjects themselves are organised by a scene class which is shown in the scene class layer.
-			PushLayer(new HeightMapLayer()); //todo: note I cheated and put this before scene class as it was breaking primitives.
+			PushLayer(new HeightMapLayer()); //todo: note the height map implementation is for demonstration purposes only and results in problems if implemented after any other mesh, i.e, leave it here....
 			PushLayer(new SceneClassLayer());
 			PushLayer(new ModelLoadingLayer());
+
 		}
 		virtual ~OpenGLRenderingApplication()
 		{

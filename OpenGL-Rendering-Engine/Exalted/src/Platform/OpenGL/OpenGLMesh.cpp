@@ -223,7 +223,7 @@ namespace Exalted
 		float* allVertices = new float[(int)vertCount * 5];
 		uint32_t* indices = new uint32_t[(int)indCount];
 
-		unsigned char* data = new unsigned char[vertCount];
+		unsigned char* data = new unsigned char[(int)vertCount];
 		file.read((char*)data, (float)vertCount * sizeof(unsigned char));
 		file.close();
 
@@ -232,11 +232,11 @@ namespace Exalted
 			for (int z = 0; z < RAW_HEIGHT; ++z)
 			{
 				int offset = (x * RAW_WIDTH) + z;
-				allVertices[0 + offset * 5] = x * HEIGHTMAP_X;
-				allVertices[1 + offset * 5] = data[offset] * HEIGHTMAP_Y;
-				allVertices[2 + offset * 5] = z * HEIGHTMAP_Z;
-				allVertices[3 + offset * 5] = x * HEIGHTMAP_TEX_X * 10;
-				allVertices[4 + offset * 5] = z * HEIGHTMAP_TEX_Z * 10;
+				allVertices[0 + offset * 5] = (float)x * HEIGHTMAP_X;
+				allVertices[1 + offset * 5] = (float)data[offset] * HEIGHTMAP_Y;
+				allVertices[2 + offset * 5] = (float)z * HEIGHTMAP_Z;
+				allVertices[3 + offset * 5] = (float)x * HEIGHTMAP_TEX_X * 10;
+				allVertices[4 + offset * 5] = (float)z * HEIGHTMAP_TEX_Z * 10;
 			}
 		}
 
@@ -266,11 +266,12 @@ namespace Exalted
 			{ShaderDataType::Float2, "a_TexCoord" }
 		};
 		allVertexBuffer->SetLayout(layout);
-
 		Ref<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, indCount / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 		m_VertexArray->AddVertexBuffer(allVertexBuffer);
 		delete[] indices;
+		delete[] allVertices;
 		delete[] data;
+		file.close();
 	}
 }

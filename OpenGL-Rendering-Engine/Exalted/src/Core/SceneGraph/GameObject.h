@@ -86,11 +86,11 @@ namespace Exalted
 				if (m_Texture)
 				{
 					m_Texture->Bind();
-					Renderer::Submit(m_Shader, m_Mesh, m_Transform->GetWorldTransform());
+					Renderer::Submit(m_Shader, m_Mesh, m_Transform->WorldTransform);
 					m_Texture->Unbind();
 				}
 				else
-					Renderer::Submit(m_Shader, m_Mesh, m_Transform->GetWorldTransform());
+					Renderer::Submit(m_Shader, m_Mesh, m_Transform->WorldTransform);
 			}
 		}
 

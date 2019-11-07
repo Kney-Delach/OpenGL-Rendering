@@ -29,6 +29,7 @@ namespace Exalted
 # define HEIGHTMAP_Y 1.25f
 # define HEIGHTMAP_TEX_X 1.0f / 16.0f
 # define HEIGHTMAP_TEX_Z 1.0f / 16.0f
+
 	class OpenGLMesh : public Mesh
 	{
 	public:
@@ -40,7 +41,7 @@ namespace Exalted
 		virtual void CreateTexturedQuad(float textureScale) override;
 		virtual void CreateTexturedCube(float textureScale) override;
 		virtual void CreateHeightMap(const std::string path) override;
-		virtual const Ref<VertexArray>& GetVertexArray() const override { return m_VertexArray; }
+		inline virtual const Ref<VertexArray>& GetVertexArray() const override { return m_VertexArray; }
 	private:
 		Ref<VertexArray> m_VertexArray;
 	};
