@@ -44,9 +44,24 @@ namespace Exalted
 		glClearStencil(static_cast<int>(stencilValue));
 	}
 
-	void OpenGLRendererAPI::Clear()
+	void OpenGLRendererAPI::Clear() //todo: Implement different clears for different flags.
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); //todo: Potentially set the different buffer clearing flags to configurable? i.e, maybe we don't always want it.
+	}
+
+	void OpenGLRendererAPI::ClearColorBuffer()
+	{
+		glClear(GL_COLOR_BUFFER_BIT);
+	}
+
+	void OpenGLRendererAPI::ClearColorDepthBuffers()
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	void OpenGLRendererAPI::ClearColorDepthStencilBuffers()
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexArray)

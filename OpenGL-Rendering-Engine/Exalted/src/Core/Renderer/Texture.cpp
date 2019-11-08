@@ -23,8 +23,8 @@ namespace Exalted
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None: return nullptr;
-		case RendererAPI::API::OpenGL: return CreateRef<OpenGLTexture2D>(width, height);
+			case RendererAPI::API::None: return nullptr;
+			case RendererAPI::API::OpenGL: return CreateRef<OpenGLTexture2D>(width, height);
 		}
 		EX_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
@@ -35,8 +35,8 @@ namespace Exalted
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None: return nullptr;
-		case RendererAPI::API::OpenGL: return CreateRef<OpenGLTexture2D>(filepath, textureFormat, textureWrap, textureMagFilter, textureMinFilter, isRGB, mipMapLevel);
+			case RendererAPI::API::None: return nullptr;
+			case RendererAPI::API::OpenGL: return CreateRef<OpenGLTexture2D>(filepath, textureFormat, textureWrap, textureMagFilter, textureMinFilter, isRGB, mipMapLevel);
 		}
 		EX_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
@@ -46,8 +46,8 @@ namespace Exalted
 	{
 		switch (format)
 		{
-		case TextureFormat::RGB:    return 3;
-		case TextureFormat::RGBA:   return 4;
+			case TextureFormat::RGB:    return 3;
+			case TextureFormat::RGBA:   return 4;
 		}
 		EX_CORE_ASSERT(false, "Unknown Texture Format!");
 		return 0;

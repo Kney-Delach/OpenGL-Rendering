@@ -69,6 +69,7 @@
     <ClInclude Include="src\9-Scene_Class\SceneClassLayer.h">
       <Filter>9-Scene_Class</Filter>
     </ClInclude>
+    <ClInclude Include="src\12-Frame_Buffers\FrameBufferLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -105,9 +106,12 @@
       <Filter>9-Scene_Class</Filter>
     </ClCompile>
     <ClCompile Include="src\SandboxEntry.cpp" />
+    <ClCompile Include="src\12-Frame_Buffers\FrameBufferLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />
     <None Include="Resources\Shaders\ModelShaders\ModelLoadFragment.glsl" />
+    <None Include="Resources\Shaders\FrameBufferShaders\Vertex.glsl" />
+    <None Include="Resources\Shaders\FrameBufferShaders\Fragment.glsl" />
   </ItemGroup>
 </Project>

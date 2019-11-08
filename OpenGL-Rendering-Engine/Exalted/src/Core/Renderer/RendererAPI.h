@@ -42,6 +42,9 @@ namespace Exalted
 		virtual void SetClearColor(const glm::vec4& color) = 0;
 		virtual void SetClearStencil(const float stencilValue) = 0;
 		virtual void Clear() = 0;
+		virtual void ClearColorBuffer() = 0;
+		virtual void ClearColorDepthBuffers() = 0;
+		virtual void ClearColorDepthStencilBuffers() = 0;
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) = 0;
 		virtual void DrawTriangles(const unsigned numberOfVertices) = 0;
 		virtual void DrawMesh(const Ref<Mesh>& mesh) = 0;

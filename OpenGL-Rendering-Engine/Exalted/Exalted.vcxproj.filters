@@ -1307,6 +1307,9 @@
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\Loaders\ObjLoader.h" />
     <ClInclude Include="src\Core\Renderer\Loaders\HeightMapLoader.h" />
+    <ClInclude Include="src\Core\Renderer\Generators\ShapeGenerator.h" />
+    <ClInclude Include="src\Core\Renderer\FrameBuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1405,5 +1408,8 @@
     <ClCompile Include="Dependencies\tinyobjloader\tiny_obj_loader.cpp" />
     <ClCompile Include="src\Core\Renderer\Loaders\ObjLoader.cpp" />
     <ClCompile Include="src\Core\Renderer\Loaders\HeightMapLoader.cpp" />
+    <ClCompile Include="src\Core\Renderer\Generators\ShapeGenerator.cpp" />
+    <ClCompile Include="src\Core\Renderer\FrameBuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
   </ItemGroup>
 </Project>

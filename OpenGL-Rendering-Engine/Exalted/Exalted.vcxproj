@@ -527,6 +527,8 @@
     <ClInclude Include="src\Core\Renderer\Buffer.h" />
     <ClInclude Include="src\Core\Renderer\Cameras.h" />
     <ClInclude Include="src\Core\Renderer\EditorCamera.h" />
+    <ClInclude Include="src\Core\Renderer\FrameBuffer.h" />
+    <ClInclude Include="src\Core\Renderer\Generators\ShapeGenerator.h" />
     <ClInclude Include="src\Core\Renderer\Loaders\HeightMapLoader.h" />
     <ClInclude Include="src\Core\Renderer\Mesh.h" />
     <ClInclude Include="src\Core\Renderer\Loaders\ObjLoader.h" />
@@ -548,6 +550,7 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLConfigurations.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFrameBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLMesh.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLRenderer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
@@ -568,6 +571,8 @@
     <ClCompile Include="src\Core\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Core\Renderer\Cameras.cpp" />
     <ClCompile Include="src\Core\Renderer\EditorCamera.cpp" />
+    <ClCompile Include="src\Core\Renderer\FrameBuffer.cpp" />
+    <ClCompile Include="src\Core\Renderer\Generators\ShapeGenerator.cpp" />
     <ClCompile Include="src\Core\Renderer\Loaders\HeightMapLoader.cpp" />
     <ClCompile Include="src\Core\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Core\Renderer\Loaders\ObjLoader.cpp" />
@@ -584,6 +589,7 @@
     <ClCompile Include="src\Core\SceneGraph\Scene.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLMesh.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLRenderer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />

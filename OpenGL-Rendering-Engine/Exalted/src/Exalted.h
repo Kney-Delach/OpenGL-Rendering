@@ -35,6 +35,7 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
 
+#include "Core/Renderer/FrameBuffer.h"
 #include "Core/Renderer/Buffer.h"
 #include "Core/Renderer/Shader.h"
 #include "Core/Renderer/Texture.h"
@@ -43,8 +44,11 @@
 #include "Core/Renderer/Texture.h"
 #include "Core/Renderer/Cameras.h"
 #include "Core/Renderer/EditorCamera.h"
-#include "Core/Renderer/Loaders/ObjLoader.h" //todo: Verify this works
-#include "Core/Renderer/Loaders/HeightMapLoader.h" //todo: Verify this works
+
+#include "Core/Renderer/Generators/ShapeGenerator.h"
+
+#include "Core/Renderer/Loaders/ObjLoader.h"
+#include "Core/Renderer/Loaders/HeightMapLoader.h"
 
 #include "Platform/OpenGL/OpenGLConfigurations.h" //todo: abstract this
 
