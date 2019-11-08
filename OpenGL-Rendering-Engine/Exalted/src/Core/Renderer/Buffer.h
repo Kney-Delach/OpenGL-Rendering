@@ -83,11 +83,11 @@ namespace Exalted
 		BufferLayout(const std::initializer_list<BufferElement>& elements) : m_Elements(elements) { CalculateOffsetsAndStride(); }
 		inline uint32_t GetStride() const { return m_Stride; }
 		inline const std::vector<BufferElement>& GetElements() const { return m_Elements; }
+		inline void AddElement(ShaderDataType type, const std::string& name, bool normalized = false) { m_Elements.emplace_back(type, name, normalized); }
 		std::vector<BufferElement>::iterator begin() { return m_Elements.begin(); }
 		std::vector<BufferElement>::iterator end() { return m_Elements.end(); }
 		_NODISCARD std::vector<BufferElement>::const_iterator begin() const { return m_Elements.begin(); }
 		_NODISCARD std::vector<BufferElement>::const_iterator end() const { return m_Elements.end(); }
-	private:
 		void CalculateOffsetsAndStride()
 		{
 			uint32_t offset = 0;
@@ -113,7 +113,7 @@ namespace Exalted
 		_NODISCARD virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 	public:
-		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(float* vertices, uint32_t count);
 	};
 
 	class IndexBuffer
@@ -124,6 +124,6 @@ namespace Exalted
 		virtual void Unbind() const = 0;
 		_NODISCARD virtual uint32_t GetCount() const = 0;
 	public:
-		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t size);
+		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
 	};
 }

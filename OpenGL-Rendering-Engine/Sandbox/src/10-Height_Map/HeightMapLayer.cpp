@@ -17,7 +17,7 @@
 namespace Sandbox
 {
 	HeightMapLayer::HeightMapLayer()
-		: Layer("Height Map Layer", true)
+		: Layer("Height Map Layer", false)
 	{
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f,
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
@@ -45,7 +45,8 @@ namespace Sandbox
 			0);
 
 		m_HeightMap = Exalted::Mesh::Create();
-		m_HeightMap->CreateHeightMap("Resources/Textures/terrain.raw");
+		m_HeightMap->SetVertexArray(Exalted::HeightMapLoader::Load("Resources/Textures/terrain.raw"));
+		//m_HeightMap->CreateHeightMap("Resources/Textures/terrain.raw");
 
 		Exalted::GameObject* terrainGameObject = new Exalted::GameObject("Terrain");
 		terrainGameObject->SetMesh(m_HeightMap);

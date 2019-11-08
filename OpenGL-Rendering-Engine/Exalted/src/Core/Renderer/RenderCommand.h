@@ -43,6 +43,18 @@ namespace Exalted
 		{
 			s_RendererAPI->Clear();
 		}
+		inline static void ClearColorBuffer()
+		{
+			s_RendererAPI->ClearColorBuffer();
+		}
+		inline static void ClearColorDepthBuffers()
+		{
+			s_RendererAPI->ClearColorDepthBuffers();
+		}
+		inline static void ClearColorDepthStencilBuffers()
+		{
+			s_RendererAPI->ClearColorDepthStencilBuffers();
+		}
 		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray)
 		{
 			s_RendererAPI->DrawIndexed(vertexArray);

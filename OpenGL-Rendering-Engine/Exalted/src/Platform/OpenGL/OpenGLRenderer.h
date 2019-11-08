@@ -26,6 +26,10 @@ namespace Exalted
 		virtual void SetClearStencil(const float stencilValue) override;
 
 		virtual void Clear() override;
+		virtual void ClearColorBuffer() override;
+		virtual void ClearColorDepthBuffers() override;
+		virtual void ClearColorDepthStencilBuffers() override;
+
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
 		void DrawTriangles(const unsigned numberOfVertices) override;
 		virtual void DrawMesh(const Ref<Mesh>& mesh) override;

@@ -1,9 +1,9 @@
 /***************************************************************************
  * Filename		: ModelLoadingLayer.h
  * Name			: Ori Lazar
- * Date			: 05/11/2019
+ * Date			: 07/11/2019
  * Description	: This layer contains a scene with 3D Model loading!
-	 .---.
+     .---.
    .'_:___".
    |__ --==|
    [  ]  :[|
@@ -32,7 +32,5 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Scene> m_SceneManager;
 		Exalted::Ref<Exalted::GameObject> m_SceneRoot;
 		Exalted::Ref<Exalted::EditorCamera> m_EditorCamera;
-		Exalted::Ref<Exalted::Shader> m_ModelShader;
-		Exalted::Ref<Exalted::Mesh> m_ModelMesh;
 	};
 }

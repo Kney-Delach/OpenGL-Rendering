@@ -15,16 +15,20 @@
 #pragma once
 #include "Core/Renderer/Texture.h"
 
+#include <glad/glad.h>
+
 namespace Exalted
 {
 	class OpenGLTexture2D : public Texture2D
 	{
 	public:
+		OpenGLTexture2D(uint32_t width, uint32_t height);
 		OpenGLTexture2D(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap = TextureWrap::REPEAT, 
 			TextureMagFilter textureMagFilter = TextureMagFilter::LINEAR, TextureMinFilter textureMinFilter = TextureMinFilter::LINEAR, bool isRGB = false, unsigned int mipMapLevel = 0);
 		virtual ~OpenGLTexture2D();
 		virtual void Bind(uint32_t slot = 0) const override;
 		virtual void Unbind() const override;
+		void SetData(void* data, uint32_t size) override;
 		_NODISCARD virtual TextureFormat GetFormat() const override { return m_TextureFormat; }
 		_NODISCARD virtual uint32_t GetWidth() const override { return m_Width; }
 		_NODISCARD virtual uint32_t GetHeight() const override { return m_Height; }
@@ -43,5 +47,6 @@ namespace Exalted
 		TextureMinFilter m_TextureMinFilter;
 		uint32_t m_Width, m_Height;
 		unsigned char* m_LocalDataBuffer;
+		GLenum m_InternalFormat, m_DataFormat;
 	};
 }
