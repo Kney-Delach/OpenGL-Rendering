@@ -33,9 +33,9 @@ namespace Exalted
 			const glm::vec3 direction = gameObject->GetTransform()->Position - m_Camera->GetPosition(); //todo: verify this works correctly
 			gameObject->SetDistanceFromCamera(glm::dot(direction, direction));
 			if(gameObject->IsTransparent())
-				m_TransparentObjects.push_back(gameObject);
+				m_TransparentObjects.emplace_back(gameObject);
 			else
-				m_OpaqueObjects.push_back(gameObject);
+				m_OpaqueObjects.emplace_back(gameObject);
 		} 
 
 		for(std::vector<GameObject*>::const_iterator i = gameObject->GetChildIteratorStart(); i != gameObject->GetChildIteratorEnd(); ++i)

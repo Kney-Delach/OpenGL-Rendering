@@ -19,7 +19,10 @@
 #define NANOSUIT "Resources/Meshes/nanosuit.obj"
 #define F16 "Resources/Meshes/f16.obj"
 #define BBIRD "Resources/Meshes/BastionBird.obj"
+#define BUNNY "Resources/Meshes/bunny.obj"
 #define SYMMETRA "Resources/Meshes/Symmetra/symmetra.obj"
+#define DABROVIC_SPONZA "Resources/Meshes/Dabrovic-Sponza/sponza.obj"
+#define CRYTEK_SPONZA "Resources/Meshes/Crytek-Sponza/sponza.obj"
 
 namespace Sandbox
 {
@@ -74,8 +77,14 @@ namespace Sandbox
 		f16Mesh->SetVertexArray(Exalted::ObjLoader::Load(F16));
 		Exalted::Ref<Exalted::Mesh> bbirdMesh = Exalted::Mesh::Create();
 		bbirdMesh->SetVertexArray(Exalted::ObjLoader::Load(BBIRD));
+		Exalted::Ref<Exalted::Mesh> bunnyMesh = Exalted::Mesh::Create();
+		bunnyMesh->SetVertexArray(Exalted::ObjLoader::Load(BUNNY));
 		Exalted::Ref<Exalted::Mesh> symmetraMesh = Exalted::Mesh::Create();
 		symmetraMesh->SetVertexArray(Exalted::ObjLoader::Load(SYMMETRA));
+		Exalted::Ref<Exalted::Mesh> dabrovicSponzaMesh = Exalted::Mesh::Create();
+		dabrovicSponzaMesh->SetVertexArray(Exalted::ObjLoader::Load(DABROVIC_SPONZA));
+		Exalted::Ref<Exalted::Mesh> crytekSponzaMesh = Exalted::Mesh::Create();
+		crytekSponzaMesh->SetVertexArray(Exalted::ObjLoader::Load(CRYTEK_SPONZA));
 
 		// -------------- Gameobjects
 		Exalted::GameObject* nanosuitGameobject = new Exalted::GameObject("Nanosuit");
@@ -83,7 +92,7 @@ namespace Sandbox
 		nanosuitGameobject->SetShader(modelShader);
 		nanosuitGameobject->SetTexture(whiteTexture);
 		nanosuitGameobject->GetTransform()->Scale = glm::vec3(0.1f, 0.1f, 0.1f);
-		nanosuitGameobject->GetTransform()->Position = glm::vec3(0.f,0,-3.f);
+		nanosuitGameobject->GetTransform()->Position = glm::vec3(0.f,1,-3.f);
 		nanosuitGameobject->SetBoundingRadius(FLT_MAX);
 
 		Exalted::GameObject* teapotGameobject = new Exalted::GameObject("Teapot");
@@ -91,7 +100,7 @@ namespace Sandbox
 		teapotGameobject->SetShader(modelShader);
 		teapotGameobject->SetTexture(transparentTexture);
 		teapotGameobject->GetTransform()->Scale = glm::vec3(0.025f, 0.025f, 0.025f);
-		teapotGameobject->GetTransform()->Position = glm::vec3(0.f, 0, 3.f);
+		teapotGameobject->GetTransform()->Position = glm::vec3(0.f, 1, 3.f);
 		teapotGameobject->SetBoundingRadius(FLT_MAX);
 
 		Exalted::GameObject* suzanneGameobject = new Exalted::GameObject("Suzanne");
@@ -99,7 +108,7 @@ namespace Sandbox
 		suzanneGameobject->SetShader(modelShader);
 		suzanneGameobject->SetTexture(whiteTexture);
 		suzanneGameobject->GetTransform()->Scale = glm::vec3(1.f, 1.f, 1.f);
-		suzanneGameobject->GetTransform()->Position = glm::vec3(0.f, 0, 6.f);
+		suzanneGameobject->GetTransform()->Position = glm::vec3(0.f, 1, 6.f);
 		suzanneGameobject->SetBoundingRadius(FLT_MAX);
 
 		Exalted::GameObject* f16Gameobject = new Exalted::GameObject("F16");
@@ -107,7 +116,7 @@ namespace Sandbox
 		f16Gameobject->SetShader(modelShader);
 		f16Gameobject->SetTexture(transparentTexture);
 		f16Gameobject->GetTransform()->Scale = glm::vec3(2.f, 2.f, 2.f);
-		f16Gameobject->GetTransform()->Position = glm::vec3(0.f, 0, 12.f);
+		f16Gameobject->GetTransform()->Position = glm::vec3(0.f, 1, 12.f);
 		f16Gameobject->SetBoundingRadius(FLT_MAX);
 
 		Exalted::GameObject* bbirdGameobject = new Exalted::GameObject("Bastion's Bird");
@@ -115,16 +124,40 @@ namespace Sandbox
 		bbirdGameobject->SetShader(modelShader);
 		bbirdGameobject->SetTexture(whiteTexture);
 		bbirdGameobject->GetTransform()->Scale = glm::vec3(1.f, 1.f, 1.f);
-		bbirdGameobject->GetTransform()->Position = glm::vec3(0.f, 0, 15.f);
+		bbirdGameobject->GetTransform()->Position = glm::vec3(0.f, 1, 15.f);
 		bbirdGameobject->SetBoundingRadius(FLT_MAX);
+
+		Exalted::GameObject* bunnyGameobject = new Exalted::GameObject("Stanford Bunny");
+		bunnyGameobject->SetMesh(bunnyMesh);
+		bunnyGameobject->SetShader(modelShader);
+		bunnyGameobject->SetTexture(whiteTexture);
+		bunnyGameobject->GetTransform()->Scale = glm::vec3(1.f, 1.f, 1.f);
+		bunnyGameobject->GetTransform()->Position = glm::vec3(-3.f, 1, 0.f);
+		bunnyGameobject->SetBoundingRadius(FLT_MAX);
 
 		Exalted::GameObject* symmetra = new Exalted::GameObject("Symmetra");
 		symmetra->SetMesh(symmetraMesh);
 		symmetra->SetShader(modelShader);
 		symmetra->SetTexture(symmetraTexture);
 		symmetra->GetTransform()->Scale = glm::vec3(2.f, 2.f, 2.f);
-		symmetra->GetTransform()->Position = glm::vec3(6.f, 0, 0.f);
+		symmetra->GetTransform()->Position = glm::vec3(6.f, 1, 0.f);
 		symmetra->SetBoundingRadius(FLT_MAX);
+
+		Exalted::GameObject* dabrovicSponza = new Exalted::GameObject("Dabrovic-Sponza");
+		dabrovicSponza->SetMesh(dabrovicSponzaMesh);
+		dabrovicSponza->SetShader(modelShader);
+		dabrovicSponza->SetTexture(whiteTexture);
+		dabrovicSponza->GetTransform()->Scale = glm::vec3(1.f, 1.f, 1.f);
+		dabrovicSponza->GetTransform()->Position = glm::vec3(25.f, 1, 0.f);
+		dabrovicSponza->SetBoundingRadius(FLT_MAX);
+
+		Exalted::GameObject* crytekSponza = new Exalted::GameObject("Crytek-Sponza");
+		crytekSponza->SetMesh(crytekSponzaMesh);
+		crytekSponza->SetShader(modelShader);
+		crytekSponza->SetTexture(transparentTexture);
+		crytekSponza->GetTransform()->Scale = glm::vec3(.25f, .25f, .25f);
+		crytekSponza->GetTransform()->Position = glm::vec3(-25.f, 0, 0.f);
+		crytekSponza->SetBoundingRadius(FLT_MAX);
 
 		// -------------- Scene manager/root 
 		m_SceneManager = Exalted::CreateRef<Exalted::Scene>(m_EditorCamera);
@@ -140,7 +173,10 @@ namespace Sandbox
 		m_SceneRoot->AddChildObject(teapotGameobject);
 		m_SceneRoot->AddChildObject(f16Gameobject);
 		m_SceneRoot->AddChildObject(bbirdGameobject);
+		m_SceneRoot->AddChildObject(bunnyGameobject);
 		m_SceneRoot->AddChildObject(symmetra);
+		m_SceneRoot->AddChildObject(dabrovicSponza);
+		m_SceneRoot->AddChildObject(crytekSponza);
 	}
 
 	void ModelLoadingLayer::OnDetach()
