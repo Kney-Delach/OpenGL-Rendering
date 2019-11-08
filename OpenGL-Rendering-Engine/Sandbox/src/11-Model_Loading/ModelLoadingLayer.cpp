@@ -1,9 +1,9 @@
 /***************************************************************************
- * Filename		: HeigtMapLayer.cpp
+ * Filename		: ModelLoadingLayer.cpp
  * Name			: Ori Lazar
- * Date			: 05/11/2019
- * Description	: This layer contains a scene which loads an external Model!
-	 .---.
+ * Date			: 07/11/2019
+ * Description	: This layer contains a scene with 3D Model loading!
+     .---.
    .'_:___".
    |__ --==|
    [  ]  :[|
@@ -14,10 +14,17 @@
 ***************************************************************************/
 #include "ModelLoadingLayer.h"
 
+#define TEAPOT "Resources/Meshes/Teapot.obj"
+#define SUZANNE "Resources/Meshes/Suzanne.obj"
+#define NANOSUIT "Resources/Meshes/nanosuit.obj"
+#define F16 "Resources/Meshes/f16.obj"
+#define BBIRD "Resources/Meshes/BastionBird.obj"
+#define SYMMETRA "Resources/Meshes/Symmetra/symmetra.obj"
+
 namespace Sandbox
 {
 	ModelLoadingLayer::ModelLoadingLayer()
-		: Layer("Model Loading Layer", false)
+		: Layer("Model Loading Layer", true)
 	{
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f,
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
@@ -28,30 +35,112 @@ namespace Sandbox
 	void ModelLoadingLayer::OnAttach()
 	{
 		EX_INFO("Model Loading layer attached successfully.");
-		Exalted::Ref<Exalted::Mesh> rootMesh = Exalted::Mesh::Create();
-		rootMesh->CreateCube();
+		// ----- Textures
+		Exalted::Ref<Exalted::Texture2D> whiteTexture = Exalted::Texture2D::Create(1,1);
+		uint32_t whiteTextureData = 0xffffffff;
+		whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
-		// ----------------- Model Setup ----------------- //
-		m_ModelShader = Exalted::Shader::Create("Resources/Shaders/VTerrain.glsl", "Resources/Shaders/FTerrain.glsl");
-		m_ModelShader->Bind();
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformInt1("u_DiffuseTexture", 0);
-		m_ModelShader->Unbind();
+		Exalted::Ref<Exalted::Texture2D> transparentTexture = Exalted::Texture2D::Create("Resources/Textures/TexTransparentGlassStained.tga",
+			Exalted::TextureFormat::RGBA,
+			Exalted::TextureWrap::REPEAT,
+			Exalted::TextureMagFilter::LINEAR,
+			Exalted::TextureMinFilter::LINEAR_LINEAR,
+			false,
+			0);
+		Exalted::Ref<Exalted::Texture2D> symmetraTexture = Exalted::Texture2D::Create("Resources/Meshes/Symmetra/textures/Symmetra_D.tga.png",
+			Exalted::TextureFormat::RGBA,
+			Exalted::TextureWrap::CLAMP,
+			Exalted::TextureMagFilter::LINEAR,
+			Exalted::TextureMinFilter::LINEAR_LINEAR,
+			false,
+			0);
+		// -------- Shader 
+		Exalted::Ref<Exalted::Shader> modelShader = Exalted::Shader::Create("Resources/Shaders/ModelShaders/ModelLoadVertex.glsl", "Resources/Shaders/ModelShaders/ModelLoadFragment.glsl");
 
-		m_ModelMesh = Exalted::Mesh::Create();
-		//m_ModelMesh.CreateModel("INSERT_PATH_HERE");
+		transparentTexture->Bind();
+		modelShader->Bind();
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(modelShader)->SetUniformInt1("u_DiffuseTexture", 0);
+		modelShader->Unbind();
+		transparentTexture->Unbind();
 
-		Exalted::GameObject* modelGameObject = new Exalted::GameObject("Model");
-		//modelGameObject->SetMesh(m_ModelMesh);
-		modelGameObject->SetShader(m_ModelShader);
-		//modelGameObject->SetTexture(m_TerrainTexture);
-		modelGameObject->SetBoundingRadius(FLT_MAX);
+		// ----------- Meshes
+		Exalted::Ref<Exalted::Mesh> nanosuitMesh = Exalted::Mesh::Create();
+		nanosuitMesh->SetVertexArray(Exalted::ObjLoader::Load(NANOSUIT));
+		Exalted::Ref<Exalted::Mesh> teapotMesh = Exalted::Mesh::Create();
+		teapotMesh->SetVertexArray(Exalted::ObjLoader::Load(TEAPOT));
+		Exalted::Ref<Exalted::Mesh> suzanneMesh = Exalted::Mesh::Create();
+		suzanneMesh->SetVertexArray(Exalted::ObjLoader::Load(SUZANNE));
+		Exalted::Ref<Exalted::Mesh> f16Mesh = Exalted::Mesh::Create();
+		f16Mesh->SetVertexArray(Exalted::ObjLoader::Load(F16));
+		Exalted::Ref<Exalted::Mesh> bbirdMesh = Exalted::Mesh::Create();
+		bbirdMesh->SetVertexArray(Exalted::ObjLoader::Load(BBIRD));
+		Exalted::Ref<Exalted::Mesh> symmetraMesh = Exalted::Mesh::Create();
+		symmetraMesh->SetVertexArray(Exalted::ObjLoader::Load(SYMMETRA));
 
-		// -------------- Scene manager/root Setup ------------ //
+		// -------------- Gameobjects
+		Exalted::GameObject* nanosuitGameobject = new Exalted::GameObject("Nanosuit");
+		nanosuitGameobject->SetMesh(nanosuitMesh);
+		nanosuitGameobject->SetShader(modelShader);
+		nanosuitGameobject->SetTexture(whiteTexture);
+		nanosuitGameobject->GetTransform()->Scale = glm::vec3(0.1f, 0.1f, 0.1f);
+		nanosuitGameobject->GetTransform()->Position = glm::vec3(0.f,0,-3.f);
+		nanosuitGameobject->SetBoundingRadius(FLT_MAX);
+
+		Exalted::GameObject* teapotGameobject = new Exalted::GameObject("Teapot");
+		teapotGameobject->SetMesh(teapotMesh);
+		teapotGameobject->SetShader(modelShader);
+		teapotGameobject->SetTexture(transparentTexture);
+		teapotGameobject->GetTransform()->Scale = glm::vec3(0.025f, 0.025f, 0.025f);
+		teapotGameobject->GetTransform()->Position = glm::vec3(0.f, 0, 3.f);
+		teapotGameobject->SetBoundingRadius(FLT_MAX);
+
+		Exalted::GameObject* suzanneGameobject = new Exalted::GameObject("Suzanne");
+		suzanneGameobject->SetMesh(suzanneMesh);
+		suzanneGameobject->SetShader(modelShader);
+		suzanneGameobject->SetTexture(whiteTexture);
+		suzanneGameobject->GetTransform()->Scale = glm::vec3(1.f, 1.f, 1.f);
+		suzanneGameobject->GetTransform()->Position = glm::vec3(0.f, 0, 6.f);
+		suzanneGameobject->SetBoundingRadius(FLT_MAX);
+
+		Exalted::GameObject* f16Gameobject = new Exalted::GameObject("F16");
+		f16Gameobject->SetMesh(f16Mesh);
+		f16Gameobject->SetShader(modelShader);
+		f16Gameobject->SetTexture(transparentTexture);
+		f16Gameobject->GetTransform()->Scale = glm::vec3(2.f, 2.f, 2.f);
+		f16Gameobject->GetTransform()->Position = glm::vec3(0.f, 0, 12.f);
+		f16Gameobject->SetBoundingRadius(FLT_MAX);
+
+		Exalted::GameObject* bbirdGameobject = new Exalted::GameObject("Bastion's Bird");
+		bbirdGameobject->SetMesh(bbirdMesh);
+		bbirdGameobject->SetShader(modelShader);
+		bbirdGameobject->SetTexture(whiteTexture);
+		bbirdGameobject->GetTransform()->Scale = glm::vec3(1.f, 1.f, 1.f);
+		bbirdGameobject->GetTransform()->Position = glm::vec3(0.f, 0, 15.f);
+		bbirdGameobject->SetBoundingRadius(FLT_MAX);
+
+		Exalted::GameObject* symmetra = new Exalted::GameObject("Symmetra");
+		symmetra->SetMesh(symmetraMesh);
+		symmetra->SetShader(modelShader);
+		symmetra->SetTexture(symmetraTexture);
+		symmetra->GetTransform()->Scale = glm::vec3(2.f, 2.f, 2.f);
+		symmetra->GetTransform()->Position = glm::vec3(6.f, 0, 0.f);
+		symmetra->SetBoundingRadius(FLT_MAX);
+
+		// -------------- Scene manager/root 
 		m_SceneManager = Exalted::CreateRef<Exalted::Scene>(m_EditorCamera);
-		m_SceneRoot = Exalted::CreateRef<Exalted::GameObject>("Scene Root");
-		m_SceneRoot->SetMesh(rootMesh);
+		m_SceneRoot = Exalted::CreateRef<Exalted::GameObject>("Scene Root (Suzanne)");
+		m_SceneRoot->SetMesh(suzanneMesh);
+		m_SceneRoot->SetShader(modelShader);
+		m_SceneRoot->SetTexture(whiteTexture);
+
 		m_SceneManager->SetSceneRoot(m_SceneRoot);
-		//m_SceneRoot->AddChildObject(modelGameObject);
+
+		m_SceneRoot->AddChildObject(nanosuitGameobject);
+		m_SceneRoot->AddChildObject(suzanneGameobject);
+		m_SceneRoot->AddChildObject(teapotGameobject);
+		m_SceneRoot->AddChildObject(f16Gameobject);
+		m_SceneRoot->AddChildObject(bbirdGameobject);
+		m_SceneRoot->AddChildObject(symmetra);
 	}
 
 	void ModelLoadingLayer::OnDetach()
@@ -66,8 +155,8 @@ namespace Sandbox
 		Exalted::RenderCommand::SetClearColor({ .05f, 0.2f, 0.5f, 1 });
 		Exalted::RenderCommand::Clear();
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
-		//Exalted::OpenGLConfigurations::EnableFaceCulling();
-		//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::BACK);
+		Exalted::OpenGLConfigurations::EnableBlending();
+		Exalted::OpenGLConfigurations::SetBlendFunction(Exalted::BlendFactors::SOURCE_ALPHA, Exalted::BlendFactors::SOURCE_ALPHA_MINUS);
 		Exalted::Renderer::BeginScene(*m_EditorCamera);
 
 		m_SceneManager->UpdateScene(deltaTime);
@@ -75,14 +164,13 @@ namespace Sandbox
 
 		Exalted::Renderer::EndScene();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
-		//Exalted::OpenGLConfigurations::DisableFaceCulling();
+		Exalted::OpenGLConfigurations::DisableBlending();
 	}
 
 	void ModelLoadingLayer::OnImGuiRender()
 	{
 		m_EditorCamera->OnImGuiRender();
 		m_SceneRoot->RenderHierarchyGUI();
-
 		ImGui::Begin("Model Loading Scene Settings");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;

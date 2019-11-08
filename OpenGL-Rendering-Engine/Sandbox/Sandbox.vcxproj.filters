@@ -4,6 +4,12 @@
     <Filter Include="1-Your_First_Triangle">
       <UniqueIdentifier>{8E4CBAF0-FAB8-75EB-C3AC-0D492FD89753}</UniqueIdentifier>
     </Filter>
+    <Filter Include="10-Height_Map">
+      <UniqueIdentifier>{69B6DA2F-D576-5666-9EB1-9FE30A319B42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="11-Model_Loading">
+      <UniqueIdentifier>{A289A33D-8E82-C28F-B7B4-A714A30CA29B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="2-Vertex_Transformations">
       <UniqueIdentifier>{4B774CCE-379C-9B4E-60E7-80DE4C6B9A6C}</UniqueIdentifier>
     </Filter>
@@ -25,10 +31,19 @@
     <Filter Include="8-Scene_Graphs">
       <UniqueIdentifier>{3C414682-280F-3A88-11A3-AAAEFD0F16ED}</UniqueIdentifier>
     </Filter>
+    <Filter Include="9-Scene_Class">
+      <UniqueIdentifier>{4E29C03B-BAE9-3B72-8324-85EFEFA3804E}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\1-Your_First_Triangle\TriangleRenderer.h">
       <Filter>1-Your_First_Triangle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\10-Height_Map\HeightMapLayer.h">
+      <Filter>10-Height_Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\11-Model_Loading\ModelLoadingLayer.h">
+      <Filter>11-Model_Loading</Filter>
     </ClInclude>
     <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h">
       <Filter>2-Vertex_Transformations</Filter>
@@ -51,13 +66,19 @@
     <ClInclude Include="src\8-Scene_Graphs\SceneGraphLayer.h">
       <Filter>8-Scene_Graphs</Filter>
     </ClInclude>
-    <ClInclude Include="src\9-Scene_Class\SceneClassLayer.h" />
-    <ClInclude Include="src\10-Height_Map\HeightMapLayer.h" />
-    <ClInclude Include="src\11-Model_Loading\ModelLoadingLayer.h" />
+    <ClInclude Include="src\9-Scene_Class\SceneClassLayer.h">
+      <Filter>9-Scene_Class</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
       <Filter>1-Your_First_Triangle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\10-Height_Map\HeightMapLayer.cpp">
+      <Filter>10-Height_Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\11-Model_Loading\ModelLoadingLayer.cpp">
+      <Filter>11-Model_Loading</Filter>
     </ClCompile>
     <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp">
       <Filter>2-Vertex_Transformations</Filter>
@@ -80,13 +101,13 @@
     <ClCompile Include="src\8-Scene_Graphs\SceneGraphLayer.cpp">
       <Filter>8-Scene_Graphs</Filter>
     </ClCompile>
+    <ClCompile Include="src\9-Scene_Class\SceneClassLayer.cpp">
+      <Filter>9-Scene_Class</Filter>
+    </ClCompile>
     <ClCompile Include="src\SandboxEntry.cpp" />
-    <ClCompile Include="src\9-Scene_Class\SceneClassLayer.cpp" />
-    <ClCompile Include="src\10-Height_Map\HeightMapLayer.cpp" />
-    <ClCompile Include="src\11-Model_Loading\ModelLoadingLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shaders\VTerrain.glsl" />
-    <None Include="Resources\Shaders\FTerrain.glsl" />
+    <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />
+    <None Include="Resources\Shaders\ModelShaders\ModelLoadFragment.glsl" />
   </ItemGroup>
 </Project>
