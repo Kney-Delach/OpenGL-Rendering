@@ -136,6 +136,7 @@
     <ClInclude Include="src\11-Model_Loading\ModelLoadingLayer.h" />
     <ClInclude Include="src\12-Frame_Buffers\FrameBufferLayer.h" />
     <ClInclude Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.h" />
+    <ClInclude Include="src\14-GLSL_Exploration\GLSLExplorationLayer.h" />
     <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h" />
     <ClInclude Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.h" />
     <ClInclude Include="src\4-Texture_Mapping\TextureMappingLayer.h" />
@@ -151,6 +152,7 @@
     <ClCompile Include="src\11-Model_Loading\ModelLoadingLayer.cpp" />
     <ClCompile Include="src\12-Frame_Buffers\FrameBufferLayer.cpp" />
     <ClCompile Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.cpp" />
+    <ClCompile Include="src\14-GLSL_Exploration\GLSLExplorationLayer.cpp" />
     <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp" />
     <ClCompile Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.cpp" />
     <ClCompile Include="src\4-Texture_Mapping\TextureMappingLayer.cpp" />

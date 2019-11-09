@@ -1,9 +1,9 @@
 /***************************************************************************
- * Filename		: SkyboxLayer.h
+ * Filename		: GLSLExplorationLayer.h
  * Name			: Ori Lazar
  * Date			: 09/11/2019
- * Description	: This layer contains a scene which displays a skybox using a cubemap.
-	 .---.
+ * Description	: This layer contains a scene I used to explore GLSL.
+     .---.
    .'_:___".
    |__ --==|
    [  ]  :[|
@@ -12,11 +12,17 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#include "SkyboxLayer.h"
+#include "GLSLExplorationLayer.h"
 
+#define TEAPOT "Resources/Meshes/Teapot.obj"
 #define SUZANNE "Resources/Meshes/Suzanne.obj"
 #define NANOSUIT "Resources/Meshes/nanosuit.obj"
-#define TEAPOT "Resources/Meshes/Teapot.obj"
+#define F16 "Resources/Meshes/f16.obj"
+#define BBIRD "Resources/Meshes/BastionBird.obj"
+#define BUNNY "Resources/Meshes/bunny.obj"
+#define SYMMETRA "Resources/Meshes/Symmetra/symmetra.obj"
+#define DABROVIC_SPONZA "Resources/Meshes/Dabrovic-Sponza/sponza.obj"
+#define CRYTEK_SPONZA "Resources/Meshes/Crytek-Sponza/sponza.obj"
 
 #define RIGHT	"Resources/Textures/Skyboxes/Crater/Right.tga"
 #define LEFT	"Resources/Textures/Skyboxes/Crater/Left.tga"
@@ -27,19 +33,19 @@
 
 namespace Sandbox
 {
-	SkyboxLayer::SkyboxLayer()
-		: Layer("Texture Cubemaps Layer", false)
+	GLSLExplorationLayer::GLSLExplorationLayer()
+		: Layer("GLSL Exploration Layer", true)
 	{
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f,
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
 			0.1f,
 			1000000.f);
-			m_EditorCamera->SetMouseSpeed(100.f);
+		m_EditorCamera->SetMouseSpeed(100.f);
 	}
 
-	void SkyboxLayer::OnAttach()
+	void GLSLExplorationLayer::OnAttach()
 	{
-		EX_INFO("Texture Cubemaps layer attached successfully.");
+		EX_INFO("GLSL Exploration layer attached successfully.");
 
 		// ----- Textures
 		Exalted::Ref<Exalted::Texture2D> whiteTexture = Exalted::Texture2D::Create(1, 1);
@@ -53,8 +59,8 @@ namespace Sandbox
 		m_SkyboxTexture = Exalted::TextureCube::Create(faces);
 
 		// -------- Shader 
-		m_ModelShader = Exalted::Shader::Create("Resources/Shaders/SkyboxShaders/ModelSkymapVertex.glsl", "Resources/Shaders/SkyboxShaders/ModelSkymapFragment.glsl");
-		m_SkyboxShader = Exalted::Shader::Create("Resources/Shaders/SkyboxShaders/SkyboxVertex.glsl", "Resources/Shaders/SkyboxShaders/SkyboxFragment.glsl");
+		m_ModelShader = Exalted::Shader::Create("Resources/Shaders/GLSL-Exploration/ModelVertex.glsl", "Resources/Shaders/GLSL-Exploration/ModelFragment.glsl");
+		m_SkyboxShader = Exalted::Shader::Create("Resources/Shaders/GLSL-Exploration/SkyboxVertex.glsl", "Resources/Shaders/GLSL-Exploration/SkyboxFragment.glsl");
 
 		// ----------- Meshes
 		m_ModelMesh = Exalted::Mesh::Create();
@@ -70,12 +76,12 @@ namespace Sandbox
 		m_SceneManager->SetSceneRoot(m_SceneRoot);
 	}
 
-	void SkyboxLayer::OnDetach()
+	void GLSLExplorationLayer::OnDetach()
 	{
-		EX_INFO("Texture Cubemaps Layer detached successfully.");
+		EX_INFO("GLSL Exploration Layer detached successfully.");
 	}
 
-	void SkyboxLayer::OnUpdate(Exalted::Timestep deltaTime)
+	void GLSLExplorationLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
 		m_EditorCamera->UpdateCamera(deltaTime);
 		//m_SceneManager->UpdateScene(deltaTime);
@@ -115,36 +121,40 @@ namespace Sandbox
 		Exalted::Renderer::EndScene();
 	}
 
-	void SkyboxLayer::OnImGuiRender()
+	void GLSLExplorationLayer::OnImGuiRender()
 	{
 		m_EditorCamera->OnImGuiRender();
 		m_SceneRoot->RenderHierarchyGUI();
-		ImGui::Begin("Texture Cubemaps (skybox) Scene Settings");
+		ImGui::Begin("GLSL Exploration Scene Settings");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
 		ImGui::Text("Choose an environment mapping technique below:");
-		if(ImGui::Button("Reflection"))
-		{
-			m_Toggle = 0;
-		}
-		if (ImGui::Button("Refraction"))
-		{
-			m_Toggle = 1;
-		}
+		//if (ImGui::Button("Reflection"))
+		//{
+		//	m_Toggle = 0;
+		//}
+		//if (ImGui::Button("Refraction"))
+		//{
+		//	m_Toggle = 1;
+		//}
+		//if (ImGui::Button("Refraction"))
+		//{
+		//	m_Toggle = 1;
+		//}
 		ImGui::End();
 	}
 
-	void SkyboxLayer::OnInactiveImGuiRender()
+	void GLSLExplorationLayer::OnInactiveImGuiRender()
 	{
 		ImGui::Begin("Disabled Scenes Settings");
-		if (ImGui::Button("Enable Scene [13] -> Texture Cubemaps - Skybox - Environment Mapping"))
+		if (ImGui::Button("Enable Scene [14] -> GLSL Exploration"))
 			m_IsActive = true;
 		ImGui::End();
 	}
 
-	void SkyboxLayer::OnEvent(Exalted::Event& event)
+	void GLSLExplorationLayer::OnEvent(Exalted::Event& event)
 	{
 		m_EditorCamera->OnEvent(event);
 		m_SceneManager->OnEvent(event);
