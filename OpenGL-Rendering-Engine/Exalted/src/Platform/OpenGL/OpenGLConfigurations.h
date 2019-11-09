@@ -92,6 +92,7 @@ namespace Exalted
 		static inline void EnableDepthTesting() { glEnable(GL_DEPTH_TEST); }
 		static inline void DisableDepthTesting() { glDisable(GL_DEPTH_TEST); }
 		static inline void SetDepthFunction(DepthMode depthMode) { glDepthFunc(GL_ENUM(depthMode)); }
+		static inline void SetDepthMask(bool value) { glDepthMask(value); }
 
 		static inline void EnableStencilTesting() { glEnable(GL_STENCIL_TEST); }
 		static inline void DisableStencilTesting() { glDisable(GL_STENCIL_TEST); }

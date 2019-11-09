@@ -35,6 +35,7 @@ namespace Exalted
 		static void Submit(const Ref<VertexArray>& vertexArray);
 		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform = glm::mat4(1.0f));
 		static void Submit(const Ref<Mesh>& mesh);
+		static void Submit(const Ref<Mesh>& mesh, const unsigned numberOfVertices);
 		static void Submit(const Ref<Shader>& shader, const Ref<Mesh>& mesh, const glm::mat4& transform = glm::mat4(1.0f));
 		static void Submit(const Ref<Shader>& shader, const Ref<Mesh>& mesh, const unsigned numberOfVertices, const glm::mat4& transform = glm::mat4(1.0f));
 

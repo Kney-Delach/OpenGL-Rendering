@@ -24,6 +24,7 @@
 #include "10-Height_Map/HeightMapLayer.h"
 #include "11-Model_Loading/ModelLoadingLayer.h"
 #include "12-Frame_Buffers/FrameBufferLayer.h"
+#include "13-Texture_Cubes_Skybox/SkyboxLayer.h"
 
 #include "Core/EntryPoint.h"
 
@@ -34,18 +35,19 @@ namespace Sandbox
 	public:
 		OpenGLRenderingApplication()
 		{
-			PushLayer(new TriangleLayer());
-			PushLayer(new VertexTransformLayer());
-			PushLayer(new EditorShowcaseLayer());
-			PushLayer(new TextureMappingLayer());
-			PushLayer(new DepthTestingLayer());
-			PushLayer(new StencilTestingLayer());
-			PushLayer(new BlendingLayer());
-			//PushLayer(new SceneGraphLayer()); //todo: For however is reading this, this scene no longer displays anything as the gameobjects themselves are organised by a scene class which is shown in the scene class layer.
-			PushLayer(new SceneClassLayer());
-			PushLayer(new HeightMapLayer());
+			//PushLayer(new TriangleLayer());
+			//PushLayer(new VertexTransformLayer());
+			//PushLayer(new EditorShowcaseLayer());
+			//PushLayer(new TextureMappingLayer());
+			//PushLayer(new DepthTestingLayer());
+			//PushLayer(new StencilTestingLayer());
+			//PushLayer(new BlendingLayer());
+			//PushLayer(new SceneGraphLayer()); //todo: For whoever is reading this, this scene no longer displays anything as the gameobjects themselves are organised by a scene class which is shown in the scene class layer.
+			//PushLayer(new SceneClassLayer());
+			//PushLayer(new HeightMapLayer());
 			//PushLayer(new ModelLoadingLayer());
-			PushLayer(new FrameBufferLayer());
+			//PushLayer(new FrameBufferLayer());
+			PushLayer(new SkyboxLayer());
 		}
 		virtual ~OpenGLRenderingApplication()
 		{

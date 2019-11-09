@@ -49,6 +49,12 @@ namespace Exalted
 		RenderCommand::DrawMesh(mesh);
 	}
 
+	void Renderer::Submit(const Ref<Mesh>& mesh, const unsigned numberOfVertices)
+	{
+		mesh->GetVertexArray()->Bind();
+		RenderCommand::DrawTriangles(numberOfVertices);
+	}
+
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<Mesh>& mesh, const glm::mat4& transform)
 	{
 		shader->Bind();

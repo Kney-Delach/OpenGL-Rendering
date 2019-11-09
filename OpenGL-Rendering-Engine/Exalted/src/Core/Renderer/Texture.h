@@ -54,4 +54,16 @@ namespace Exalted
 		_NODISCARD virtual const std::string& GetPath() const = 0;
 
 	};
+
+	//todo: Implement constructor with single path
+	class TextureCube : public Texture
+	{
+	public: 
+		static Ref<TextureCube> Create(const std::vector<std::string>& paths);
+
+		virtual TextureFormat GetFormat() const = 0;
+		virtual uint32_t GetWidth() const = 0;
+		virtual uint32_t GetHeight() const = 0;
+		virtual const std::vector<std::string>& GetPaths() const = 0;
+	};
 }

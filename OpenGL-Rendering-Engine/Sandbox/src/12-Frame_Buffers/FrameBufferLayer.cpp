@@ -22,7 +22,7 @@
 namespace Sandbox
 {
 	FrameBufferLayer::FrameBufferLayer()
-		: Layer("Frame Buffer Layer", true)
+		: Layer("Frame Buffer Layer", false)
 	{
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f,
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
@@ -123,7 +123,7 @@ namespace Sandbox
 		ImGui::Text("3 -> Sharpening");
 		ImGui::Text("4 -> Blurring");
 		ImGui::Text("5 -> Edge Detection");
-		ImGui::DragInt(" ", &m_PostProcessChoice, 1, 0, 3);
+		ImGui::DragInt(" ", &m_PostProcessChoice, 1, 0, 5);
 		ImGui::End();
 	}
 
@@ -138,7 +138,13 @@ namespace Sandbox
 	void FrameBufferLayer::OnEvent(Exalted::Event& event)
 	{
 		if (event.GetEventType() == Exalted::EventType::WindowResize)
-			m_FrameBuffer->Resize(static_cast<uint32_t>(Exalted::Application::Get().GetWindow().GetWindowWidth()), static_cast<uint32_t>(Exalted::Application::Get().GetWindow().GetWindowHeight()));
+		{
+			const auto resizeEvent = dynamic_cast<Exalted::WindowResizeEvent&>(event);
+			const auto windowWidth = resizeEvent.GetWidth();
+			const auto windowHeight = resizeEvent.GetHeight();
+			m_FrameBuffer->Resize(static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight));
+			
+		}
 		m_EditorCamera->OnEvent(event);
 		m_SceneManager->OnEvent(event);
 	}

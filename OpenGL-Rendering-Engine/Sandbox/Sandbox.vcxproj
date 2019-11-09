@@ -135,6 +135,7 @@
     <ClInclude Include="src\10-Height_Map\HeightMapLayer.h" />
     <ClInclude Include="src\11-Model_Loading\ModelLoadingLayer.h" />
     <ClInclude Include="src\12-Frame_Buffers\FrameBufferLayer.h" />
+    <ClInclude Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.h" />
     <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h" />
     <ClInclude Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.h" />
     <ClInclude Include="src\4-Texture_Mapping\TextureMappingLayer.h" />
@@ -149,6 +150,7 @@
     <ClCompile Include="src\10-Height_Map\HeightMapLayer.cpp" />
     <ClCompile Include="src\11-Model_Loading\ModelLoadingLayer.cpp" />
     <ClCompile Include="src\12-Frame_Buffers\FrameBufferLayer.cpp" />
+    <ClCompile Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.cpp" />
     <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp" />
     <ClCompile Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.cpp" />
     <ClCompile Include="src\4-Texture_Mapping\TextureMappingLayer.cpp" />
@@ -169,6 +171,10 @@
     <None Include="Resources\Shaders\FrameBufferShaders\Vertex.glsl" />
     <None Include="Resources\Shaders\ModelShaders\ModelLoadFragment.glsl" />
     <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />
+    <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapFragment.glsl" />
+    <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapVertex.glsl" />
+    <None Include="Resources\Shaders\SkyboxShaders\SkyboxFragment.glsl" />
+    <None Include="Resources\Shaders\SkyboxShaders\SkyboxVertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

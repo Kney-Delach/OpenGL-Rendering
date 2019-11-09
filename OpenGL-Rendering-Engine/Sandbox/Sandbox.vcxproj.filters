@@ -70,6 +70,7 @@
       <Filter>9-Scene_Class</Filter>
     </ClInclude>
     <ClInclude Include="src\12-Frame_Buffers\FrameBufferLayer.h" />
+    <ClInclude Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -107,11 +108,16 @@
     </ClCompile>
     <ClCompile Include="src\SandboxEntry.cpp" />
     <ClCompile Include="src\12-Frame_Buffers\FrameBufferLayer.cpp" />
+    <ClCompile Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />
     <None Include="Resources\Shaders\ModelShaders\ModelLoadFragment.glsl" />
     <None Include="Resources\Shaders\FrameBufferShaders\Vertex.glsl" />
     <None Include="Resources\Shaders\FrameBufferShaders\Fragment.glsl" />
+    <None Include="Resources\Shaders\SkyboxShaders\SkyboxVertex.glsl" />
+    <None Include="Resources\Shaders\SkyboxShaders\SkyboxFragment.glsl" />
+    <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapVertex.glsl" />
+    <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapFragment.glsl" />
   </ItemGroup>
 </Project>
