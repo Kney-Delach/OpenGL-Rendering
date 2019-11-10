@@ -20,9 +20,6 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-
-//todo: Replace glm implementation with Mathex math library.
-
 namespace Exalted 
 {
 	enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2 };
@@ -32,6 +29,12 @@ namespace Exalted
 	public:
 		OpenGLShader(const std::string& vertexFilePath, const std::string& fragmentFilePath, const std::string& geometryFilePath = "");
 		_NODISCARD inline uint32_t* GetRendererID() { return &m_RendererID; }
+
+		__forceinline void SetUniformBlockIndex(const char* uniformName, uint32_t blockBindingIndex = 0) const
+		{
+			const uint32_t index = glGetUniformBlockIndex(m_RendererID, uniformName);
+			glUniformBlockBinding(m_RendererID, index, blockBindingIndex);
+		}
 
 		__forceinline virtual ~OpenGLShader() override
 		{

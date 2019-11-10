@@ -20,13 +20,14 @@
 
 namespace Exalted
 {
-	Ref<UniformBuffer> UniformBuffer::Create()
+	Ref<UniformBuffer> UniformBuffer::Create(Bytes& bufferSize)
 	{
 		switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::API::None:	return nullptr;
-			case RendererAPI::API::OpenGL:	return CreateRef<OpenGLUniformBuffer>();
+			case RendererAPI::API::OpenGL:	return CreateRef<OpenGLUniformBuffer>(bufferSize);
 		}
+		EX_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 }

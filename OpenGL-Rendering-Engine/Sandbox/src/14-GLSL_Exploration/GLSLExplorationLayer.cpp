@@ -60,6 +60,7 @@ namespace Sandbox
 
 		// -------- Shader 
 		m_ModelShader = Exalted::Shader::Create("Resources/Shaders/GLSL-Exploration/ModelVertex.glsl", "Resources/Shaders/GLSL-Exploration/ModelFragment.glsl");
+		m_ModelShader2 = Exalted::Shader::Create("Resources/Shaders/GLSL-Exploration/ModelVertex.glsl", "Resources/Shaders/GLSL-Exploration/ModelFragment2.glsl");
 		m_SkyboxShader = Exalted::Shader::Create("Resources/Shaders/GLSL-Exploration/SkyboxVertex.glsl", "Resources/Shaders/GLSL-Exploration/SkyboxFragment.glsl");
 
 		// ----------- Meshes
@@ -74,6 +75,19 @@ namespace Sandbox
 		m_SceneRoot->SetTexture(whiteTexture);
 		m_SceneRoot->SetBoundingRadius(FLT_MAX);
 		m_SceneManager->SetSceneRoot(m_SceneRoot);
+
+		// ----------------------------- Configure Uniform Buffer Object ----------------------------- //
+		// configure shader bindings
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformBlockIndex("Matrices", 0);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader2)->SetUniformBlockIndex("Matrices", 0);
+
+		// create uniform buffer
+		Exalted::Bytes bufferSize = sizeof(glm::mat4); //only 1 as uploading a single view projection matrix
+		m_MatUniformBuffer = Exalted::UniformBuffer::Create(bufferSize);
+
+		const Exalted::Bytes blockBindingIndex = 0;
+		const Exalted::Bytes offset = 0;
+		m_MatUniformBuffer->BindBufferRange(blockBindingIndex, offset, bufferSize); 		// define range of buffer that links to a uniform binding point
 	}
 
 	void GLSLExplorationLayer::OnDetach()
@@ -84,28 +98,42 @@ namespace Sandbox
 	void GLSLExplorationLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
 		m_EditorCamera->UpdateCamera(deltaTime);
-		//m_SceneManager->UpdateScene(deltaTime);
 
 		Exalted::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 		Exalted::RenderCommand::ClearColorDepthBuffers();
 		Exalted::Renderer::BeginScene(*m_EditorCamera);
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
-		//m_SceneManager->RenderScene();// render rest of scene
 
-		// model rendering
+		// Set uniform buffer object once per loop
+		m_MatUniformBuffer->Bind();
+		Exalted::Bytes offset = 0;
+		Exalted::Bytes size = sizeof(glm::mat4);
+		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(m_EditorCamera->GetViewProjectionMatrix()));
+		m_MatUniformBuffer->Unbind();
+
+		// Render models
+
 		m_ModelShader->Bind();
 		m_SkyboxTexture->Bind();
+		glm::mat4 transform = glm::mat4(1.f);
+
 		glm::mat4 projection = m_EditorCamera->GetProjectionMatrix();
 		glm::mat4 view = glm::mat4(glm::mat3(m_EditorCamera->GetViewMatrix()));
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformMatFloat4("u_ViewProjection", m_EditorCamera->GetViewProjectionMatrix());
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformMatFloat4("u_Model", glm::mat4(1.f));
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformMatFloat4("u_Model", transform);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformInt1("u_Skybox", 0);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformFloat3("u_CameraPosition", m_EditorCamera->GetPosition());
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformInt1("u_Toggle", m_Toggle);
-
 		Exalted::Renderer::Submit(m_ModelMesh);
+		m_ModelShader->Unbind();
 
-		// skybox rendering
+		transform = glm::translate(glm::mat4(1.f), glm::vec3(100.0, 0.0, 0.0));
+		m_ModelShader2->Bind();
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader2)->SetUniformMatFloat4("u_Model", transform);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader2)->SetUniformInt1("u_Skybox", 0);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader2)->SetUniformFloat3("u_CameraPosition", m_EditorCamera->GetPosition());
+		Exalted::Renderer::Submit(m_ModelMesh);
+		m_ModelShader2->Unbind();
+
+		// Skybox rendering
 		Exalted::OpenGLConfigurations::SetDepthFunction(Exalted::DepthMode::LESS_EQUAL);
 		m_SkyboxShader->Bind();
 		m_SkyboxTexture->Bind();
@@ -125,31 +153,18 @@ namespace Sandbox
 	{
 		m_EditorCamera->OnImGuiRender();
 		m_SceneRoot->RenderHierarchyGUI();
-		ImGui::Begin("GLSL Exploration Scene Settings");
+		ImGui::Begin("GLSL Exploration (uniform buffer objects) Scene Settings");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
-		ImGui::Text("Choose an environment mapping technique below:");
-		//if (ImGui::Button("Reflection"))
-		//{
-		//	m_Toggle = 0;
-		//}
-		//if (ImGui::Button("Refraction"))
-		//{
-		//	m_Toggle = 1;
-		//}
-		//if (ImGui::Button("Refraction"))
-		//{
-		//	m_Toggle = 1;
-		//}
 		ImGui::End();
 	}
 
 	void GLSLExplorationLayer::OnInactiveImGuiRender()
 	{
 		ImGui::Begin("Disabled Scenes Settings");
-		if (ImGui::Button("Enable Scene [14] -> GLSL Exploration"))
+		if (ImGui::Button("Enable Scene [14] -> GLSL Exploration (uniform buffer objects)"))
 			m_IsActive = true;
 		ImGui::End();
 	}

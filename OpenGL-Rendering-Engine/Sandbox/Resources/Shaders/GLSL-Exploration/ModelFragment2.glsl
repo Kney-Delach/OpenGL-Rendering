@@ -1,5 +1,5 @@
 /***************************************************************************
- * Filename		: ModelFragment.glsl
+ * Filename		: ModelFragment2.glsl
  * Name			: Ori Lazar
  * Date			: 09/11/2019
  * Description	: Used to explore the fragment shader, can be seen in the 
@@ -29,5 +29,5 @@ void main()
 {
 	vec3 I = normalize(o_Position - u_CameraPosition); // view direction
 	vec3 R = reflect(I, normalize(o_Normal)); // reflection vector around object's normal vector
-	color = vec4(0.0,1.0,1.0,1.0) * vec4(texture(u_Skybox, R).rgb, 1.0);
+	color = vec4(1.0,0.0,1.0,1.0) * vec4(texture(u_Skybox, R).rgb, 1.0);
 }

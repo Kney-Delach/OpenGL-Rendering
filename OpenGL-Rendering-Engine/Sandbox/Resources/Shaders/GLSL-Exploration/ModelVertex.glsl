@@ -2,7 +2,7 @@
  * Filename		: ModelVertex.glsl
  * Name			: Ori Lazar
  * Date			: 09/11/2019
- * Description	: Processes model vertices in the GLSL exploration scene.
+ * Description	: Demonstrates using uniform buffer objects to access uniform data.
      .---.
    .'_:___".
    |__ --==|
@@ -18,7 +18,11 @@ layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec3 a_Normal;
 layout(location = 2) in vec2 a_TexCoord;
 
-uniform mat4 u_ViewProjection;
+layout (std140) uniform Matrices
+{
+	mat4 u_ViewProjection;
+};
+
 uniform mat4 u_Model;
 
 out vec3 o_Position;

@@ -121,5 +121,6 @@
     <None Include="Resources\Shaders\SkyboxShaders\SkyboxFragment.glsl" />
     <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapVertex.glsl" />
     <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapFragment.glsl" />
+    <None Include="Resources\Shaders\GLSL-Exploration\ModelFragment2.glsl" />
   </ItemGroup>
 </Project>

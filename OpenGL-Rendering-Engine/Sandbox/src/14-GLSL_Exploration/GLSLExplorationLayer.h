@@ -39,6 +39,9 @@ namespace Sandbox
 
 		Exalted::Ref<Exalted::Mesh> m_ModelMesh;
 		Exalted::Ref<Exalted::Shader> m_ModelShader;
+		Exalted::Ref<Exalted::Shader> m_ModelShader2;
+
+		Exalted::Ref<Exalted::UniformBuffer> m_MatUniformBuffer;
 
 		unsigned m_Toggle = 0;
 	};

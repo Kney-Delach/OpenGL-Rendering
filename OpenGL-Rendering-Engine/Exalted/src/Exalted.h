@@ -35,6 +35,7 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
 
+#include "Core/Renderer/UniformBuffer.h"
 #include "Core/Renderer/FrameBuffer.h"
 #include "Core/Renderer/Buffer.h"
 #include "Core/Renderer/Shader.h"

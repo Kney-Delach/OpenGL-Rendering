@@ -22,12 +22,12 @@ namespace Exalted
 {
 	Ref<FrameBuffer> FrameBuffer::Create(uint32_t width, uint32_t height, FrameBufferFormat format)
 	{
-
 		switch (RendererAPI::GetAPI())
 		{
 			case RendererAPI::API::None:	return nullptr;
 			case RendererAPI::API::OpenGL:	return CreateRef<OpenGLFrameBuffer>(width, height, format);
 		}
+		EX_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 }
