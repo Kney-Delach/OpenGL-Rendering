@@ -1,8 +1,8 @@
 /***************************************************************************
- * Filename		: ModelVertex.glsl
+ * Filename		: ExplosionVertex.glsl
  * Name			: Ori Lazar
- * Date			: 09/11/2019
- * Description	: Demonstrates using uniform buffer objects to access uniform data.
+ * Date			: 10/11/2019
+ * Description	: Used to explore geometry shaders. Displays an exploding object. 
      .---.
    .'_:___".
    |__ --==|
@@ -22,17 +22,21 @@ layout (std140) uniform Matrices
 {
 	mat4 u_ViewProjection;
 };
-
+uniform mat4 u_View;
+uniform mat4 u_Projection;
 uniform mat4 u_Model;
 
-out vec3 o_Position;
-out vec3 o_Normal;
-out vec2 o_TexCoord;
-
-void main() 
+out VS_OUT 
 {
-	o_TexCoord = a_TexCoord; 
-	o_Position = vec3(u_Model * vec4(a_Position, 1.0));
-	o_Normal = mat3(transpose(inverse(u_Model))) * a_Normal;
+	vec3 Position;
+	vec2 TexCoord;
+	vec3 Normal;
+} vs_out;
+
+void main()
+{
+	vs_out.TexCoord = a_TexCoord; 
+	vs_out.Position = vec3(u_Model * vec4(a_Position, 1.0));
+	vs_out.Normal = mat3(transpose(inverse(u_Model))) * a_Normal;
 	gl_Position = u_ViewProjection * u_Model * vec4(a_Position, 1.0);
 }

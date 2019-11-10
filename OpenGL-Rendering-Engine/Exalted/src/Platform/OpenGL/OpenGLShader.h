@@ -20,6 +20,8 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
+//todo: Implement tessellation shader support. 
+
 namespace Exalted 
 {
 	enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2 };

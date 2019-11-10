@@ -24,9 +24,10 @@ namespace Exalted
 		std::string Vendor;
 		std::string Renderer;
 		std::string Version;
-		
+
 		int MaxSamples;
 		float MaxAnisotropy;
+		int MaxVertexUniformComponents;
 	};
 
 	class RendererAPI

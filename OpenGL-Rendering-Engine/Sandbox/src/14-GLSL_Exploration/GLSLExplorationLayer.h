@@ -41,8 +41,12 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Shader> m_ModelShader;
 		Exalted::Ref<Exalted::Shader> m_ModelShader2;
 
+		Exalted::Ref<Exalted::Shader> m_NormalsShader;
+		Exalted::Ref<Exalted::Shader> m_ExplosionShader;
+
 		Exalted::Ref<Exalted::UniformBuffer> m_MatUniformBuffer;
 
-		unsigned m_Toggle = 0;
+		bool m_NormalToggle = false;
+		bool m_ExplosionToggle = false;
 	};
 }

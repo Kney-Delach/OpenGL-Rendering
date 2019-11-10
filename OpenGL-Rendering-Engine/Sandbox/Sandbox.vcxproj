@@ -171,7 +171,10 @@
   <ItemGroup>
     <None Include="Resources\Shaders\FrameBufferShaders\Fragment.glsl" />
     <None Include="Resources\Shaders\FrameBufferShaders\Vertex.glsl" />
+    <None Include="Resources\Shaders\GLSL-Exploration\NormalsFragment.glsl" />
+    <None Include="Resources\Shaders\GLSL-Exploration\NormalsGeometry.glsl" />
     <None Include="Resources\Shaders\GLSL-Exploration\ModelFragment2.glsl" />
+    <None Include="Resources\Shaders\GLSL-Exploration\NormalsVertex.glsl" />
     <None Include="Resources\Shaders\ModelShaders\ModelLoadFragment.glsl" />
     <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />
     <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapFragment.glsl" />

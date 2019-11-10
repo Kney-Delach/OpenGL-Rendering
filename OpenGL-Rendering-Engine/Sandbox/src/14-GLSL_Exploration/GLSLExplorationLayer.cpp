@@ -31,10 +31,12 @@
 #define FRONT	"Resources/Textures/Skyboxes/Crater/Front.tga"
 #define BACK	"Resources/Textures/Skyboxes/Crater/Back.tga"
 
+#include "GLFW/include/GLFW/glfw3.h" //todo: Remove this and add a static application call to get the current time.
+
 namespace Sandbox
 {
 	GLSLExplorationLayer::GLSLExplorationLayer()
-		: Layer("GLSL Exploration Layer", true)
+		: Layer("GLSL Exploration Layer", false)
 	{
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f,
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
@@ -59,6 +61,8 @@ namespace Sandbox
 		m_SkyboxTexture = Exalted::TextureCube::Create(faces);
 
 		// -------- Shader 
+		m_ExplosionShader = Exalted::Shader::Create("Resources/Shaders/GLSL-Exploration/ExplosionVertex.glsl", "Resources/Shaders/GLSL-Exploration/ExplosionFragment.glsl", "Resources/Shaders/GLSL-Exploration/ExplosionGeometry.glsl");
+		m_NormalsShader = Exalted::Shader::Create("Resources/Shaders/GLSL-Exploration/NormalsVertex.glsl", "Resources/Shaders/GLSL-Exploration/NormalsFragment.glsl", "Resources/Shaders/GLSL-Exploration/NormalsGeometry.glsl");
 		m_ModelShader = Exalted::Shader::Create("Resources/Shaders/GLSL-Exploration/ModelVertex.glsl", "Resources/Shaders/GLSL-Exploration/ModelFragment.glsl");
 		m_ModelShader2 = Exalted::Shader::Create("Resources/Shaders/GLSL-Exploration/ModelVertex.glsl", "Resources/Shaders/GLSL-Exploration/ModelFragment2.glsl");
 		m_SkyboxShader = Exalted::Shader::Create("Resources/Shaders/GLSL-Exploration/SkyboxVertex.glsl", "Resources/Shaders/GLSL-Exploration/SkyboxFragment.glsl");
@@ -80,6 +84,8 @@ namespace Sandbox
 		// configure shader bindings
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformBlockIndex("Matrices", 0);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader2)->SetUniformBlockIndex("Matrices", 0);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_NormalsShader)->SetUniformBlockIndex("Matrices", 0);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformBlockIndex("Matrices", 0);
 
 		// create uniform buffer
 		Exalted::Bytes bufferSize = sizeof(glm::mat4); //only 1 as uploading a single view projection matrix
@@ -113,25 +119,71 @@ namespace Sandbox
 
 		// Render models
 
-		m_ModelShader->Bind();
 		m_SkyboxTexture->Bind();
 		glm::mat4 transform = glm::mat4(1.f);
-
 		glm::mat4 projection = m_EditorCamera->GetProjectionMatrix();
 		glm::mat4 view = glm::mat4(glm::mat3(m_EditorCamera->GetViewMatrix()));
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformMatFloat4("u_Model", transform);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformInt1("u_Skybox", 0);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformFloat3("u_CameraPosition", m_EditorCamera->GetPosition());
-		Exalted::Renderer::Submit(m_ModelMesh);
-		m_ModelShader->Unbind();
+		
+		if (m_ExplosionToggle) // draw explosions for object 1
+		{
+			m_ExplosionShader->Bind();
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformMatFloat4("u_Model", transform);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformInt1("u_Skybox", 0);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformFloat3("u_CameraPosition", m_EditorCamera->GetPosition());
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_NormalsShader)->SetUniformMatFloat4("u_View", m_EditorCamera->GetViewMatrix());
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_NormalsShader)->SetUniformMatFloat4("u_Projection", m_EditorCamera->GetProjectionMatrix());
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformFloat1("u_Time", glfwGetTime()); //todo: abstract this get time call
+			Exalted::Renderer::Submit(m_ModelMesh);
+		}
+		else
+		{ // draw object 1 regularly
+			m_ModelShader->Bind();
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformMatFloat4("u_Model", transform);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformInt1("u_Skybox", 0);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformFloat3("u_CameraPosition", m_EditorCamera->GetPosition());
+			Exalted::Renderer::Submit(m_ModelMesh);
+		}
+
+		// draw normals for object 1
+		if (m_NormalToggle)
+		{
+			m_NormalsShader->Bind();
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_NormalsShader)->SetUniformMatFloat4("u_Model", transform);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_NormalsShader)->SetUniformMatFloat4("u_View", m_EditorCamera->GetViewMatrix());
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_NormalsShader)->SetUniformMatFloat4("u_Projection", m_EditorCamera->GetProjectionMatrix());
+			Exalted::Renderer::Submit(m_ModelMesh);
+		}
 
 		transform = glm::translate(glm::mat4(1.f), glm::vec3(100.0, 0.0, 0.0));
-		m_ModelShader2->Bind();
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader2)->SetUniformMatFloat4("u_Model", transform);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader2)->SetUniformInt1("u_Skybox", 0);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader2)->SetUniformFloat3("u_CameraPosition", m_EditorCamera->GetPosition());
-		Exalted::Renderer::Submit(m_ModelMesh);
-		m_ModelShader2->Unbind();
+		if (m_ExplosionToggle) // draw explosions for object 2
+		{
+			m_ExplosionShader->Bind();
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformMatFloat4("u_Model", transform);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformInt1("u_Skybox", 0);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformFloat3("u_CameraPosition", m_EditorCamera->GetPosition());
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_NormalsShader)->SetUniformMatFloat4("u_View", m_EditorCamera->GetViewMatrix());
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_NormalsShader)->SetUniformMatFloat4("u_Projection", m_EditorCamera->GetProjectionMatrix());
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformFloat1("u_Time", glfwGetTime()); //todo: abstract this get time call
+			Exalted::Renderer::Submit(m_ModelMesh);
+		}
+		else
+		{ // draw object 2 regularly
+			m_ModelShader2->Bind();
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader2)->SetUniformMatFloat4("u_Model", transform);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader2)->SetUniformInt1("u_Skybox", 0);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader2)->SetUniformFloat3("u_CameraPosition", m_EditorCamera->GetPosition());
+			Exalted::Renderer::Submit(m_ModelMesh);
+		}
+
+		// draw normals  for object 2
+		if(m_NormalToggle)
+		{
+			m_NormalsShader->Bind();
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_NormalsShader)->SetUniformMatFloat4("u_Model", transform);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_NormalsShader)->SetUniformMatFloat4("u_View", m_EditorCamera->GetViewMatrix());
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_NormalsShader)->SetUniformMatFloat4("u_Projection", m_EditorCamera->GetProjectionMatrix());
+			Exalted::Renderer::Submit(m_ModelMesh);
+		}
 
 		// Skybox rendering
 		Exalted::OpenGLConfigurations::SetDepthFunction(Exalted::DepthMode::LESS_EQUAL);
@@ -158,13 +210,21 @@ namespace Sandbox
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
+		if(ImGui::Button("Toggle Normal Display"))
+		{
+			m_NormalToggle = !m_NormalToggle;
+		}
+		if (ImGui::Button("Toggle Object Explosion"))
+		{
+			m_ExplosionToggle = !m_ExplosionToggle;
+		}
 		ImGui::End();
 	}
 
 	void GLSLExplorationLayer::OnInactiveImGuiRender()
 	{
 		ImGui::Begin("Disabled Scenes Settings");
-		if (ImGui::Button("Enable Scene [14] -> GLSL Exploration (uniform buffer objects)"))
+		if (ImGui::Button("Enable Scene [14] -> GLSL Exploration (UBO / Geometry)"))
 			m_IsActive = true;
 		ImGui::End();
 	}

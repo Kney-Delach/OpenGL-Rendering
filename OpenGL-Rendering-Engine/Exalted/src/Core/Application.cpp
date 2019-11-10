@@ -93,6 +93,7 @@ namespace Exalted
 			ImGui::Text("GPU Driver: %s", caps.Version.c_str());
 			ImGui::Text("Maximum Multi-Sample Samples: %i", caps.MaxSamples);
 			ImGui::Text("Maximum Anisotropic Filtering: %i", static_cast<int>(caps.MaxAnisotropy));
+			ImGui::Text("Maximum Vertex Uniform Components: %i", caps.MaxVertexUniformComponents);
 			ImGui::End();
 			for (Layer* layer : m_LayerStack)
 			{

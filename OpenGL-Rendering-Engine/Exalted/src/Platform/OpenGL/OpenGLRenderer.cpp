@@ -27,6 +27,7 @@ namespace Exalted
 		capabilities.Version = (const char*) glGetString(GL_VERSION);
 		glGetIntegerv(GL_MAX_SAMPLES, &capabilities.MaxSamples);
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, &capabilities.MaxAnisotropy);
+		glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &capabilities.MaxVertexUniformComponents);
 	}
 
 	void OpenGLRendererAPI::SetViewport(const int xOffset, const int yOffset, const unsigned windowWidth, const unsigned windowHeight)
