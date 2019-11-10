@@ -39,6 +39,9 @@ namespace Exalted
 		static void Submit(const Ref<Shader>& shader, const Ref<Mesh>& mesh, const glm::mat4& transform = glm::mat4(1.0f));
 		static void Submit(const Ref<Shader>& shader, const Ref<Mesh>& mesh, const unsigned numberOfVertices, const glm::mat4& transform = glm::mat4(1.0f));
 
+		static void SubmitInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity);
+		static void SubmitTrianglesInstanced(const Ref<Mesh>& mesh, const unsigned numberOfVertices, unsigned long long& quantity);
+
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	private:
 		struct SceneData

@@ -26,6 +26,8 @@ namespace Exalted
 		virtual void Unbind() const override;
 		virtual void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) override;
 		virtual void AddIndexBuffer(const  Ref<IndexBuffer>& indexBuffer) override;
+		virtual void AddVertexBufferDivisor(const Ref<VertexBuffer>& vertexBuffer, unsigned attributeIndex, unsigned advancementRate) override;
+
 		_NODISCARD inline virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const override { return m_VertexBuffers; }
 		_NODISCARD inline virtual const Ref<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBuffer; }
 	private:

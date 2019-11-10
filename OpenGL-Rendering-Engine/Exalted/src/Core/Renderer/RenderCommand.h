@@ -67,6 +67,18 @@ namespace Exalted
 		{
 			s_RendererAPI->DrawMesh(mesh);
 		}
+
+		// ------------------- Instanced Drawing ------------------- // 
+
+		inline static void DrawMeshInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity)
+		{
+			s_RendererAPI->DrawMeshInstanced(mesh, quantity);
+		}
+		inline static void DrawTrianglesInstanced(const unsigned numberOfVertices, unsigned long long& quantity)
+		{
+			s_RendererAPI->DrawTrianglesInstanced(numberOfVertices, quantity);
+		}
+
 	private:
 		static Scope<RendererAPI> s_RendererAPI;
 	};
