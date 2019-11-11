@@ -45,7 +45,8 @@ namespace Exalted
 		TextureWrap m_TextureWrap;
 		TextureMagFilter m_TextureMagFilter;
 		TextureMinFilter m_TextureMinFilter;
-		uint32_t m_Width, m_Height;
+		uint32_t m_Width;
+		uint32_t m_Height;
 		unsigned char* m_LocalDataBuffer;
 		GLenum m_InternalFormat, m_DataFormat;
 	};

@@ -49,6 +49,12 @@ namespace Exalted
 		RenderCommand::DrawMesh(mesh);
 	}
 
+	void Renderer::Submit(const Ref<Mesh>& mesh, const unsigned numberOfVertices)
+	{
+		mesh->GetVertexArray()->Bind();
+		RenderCommand::DrawTriangles(numberOfVertices);
+	}
+
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<Mesh>& mesh, const glm::mat4& transform)
 	{
 		shader->Bind();
@@ -78,5 +84,18 @@ namespace Exalted
 
 		mesh->GetVertexArray()->Bind();
 		RenderCommand::DrawTriangles(numberOfVertices);
+	}
+
+	// -------- Instanced Submissions -------- //
+	void Renderer::SubmitInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity) //todo: maybe replcae unsigned long long with something else? 
+	{
+		mesh->GetVertexArray()->Bind();
+		RenderCommand::DrawMeshInstanced(mesh, quantity);
+	}
+
+	void Renderer::SubmitTrianglesInstanced(const Ref<Mesh>& mesh, const unsigned numberOfVertices, unsigned long long& quantity)
+	{
+		mesh->GetVertexArray()->Bind();
+		RenderCommand::DrawTrianglesInstanced(numberOfVertices, quantity);
 	}
 }

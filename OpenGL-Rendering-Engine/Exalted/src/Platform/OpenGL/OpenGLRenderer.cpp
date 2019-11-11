@@ -27,6 +27,7 @@ namespace Exalted
 		capabilities.Version = (const char*) glGetString(GL_VERSION);
 		glGetIntegerv(GL_MAX_SAMPLES, &capabilities.MaxSamples);
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, &capabilities.MaxAnisotropy);
+		glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &capabilities.MaxVertexUniformComponents);
 	}
 
 	void OpenGLRendererAPI::SetViewport(const int xOffset, const int yOffset, const unsigned windowWidth, const unsigned windowHeight)
@@ -77,5 +78,15 @@ namespace Exalted
 	void OpenGLRendererAPI::DrawMesh(const Ref<Mesh>& mesh)
 	{
 		glDrawElements(GL_TRIANGLES, mesh->GetVertexArray()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+	}
+
+	void OpenGLRendererAPI::DrawMeshInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity)
+	{
+		glDrawElementsInstanced(GL_TRIANGLES, mesh->GetVertexArray()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0, quantity);
+	}
+
+	void OpenGLRendererAPI::DrawTrianglesInstanced(const unsigned numberOfVertices, unsigned long long& quantity)
+	{
+		glDrawArraysInstanced(GL_TRIANGLES, 0, numberOfVertices, quantity);
 	}
 }

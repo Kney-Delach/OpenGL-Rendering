@@ -538,6 +538,7 @@
     <ClInclude Include="src\Core\Renderer\RenderingContext.h" />
     <ClInclude Include="src\Core\Renderer\Shader.h" />
     <ClInclude Include="src\Core\Renderer\Texture.h" />
+    <ClInclude Include="src\Core\Renderer\UniformBuffer.h" />
     <ClInclude Include="src\Core\Renderer\VertexArray.h" />
     <ClInclude Include="src\Core\SceneGraph\FrustumCulling\Frustum.h" />
     <ClInclude Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.h" />
@@ -555,6 +556,8 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLRenderer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture2D.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTextureCube.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
@@ -582,6 +585,7 @@
     <ClCompile Include="src\Core\Renderer\RenderingContext.cpp" />
     <ClCompile Include="src\Core\Renderer\Shader.cpp" />
     <ClCompile Include="src\Core\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Core\Renderer\UniformBuffer.cpp" />
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Core\SceneGraph\FrustumCulling\Frustum.cpp" />
     <ClCompile Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.cpp" />
@@ -594,6 +598,8 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLRenderer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture2D.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTextureCube.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />

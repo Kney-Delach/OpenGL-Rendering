@@ -101,7 +101,7 @@ namespace Sandbox
 	void HeightMapLayer::OnInactiveImGuiRender()
 	{
 		ImGui::Begin("Disabled Scenes Settings");
-		if (ImGui::Button("Enable Scene [9] -> Height Map"))
+		if (ImGui::Button("Enable Scene [10] -> Height Map"))
 			m_IsActive = true;
 		ImGui::End();
 	}

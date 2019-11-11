@@ -33,5 +33,9 @@ namespace Exalted
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
 		void DrawTriangles(const unsigned numberOfVertices) override;
 		virtual void DrawMesh(const Ref<Mesh>& mesh) override;
+
+		// ------------------ Instanced rendering ------------------- //
+		virtual void DrawMeshInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity) override;
+		virtual void DrawTrianglesInstanced(const unsigned numberOfVertices, unsigned long long& quantity) override;
 	};
 }

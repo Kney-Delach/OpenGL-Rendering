@@ -62,7 +62,6 @@ namespace Exalted
 			gs = CompileShader(GL_GEOMETRY_SHADER, geometryShader);
 			glAttachShader(program, gs);
 		}
-
 		glAttachShader(program, vs);
 		glAttachShader(program, fs);
 		glLinkProgram(program);

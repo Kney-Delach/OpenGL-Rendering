@@ -24,9 +24,10 @@ namespace Exalted
 		std::string Vendor;
 		std::string Renderer;
 		std::string Version;
-		
+
 		int MaxSamples;
 		float MaxAnisotropy;
+		int MaxVertexUniformComponents;
 	};
 
 	class RendererAPI
@@ -48,6 +49,11 @@ namespace Exalted
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) = 0;
 		virtual void DrawTriangles(const unsigned numberOfVertices) = 0;
 		virtual void DrawMesh(const Ref<Mesh>& mesh) = 0;
+
+		// ------------------ Instanced Rendering ------------------- //
+		virtual void DrawMeshInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity) = 0;
+		virtual void DrawTrianglesInstanced(const unsigned numberOfVertices, unsigned long long& quantity) = 0;
+
 	public:
 		static RenderAPICapabilities& GetCapabilities()
 		{
