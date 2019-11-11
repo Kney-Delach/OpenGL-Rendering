@@ -14,25 +14,6 @@
 ***************************************************************************/
 #include "InstancingLayer.h"
 
-#define TEAPOT "Resources/Meshes/Teapot.obj"
-#define SUZANNE "Resources/Meshes/Suzanne2.obj"
-#define NANOSUIT "Resources/Meshes/nanosuit.obj"
-#define F16 "Resources/Meshes/f16.obj"
-#define BBIRD "Resources/Meshes/BastionBird.obj"
-#define BUNNY "Resources/Meshes/bunny.obj"
-#define SYMMETRA "Resources/Meshes/Symmetra/symmetra.obj"
-#define DABROVIC_SPONZA "Resources/Meshes/Dabrovic-Sponza/sponza.obj"
-#define CRYTEK_SPONZA "Resources/Meshes/Crytek-Sponza/sponza.obj"
-
-#define RIGHT	"Resources/Textures/Skyboxes/Crater/Right.tga"
-#define LEFT	"Resources/Textures/Skyboxes/Crater/Left.tga"
-#define TOP		"Resources/Textures/Skyboxes/Crater/Top.tga"
-#define BOTTOM	"Resources/Textures/Skyboxes/Crater/Bottom.tga"
-#define FRONT	"Resources/Textures/Skyboxes/Crater/Front.tga"
-#define BACK	"Resources/Textures/Skyboxes/Crater/Back.tga"
-
-#include "GLFW/include/GLFW/glfw3.h" //todo: Remove this and add a static application call to get the current time.
-
 namespace Sandbox
 {
 	InstancingLayer::InstancingLayer()
@@ -47,7 +28,7 @@ namespace Sandbox
 
 	void InstancingLayer::OnAttach()
 	{
-		EX_INFO("Instancing layer attached successfully.");
+		EX_INFO("Instancing layer attached successfully. {0}", TIME);
 
 		// ----- Textures
 		Exalted::Ref<Exalted::Texture2D> whiteTexture = Exalted::Texture2D::Create(1, 1);
@@ -56,7 +37,7 @@ namespace Sandbox
 
 		const std::vector<std::string> faces
 		{
-			FRONT, BACK, TOP, BOTTOM, RIGHT, LEFT,
+			SKYBOX_FRONT, SKYBOX_BACK, SKYBOX_TOP, SKYBOX_BOTTOM, SKYBOX_RIGHT, SKYBOX_LEFT,
 		};
 		m_SkyboxTexture = Exalted::TextureCube::Create(faces);
 
@@ -72,11 +53,8 @@ namespace Sandbox
 		// ------------ Instanced Model Transformations and vertex binding
 
 		m_ModelMesh = Exalted::Mesh::Create();
-		//m_ModelMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateQuad());//(Exalted::ObjLoader::Load(SUZANNE));
 		m_ModelMesh->SetVertexArray(Exalted::ObjLoader::Load(TEAPOT));
 
-		std::vector<glm::vec2> offsets;//[1000];
-		offsets.reserve(m_InstanceCount);
 		unsigned row = 0;
 		int column = 0;
 		for (int i = 0; i < m_InstanceCount; ++i)
@@ -86,22 +64,15 @@ namespace Sandbox
 				column += 2;
 				row = 0;
 			}
-			offsets.emplace_back(glm::vec2(3*row, column));
-			m_Transformations.emplace_back(glm::translate(glm::mat4(1.f), glm::vec3(3 * row++, column, 0)));
+			m_Transformations.emplace_back(glm::translate(glm::mat4(1.f), glm::vec3(300 * row++, 100* column, 0)));
 		}
-		//todo: Figure out how to pass matrices using array buffer objects
-		//vb = Exalted::VertexBuffer::Create(glm::value_ptr(m_Transformations[0]), m_InstanceCount * 16);
-		//const Exalted::BufferLayout layout =
-		//{
-		//	{Exalted::ShaderDataType::Mat4, "a_Model"}
-		//};
-		//vb->SetLayout(layout);
-		//m_ModelMesh->GetVertexArray()->AddVertexBufferDivisor(vb, 3, 1);
-		EX_CORE_CRITICAL("Pointer VALUE: {0}", (void*)glm::value_ptr(offsets[0]));
-		vb = Exalted::VertexBuffer::Create(glm::value_ptr(offsets[0]), m_InstanceCount * 2);
+		vb = Exalted::VertexBuffer::Create(glm::value_ptr(m_Transformations[0]), m_InstanceCount * 16);
 		const Exalted::BufferLayout layout =
 		{
-			{Exalted::ShaderDataType::Float2, "a_Offsets"}
+			{Exalted::ShaderDataType::Float4, "a_Model"},
+			{Exalted::ShaderDataType::Float4, "a_Model"},
+			{Exalted::ShaderDataType::Float4, "a_Model"},
+			{Exalted::ShaderDataType::Float4, "a_Model"}
 		};
 		vb->SetLayout(layout);
 		m_ModelMesh->GetVertexArray()->AddVertexBufferDivisor(vb, 3, 1);
@@ -144,52 +115,34 @@ namespace Sandbox
 		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(m_EditorCamera->GetViewProjectionMatrix()));
 		m_MatUniformBuffer->Unbind();
 
-		m_SkyboxTexture->Bind();
-		glm::mat4 view = glm::mat4(glm::mat3(m_EditorCamera->GetViewMatrix()));
-		glm::mat4 projection = m_EditorCamera->GetProjectionMatrix();
-
 		// Render models
-
+		m_SkyboxTexture->Bind();
 		if(!m_ToggleInstancing) // not instanced rendering (single draw calls)
 		{
 			m_ModelShader->Bind();
-
 			for (int i = 0; i < m_InstanceCount; i++)
 			{
 				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformMatFloat4("u_Model", m_Transformations[i]);
 				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformInt1("u_Skybox", 0);
 				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ModelShader)->SetUniformFloat3("u_CameraPosition", m_EditorCamera->GetPosition());
-				Exalted::Renderer::Submit(m_ModelMesh); //todo: fix bugs with instanced index drawing
-				//Exalted::Renderer::Submit(m_ModelMesh, 6);
+				Exalted::Renderer::Submit(m_ModelMesh);
 			}
 		}
 		else
 		{
 			m_InstancedModelShader->Bind();
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_InstancedModelShader)->SetUniformMatFloat4("u_Model", m_Transformations[0]);
-
 			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_InstancedModelShader)->SetUniformInt1("u_Skybox", 0);
 			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_InstancedModelShader)->SetUniformFloat3("u_CameraPosition", m_EditorCamera->GetPosition());
-			//for (unsigned int i = 0; i < m_InstanceCount; i++)
-			//{
-			//	std::stringstream ss;
-			//	ss << "u_Models[" << i << "]";
-			//	std::string s = ss.str();
-			//	std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_InstancedModelShader)->SetUniformMatFloat4(s, m_Transformations[i]);
-			//
-			//}
-			unsigned long long quantity = m_InstanceCount;//m_InstanceCount;//m_Transformations.size();
-			Exalted::Renderer::SubmitInstanced(m_ModelMesh, quantity); //todo: fix bugs with instanced index drawing
-			//Exalted::Renderer::SubmitTrianglesInstanced(m_ModelMesh, 6, quantity); // replace with instanced draw elements
-
+			unsigned long long quantity = m_InstanceCount;
+			Exalted::Renderer::SubmitInstanced(m_ModelMesh, quantity);
 		}
 
 		// Skybox rendering
 		Exalted::OpenGLConfigurations::SetDepthFunction(Exalted::DepthMode::LESS_EQUAL);
 		m_SkyboxShader->Bind();
 		m_SkyboxTexture->Bind();
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_SkyboxShader)->SetUniformMatFloat4("u_ViewMatrix", view);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_SkyboxShader)->SetUniformMatFloat4("u_ProjectionMatrix", projection);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_SkyboxShader)->SetUniformMatFloat4("u_ViewMatrix", glm::mat4(glm::mat3(m_EditorCamera->GetViewMatrix())));
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_SkyboxShader)->SetUniformMatFloat4("u_ProjectionMatrix", m_EditorCamera->GetProjectionMatrix());
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_SkyboxShader)->SetUniformInt1("u_Skybox", 0);
 		Exalted::Renderer::Submit(m_SkyboxMesh, 36);
 		m_SkyboxTexture->Unbind();
@@ -204,7 +157,7 @@ namespace Sandbox
 	{
 		m_EditorCamera->OnImGuiRender();
 		m_SceneRoot->RenderHierarchyGUI();
-		ImGui::Begin("Instancing (uniform buffer objects) Scene Settings");
+		ImGui::Begin("Instancing Scene Settings");
 		if (ImGui::Button("Disable Scene"))
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);

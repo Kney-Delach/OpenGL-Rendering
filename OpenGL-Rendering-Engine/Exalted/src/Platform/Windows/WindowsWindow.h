@@ -32,6 +32,8 @@ namespace Exalted
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_WindowData.EventCallback = callback; }
 		inline unsigned int GetWindowWidth() const override { return m_WindowData.Properties.Width; }
 		inline unsigned int GetWindowHeight() const override { return m_WindowData.Properties.Height; }
+		inline float GetTime() const override { return static_cast<float>(glfwGetTime()); }
+
 		inline bool IsVSync() const override { return m_WindowData.VSync;  }
 		inline void* GetNativeWindow() const override { return m_Window; }
 	private:

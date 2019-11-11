@@ -47,7 +47,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::UniformBuffer> m_MatUniformBuffer;
 
 		bool m_ToggleInstancing = true;
-		unsigned m_InstanceCount = 100000;
+		unsigned m_InstanceCount = 5000;
 
 		Exalted::Ref<Exalted::VertexBuffer> vb;
 	};

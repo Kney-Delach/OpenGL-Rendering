@@ -29,5 +29,5 @@ void main()
 {
 	vec3 I = normalize(o_Position - u_CameraPosition); // view direction
 	vec3 R = reflect(I, normalize(o_Normal)); // reflection vector around object's normal vector
-	color = vec4(texture(u_Skybox, R).rgb, 1.0); // o_Color * 
+	color = vec4(texture(u_Skybox, R).rgb, 1.0);
 }

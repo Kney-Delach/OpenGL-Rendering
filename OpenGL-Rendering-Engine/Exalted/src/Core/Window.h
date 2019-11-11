@@ -45,6 +45,8 @@ namespace Exalted
 		virtual void OnUpdate() = 0;
 		virtual unsigned int GetWindowWidth() const = 0;
 		virtual unsigned int GetWindowHeight() const = 0;
+		virtual float GetTime() const =  0;
+
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(const bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
