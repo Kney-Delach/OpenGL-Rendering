@@ -1313,6 +1313,7 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLTextureCube.h" />
     <ClInclude Include="src\Core\Renderer\UniformBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
+    <ClInclude Include="src\Core\Renderer\Skybox\Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1417,5 +1418,6 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLTextureCube.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="src\Core\Renderer\UniformBuffer.cpp" />
+    <ClCompile Include="src\Core\Renderer\Skybox\Skybox.cpp" />
   </ItemGroup>
 </Project>

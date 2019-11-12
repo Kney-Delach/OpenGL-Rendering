@@ -45,6 +45,7 @@
 #include "Core/Renderer/Texture.h"
 #include "Core/Renderer/Cameras.h"
 #include "Core/Renderer/EditorCamera.h"
+#include "Core/Renderer/Skybox/Skybox.h"
 
 #include "Core/Renderer/Generators/ShapeGenerator.h"
 
@@ -79,6 +80,12 @@
 #define SYMMETRA "Resources/Meshes/Symmetra/symmetra.obj"
 #define DABROVIC_SPONZA "Resources/Meshes/Dabrovic-Sponza/sponza.obj"
 #define CRYTEK_SPONZA "Resources/Meshes/Crytek-Sponza/sponza.obj"
+
+// ------------- Skydome macros ---------------- // todo: move from here
+
+#define SKYDOME "Resources/Defaults/Skydome/Meshes/Dome.obj"
+#define ATMOSPHERE_VERTEX "Resources/Defaults/Skydome/Shaders/AtmosphereVertex.glsl"
+#define ATMOSPHERE_FRAGMENT "Resources/Defaults/Skydome/Shaders/AtmosphereFragment.glsl"
 
 // -------------- Texture Macros -------------- //
 

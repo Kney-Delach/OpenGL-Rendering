@@ -73,7 +73,6 @@ namespace Exalted
 				indices.push_back(a);
 				indices.push_back(d);
 				indices.push_back(c);
-
 			}		}
 		Ref<VertexArray> va = VertexArray::Create();
 		Ref<VertexBuffer> vb = VertexBuffer::Create(allVertices.data(), allVertices.size());

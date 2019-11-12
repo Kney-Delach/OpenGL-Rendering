@@ -16,19 +16,27 @@
 #include "OpenGLShader.h"
 
 
-
 namespace Exalted 
 {
-	OpenGLShader::OpenGLShader(const std::string& vertexFilePath, const std::string& fragmentFilePath, const std::string& geometryFilePath)
+	OpenGLShader::OpenGLShader(const std::string& vertexFilePath, const std::string& fragmentFilePath, const std::string& geometryFilePath, const std::string& tessEvalFilePath, const std::string& tessControlFilePath)
 		: m_RendererID(0) // Shader("OpenGL Shader"), 
 	{
 		const std::string vertexSource = ParseShader(vertexFilePath);
 		const std::string fragmentSource = ParseShader(fragmentFilePath);
+		
 		std::string geometrySource = "";
 		if(!geometryFilePath.empty())
 			geometrySource = ParseShader(geometryFilePath);
 
-		m_RendererID = CreateShader(vertexSource, fragmentSource, geometrySource);
+		std::string tessEvalSource = "";
+		if (!tessEvalFilePath.empty())
+			tessEvalSource = ParseShader(tessEvalFilePath);
+
+		std::string tessControlSource = "";
+		if (!tessControlFilePath.empty())
+			tessControlSource = ParseShader(tessControlFilePath);
+
+		m_RendererID = CreateShader(vertexSource, fragmentSource, geometrySource, tessEvalSource, tessControlSource);
 	}
 
 
@@ -51,7 +59,7 @@ namespace Exalted
 		return ss.str();
 	}
 
-	uint32_t OpenGLShader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader)
+	uint32_t OpenGLShader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader, const std::string& tessEvalShader, const std::string& tessControlShader)
 	{
 		const unsigned int program = glCreateProgram();
 		const unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
@@ -62,6 +70,19 @@ namespace Exalted
 			gs = CompileShader(GL_GEOMETRY_SHADER, geometryShader);
 			glAttachShader(program, gs);
 		}
+		unsigned int tcs;
+		if (!tessControlShader.empty())
+		{
+			tcs = CompileShader(GL_TESS_CONTROL_SHADER, tessControlShader);
+			glAttachShader(program, tcs);
+		}
+		unsigned int tes;
+		if (!tessEvalShader.empty())
+		{
+			tes = CompileShader(GL_TESS_EVALUATION_SHADER, tessEvalShader);
+			glAttachShader(program, tes);
+		}
+
 		glAttachShader(program, vs);
 		glAttachShader(program, fs);
 		glLinkProgram(program);
@@ -70,7 +91,10 @@ namespace Exalted
 		glDeleteShader(fs);
 		if (!geometryShader.empty())
 			glDeleteShader(gs);
-		
+		if (!tessEvalShader.empty())
+			glDeleteShader(tes);
+		if (!tessControlShader.empty())
+			glDeleteShader(tcs);
 		return program;
 	}
 
@@ -93,7 +117,7 @@ namespace Exalted
 			glGetShaderInfoLog(id, messageLength, &messageLength, &infoLog[0]);
 
 			EX_CORE_CRITICAL("{0}", infoLog.data());
-			EX_CORE_ERROR("Failed to compile shader! Type: {0}\n------------------------\nShader Source Code:\n------------------------\n{1}", (GL_VERTEX_SHADER ? "VERTEX\n" : GL_FRAGMENT_SHADER ? "FRAGMENT\n" : GL_GEOMETRY_SHADER ? "GEOMETRY\n" : "UNKNOWN SHADER TYPE\n"), source);
+			EX_CORE_ERROR("Failed to compile shader! Type: {0}\n------------------------\nShader Source Code:\n------------------------\n{1}", (GL_VERTEX_SHADER ? "VERTEX\n" : GL_FRAGMENT_SHADER ? "FRAGMENT\n" : GL_GEOMETRY_SHADER ? "GEOMETRY\n" : GL_TESS_CONTROL_SHADER ? "TESSELATION CONTROL\n" : GL_TESS_EVALUATION_SHADER ? "TESSELATION EVALUATION\n" : "UNKNOWN SHADER TYPE\n"), source);
 			EX_CORE_ASSERT(false, "Shader compilation failure!");
 
 			glDeleteShader(id);

@@ -31,11 +31,16 @@ namespace Exalted
 		virtual void ClearColorDepthStencilBuffers() override;
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
-		void DrawTriangles(const unsigned numberOfVertices) override;
+		virtual void DrawTriangles(const unsigned numberOfVertices) override;
 		virtual void DrawMesh(const Ref<Mesh>& mesh) override;
 
 		// ------------------ Instanced rendering ------------------- //
 		virtual void DrawMeshInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity) override;
 		virtual void DrawTrianglesInstanced(const unsigned numberOfVertices, unsigned long long& quantity) override;
+
+		// ------------------- Tessellated Rendering --------------------- //
+		virtual void DrawTessellatedMesh(const Ref<Mesh>& mesh) override;
+		virtual void DrawTessellatedInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity) override;
+		virtual void DrawTessellatedTrianglesInstanced(int numberOfVertices, unsigned long long& quantity) override;
 	};
 }

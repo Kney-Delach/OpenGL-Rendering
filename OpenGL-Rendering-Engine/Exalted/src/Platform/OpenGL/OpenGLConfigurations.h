@@ -118,5 +118,7 @@ namespace Exalted
 		static inline void EnableFaceCulling() { glEnable(GL_CULL_FACE); }
 		static inline void DisableFaceCulling() { glDisable(GL_CULL_FACE); }
 		static inline void SetFaceCullingMode(FaceCullMode cullMode) { glCullFace(GL_ENUM(cullMode)); }
+
+		static inline void SetPatchVerticeCount(unsigned count = 4) { glPatchParameteri(GL_PATCH_VERTICES, count); }
 	};
 }

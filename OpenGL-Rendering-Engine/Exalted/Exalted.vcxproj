@@ -537,6 +537,7 @@
     <ClInclude Include="src\Core\Renderer\RendererAPI.h" />
     <ClInclude Include="src\Core\Renderer\RenderingContext.h" />
     <ClInclude Include="src\Core\Renderer\Shader.h" />
+    <ClInclude Include="src\Core\Renderer\Skybox\Skybox.h" />
     <ClInclude Include="src\Core\Renderer\Texture.h" />
     <ClInclude Include="src\Core\Renderer\UniformBuffer.h" />
     <ClInclude Include="src\Core\Renderer\VertexArray.h" />
@@ -584,6 +585,7 @@
     <ClCompile Include="src\Core\Renderer\RendererAPI.cpp" />
     <ClCompile Include="src\Core\Renderer\RenderingContext.cpp" />
     <ClCompile Include="src\Core\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Core\Renderer\Skybox\Skybox.cpp" />
     <ClCompile Include="src\Core\Renderer\Texture.cpp" />
     <ClCompile Include="src\Core\Renderer\UniformBuffer.cpp" />
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp" />

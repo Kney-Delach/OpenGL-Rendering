@@ -32,12 +32,12 @@ namespace Exalted
 	}
 
 	Ref<Texture2D> Texture2D::Create(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap,
-		TextureMagFilter textureMagFilter, TextureMinFilter textureMinFilter, bool isRGB, unsigned int mipMapLevel)
+		TextureMagFilter textureMagFilter, TextureMinFilter textureMinFilter, bool isRGB, unsigned int mipMapLevel, bool flipTexture)
 	{
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None:	return nullptr;
-			case RendererAPI::API::OpenGL:	return CreateRef<OpenGLTexture2D>(filepath, textureFormat, textureWrap, textureMagFilter, textureMinFilter, isRGB, mipMapLevel);
+			case RendererAPI::API::OpenGL:	return CreateRef<OpenGLTexture2D>(filepath, textureFormat, textureWrap, textureMagFilter, textureMinFilter, isRGB, mipMapLevel, flipTexture);
 		}
 		EX_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;

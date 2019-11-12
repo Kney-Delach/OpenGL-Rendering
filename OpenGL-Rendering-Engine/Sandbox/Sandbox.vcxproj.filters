@@ -73,6 +73,7 @@
     <ClInclude Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.h" />
     <ClInclude Include="src\14-GLSL_Exploration\GLSLExplorationLayer.h" />
     <ClInclude Include="src\15-Instancing\InstancingLayer.h" />
+    <ClInclude Include="src\16-Tesselation\TessellationLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -113,6 +114,7 @@
     <ClCompile Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.cpp" />
     <ClCompile Include="src\14-GLSL_Exploration\GLSLExplorationLayer.cpp" />
     <ClCompile Include="src\15-Instancing\InstancingLayer.cpp" />
+    <ClCompile Include="src\16-Tesselation\TessellationLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />
