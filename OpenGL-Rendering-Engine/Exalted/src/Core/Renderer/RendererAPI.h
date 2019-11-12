@@ -28,6 +28,7 @@ namespace Exalted
 		int MaxSamples;
 		float MaxAnisotropy;
 		int MaxVertexUniformComponents;
+		int MaxUniformBufferComponents;
 	};
 
 	class RendererAPI

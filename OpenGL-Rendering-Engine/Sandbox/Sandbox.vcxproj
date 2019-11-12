@@ -139,6 +139,7 @@
     <ClInclude Include="src\14-GLSL_Exploration\GLSLExplorationLayer.h" />
     <ClInclude Include="src\15-Instancing\InstancingLayer.h" />
     <ClInclude Include="src\16-Tesselation\TessellationLayer.h" />
+    <ClInclude Include="src\17-Lighting\LightingLayer.h" />
     <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h" />
     <ClInclude Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.h" />
     <ClInclude Include="src\4-Texture_Mapping\TextureMappingLayer.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="src\14-GLSL_Exploration\GLSLExplorationLayer.cpp" />
     <ClCompile Include="src\15-Instancing\InstancingLayer.cpp" />
     <ClCompile Include="src\16-Tesselation\TessellationLayer.cpp" />
+    <ClCompile Include="src\17-Lighting\LightingLayer.cpp" />
     <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp" />
     <ClCompile Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.cpp" />
     <ClCompile Include="src\4-Texture_Mapping\TextureMappingLayer.cpp" />

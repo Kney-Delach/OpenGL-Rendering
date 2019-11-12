@@ -28,6 +28,7 @@
 #include "14-GLSL_Exploration/GLSLExplorationLayer.h"
 #include "15-Instancing/InstancingLayer.h"
 #include "16-Tesselation/TessellationLayer.h"
+#include "17-Lighting/LightingLayer.h"
 
 #include "Core/EntryPoint.h"
 
@@ -53,7 +54,8 @@ namespace Sandbox
 			//PushLayer(new SkyboxLayer());
 			//PushLayer(new GLSLExplorationLayer); 
 			//PushLayer(new InstancingLayer());
-			PushLayer(new TessellationLayer());
+			//PushLayer(new TessellationLayer()); //todo: Note, don't run this simultaneously with the lighting layer.
+			PushLayer(new LightingLayer());
 		}
 		virtual ~OpenGLRenderingApplication()
 		{

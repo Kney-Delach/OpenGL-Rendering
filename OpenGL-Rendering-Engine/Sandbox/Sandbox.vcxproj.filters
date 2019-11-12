@@ -74,6 +74,7 @@
     <ClInclude Include="src\14-GLSL_Exploration\GLSLExplorationLayer.h" />
     <ClInclude Include="src\15-Instancing\InstancingLayer.h" />
     <ClInclude Include="src\16-Tesselation\TessellationLayer.h" />
+    <ClInclude Include="src\17-Lighting\LightingLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -115,6 +116,7 @@
     <ClCompile Include="src\14-GLSL_Exploration\GLSLExplorationLayer.cpp" />
     <ClCompile Include="src\15-Instancing\InstancingLayer.cpp" />
     <ClCompile Include="src\16-Tesselation\TessellationLayer.cpp" />
+    <ClCompile Include="src\17-Lighting\LightingLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />

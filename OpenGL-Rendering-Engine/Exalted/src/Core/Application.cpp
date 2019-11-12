@@ -94,6 +94,7 @@ namespace Exalted
 			ImGui::Text("Maximum Multi-Sample Samples: %i", caps.MaxSamples);
 			ImGui::Text("Maximum Anisotropic Filtering: %i", static_cast<int>(caps.MaxAnisotropy));
 			ImGui::Text("Maximum Vertex Uniform Components: %i", caps.MaxVertexUniformComponents);
+			ImGui::Text("Maximum Uniform Buffer Components: %i", caps.MaxUniformBufferComponents);
 			ImGui::End();
 			for (Layer* layer : m_LayerStack)
 			{
