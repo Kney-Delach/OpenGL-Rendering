@@ -12,31 +12,35 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#version 450 
+#version 420 
 
 layout (quads, cw) in; // Tesselation using quads and clockwise winding
 
 layout (std140) uniform Camera_Matrices
 {
-	mat4 ViewMatrix;
+	mat4 RealViewMatrix;
+	mat4 SkyboxViewMatrix;
 	mat4 ProjectionMatrix;
 	mat4 ViewProjectionMatrix;
 };
 
-uniform float u_TerrainScale;
-uniform sampler2D u_HeightMap;
-
 in ShaderData 
 {
-	vec2 c_TexCoord;
 	vec3 c_Position;
+	vec2 c_ColorTexCoord;
+	vec2 c_HeightmapTexCoord;
 } IN[];
 
 out ShaderData 
 {
 	vec2 e_TexCoord;
-	vec3 e_Position; 
+	float e_TerrainScale;
+	float e_PositionY;
 } OUT;
+
+uniform float u_TerrainScale;
+uniform sampler2D u_HeightMap;
+
 
 vec4 QuadMixVec4(vec4 v1, vec4 v2, vec4 v3, vec4 v4) 
 {
@@ -61,16 +65,16 @@ vec2 QuadMixVec2(vec2 v1, vec2 v2, vec2 v3, vec2 v4)
 
 void main()
 {
-	//gl_Position = QuadMixVec4(gl_in[0].gl_Position, gl_in[1].gl_Position, gl_in[2].gl_Position,gl_in[3].gl_Position);
 	
-	vec2 texCoord = QuadMixVec2(IN[0].c_TexCoord, IN[1].c_TexCoord, IN[2].c_TexCoord, IN[3].c_TexCoord);
+	vec2 texCoordHeightmap = QuadMixVec2(IN[0].c_HeightmapTexCoord, IN[1].c_HeightmapTexCoord, IN[2].c_HeightmapTexCoord, IN[3].c_HeightmapTexCoord);
+	vec2 texCoordColormap = QuadMixVec2(IN[0].c_ColorTexCoord, IN[1].c_ColorTexCoord, IN[2].c_ColorTexCoord, IN[3].c_ColorTexCoord);
 
 	vec3 position = QuadMixVec3(IN[0].c_Position, IN[1].c_Position, IN[2].c_Position, IN[3].c_Position);
 
-	position.y += u_TerrainScale * texture(u_HeightMap, texCoord).r;
+	position.y += u_TerrainScale * texture(u_HeightMap, texCoordHeightmap).r;
 	 
-	 gl_Position = ViewProjectionMatrix * vec4(position, 1.0);
-
-	OUT.e_TexCoord = texCoord;
-	OUT.e_Position = position;
+	gl_Position = ViewProjectionMatrix * vec4(position, 1.0);
+	OUT.e_PositionY = position.y;
+	OUT.e_TexCoord = texCoordColormap;
+	OUT.e_TerrainScale = u_TerrainScale;
 }

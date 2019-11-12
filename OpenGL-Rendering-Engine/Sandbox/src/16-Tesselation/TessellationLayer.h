@@ -40,5 +40,6 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Texture2D> u_TerrainHeightMap;
 
 		float m_TerrainScale = 1;
+		float m_VertexScale = 1;
 	};
 }

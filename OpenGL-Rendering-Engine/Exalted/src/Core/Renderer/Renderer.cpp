@@ -99,9 +99,22 @@ namespace Exalted
 		RenderCommand::DrawTrianglesInstanced(numberOfVertices, quantity);
 	}
 
+	// -------- Tessellated Submission -------- //
+
 	void Renderer::SubmitTessellated(const Ref<Mesh>& mesh)
 	{
 		mesh->GetVertexArray()->Bind();
 		RenderCommand::DrawTessellatedIndexed(mesh);
+	}
+
+	void Renderer::SubmitTessellatedInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity)
+	{
+		mesh->GetVertexArray()->Bind();
+		RenderCommand::DrawTessellatedInstanced(mesh, quantity);
+	}
+
+	void Renderer::SubmitTessellatedTriangleInstanced(int numberOfVertices, unsigned long long& quantity)
+	{
+		RenderCommand::DrawTessellatedTrianglesInstanced(numberOfVertices, quantity);
 	}
 }

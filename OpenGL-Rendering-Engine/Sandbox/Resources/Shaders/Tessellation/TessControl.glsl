@@ -12,20 +12,30 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#version 450 
+#version 420 
 
 layout (vertices = 4) out; // Tesselation using quads 
 
+layout (std140) uniform Camera_Matrices
+{
+	mat4 RealViewMatrix;
+	mat4 SkyboxViewMatrix;
+	mat4 ProjectionMatrix;
+	mat4 ViewProjectionMatrix;
+};
+
 in ShaderData 
 {
-	vec2 v_TexCoord;
 	vec3 v_Position;
+	vec2 v_ColorTexCoord;
+	vec2 v_HeightmapTexCoord;
 } IN[];
 
 out ShaderData 
 {
-	vec2 c_TexCoord;
 	vec3 c_Position;
+	vec2 c_ColorTexCoord;
+	vec2 c_HeightmapTexCoord;
 } OUT[];
 
 void main()
@@ -33,17 +43,19 @@ void main()
 	if (gl_InvocationID == 0)
 	{
 		// Inner tesselation factors
-		gl_TessLevelInner[0] = 9.0;
-		gl_TessLevelInner[1] = 7.0;
+		gl_TessLevelInner[0] = 100.0;
+		gl_TessLevelInner[1] = 100.0;
 		
 		// Outer tesselation factors
-		gl_TessLevelOuter[0] = 3.0;
-		gl_TessLevelOuter[1] = 5.0;
-		gl_TessLevelOuter[2] = 3.0;
-		gl_TessLevelOuter[3] = 5.0;
+		gl_TessLevelOuter[0] = 1000.0;
+		gl_TessLevelOuter[1] = 1000.0;
+		gl_TessLevelOuter[2] = 1000.0;
+		gl_TessLevelOuter[3] = 1000.0;
 	}
+
 	gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
 
-	OUT[gl_InvocationID].c_TexCoord = IN[gl_InvocationID].v_TexCoord;
 	OUT[gl_InvocationID].c_Position = IN[gl_InvocationID].v_Position;
+	OUT[gl_InvocationID].c_ColorTexCoord = IN[gl_InvocationID].v_ColorTexCoord;
+	OUT[gl_InvocationID].c_HeightmapTexCoord = IN[gl_InvocationID].v_HeightmapTexCoord;
 }

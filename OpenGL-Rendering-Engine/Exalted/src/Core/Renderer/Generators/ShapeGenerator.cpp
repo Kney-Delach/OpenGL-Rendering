@@ -54,22 +54,23 @@ namespace Exalted
 		return va;
 	}
 
-	Ref<VertexArray> ShapeGenerator::GenerateFlatQuad()
+	Ref<VertexArray> ShapeGenerator::GenerateFlatQuad(float widthScale, float lengthScale)
 	{
 		Ref<VertexArray> va = VertexArray::Create();
-		float vertices[20] = 
+		float vertices[28] = 
 		{
-			// positions		texture coords
-			-1.0f, 0.0f, -1.0,	0.0f, 0.f,
-			-1.0f, 0.0f,  1.0,	1.0f, 0.0f,
-			 1.0f, 0.0f,  1.0,	1.0f, 1.0f,
-			 1.0f, 0.0f, -1.0,	0.0f, 1.0f 
+			// positions							colormap texture coords                 heightmap texture coords
+			 -widthScale ,	0.0f, -lengthScale,		0.0f,				100.0f,				0.0f, 1.0f,
+			 -widthScale ,	0.0f,  lengthScale,		0.0f,				0.0f,				0.0f, 0.0f,
+			 widthScale  ,	0.0f,  lengthScale,		100.0f,				0.0f,				1.0f, 0.0f,
+			 widthScale  ,	0.0f, -lengthScale,		100.0f,				100.0f,				1.0f, 1.0f
 		};
-		Ref<VertexBuffer> vb = VertexBuffer::Create(vertices, 20);
+		Ref<VertexBuffer> vb = VertexBuffer::Create(vertices, 28);
 		const BufferLayout layout =
 		{
 			{ShaderDataType::Float3, "a_Position"},
-			{ShaderDataType::Float2, "a_TexCoord"}
+			{ShaderDataType::Float2, "a_ColorTexCoord"},
+			{ShaderDataType::Float2, "a_HeightmapTexCoord"}
 		};
 		vb->SetLayout(layout);
 		va->AddVertexBuffer(vb);

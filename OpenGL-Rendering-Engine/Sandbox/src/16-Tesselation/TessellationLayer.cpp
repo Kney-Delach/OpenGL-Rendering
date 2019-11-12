@@ -28,8 +28,8 @@ namespace Sandbox
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f,
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
 			0.1f,
-			1000000.f);
-		m_EditorCamera->SetMouseSpeed(1.f);
+			1000.f);
+		m_EditorCamera->SetMouseSpeed(10.f);
 	}
 
 	void TessellationLayer::OnAttach()
@@ -38,13 +38,10 @@ namespace Sandbox
 
 		// ---------------- Setup tesselation data ------------------- //
 		m_TessellationShader = Exalted::Shader::Create(TESSELLATION_VERTEX, TESSELLATION_FRAGMENT, "", TESSELLATION_EVALUATION, TESSELLATION_CONTROL); //todo: insert geometry shader
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_TessellationShader)->SetUniformInt1("u_HeightMap", 0);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_TessellationShader)->SetUniformInt1("u_ColorMap", 1);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_TessellationShader)->SetUniformFloat1("u_TerrainScale", m_TerrainScale);
-
+		
 		m_TessellationMesh = Exalted::Mesh::Create();
-		m_TessellationMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateFlatQuad());
-		u_TerrainColorMap = Exalted::Texture2D::Create("Resources/Textures/Terrain/HeightMap.png",
+		m_TessellationMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateFlatQuad(100, 100));
+		u_TerrainColorMap = Exalted::Texture2D::Create("Resources/Textures/Terrain/Sand.jpg",
 			Exalted::TextureFormat::RGB,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
@@ -53,24 +50,25 @@ namespace Sandbox
 			0,
 			true);
 
-		u_TerrainHeightMap = Exalted::Texture2D::Create("Resources/Textures/Terrain/ColorMap.png",
-			Exalted::TextureFormat::RGB,
+		u_TerrainHeightMap = Exalted::Texture2D::Create("Resources/Textures/Terrain/Lake.png",//"HeightMap_GrandCanyon.png",
+			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::REPEAT,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
-			true,
+			false,
 			0,
-			true);
+			false);
 		// -------------- Scene manager/root 
 		m_SceneManager = Exalted::CreateRef<Exalted::Scene>(m_EditorCamera, true);
 
 		// ----------------------------- Configure Uniform Buffer Object ----------------------------- //
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_TessellationShader)->SetUniformBlockIndex("Camera_Matrices", 2);
-		Exalted::Bytes bufferSize = 3 * sizeof(glm::mat4);
+		Exalted::Bytes bufferSize = 4 * sizeof(glm::mat4);
 		m_MatUniformBuffer = Exalted::UniformBuffer::Create(bufferSize);
 		const Exalted::Bytes blockBindingIndex = 2;
 		const Exalted::Bytes offset = 0;
 		m_MatUniformBuffer->BindBufferRange(blockBindingIndex, offset, bufferSize);
+
 
 		Exalted::OpenGLConfigurations::SetPatchVerticeCount(4);
 	}
@@ -93,6 +91,8 @@ namespace Sandbox
 		m_MatUniformBuffer->Bind();
 		Exalted::Bytes offset = 0;
 		Exalted::Bytes size = sizeof(glm::mat4);
+		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(m_EditorCamera->GetViewMatrix()));
+		offset += sizeof(glm::mat4);
 		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(glm::mat4(glm::mat3(m_EditorCamera->GetViewMatrix()))));
 		offset += sizeof(glm::mat4);
 		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(m_EditorCamera->GetProjectionMatrix()));
@@ -108,14 +108,18 @@ namespace Sandbox
 		// ----------------------------- Render Tessellation Terrain ----------------------------- //
 		Exalted::OpenGLConfigurations::EnableFaceCulling();
 		Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::FRONT);
-		m_TessellationShader->Bind();
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_TessellationShader)->SetUniformFloat1("u_TerrainScale", m_TerrainScale);
+
 		u_TerrainHeightMap->Bind(0);
 		u_TerrainColorMap->Bind(1);
+		m_TessellationShader->Bind();
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_TessellationShader)->SetUniformFloat1("u_TerrainScale", m_TerrainScale);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_TessellationShader)->SetUniformInt1("u_HeightMap", 0);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_TessellationShader)->SetUniformInt1("u_ColorMap", 1);
 		Exalted::Renderer::SubmitTessellated(m_TessellationMesh);
+		m_TessellationShader->Unbind();
 		u_TerrainHeightMap->Unbind();
 		u_TerrainColorMap->Unbind();
-		m_TessellationShader->Unbind();
+
 		Exalted::OpenGLConfigurations::DisableFaceCulling();
 
 		// --------------------------- Render Skybox --------------------------- //
@@ -136,7 +140,7 @@ namespace Sandbox
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
-		ImGui::InputFloat("Terrain Scale", &m_TerrainScale);
+		ImGui::InputFloat("Terrain Height Scale", &m_TerrainScale);
 		ImGui::End();
 	}
 

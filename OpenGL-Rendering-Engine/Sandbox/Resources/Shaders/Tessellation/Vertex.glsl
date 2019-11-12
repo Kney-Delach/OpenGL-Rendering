@@ -12,20 +12,24 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#version 450
+#version 420
 
 layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec2 a_TexCoord;
+layout(location = 1) in vec2 a_ColorTexCoord;
+layout(location = 2) in vec2 a_HeightmapTexCoord;
+
 
 out ShaderData 
 {
-	vec2 v_TexCoord;
 	vec3 v_Position;
+	vec2 v_ColorTexCoord;
+	vec2 v_HeightmapTexCoord;
 } OUT;
 
 void main()
 {
-	OUT.v_TexCoord = a_TexCoord;
+	gl_Position = vec4(a_Position,1.0);
 	OUT.v_Position = a_Position;
-	gl_Position = vec4(a_Position, 1.0);
+	OUT.v_ColorTexCoord = a_ColorTexCoord;
+	OUT.v_HeightmapTexCoord = a_HeightmapTexCoord;
 }
