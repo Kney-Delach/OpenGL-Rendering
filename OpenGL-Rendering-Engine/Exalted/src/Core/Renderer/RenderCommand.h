@@ -79,6 +79,12 @@ namespace Exalted
 			s_RendererAPI->DrawTrianglesInstanced(numberOfVertices, quantity);
 		}
 
+		// ------------------ Tessellated Drawing ------------------ //
+		inline static void DrawTessellatedIndexed(const Ref<Mesh>& mesh)
+		{
+			s_RendererAPI->DrawTessellatedMesh(mesh);
+		}
+
 	private:
 		static Scope<RendererAPI> s_RendererAPI;
 	};

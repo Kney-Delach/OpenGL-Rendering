@@ -45,6 +45,7 @@
 #include "Core/Renderer/Texture.h"
 #include "Core/Renderer/Cameras.h"
 #include "Core/Renderer/EditorCamera.h"
+#include "Core/Renderer/Skybox/Skybox.h"
 
 #include "Core/Renderer/Generators/ShapeGenerator.h"
 

@@ -65,29 +65,6 @@ namespace Exalted
 		}
 	}
 
-	//void GameObject::Draw() //todo: Verify correct draw ordering
-	//{
-	//	//for (std::vector<GameObject*>::iterator i = m_ChildrenObjectsList.begin(); i != m_ChildrenObjectsList.end(); ++i)
-	//	//{
-	//	//	(*i)->Draw();
-	//	//}
-	//	//todo: Instance materials so we don't have to iterate one by one like this for each mesh, also instance draw calls....
-
-	//	if (m_Mesh)
-	//	{
-	//		if(m_Texture)
-	//		{
-	//			m_Texture->Bind();
-	//			Renderer::Submit(m_Shader, m_Mesh, m_Transform->GetWorldTransform());
-	//			m_Texture->Unbind();
-	//		}
-	//		else
-	//		{
-	//			Renderer::Submit(m_Shader, m_Mesh, m_Transform->GetWorldTransform());
-	//		}
-	//	}
-	//}
-
 	void GameObject::RemoveGameComponent(GameComponent* pGameComponent)
 	{
 		const std::vector<GameComponent*>::iterator objectPosition = std::find(m_GameComponents.begin(), m_GameComponents.end(), &(*pGameComponent));
@@ -131,6 +108,7 @@ namespace Exalted
 		ImGui::Text("-------------------------------");
 		ImGui::Text(GetUiText(m_ObjectName).c_str());
 		ImGui::Text("-------------------------------");
+		ImGui::Checkbox(GetUiText("Active").c_str(), &m_Active);
 		ImGui::InputFloat3(GetUiText("Position [x,y,z]").c_str(), (float*) & (m_Transform->Position) ,"%.3f");
 		ImGui::InputFloat3(GetUiText("Rotation [x,y,z]").c_str(), (float*) & (m_Transform->Rotation), "%.3f");
 		ImGui::InputFloat3(GetUiText("Scale [x,y,z]").c_str(), (float*) & (m_Transform->Scale), "%.3f");

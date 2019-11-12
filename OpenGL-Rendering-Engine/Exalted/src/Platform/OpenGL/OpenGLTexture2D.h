@@ -24,7 +24,7 @@ namespace Exalted
 	public:
 		OpenGLTexture2D(uint32_t width, uint32_t height);
 		OpenGLTexture2D(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap = TextureWrap::REPEAT, 
-			TextureMagFilter textureMagFilter = TextureMagFilter::LINEAR, TextureMinFilter textureMinFilter = TextureMinFilter::LINEAR, bool isRGB = false, unsigned int mipMapLevel = 0);
+			TextureMagFilter textureMagFilter = TextureMagFilter::LINEAR, TextureMinFilter textureMinFilter = TextureMinFilter::LINEAR, bool isRGB = false, unsigned int mipMapLevel = 0, bool flipTexture = true);
 		virtual ~OpenGLTexture2D();
 		virtual void Bind(uint32_t slot = 0) const override;
 		virtual void Unbind() const override;

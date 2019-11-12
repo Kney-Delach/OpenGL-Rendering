@@ -47,7 +47,7 @@ namespace Exalted
 	public:
 		static Ref<Texture2D> Create(uint32_t width, uint32_t height); //todo: Extend with formatting capabilities
 		static Ref<Texture2D> Create(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap = TextureWrap::REPEAT, 
-			TextureMagFilter textureMagFilter = TextureMagFilter::LINEAR, TextureMinFilter textureMinFilter = TextureMinFilter::LINEAR, bool isRGB = false, unsigned int mipMapLevel = 0);
+			TextureMagFilter textureMagFilter = TextureMagFilter::LINEAR, TextureMinFilter textureMinFilter = TextureMinFilter::LINEAR, bool isRGB = false, unsigned int mipMapLevel = 0, bool flipTexture = true);
 		_NODISCARD virtual TextureFormat GetFormat() const = 0;
 		_NODISCARD virtual uint32_t GetWidth() const = 0;
 		_NODISCARD virtual uint32_t GetHeight() const = 0;

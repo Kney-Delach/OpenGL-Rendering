@@ -62,12 +62,12 @@ namespace Exalted
 	}
 
 	//todo: Implement error handling for failing stb read!
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap, TextureMagFilter textureMagFilter, TextureMinFilter textureMinFilter, bool isRGB, unsigned int mipMapLevel)
+	OpenGLTexture2D::OpenGLTexture2D(const std::string& filepath, TextureFormat textureFormat, TextureWrap textureWrap, TextureMagFilter textureMagFilter, TextureMinFilter textureMinFilter, bool isRGB, unsigned int mipMapLevel, bool flipTexture)
 		: m_RendererID(0), m_FilePath(filepath), m_TextureFormat(textureFormat),  m_TextureWrap(textureWrap), m_TextureMagFilter(textureMagFilter), m_TextureMinFilter(textureMinFilter)
 	{
 		EX_CORE_INFO("Loading texture {0}, format {1}, wrapping {2}, magnification filtering {3}, minification filter {4}, isRGB {5}, mipMapLevel {6}", filepath, textureFormat, textureWrap, textureMagFilter, textureMinFilter, isRGB, mipMapLevel);
 		
-		stbi_set_flip_vertically_on_load(1); //todo: Verify how to set this correctly, as sometime textures need this and some dont....
+		stbi_set_flip_vertically_on_load(flipTexture); //todo: Verify how to set this correctly, as sometime textures need this and some dont....
 		int width, height, channels;
 		m_LocalDataBuffer = stbi_load(filepath.c_str(), &width, &height, &channels, isRGB ? STBI_rgb : STBI_rgb_alpha);
 		m_Transparent = !isRGB; // assign transparency of texture

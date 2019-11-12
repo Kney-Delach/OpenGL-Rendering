@@ -28,6 +28,8 @@ namespace Exalted
 
 	void Scene::BuildObjectLists(GameObject* gameObject)
 	{
+		if (!(gameObject->IsActive()))
+			return;
 		if(m_Frustum.InsideFrustum(*gameObject))
 		{
 			const glm::vec3 direction = gameObject->GetTransform()->Position - m_Camera->GetPosition(); //todo: verify this works correctly

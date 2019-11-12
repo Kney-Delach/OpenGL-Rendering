@@ -54,6 +54,9 @@ namespace Exalted
 		virtual void DrawMeshInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity) = 0;
 		virtual void DrawTrianglesInstanced(const unsigned numberOfVertices, unsigned long long& quantity) = 0;
 
+		// ------------------ Tesselated Rendering ------------------ //
+		virtual void DrawTessellatedMesh(const Ref<Mesh>& mesh) = 0;
+
 	public:
 		static RenderAPICapabilities& GetCapabilities()
 		{

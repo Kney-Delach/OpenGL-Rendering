@@ -42,6 +42,7 @@ namespace Exalted
 		static void SubmitInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity);
 		static void SubmitTrianglesInstanced(const Ref<Mesh>& mesh, const unsigned numberOfVertices, unsigned long long& quantity);
 
+		static void SubmitTessellated(const Ref<Mesh>& mesh);
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	private:
 		struct SceneData

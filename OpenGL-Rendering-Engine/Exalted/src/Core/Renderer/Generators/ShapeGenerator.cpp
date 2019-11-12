@@ -54,6 +54,32 @@ namespace Exalted
 		return va;
 	}
 
+	Ref<VertexArray> ShapeGenerator::GenerateFlatQuad()
+	{
+		Ref<VertexArray> va = VertexArray::Create();
+		float vertices[20] = 
+		{
+			// positions		texture coords
+			-1.0f, 0.0f, -1.0,	0.0f, 0.f,
+			-1.0f, 0.0f,  1.0,	1.0f, 0.0f,
+			 1.0f, 0.0f,  1.0,	1.0f, 1.0f,
+			 1.0f, 0.0f, -1.0,	0.0f, 1.0f 
+		};
+		Ref<VertexBuffer> vb = VertexBuffer::Create(vertices, 20);
+		const BufferLayout layout =
+		{
+			{ShaderDataType::Float3, "a_Position"},
+			{ShaderDataType::Float2, "a_TexCoord"}
+		};
+		vb->SetLayout(layout);
+		va->AddVertexBuffer(vb);
+		uint32_t indices[4] = { 0,1,3,2 };
+		Ref<IndexBuffer> ib;
+		ib = IndexBuffer::Create(indices,4);
+		va->AddIndexBuffer(ib);
+		return va;
+	}
+
 	Ref<VertexArray> ShapeGenerator::GenerateIndexedQuad()
 	{
 		Ref<VertexArray> va = VertexArray::Create();

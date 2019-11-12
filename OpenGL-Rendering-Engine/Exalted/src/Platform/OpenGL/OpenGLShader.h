@@ -29,7 +29,7 @@ namespace Exalted
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(const std::string& vertexFilePath, const std::string& fragmentFilePath, const std::string& geometryFilePath = "");
+		OpenGLShader(const std::string& vertexFilePath, const std::string& fragmentFilePath, const std::string& geometryFilePath = "", const std::string& tessEvalFilePath = "", const std::string& tessControlFilePath = "");
 		_NODISCARD inline uint32_t* GetRendererID() { return &m_RendererID; }
 
 		__forceinline void SetUniformBlockIndex(const char* uniformName, uint32_t blockBindingIndex = 0) const
@@ -114,7 +114,7 @@ namespace Exalted
 		}
 	private:
 		_NODISCARD std::string ParseShader(const std::string& filepath) const;
-		uint32_t CreateShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader);
+		uint32_t CreateShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader, const std::string& tessEvalShader, const std::string& tessControlShader);
 		uint32_t CompileShader(uint32_t shaderType, const std::string& source);
 
 		int GetUniformLocation(const std::string& uniformName);

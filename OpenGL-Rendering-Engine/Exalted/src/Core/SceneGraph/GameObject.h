@@ -109,6 +109,8 @@ namespace Exalted
 		inline Ref<Mesh>& GetMesh() { return m_Mesh; }
 
 		inline bool IsTransparent() const { return m_IsTransparent; }
+		inline bool IsActive() const { return m_Active; }
+		inline void SetActive(bool active) { m_Active = active; }
 
 		void RenderHierarchyGUI();
 		void OnImGuiRender(); //todo: Implement imgui rendering
@@ -143,7 +145,8 @@ namespace Exalted
 		GameObject* m_pParent = nullptr;
 		std::vector<GameComponent*> m_GameComponents;
 		std::vector<GameObject*> m_ChildrenObjectsList;
-		bool m_IsTransparent; 
+		bool m_IsTransparent;
+		bool m_Active = true;
 		std::string m_ObjectName;
 		uint32_t m_Id;
 		float m_BoundingRadius; // to keep things simple in initial implementation, using a bounding sphere for each object, represented by single radius -> todo: implement bounding volume class. 

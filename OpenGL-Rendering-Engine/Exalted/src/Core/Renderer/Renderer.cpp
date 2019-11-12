@@ -98,4 +98,10 @@ namespace Exalted
 		mesh->GetVertexArray()->Bind();
 		RenderCommand::DrawTrianglesInstanced(numberOfVertices, quantity);
 	}
+
+	void Renderer::SubmitTessellated(const Ref<Mesh>& mesh)
+	{
+		mesh->GetVertexArray()->Bind();
+		RenderCommand::DrawTessellatedIndexed(mesh);
+	}
 }

@@ -24,6 +24,7 @@ namespace Exalted
 		static Ref<VertexArray> GenerateSphere();
 		static Ref<VertexArray> GenerateCube();
 		static Ref<VertexArray> GenerateQuad();
+		static Ref<VertexArray> GenerateFlatQuad();
 		static Ref<VertexArray> GenerateIndexedQuad();
 		static Ref<VertexArray> GenerateSkybox();
 	};

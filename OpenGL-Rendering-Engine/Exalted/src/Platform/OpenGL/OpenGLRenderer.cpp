@@ -79,7 +79,10 @@ namespace Exalted
 	{
 		glDrawElements(GL_TRIANGLES, mesh->GetVertexArray()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
-
+	void OpenGLRendererAPI::DrawTessellatedMesh(const Ref<Mesh>& mesh)
+	{
+		glDrawElements(GL_PATCHES, mesh->GetVertexArray()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+	}
 	void OpenGLRendererAPI::DrawMeshInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity)
 	{
 		glDrawElementsInstanced(GL_TRIANGLES, mesh->GetVertexArray()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0, quantity);
