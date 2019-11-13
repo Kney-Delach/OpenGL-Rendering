@@ -34,6 +34,7 @@ out ShaderData
 {
 	vec3 v_FragPosition;
 	vec3 v_Normal;
+	vec2 v_TexCoord;
 } OUT;
 
 uniform mat4 u_Model;
@@ -42,5 +43,6 @@ void main()
 {
 	OUT.v_FragPosition = vec3(RealViewMatrix * u_Model * vec4(a_Position,1)); // view space vertex position
 	OUT.v_Normal = mat3(transpose(inverse(RealViewMatrix * u_Model))) * a_Normal; // generate the normal matrix  (necessary when model is scales / translated)
+	OUT.v_TexCoord = a_TexCoord;
 	gl_Position = ViewProjectionMatrix * u_Model * vec4(a_Position, 1.0);
 }

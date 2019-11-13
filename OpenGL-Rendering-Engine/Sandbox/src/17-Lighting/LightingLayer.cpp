@@ -21,6 +21,10 @@
 #define LIGHT_ORIGIN_FRAGMENT "Resources/Shaders/Lighting/LightOriginFragment.glsl"
 
 #define LIGHT_SOURCE_MESH "Resources/Meshes/cube.obj"
+
+#define TEXTURE_DIFFUSE_CUBE	"Resources/Textures/Lights/CubeDiffuse.png";
+#define TEXTURE_SPECULAR_CUBE	"Resources/Textures/Lights/CubeSpecular.png";
+
 namespace Sandbox
 {
 	LightingLayer::LightingLayer()
@@ -55,6 +59,8 @@ namespace Sandbox
 		// --------------------- Setup Scene objects --------------------- //
 		glm::vec3 color = glm::vec3(1.0f, 0.5f, 0.31f);
 		const float shininess = 32.f;
+		std::string diffusePath = TEXTURE_DIFFUSE_CUBE;
+		std::string specularPath = TEXTURE_SPECULAR_CUBE;
 
 		unsigned row = 0;
 		int column = 0;
@@ -65,8 +71,8 @@ namespace Sandbox
 				column += 2;
 				row = 0;
 			}
-			m_ObjectMaterialS.emplace_back(Exalted::Material::Create(color, color, color, shininess));
-			m_ObjectTransformations.emplace_back(glm::translate(glm::mat4(1.f), glm::vec3(3 * row++, 2* column, 0)));
+			m_ObjectMaterials.emplace_back(Exalted::Material::Create(color, color, color, shininess, diffusePath, specularPath));
+			m_ObjectTransformations.emplace_back(glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(3 * row++, 2* column, 0)), glm::vec3(2.f)));
 		}
 
 		// -------------- Scene manager/root 
@@ -110,6 +116,21 @@ namespace Sandbox
 			float lightZ = 10.f * cos(TIME);
 			m_LightA->Transform->Position = glm::vec3(lightX, lightY, lightZ);
 		}
+		if(m_ChangeLightColor)
+		{
+			glm::vec3 lightColor;
+			lightColor.x = sin(TIME * 2.0f);
+			lightColor.y = sin(TIME * 0.7f);
+			lightColor.z = sin(TIME * 1.3f);
+
+			glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+			glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+			glm::vec3 specularColor = lightColor;
+
+			m_LightA->Ambient = ambientColor;
+			m_LightA->Diffuse = diffuseColor;
+			m_LightA->Specular = specularColor;
+		}
 
 		Exalted::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 		Exalted::RenderCommand::ClearColorDepthBuffers();
@@ -131,7 +152,7 @@ namespace Sandbox
 		// --------------------------- Set Light uniform data ------------------------------- // Iterate over this for each light source 
 		m_LightUniformBuffer->Bind();
 		Exalted::Bytes lightBufferOffset = 0;
-		m_LightA->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer);
+		m_LightA->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer); //todo: Loop over all the lights here
 		m_LightUniformBuffer->Unbind();
 
 		// ----------------------------- Render Scene ----------------------------- //
@@ -140,15 +161,21 @@ namespace Sandbox
 
 		// render objects 
 		m_ObjectShader->Bind();
-		for (int i = 0; i < m_ObjectCount; i++)
+		for (int i = 0; i < m_ObjectCount; i++) //todo: Group by material / shader ID for instancing
 		{
+			m_ObjectMaterials[i]->DiffuseTexture->Bind(0);
+			m_ObjectMaterials[i]->SpecularTexture->Bind(1);
 			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformMatFloat4("u_Model", m_ObjectTransformations[i]);
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Ambient", m_ObjectMaterialS[i]->Ambient);
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Diffuse", m_ObjectMaterialS[i]->Diffuse);
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Specular", m_ObjectMaterialS[i]->Specular);
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat1("u_Material.Shininess", m_ObjectMaterialS[i]->Shininess);
+			//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Ambient", m_ObjectMaterials[i]->Ambient);
+			//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Diffuse", m_ObjectMaterialS[i]->Diffuse);
+			//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Specular", m_ObjectMaterialS[i]->Specular);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat1("u_Material.Shininess", m_ObjectMaterials[i]->Shininess);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureDiffuse", 0);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureSpecular", 1);
+
 			Exalted::Renderer::Submit(m_ObjectMesh);
 		}
+		m_ObjectMaterials[0]->DiffuseTexture->Unbind(); //todo: make unbind a static function?
 		m_ObjectShader->Unbind();
 
 		// render light sources 
@@ -177,9 +204,16 @@ namespace Sandbox
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
 		ImGui::InputFloat3("Light Source Position", glm::value_ptr(m_LightA->Transform->Position));
+		ImGui::InputFloat3("Light Source Ambient", glm::value_ptr(m_LightA->Ambient));
+		ImGui::InputFloat3("Light Source Diffuse", glm::value_ptr(m_LightA->Diffuse));
+		ImGui::InputFloat3("Light Source Specular", glm::value_ptr(m_LightA->Specular));
 		if(ImGui::Button("Toggle Light Rotation"))
 		{
 			m_RotateLight = !m_RotateLight;
+		}
+		if (ImGui::Button("Toggle Light Color"))
+		{
+			m_ChangeLightColor = !m_ChangeLightColor;
 		}
 		ImGui::End();
 	}

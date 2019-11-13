@@ -23,8 +23,8 @@ namespace Exalted
 {
 	struct GameTransform
 	{
+		glm::vec3 Position;
 		glm::mat4 WorldTransform;
-		glm::vec3 Position; 
 		glm::vec3 Scale;
 		glm::vec3 Rotation; 
 

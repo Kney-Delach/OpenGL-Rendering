@@ -41,12 +41,13 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> m_ObjectMesh;
 		Exalted::Ref<Exalted::Mesh> m_LightSourceMesh;
 
-		std::vector<Exalted::Ref<Exalted::Material>> m_ObjectMaterialS;
+		std::vector<Exalted::Ref<Exalted::Material>> m_ObjectMaterials;
 		std::vector<glm::mat4> m_ObjectTransformations;
 
 		Exalted::Ref<Exalted::Light> m_LightA;
 
 		int m_ObjectCount = 25;
 		bool m_RotateLight = false;
+		bool m_ChangeLightColor = false;
 	};
 }
