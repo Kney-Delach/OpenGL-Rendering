@@ -16,9 +16,9 @@
 
 layout(location = 0) out vec4 color;
 
-uniform vec3 u_SourceColor;
+uniform vec3 u_SourceDiffuse;
 
 void main()
 {
-	color = vec4(u_SourceColor,1.0);
+	color = vec4(u_SourceDiffuse,1.0);
 }

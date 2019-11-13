@@ -35,6 +35,10 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
 
+//todo: maybe move these?
+#include "Core/Renderer/Lights/Light.h"
+#include "Core/Renderer/Lights/Material.h"
+
 #include "Core/Renderer/UniformBuffer.h"
 #include "Core/Renderer/FrameBuffer.h"
 #include "Core/Renderer/Buffer.h"

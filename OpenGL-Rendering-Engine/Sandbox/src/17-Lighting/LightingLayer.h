@@ -36,17 +36,15 @@ namespace Sandbox
 		Exalted::Ref<Exalted::UniformBuffer> m_LightUniformBuffer;
 
 		Exalted::Ref<Exalted::Shader> m_ObjectShader;
-		Exalted::Ref<Exalted::Shader> m_LightSourceShaderA;
+		Exalted::Ref<Exalted::Shader> m_LightSourceShader;
 
 		Exalted::Ref<Exalted::Mesh> m_ObjectMesh;
 		Exalted::Ref<Exalted::Mesh> m_LightSourceMesh;
 
-		glm::vec3 m_LightPosition; 
-		glm::mat4 m_LightSourceTransformationA;
-		glm::vec3 m_LightSourceColorA;
-		
-		std::vector<glm::vec3> m_ObjectColors; 
-		std::vector<glm::mat4> m_Transformations;
+		std::vector<Exalted::Ref<Exalted::Material>> m_ObjectMaterialS;
+		std::vector<glm::mat4> m_ObjectTransformations;
+
+		Exalted::Ref<Exalted::Light> m_LightA;
 
 		int m_ObjectCount = 25;
 		bool m_RotateLight = false;

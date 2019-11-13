@@ -12,6 +12,10 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
+
+//todo: An optimization would be to calculate this value on the cpu and then pass that through to the gpu, as it is a costly operation.
+//todo: Calculate this on the cpu: mat3(transpose(inverse(u_Model))) -> Normal Matrix
+
 #version 330
 
 layout(location = 0) in vec3 a_Position;
@@ -36,11 +40,7 @@ uniform mat4 u_Model;
 
 void main()
 {
-	OUT.v_FragPosition = vec3(RealViewMatrix * u_Model * vec4(a_Position,1)); // view space position
-
-	//todo: An optimization would be to calculate this value on the cpu and then pass that through to the gpu, as it is a costly operation.
-	//todo: Calculate this on the cpu: mat3(transpose(inverse(u_Model))) -> Normal Matrix
+	OUT.v_FragPosition = vec3(RealViewMatrix * u_Model * vec4(a_Position,1)); // view space vertex position
 	OUT.v_Normal = mat3(transpose(inverse(RealViewMatrix * u_Model))) * a_Normal; // generate the normal matrix  (necessary when model is scales / translated)
-	
-	gl_Position = ViewProjectionMatrix * u_Model * vec4(a_Position,1.0);
+	gl_Position = ViewProjectionMatrix * u_Model * vec4(a_Position, 1.0);
 }

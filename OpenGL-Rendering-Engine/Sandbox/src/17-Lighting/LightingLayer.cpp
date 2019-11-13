@@ -38,19 +38,24 @@ namespace Sandbox
 		EX_INFO("Lighting layer attached successfully. {0}", TIME);
 
 		// ---------------- Setup Light A Data ------------------- //
-		m_LightSourceShaderA = Exalted::Shader::Create(LIGHT_ORIGIN_VERTEX, LIGHT_ORIGIN_FRAGMENT);
+		m_LightSourceShader = Exalted::Shader::Create(LIGHT_ORIGIN_VERTEX, LIGHT_ORIGIN_FRAGMENT);
 		m_LightSourceMesh = Exalted::Mesh::Create();
 		m_LightSourceMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateCubeIT(1.f));
-		m_LightPosition = glm::vec3(3.f, 3.f, 3.f);
-		m_LightSourceTransformationA = glm::translate(glm::mat4(1.f), m_LightPosition);
-		m_LightSourceColorA = glm::vec3(1.0,1.0,1.0);
+		m_LightA = Exalted::Light::Create(); 
+		m_LightA->Transform->Position = glm::vec3(2.5f, 12.5f, 7.f);
+		m_LightA->Ambient = glm::vec3(0.2); 
+		m_LightA->Diffuse = glm::vec3(0.5);
+		m_LightA->Specular = glm::vec3(1.0);
 
 		// ---------------- Setup Object A (effected by light) ------------------- //
 		m_ObjectShader = Exalted::Shader::Create(LIGHTING_SHADER_VERTEX, LIGHTING_SHADER_FRAGMENT);
 		m_ObjectMesh = Exalted::Mesh::Create();
 		m_ObjectMesh->SetVertexArray(Exalted::ObjLoader::Load(LIGHT_SOURCE_MESH));
 
-		// --------------------- Setup object transformations 
+		// --------------------- Setup Scene objects --------------------- //
+		glm::vec3 color = glm::vec3(1.0f, 0.5f, 0.31f);
+		const float shininess = 32.f;
+
 		unsigned row = 0;
 		int column = 0;
 		for (int i = 0; i < m_ObjectCount; ++i)
@@ -60,17 +65,16 @@ namespace Sandbox
 				column += 2;
 				row = 0;
 			}
-			float val = (float)i / (float)m_ObjectCount;
-			m_ObjectColors.emplace_back(glm::vec3(val, 0,0));
-			m_Transformations.emplace_back(glm::translate(glm::mat4(1.f), glm::vec3(3 * row++, 2* column, 0)));
+			m_ObjectMaterialS.emplace_back(Exalted::Material::Create(color, color, color, shininess));
+			m_ObjectTransformations.emplace_back(glm::translate(glm::mat4(1.f), glm::vec3(3 * row++, 2* column, 0)));
 		}
 
 		// -------------- Scene manager/root 
 		m_SceneManager = Exalted::CreateRef<Exalted::Scene>(m_EditorCamera, true);
 
 		// ----------------------------- Configure Uniform Buffer Objects ----------------------------- //
-		// camera data
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShaderA)->SetUniformBlockIndex("Camera_Matrices", 2);
+		// camera UBO data
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformBlockIndex("Camera_Matrices", 2);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformBlockIndex("Camera_Matrices", 2);
 		Exalted::Bytes bufferSize = 4 * sizeof(glm::mat4);
 		m_MatUniformBuffer = Exalted::UniformBuffer::Create(bufferSize);
@@ -78,16 +82,14 @@ namespace Sandbox
 		const Exalted::Bytes offset = 0;
 		m_MatUniformBuffer->BindBufferRange(bbi, offset, bufferSize);
 
-		// light data 
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformBlockIndex("Light_Uniforms", 1);
-		Exalted::Bytes bufferSize2 = sizeof(glm::vec4);
-		m_LightUniformBuffer = Exalted::UniformBuffer::Create(bufferSize2);
-		const Exalted::Bytes bbi2 = 1;
-		const Exalted::Bytes offset2 = 0;
-		m_LightUniformBuffer->BindBufferRange(bbi2, offset2, bufferSize2);
-
-		//todo: uncomment this if using terrain
-		//Exalted::OpenGLConfigurations::SetPatchVerticeCount(4);
+		// lighting UBO setup 
+		const Exalted::Bytes numberOfLights = 1;
+		const Exalted::Bytes lightsBBI = 1;
+		const Exalted::Bytes lightsOffset = 0;
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformBlockIndex("Light_Uniforms", lightsBBI);
+		Exalted::Bytes lightsBufferSize = numberOfLights * Exalted::Light::UBSize();
+		m_LightUniformBuffer = Exalted::UniformBuffer::Create(lightsBufferSize);
+		m_LightUniformBuffer->BindBufferRange(lightsBBI, lightsOffset, lightsBufferSize);
 	}
 
 	void LightingLayer::OnDetach()
@@ -100,11 +102,20 @@ namespace Sandbox
 		m_EditorCamera->UpdateCamera(deltaTime);
 		m_SceneManager->UpdateScene(deltaTime);
 
+		// ---------------------------- Update Light Positions ---------------------------- //
+		if (m_RotateLight)
+		{
+			float lightX = 5.f + 10.f * sin(TIME);
+			float lightY = m_LightA->Transform->Position.y;
+			float lightZ = 10.f * cos(TIME);
+			m_LightA->Transform->Position = glm::vec3(lightX, lightY, lightZ);
+		}
+
 		Exalted::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 		Exalted::RenderCommand::ClearColorDepthBuffers();
 		Exalted::Renderer::BeginScene(*m_EditorCamera);
 
-		// ----------------------------- Set camera matrices data ----------------------------- //
+		// ----------------------------- Set camera matrices data ----------------------------- // todo: Abstract this into the camera object (Camera->UpdateUniformBuffer)
 		m_MatUniformBuffer->Bind();
 		Exalted::Bytes offset = 0;
 		Exalted::Bytes size = sizeof(glm::mat4);
@@ -117,50 +128,38 @@ namespace Sandbox
 		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(m_EditorCamera->GetViewProjectionMatrix()));
 		m_MatUniformBuffer->Unbind();
 
-		// --------------------------- Set Light uniform data ------------------------------- //
+		// --------------------------- Set Light uniform data ------------------------------- // Iterate over this for each light source 
 		m_LightUniformBuffer->Bind();
-		Exalted::Bytes offset2 = 0;
-		Exalted::Bytes size2 = sizeof(glm::vec4);
-		m_LightUniformBuffer->SetBufferSubData(offset2, size2, glm::value_ptr(m_EditorCamera->GetPosition())); // actually a vec3
-		//offset2 += sizeof(glm::vec4);
-		//m_LightUniformBuffer->SetBufferSubData(offset2, size2, glm::value_ptr(m_EditorCamera->GetPosition())); // actually a vec3
+		Exalted::Bytes lightBufferOffset = 0;
+		m_LightA->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer);
 		m_LightUniformBuffer->Unbind();
 
 		// ----------------------------- Render Scene ----------------------------- //
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
 		//m_SceneManager->RenderScene();
-		if(m_RotateLight)
-		{
-			float lightX = 5.f + 10.f * sin(TIME);
-			float lightY = m_LightPosition.y;
-			float lightZ = 10.f * cos(TIME);
-			m_LightPosition= glm::vec3(lightX, lightY, lightZ);
-		}
-		m_LightSourceTransformationA = glm::translate(glm::mat4(1.f), m_LightPosition); // update light source position
-
 
 		// render objects 
 		m_ObjectShader->Bind();
 		for (int i = 0; i < m_ObjectCount; i++)
 		{
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformMatFloat4("u_Model", m_Transformations[i]);
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_ObjectColor", m_ObjectColors[i]);
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_LightSourceColor", m_LightSourceColorA);
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_LightSourcePosition", m_LightPosition);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformMatFloat4("u_Model", m_ObjectTransformations[i]);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Ambient", m_ObjectMaterialS[i]->Ambient);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Diffuse", m_ObjectMaterialS[i]->Diffuse);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Specular", m_ObjectMaterialS[i]->Specular);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat1("u_Material.Shininess", m_ObjectMaterialS[i]->Shininess);
 			Exalted::Renderer::Submit(m_ObjectMesh);
 		}
 		m_ObjectShader->Unbind();
 
-
 		// render light sources 
-		m_LightSourceShaderA->Bind();
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShaderA)->SetUniformMatFloat4("u_Model", m_LightSourceTransformationA);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShaderA)->SetUniformFloat3("u_SourceColor", m_LightSourceColorA);
+		m_LightSourceShader->Bind();
+		//todo: verify this works correctly
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_LightA->Transform->SetAndGetWorldTransform());
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_LightA->Diffuse);
 		Exalted::Renderer::Submit(m_LightSourceMesh);
-		m_LightSourceShaderA->Unbind();
+		m_LightSourceShader->Unbind();
 
 		// --------------------------- Render Skybox --------------------------- //
-
 		m_SceneManager->RenderSkybox();
 
 		Exalted::Renderer::EndScene();
@@ -177,7 +176,7 @@ namespace Sandbox
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
-		ImGui::InputFloat3("Light Source Position", glm::value_ptr(m_LightPosition));
+		ImGui::InputFloat3("Light Source Position", glm::value_ptr(m_LightA->Transform->Position));
 		if(ImGui::Button("Toggle Light Rotation"))
 		{
 			m_RotateLight = !m_RotateLight;

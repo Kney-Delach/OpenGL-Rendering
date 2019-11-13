@@ -1314,6 +1314,8 @@
     <ClInclude Include="src\Core\Renderer\UniformBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
     <ClInclude Include="src\Core\Renderer\Skybox\Skybox.h" />
+    <ClInclude Include="src\Core\Renderer\Lights\Material.h" />
+    <ClInclude Include="src\Core\Renderer\Lights\Light.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
