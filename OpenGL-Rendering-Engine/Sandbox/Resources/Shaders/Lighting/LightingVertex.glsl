@@ -18,7 +18,7 @@ layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec3 a_Normal;
 layout(location = 2) in vec2 a_TexCoord;
 
-layout (std140) uniform Camera_Matrices
+layout (std140) uniform Camera_Matrices 
 {
 	mat4 RealViewMatrix;
 	mat4 SkyboxViewMatrix;
@@ -28,16 +28,19 @@ layout (std140) uniform Camera_Matrices
 
 out ShaderData 
 {
-	vec3 v_Position;
+	vec3 v_FragPosition;
 	vec3 v_Normal;
 } OUT;
 
 uniform mat4 u_Model;
-uniform mat4 u_ViewProjection; 
 
 void main()
 {
-	OUT.v_Position = vec3(u_Model * vec4(a_Position,1));
-	OUT.v_Normal = a_Normal;
+	OUT.v_FragPosition = vec3(RealViewMatrix * u_Model * vec4(a_Position,1)); // view space position
+
+	//todo: An optimization would be to calculate this value on the cpu and then pass that through to the gpu, as it is a costly operation.
+	//todo: Calculate this on the cpu: mat3(transpose(inverse(u_Model))) -> Normal Matrix
+	OUT.v_Normal = mat3(transpose(inverse(RealViewMatrix * u_Model))) * a_Normal; // generate the normal matrix  (necessary when model is scales / translated)
+	
 	gl_Position = ViewProjectionMatrix * u_Model * vec4(a_Position,1.0);
 }

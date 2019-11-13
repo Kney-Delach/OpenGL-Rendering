@@ -16,12 +16,9 @@
 
 layout(location = 0) out vec4 color;
 
-in ShaderData 
-{
-	vec3 v_Color;
-} IN;
+uniform vec3 u_SourceColor;
 
 void main()
 {
-	color = vec4(IN.v_Color,1.0);
+	color = vec4(u_SourceColor,1.0);
 }

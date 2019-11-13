@@ -15,10 +15,9 @@
 #version 330
 
 layout(location = 0) in vec3 a_Position;
-layout(location = 1) in vec3 a_Normal;
-layout(location = 2) in vec2 a_TexCoord;
+layout(location = 1) in vec2 a_TexCoord;
 
-layout (std140) uniform Camera_Matrices
+layout (std140) uniform Camera_Matrices 
 {
 	mat4 RealViewMatrix;
 	mat4 SkyboxViewMatrix;
@@ -26,17 +25,9 @@ layout (std140) uniform Camera_Matrices
 	mat4 ViewProjectionMatrix;
 };
 
-out ShaderData 
-{
-	vec3 v_Color;
-} OUT;
-
-uniform vec3 u_Color;
 uniform mat4 u_Model;
-uniform mat4 u_ViewProjection; 
 
 void main()
 {
-	OUT.v_Color = u_Color;	
 	gl_Position = ViewProjectionMatrix * u_Model * vec4(a_Position,1.0);
 }

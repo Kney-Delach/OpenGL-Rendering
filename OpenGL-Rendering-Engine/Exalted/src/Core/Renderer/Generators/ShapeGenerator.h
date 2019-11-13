@@ -23,6 +23,7 @@ namespace Exalted
 	public:
 		static Ref<VertexArray> GenerateSphere();
 		static Ref<VertexArray> GenerateCube();
+		static Ref<VertexArray> GenerateCubeIT(float texturedScale);
 		static Ref<VertexArray> GenerateQuad();
 		static Ref<VertexArray> GenerateFlatQuad(float widthScale, float lengthScale);
 		static Ref<VertexArray> GenerateIndexedQuad();
