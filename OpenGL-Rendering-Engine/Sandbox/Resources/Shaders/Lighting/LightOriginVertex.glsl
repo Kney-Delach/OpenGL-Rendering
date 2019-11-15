@@ -23,6 +23,8 @@ layout (std140) uniform Camera_Matrices
 	mat4 SkyboxViewMatrix;
 	mat4 ProjectionMatrix;
 	mat4 ViewProjectionMatrix;
+	vec3 CameraPosition;
+	float _BoundaryPadding;
 };
 
 uniform mat4 u_Model;

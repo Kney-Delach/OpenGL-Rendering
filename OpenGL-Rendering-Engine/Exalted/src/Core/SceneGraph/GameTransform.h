@@ -67,6 +67,5 @@ namespace Exalted
 			EX_CORE_CRITICAL("GameTransform UBSize attempting to use unimplemented function!");
 			return 0;
 		}
-
 	};
 }

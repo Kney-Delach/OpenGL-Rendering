@@ -24,6 +24,11 @@
 
 #define TEXTURE_DIFFUSE_CUBE	"Resources/Textures/Lights/CubeDiffuse.png";
 #define TEXTURE_SPECULAR_CUBE	"Resources/Textures/Lights/CubeSpecular.png";
+#define TEXTURE_EMISSION_CUBE	"Resources/Textures/Lights/CubeEmission.png";
+
+#define TEXTURE_DIFFUSE_OTHER	"Resources/Textures/wood.png";
+#define TEXTURE_SPECULAR_OTHER	"Resources/Textures/wood.png";
+#define TEXTURE_EMISSION_OTHER	"Resources/Textures/CubeEmission.png";
 
 namespace Sandbox
 {
@@ -33,7 +38,7 @@ namespace Sandbox
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f,
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
 			0.1f,
-			1000.f);
+			10000.f);
 		m_EditorCamera->SetMouseSpeed(10.f);
 	}
 
@@ -45,55 +50,92 @@ namespace Sandbox
 		m_LightSourceShader = Exalted::Shader::Create(LIGHT_ORIGIN_VERTEX, LIGHT_ORIGIN_FRAGMENT);
 		m_LightSourceMesh = Exalted::Mesh::Create();
 		m_LightSourceMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateCubeIT(1.f));
-		m_LightA = Exalted::Light::Create(); 
-		m_LightA->Transform->Position = glm::vec3(2.5f, 12.5f, 7.f);
-		m_LightA->Ambient = glm::vec3(0.2); 
-		m_LightA->Diffuse = glm::vec3(0.5);
-		m_LightA->Specular = glm::vec3(1.0);
+		
+		// --------- Point Light ------------ //
+		m_PointLightA = Exalted::PointLight::Create(); //todo: change to a spot light
+		m_PointLightA->Ambient = glm::vec3(0.2); 
+		m_PointLightA->Diffuse = glm::vec3(0.5);
+		m_PointLightA->Specular = glm::vec3(1.0);
+		m_PointLightA->SetAttenuationDistance(200);
+		m_PointLightTransform = Exalted::GameTransform::Create();
+		m_PointLightTransform->Position = glm::vec3(2.5f, 12.5f, 7.f);
 
+		// --------- Directional Light ------------ //
+		m_DirectionalLightA= Exalted::DirectionalLight::Create(); //todo: change to a spot light
+		m_DirectionalLightA->Ambient = glm::vec3(0.2);
+		m_DirectionalLightA->Diffuse = glm::vec3(0.5);
+		m_DirectionalLightA->Specular = glm::vec3(1.0);
+		m_DirectionalLightA->Direction = glm::vec3(-0.2f, -1.0f, -0.3f);
+
+		// --------- Spot Light ------------ //
+		m_SpotLightA = Exalted::SpotLight::Create();
+		m_SpotLightA->Ambient = glm::vec3(0);
+		m_SpotLightA->Diffuse = glm::vec3(1.0);
+		m_SpotLightA->Specular = glm::vec3(1.0);
+		m_SpotLightA->CutoffInner = glm::cos(glm::radians(12.5f));
+		m_SpotLightA->CutoffOuter = glm::cos(glm::radians(15.f));
+		m_SpotLightA->SetAttenuationDistance(200);
+		m_SpotLightA->Position = m_EditorCamera->GetPosition();
+		m_SpotLightA->Direction = m_EditorCamera->GetFront();
+		m_SpotLightTransform = Exalted::GameTransform::Create();
+		m_SpotLightTransform->Position = m_EditorCamera->GetPosition();
+		
 		// ---------------- Setup Object A (effected by light) ------------------- //
 		m_ObjectShader = Exalted::Shader::Create(LIGHTING_SHADER_VERTEX, LIGHTING_SHADER_FRAGMENT);
 		m_ObjectMesh = Exalted::Mesh::Create();
-		m_ObjectMesh->SetVertexArray(Exalted::ObjLoader::Load(LIGHT_SOURCE_MESH));
+		m_ObjectMesh->SetVertexArray(Exalted::ObjLoader::Load(LIGHT_SOURCE_MESH)); 
 
 		// --------------------- Setup Scene objects --------------------- //
 		glm::vec3 color = glm::vec3(1.0f, 0.5f, 0.31f);
 		const float shininess = 32.f;
 		std::string diffusePath = TEXTURE_DIFFUSE_CUBE;
 		std::string specularPath = TEXTURE_SPECULAR_CUBE;
+		std::string emissionPath = TEXTURE_EMISSION_CUBE;
 
 		unsigned row = 0;
 		int column = 0;
 		for (int i = 0; i < m_ObjectCount; ++i)
 		{
-			if (i % (m_ObjectCount / 5) == 0)
+			if (i % 5 == 0)
 			{
 				column += 2;
 				row = 0;
 			}
-			m_ObjectMaterials.emplace_back(Exalted::Material::Create(color, color, color, shininess, diffusePath, specularPath));
+			m_ObjectMaterials.emplace_back(Exalted::Material::Create(color, color, color, shininess, diffusePath, specularPath, emissionPath));
 			m_ObjectTransformations.emplace_back(glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(3 * row++, 2* column, 0)), glm::vec3(2.f)));
 		}
 
-		// -------------- Scene manager/root 
+		// ---------------- Floor Setup ----------------
+		std::string floorDiffusePath = TEXTURE_DIFFUSE_OTHER;
+		std::string floorSpecularPath = TEXTURE_SPECULAR_OTHER;
+		std::string floorEmissionPath = TEXTURE_EMISSION_OTHER;
+		m_FloorMesh = Exalted::Mesh::Create();
+		m_FloorMesh->SetVertexArray(Exalted::ObjLoader::Load(CRYTEK_SPONZA));
+		m_FloorMaterial = Exalted::Material::Create(color, color, color, shininess, floorDiffusePath, floorSpecularPath, floorEmissionPath);
+		m_FloorTransformation = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(0, 0, 0)), glm::vec3(1.f));
+		
+		// -------------- Scene manager/root ------------------ //
 		m_SceneManager = Exalted::CreateRef<Exalted::Scene>(m_EditorCamera, true);
 
 		// ----------------------------- Configure Uniform Buffer Objects ----------------------------- //
 		// camera UBO data
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformBlockIndex("Camera_Matrices", 2);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformBlockIndex("Camera_Matrices", 2);
-		Exalted::Bytes bufferSize = 4 * sizeof(glm::mat4);
+		Exalted::Bytes bufferSize = 4 * sizeof(glm::mat4) + sizeof(glm::vec4);;
 		m_MatUniformBuffer = Exalted::UniformBuffer::Create(bufferSize);
 		const Exalted::Bytes bbi = 2;
 		const Exalted::Bytes offset = 0;
 		m_MatUniformBuffer->BindBufferRange(bbi, offset, bufferSize);
 
 		// lighting UBO setup 
-		const Exalted::Bytes numberOfLights = 1;
+		const Exalted::Bytes noPointLights = 1;
+		const Exalted::Bytes noDirectionalLights = 1;
+		const Exalted::Bytes noSpotLights = 1;
+
 		const Exalted::Bytes lightsBBI = 1;
 		const Exalted::Bytes lightsOffset = 0;
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformBlockIndex("Light_Uniforms", lightsBBI);
-		Exalted::Bytes lightsBufferSize = numberOfLights * Exalted::Light::UBSize();
+		Exalted::Bytes lightsBufferSize = noPointLights * Exalted::PointLight::UBSize() + noDirectionalLights * Exalted::DirectionalLight::UBSize() + noSpotLights * Exalted::SpotLight::UBSize();
 		m_LightUniformBuffer = Exalted::UniformBuffer::Create(lightsBufferSize);
 		m_LightUniformBuffer->BindBufferRange(lightsBBI, lightsOffset, lightsBufferSize);
 	}
@@ -108,14 +150,15 @@ namespace Sandbox
 		m_EditorCamera->UpdateCamera(deltaTime);
 		m_SceneManager->UpdateScene(deltaTime);
 
-		// ---------------------------- Update Light Positions ---------------------------- //
+		// ---------------------------- Point Light Data Update ---------------------------- //
 		if (m_RotateLight)
 		{
 			float lightX = 5.f + 10.f * sin(TIME);
-			float lightY = m_LightA->Transform->Position.y;
+			float lightY = m_PointLightA->Position.y;
 			float lightZ = 10.f * cos(TIME);
-			m_LightA->Transform->Position = glm::vec3(lightX, lightY, lightZ);
+			 m_PointLightA->Position = glm::vec3(lightX, lightY, lightZ);
 		}
+		m_PointLightTransform->Position = m_PointLightA->Position;
 		if(m_ChangeLightColor)
 		{
 			glm::vec3 lightColor;
@@ -127,11 +170,20 @@ namespace Sandbox
 			glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
 			glm::vec3 specularColor = lightColor;
 
-			m_LightA->Ambient = ambientColor;
-			m_LightA->Diffuse = diffuseColor;
-			m_LightA->Specular = specularColor;
+			m_PointLightA->Ambient = ambientColor;
+			m_PointLightA->Diffuse = diffuseColor;
+			m_PointLightA->Specular = specularColor;
+		}		
+		// ---------------------- Spot Light Data Update ------------------------- //
+		if(m_FlashlightMode)
+		{
+			m_SpotLightA->Position = m_EditorCamera->GetPosition();
+			m_SpotLightA->Direction = m_EditorCamera->GetFront();
+			m_SpotLightTransform->Position = m_SpotLightA->Position;
 		}
-
+		
+		// ------------------------------------------------------------------------------- //
+		
 		Exalted::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
 		Exalted::RenderCommand::ClearColorDepthBuffers();
 		Exalted::Renderer::BeginScene(*m_EditorCamera);
@@ -140,6 +192,7 @@ namespace Sandbox
 		m_MatUniformBuffer->Bind();
 		Exalted::Bytes offset = 0;
 		Exalted::Bytes size = sizeof(glm::mat4);
+		Exalted::Bytes sizeofVec4 = sizeof(glm::vec4);
 		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(m_EditorCamera->GetViewMatrix()));
 		offset += sizeof(glm::mat4);
 		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(glm::mat4(glm::mat3(m_EditorCamera->GetViewMatrix()))));
@@ -147,12 +200,17 @@ namespace Sandbox
 		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(m_EditorCamera->GetProjectionMatrix()));
 		offset += sizeof(glm::mat4);
 		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(m_EditorCamera->GetViewProjectionMatrix()));
+		offset += sizeof(glm::mat4);
+		m_MatUniformBuffer->SetBufferSubData(offset, sizeofVec4, glm::value_ptr(m_EditorCamera->GetPosition()));
+		offset += sizeof(glm::vec4);
 		m_MatUniformBuffer->Unbind();
 
-		// --------------------------- Set Light uniform data ------------------------------- // Iterate over this for each light source 
+		// --------------------------- Set Light uniform data ------------------------------- // Iterate over this for each light source THAT CAN CHANGE during runtime
 		m_LightUniformBuffer->Bind();
 		Exalted::Bytes lightBufferOffset = 0;
-		m_LightA->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer); //todo: Loop over all the lights here
+		m_PointLightA->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer);
+		m_DirectionalLightA->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer);
+		m_SpotLightA->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer);
 		m_LightUniformBuffer->Unbind();
 
 		// ----------------------------- Render Scene ----------------------------- //
@@ -161,33 +219,59 @@ namespace Sandbox
 
 		// render objects 
 		m_ObjectShader->Bind();
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformBool1("u_ActivateEmission", m_ActivateEmission);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformBool1("u_EmissionTransform", m_EmissionTransform);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformBool1("u_BlinnPhong", m_BlinnPhong);
+		if(m_EmissionTransform)
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat1("u_Time", TIME);
+		
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureDiffuse", 0);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureSpecular", 1);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureEmission", 2);
 		for (int i = 0; i < m_ObjectCount; i++) //todo: Group by material / shader ID for instancing
 		{
 			m_ObjectMaterials[i]->DiffuseTexture->Bind(0);
 			m_ObjectMaterials[i]->SpecularTexture->Bind(1);
+			m_ObjectMaterials[i]->EmissionTexture->Bind(2);
 			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformMatFloat4("u_Model", m_ObjectTransformations[i]);
-			//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Ambient", m_ObjectMaterials[i]->Ambient);
-			//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Diffuse", m_ObjectMaterialS[i]->Diffuse);
-			//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat3("u_Material.Specular", m_ObjectMaterialS[i]->Specular);
 			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat1("u_Material.Shininess", m_ObjectMaterials[i]->Shininess);
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureDiffuse", 0);
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureSpecular", 1);
-
 			Exalted::Renderer::Submit(m_ObjectMesh);
 		}
-		m_ObjectMaterials[0]->DiffuseTexture->Unbind(); //todo: make unbind a static function?
+		// draw floor
+		m_FloorMaterial->DiffuseTexture->Bind(0);
+		m_FloorMaterial->SpecularTexture->Bind(1);
+		m_FloorMaterial->EmissionTexture->Bind(2);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformMatFloat4("u_Model", m_FloorTransformation);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat1("u_Material.Shininess", m_FloorMaterial->Shininess);
+		Exalted::Renderer::Submit(m_FloorMesh);
+		m_FloorMaterial->DiffuseTexture->Unbind(); //todo: make unbind a static function?
 		m_ObjectShader->Unbind();
 
-		// render light sources 
+		// ---------------------------------- render light sources --------------------------------- //
 		m_LightSourceShader->Bind();
-		//todo: verify this works correctly
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_LightA->Transform->SetAndGetWorldTransform());
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_LightA->Diffuse);
+
+		// ---------------- Render Point Light ----------------------- //
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_PointLightTransform->SetAndGetWorldTransform());
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_PointLightA->Diffuse);
 		Exalted::Renderer::Submit(m_LightSourceMesh);
+		
+		// ---------------- Render Directional Light ----------------------- //
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", glm::mat4(1.0f)); // draw it at the origin
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_DirectionalLightA->Diffuse);
+		Exalted::Renderer::Submit(m_LightSourceMesh);
+		
+		// ---------------- Render Spot Light ----------------------- //
+		if(!m_FlashlightMode)
+		{
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_SpotLightTransform->SetAndGetWorldTransform()); // draw it at the origin
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_SpotLightA->Diffuse);
+			Exalted::Renderer::Submit(m_LightSourceMesh);
+		}
+		
 		m_LightSourceShader->Unbind();
 
 		// --------------------------- Render Skybox --------------------------- //
-		m_SceneManager->RenderSkybox();
+		//m_SceneManager->RenderSkybox();
 
 		Exalted::Renderer::EndScene();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
@@ -203,10 +287,12 @@ namespace Sandbox
 			m_IsActive = false;
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
-		ImGui::InputFloat3("Light Source Position", glm::value_ptr(m_LightA->Transform->Position));
-		ImGui::InputFloat3("Light Source Ambient", glm::value_ptr(m_LightA->Ambient));
-		ImGui::InputFloat3("Light Source Diffuse", glm::value_ptr(m_LightA->Diffuse));
-		ImGui::InputFloat3("Light Source Specular", glm::value_ptr(m_LightA->Specular));
+		ImGui::Text("Directional Light Settings");
+		ImGui::Text("----------------------------");
+		ImGui::InputFloat3("Direction", glm::value_ptr(m_DirectionalLightA->Direction));
+		ImGui::Text("----------------------------");
+		ImGui::Text("Point Light Settings");
+		ImGui::Text("----------------------------");
 		if(ImGui::Button("Toggle Light Rotation"))
 		{
 			m_RotateLight = !m_RotateLight;
@@ -214,6 +300,36 @@ namespace Sandbox
 		if (ImGui::Button("Toggle Light Color"))
 		{
 			m_ChangeLightColor = !m_ChangeLightColor;
+		}
+		ImGui::InputFloat3("Position", glm::value_ptr(m_PointLightA->Position));
+		ImGui::InputFloat3("Ambient", glm::value_ptr(m_PointLightA->Ambient));
+		ImGui::InputFloat3("Diffuse", glm::value_ptr(m_PointLightA->Diffuse));
+		ImGui::InputFloat3("Specular", glm::value_ptr(m_PointLightA->Specular));
+		ImGui::Text("----------------------------");
+		ImGui::Text("Spot Light Settings");
+		ImGui::Text("----------------------------");
+		if (ImGui::Button("Toggle Emission Display"))
+		{
+			m_ActivateEmission = !m_ActivateEmission;
+		}
+		if (ImGui::Button("Toggle Emission Translation"))
+		{
+			m_EmissionTransform = !m_EmissionTransform;
+		}
+		if (ImGui::Button("Toggle Flashlight Mode"))
+		{
+			m_FlashlightMode = !m_FlashlightMode;
+		}
+		ImGui::Text("----------------------------");
+		ImGui::Text("Blinn-Phong Settings");
+		ImGui::Text("----------------------------");
+		if (ImGui::Button("Blinn-Phong Specular ON"))
+		{
+			m_BlinnPhong = true;
+		}
+		if (ImGui::Button("Blinn-Phong Specular OFF"))
+		{
+			m_BlinnPhong = false;
 		}
 		ImGui::End();
 	}

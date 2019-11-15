@@ -15,7 +15,6 @@
 #pragma once
 #include "Exalted.h"
 
-
 namespace Sandbox
 {
 	class LightingLayer : public Exalted::Layer
@@ -41,13 +40,32 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> m_ObjectMesh;
 		Exalted::Ref<Exalted::Mesh> m_LightSourceMesh;
 
+		// floor
+		Exalted::Ref<Exalted::Material> m_FloorMaterial;
+		glm::mat4 m_FloorTransformation;
+		Exalted::Ref<Exalted::Mesh> m_FloorMesh;
+
+		// cubes
 		std::vector<Exalted::Ref<Exalted::Material>> m_ObjectMaterials;
 		std::vector<glm::mat4> m_ObjectTransformations;
 
-		Exalted::Ref<Exalted::Light> m_LightA;
+		// point light
+		Exalted::Ref<Exalted::PointLight> m_PointLightA;
+		Exalted::Ref<Exalted::GameTransform> m_PointLightTransform;
 
+		// directional light
+		Exalted::Ref<Exalted::DirectionalLight> m_DirectionalLightA;
+
+		// spot light
+		Exalted::Ref<Exalted::SpotLight> m_SpotLightA;
+		Exalted::Ref<Exalted::GameTransform> m_SpotLightTransform;
+		
 		int m_ObjectCount = 25;
 		bool m_RotateLight = false;
 		bool m_ChangeLightColor = false;
+		bool m_ActivateEmission = false;
+		bool m_EmissionTransform = false;
+		bool m_FlashlightMode = true;
+		bool m_BlinnPhong = false;
 	};
 }

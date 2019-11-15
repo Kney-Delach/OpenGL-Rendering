@@ -23,7 +23,7 @@ namespace Exalted
 		OpenGLUniformBuffer(Bytes& bufferSize);
 		virtual ~OpenGLUniformBuffer();
 		uint32_t GetRendererID() const override { return m_RendererID; }
-		void Bind() const override; //todo: Possible bug? Intellisense states not being declared. 
+		void Bind() const override;
 		void Unbind() const override;
 		void SetBufferSubData(Bytes& offset, Bytes& size, const void* data) const override;
 		void BindBufferRange(const uint32_t blockBindingIndex, const Bytes& offset, const Bytes& size) const override;

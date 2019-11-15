@@ -39,6 +39,7 @@ namespace Exalted
 		void OnEvent(Exalted::Event& event);
 		void SetMouseSensitivity(const float sensitivity) { m_MouseSensitivity = sensitivity; }
 		void SetMouseSpeed(const float speed) { m_MovementSpeed = speed; }
+		inline glm::vec3& GetFront() { return m_Front; }
 	private:
 		inline void RecalculateViewProjectionMatrix() override { m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix; }
 		void UpdateCameraVectors();
