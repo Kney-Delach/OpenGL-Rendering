@@ -75,6 +75,7 @@
     <ClInclude Include="src\15-Instancing\InstancingLayer.h" />
     <ClInclude Include="src\16-Tesselation\TessellationLayer.h" />
     <ClInclude Include="src\17-Lighting\LightingLayer.h" />
+    <ClInclude Include="src\18-Shadows\ShadowLayer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -117,6 +118,7 @@
     <ClCompile Include="src\15-Instancing\InstancingLayer.cpp" />
     <ClCompile Include="src\16-Tesselation\TessellationLayer.cpp" />
     <ClCompile Include="src\17-Lighting\LightingLayer.cpp" />
+    <ClCompile Include="src\18-Shadows\ShadowLayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />
@@ -131,5 +133,7 @@
     <None Include="Resources\Shaders\GLSL-Exploration\NormalsGeometry.glsl" />
     <None Include="Resources\Shaders\GLSL-Exploration\NormalsFragment.glsl" />
     <None Include="Resources\Shaders\GLSL-Exploration\NormalsVertex.glsl" />
+    <None Include="Resources\Shaders\Shadows\ShadowDepthVertex.glsl" />
+    <None Include="Resources\Shaders\Shadows\ShadowDepthFragment.glsl" />
   </ItemGroup>
 </Project>

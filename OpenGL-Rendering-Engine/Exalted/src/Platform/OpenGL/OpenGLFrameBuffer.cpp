@@ -26,6 +26,37 @@ namespace Exalted
 		Resize(width, height);
 	}
 
+	OpenGLFrameBuffer::OpenGLFrameBuffer(uint32_t width, uint32_t height, bool generateBorderColor)
+		: m_Width(width), m_Height(height), m_Format(FrameBufferFormat::RGBA16F)
+	{
+		// Generate depth map
+		glGenTextures(1, &m_ColorAttachment);
+		glBindTexture(GL_TEXTURE_2D, m_ColorAttachment);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, m_Width, m_Height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		if(!generateBorderColor)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		}
+		else
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+			float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+			glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+		}
+
+		// Generate and bind frame buffer
+		glGenFramebuffers(1, &m_RendererID);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_ColorAttachment, 0);
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE); // explicitly state that won't be rendering color data
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
 	OpenGLFrameBuffer::~OpenGLFrameBuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
@@ -81,8 +112,8 @@ namespace Exalted
 
 	void OpenGLFrameBuffer::Bind() const
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 		glViewport(0, 0, m_Width, m_Height);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 	}
 
 	void OpenGLFrameBuffer::Unbind() const
@@ -93,7 +124,7 @@ namespace Exalted
 	void OpenGLFrameBuffer::UnbindMiniFrame() const //todo: Get this to work, resulting in multi-display functionality
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glViewport(0, 0, static_cast<uint32_t>(Exalted::Application::Get().GetWindow().GetWindowWidth()), static_cast<uint32_t>(Exalted::Application::Get().GetWindow().GetWindowHeight()));
+		glViewport(0, 0, static_cast<uint32_t>(Application::Get().GetWindow().GetWindowWidth()), static_cast<uint32_t>(Application::Get().GetWindow().GetWindowHeight()));
 	}
 
 	void OpenGLFrameBuffer::BindTexture(uint32_t slot) const
@@ -101,4 +132,6 @@ namespace Exalted
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, m_ColorAttachment);
 	}
+
+	
 }

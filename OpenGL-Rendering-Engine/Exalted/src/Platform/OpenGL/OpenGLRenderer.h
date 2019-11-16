@@ -27,6 +27,7 @@ namespace Exalted
 
 		virtual void Clear() override;
 		virtual void ClearColorBuffer() override;
+		virtual void ClearDepthBuffer() override;
 		virtual void ClearColorDepthBuffers() override;
 		virtual void ClearColorDepthStencilBuffers() override;
 

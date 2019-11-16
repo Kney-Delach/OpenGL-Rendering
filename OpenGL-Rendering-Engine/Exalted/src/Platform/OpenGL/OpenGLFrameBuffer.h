@@ -22,6 +22,7 @@ namespace Exalted
 	{
 	public:
 		OpenGLFrameBuffer(uint32_t width, uint32_t height, FrameBufferFormat format);
+		OpenGLFrameBuffer(uint32_t width, uint32_t height, bool generateBorderColor);
 		virtual ~OpenGLFrameBuffer();
 		virtual void Resize(uint32_t width, uint32_t height) override;
 		virtual void Bind() const override;

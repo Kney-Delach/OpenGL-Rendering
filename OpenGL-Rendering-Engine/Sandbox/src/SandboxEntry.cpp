@@ -29,6 +29,7 @@
 #include "15-Instancing/InstancingLayer.h"
 #include "16-Tesselation/TessellationLayer.h"
 #include "17-Lighting/LightingLayer.h"
+#include "18-Shadows/ShadowLayer.h"
 
 #include "Core/EntryPoint.h"
 
@@ -46,7 +47,7 @@ namespace Sandbox
 			//PushLayer(new DepthTestingLayer());
 			//PushLayer(new StencilTestingLayer());
 			//PushLayer(new BlendingLayer());
-			////PushLayer(new SceneGraphLayer()); //todo: For whoever is reading this, this scene no longer displays anything as the gameobjects themselves are organised by a scene class which is shown in the scene class layer.
+			//////PushLayer(new SceneGraphLayer()); //todo: For whoever is reading this, this scene no longer displays anything as the gameobjects themselves are organised by a scene class which is shown in the scene class layer.
 			//PushLayer(new SceneClassLayer());
 			//PushLayer(new HeightMapLayer());
 			//PushLayer(new ModelLoadingLayer());
@@ -54,8 +55,9 @@ namespace Sandbox
 			//PushLayer(new SkyboxLayer());
 			//PushLayer(new GLSLExplorationLayer); 
 			//PushLayer(new InstancingLayer());
-			//PushLayer(new TessellationLayer()); //todo: Note, don't run this simultaneously with the lighting layer.
-			PushLayer(new LightingLayer());
+			//PushLayer(new TessellationLayer()); //todo: Note, don't run this simultaneously with the lighting layer because of the camera matrices.
+			//PushLayer(new LightingLayer());
+			PushLayer(new ShadowLayer());
 		}
 		virtual ~OpenGLRenderingApplication()
 		{

@@ -39,5 +39,6 @@ namespace Exalted
 		virtual uint32_t GetRenderBufferAttachmentRendererID() const = 0;
 	public:
 		static Ref<FrameBuffer> Create(uint32_t width, uint32_t height, FrameBufferFormat format);
+		static Ref<FrameBuffer> Create(uint32_t width, uint32_t height, bool generateBorderColor);
 	};
 }
