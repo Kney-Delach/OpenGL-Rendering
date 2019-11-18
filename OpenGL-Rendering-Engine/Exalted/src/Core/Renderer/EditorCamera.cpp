@@ -24,6 +24,8 @@
 
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "UniformBuffer.h"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace Exalted
 {
@@ -124,6 +126,25 @@ namespace Exalted
 			m_LastMouseY = e.GetY();
 			ProcessRotationEvent(xOffset, yOffset);
 		}
+	}
+
+	void EditorCamera::UpdateUBO(Ref<UniformBuffer>& ubo) const
+	{
+		ubo->Bind();
+		Bytes offset = 0;
+		Bytes size = sizeof(glm::mat4);
+		Bytes sizeofVec4 = sizeof(glm::vec4);
+		ubo->SetBufferSubData(offset, size, glm::value_ptr(GetViewMatrix()));
+		offset += sizeof(glm::mat4);
+		ubo->SetBufferSubData(offset, size, glm::value_ptr(glm::mat4(glm::mat3(GetViewMatrix()))));
+		offset += sizeof(glm::mat4);
+		ubo->SetBufferSubData(offset, size, glm::value_ptr(GetProjectionMatrix()));
+		offset += sizeof(glm::mat4);
+		ubo->SetBufferSubData(offset, size, glm::value_ptr(GetViewProjectionMatrix()));
+		offset += sizeof(glm::mat4);
+		ubo->SetBufferSubData(offset, sizeofVec4, glm::value_ptr(GetPosition()));
+		offset += sizeof(glm::vec4);
+		ubo->Unbind();
 	}
 
 	void EditorCamera::ProcessRotationEvent(float xOffset, float yOffset)

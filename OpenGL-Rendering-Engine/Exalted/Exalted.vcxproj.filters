@@ -1316,6 +1316,7 @@
     <ClInclude Include="src\Core\Renderer\Skybox\Skybox.h" />
     <ClInclude Include="src\Core\Renderer\Lights\Material.h" />
     <ClInclude Include="src\Core\Renderer\Lights\Light.h" />
+    <ClInclude Include="src\Core\Renderer\Lights\ShadowInfo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">

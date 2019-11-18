@@ -32,6 +32,9 @@ namespace Exalted
 			RecalculateViewMatrix();
 			RecalculateViewProjectionMatrix();
 		}
+		_NODISCARD inline const float GetNear() const { return m_zNear; }
+		_NODISCARD inline const float GetFar() const { return m_zFar; }
+
 		_NODISCARD inline const glm::vec3& GetPosition() const { return m_Position; }
 		_NODISCARD const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		_NODISCARD const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }

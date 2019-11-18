@@ -124,66 +124,66 @@ uniform Material u_Material;
 //////////////////////////////////////////////////////////
 // Diffuse Multiplier ////////////////////////////////////
 //////////////////////////////////////////////////////////
-// float Pi = 3.14159265;
-// float CalculateDiffuseMultiplier(vec3 normal, vec3 lightDirection)
-// {
-// 	return max(dot(normal, lightDirection), 0.0) / Pi; // divide by pi to conserve energy (thus staying consistent with specular calculation approach)
-// }
+ float Pi = 3.14159265;
+ float CalculateDiffuseMultiplier(vec3 normal, vec3 lightDirection)
+ {
+ 	return max(dot(normal, lightDirection), 0.0) / Pi; // divide by pi to conserve energy (thus staying consistent with specular calculation approach)
+ }
 
 // //////////////////////////////////////////////////////////
 // // Specular Multiplier ///////////////////////////////////
 // //////////////////////////////////////////////////////////
 // // Energy Conservation article towards solving relative brightness problems: http://www.rorydriscoll.com/2009/01/25/energy-conservation-in-games/
 
-// float CalculateSpecularMultiplier(vec3 lightDirection, vec3 normal, vec3 viewDirection)
-// {
-// 	if (u_BlinnPhong) // Blinn-Phong 
-// 	{
-// 		float EnergyConservation = (8.0 + u_Material.Shininess) / (8.0 * Pi);
-// 		vec3 halfwayDirection = normalize(lightDirection + viewDirection);
-// 		return EnergyConservation * pow(max(dot(normal, halfwayDirection), 0.0), u_Material.Shininess);
-// 	}
-// 	else // Normal Phong 
-// 	{
-// 		float EnergyConservation = (2.0 + u_Material.Shininess) / (2.0 * Pi);
-// 		vec3 reflectionDirection = reflect(-lightDirection, normal);
-// 		return EnergyConservation * pow(max(dot(viewDirection, reflectionDirection), 0.0), u_Material.Shininess);
-// 	}
-// }
+ float CalculateSpecularMultiplier(vec3 lightDirection, vec3 normal, vec3 viewDirection)
+ {
+ 	//if (u_BlinnPhong) // Blinn-Phong 
+ 	//{
+ 		float EnergyConservation = (8.0 + u_Material.Shininess) / (8.0 * Pi);
+ 		vec3 halfwayDirection = normalize(lightDirection + viewDirection);
+ 		return EnergyConservation * pow(max(dot(normal, halfwayDirection), 0.0), u_Material.Shininess);
+ 	//}
+ 	//else // Normal Phong 
+ 	//{
+ 	//	float EnergyConservation = (2.0 + u_Material.Shininess) / (2.0 * Pi);
+ 	//	vec3 reflectionDirection = reflect(-lightDirection, normal);
+ 	//	return EnergyConservation * pow(max(dot(viewDirection, reflectionDirection), 0.0), u_Material.Shininess);
+ 	//}
+ }
 
 // //////////////////////////////////////////////////////////
 // // Attenuation Calculator ////////////////////////////////
 // //////////////////////////////////////////////////////////
-// vec3 CalculateAttenuationResults(vec3 ambient, vec3 diffuse, vec3 specular, vec3 position, vec3 fragPosition, float constant, float lin, float quadratic)
-// {
-// 	float distance = length(position - fragPosition);
-// 	float attenuation = 1.0 / (constant + lin * distance + quadratic * (distance * distance));
-// 	ambient *= attenuation;
-// 	diffuse *= attenuation;
-// 	specular *= attenuation;
-// 	return (ambient + diffuse + specular);
-// }
+ vec3 CalculateAttenuationResults(vec3 ambient, vec3 diffuse, vec3 specular, vec3 position, vec3 fragPosition, float constant, float lin, float quadratic)
+ {
+ 	float distance = length(position - fragPosition);
+ 	float attenuation = 1.0 / (constant + lin * distance + quadratic * (distance * distance));
+ 	ambient *= attenuation;
+ 	diffuse *= attenuation;
+ 	specular *= attenuation;
+ 	return (ambient + diffuse + specular);
+ }
 
 // //////////////////////////////////////////////////////////
 // // DIRECTIONAL LIGHT CALCULATION /////////////////////////
 // //////////////////////////////////////////////////////////
-// vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDirection)
-// {
-// 	vec3 lightDirection = normalize(-light.Direction);
+ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDirection, float shadow)
+ {
+ 	vec3 lightDirection = normalize(light.Direction);
 
-// 	// diffuse
-// 	float diff = CalculateDiffuseMultiplier(normal, lightDirection);
+ 	// diffuse
+ 	float diff = CalculateDiffuseMultiplier(normal, lightDirection);
 
-// 	// specular 
-// 	float spec = CalculateSpecularMultiplier(lightDirection, normal, viewDirection);
+ 	// specular 
+ 	float spec = CalculateSpecularMultiplier(lightDirection, normal, viewDirection);
 
-// 	// combine results 
-// 	vec3 ambient = light.Ambient * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
-// 	vec3 diffuse = light.Diffuse * diff * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
-// 	vec3 specular = light.Specular * spec * vec3(texture(u_Material.TextureSpecular, IN.v_TexCoord));
+ 	// combine results 
+ 	vec3 ambient = light.Ambient * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
+ 	vec3 diffuse = light.Diffuse * diff * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
+ 	vec3 specular = light.Specular * spec * vec3(texture(u_Material.TextureSpecular, IN.v_TexCoord));
 
-// 	return (ambient + diffuse + specular);
-// }
+ 	return (ambient * (1 - shadow) + diffuse + specular);
+ }
 
 
 // //////////////////////////////////////////////////////////
@@ -254,7 +254,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, float bias)
     // perform perspective divide
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     // transform to [0,1] range
-    projCoords = projCoords * 0.5 + 0.5;
+	projCoords = projCoords * 0.5 + 0.5;
 
 	// fix for co-ordinates that are outside far plane of light's frustum.
 	if(projCoords.z > 1.0) 
@@ -275,15 +275,15 @@ float ShadowCalculation(vec4 fragPosLightSpace, float bias)
 		for(int y = -1; y <= 1; ++y)
 		{
 			float pcfDepth = texture(u_ShadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
-			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
-		}    
+			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
+		} 
 	}
 
 	shadow /= 9.0;
-    // check whether current frag pos is in shadow
+	// check whether current frag pos is in shadow
  	//shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;  
 
-    return shadow;
+	return shadow;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -292,27 +292,13 @@ float ShadowCalculation(vec4 fragPosLightSpace, float bias)
 void main()
 {
 	// Performing all lighting calculations in world space
-	//vec3 normal = normalize(IN.v_Normal);
-	//vec3 viewDirection = normalize(CameraPosition - IN.v_FragPosition);
-
-	// Directional light calculation
-	//vec3 result = CalculateDirectionalLight(DirectionalLights, normal, viewDirection);
-
-	//// Point Light Calculations
-	//for (int i = 0; i < NUMBER_OF_POINT_LIGHTS; i++)
-	//	result += CalculatePointLights(PointLights[i], normal, IN.v_FragPosition, viewDirection);
-
-	//// Spot Light Calculations
-	//for (int i = 0; i < NUMBER_OF_SPOT_LIGHTS; i++)
-	//	result += CalculateSpotLights(SpotLights[i], normal, IN.v_FragPosition, viewDirection);
-		
-	//color = vec4(result, 1.0);
+	vec3 normal = normalize(IN.v_Normal);
 
 	///////////////////////////////
 	/// shadow main //////////////
 	//////////////////////////////
 	vec3 tempColor = texture(u_Material.TextureDiffuse, IN.v_TexCoord).rgb;
-    vec3 normal = normalize(IN.v_Normal);
+    //vec3 normal = normalize(IN.v_Normal);
     vec3 lightColor = vec3(0.3);
     // ambient
     vec3 ambient = 0.3 * tempColor;
@@ -332,8 +318,29 @@ void main()
 	float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005); 
 
 	// calculate shadow
-    float shadow = ShadowCalculation(IN.v_LightSpaceFragCoord, bias);                      
-    vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * tempColor;    
-    
-    color = vec4(lighting, 1.0);
+    float shadow = ShadowCalculation(IN.v_LightSpaceFragCoord, bias);  
+	
+	//color = vec4(shadow,0,0, 1);
+    //vec3 lighting = (ambient + (1 - shadow)) * (diffuse + specular) * tempColor;    //+ (1.0 - shadow)
+	
+	vec3 viewDirection = normalize(CameraPosition - IN.v_FragPosition);
+	
+	// Directional light calculation
+	vec3 result = CalculateDirectionalLight(DirectionalLights, normal, viewDirection, shadow);
+
+	//result = result * (1 - shadow);
+    color = vec4(result, 1.0);
 }
+
+
+
+
+	//// Point Light Calculations
+	//for (int i = 0; i < NUMBER_OF_POINT_LIGHTS; i++)
+	//	result += CalculatePointLights(PointLights[i], normal, IN.v_FragPosition, viewDirection);
+
+	//// Spot Light Calculations
+	//for (int i = 0; i < NUMBER_OF_SPOT_LIGHTS; i++)
+	//	result += CalculateSpotLights(SpotLights[i], normal, IN.v_FragPosition, viewDirection);
+		
+	//color = vec4(result, 1.0);

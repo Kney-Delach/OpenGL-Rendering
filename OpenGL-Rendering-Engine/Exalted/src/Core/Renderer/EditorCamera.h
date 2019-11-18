@@ -23,6 +23,8 @@
 
 namespace Exalted
 {
+	class UniformBuffer;
+
 	enum class CameraMovement { FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN };
 	
 	class EditorCamera : public PerspectiveCamera
@@ -36,9 +38,13 @@ namespace Exalted
 		}
 		void UpdateCamera(Timestep deltaTime);
 		void OnImGuiRender();
-		void OnEvent(Exalted::Event& event);
+		void OnEvent(Event& event);
+		void UpdateUBO(Ref<UniformBuffer>& ubo) const;
 		void SetMouseSensitivity(const float sensitivity) { m_MouseSensitivity = sensitivity; }
 		void SetMouseSpeed(const float speed) { m_MovementSpeed = speed; }
+		float GetFOV() { return m_FOV; } //todo: move this to parent class
+		float GetYaw() { return m_Yaw; }
+		float GetPitch() { return m_Pitch; }
 		inline glm::vec3& GetFront() { return m_Front; }
 	private:
 		inline void RecalculateViewProjectionMatrix() override { m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix; }

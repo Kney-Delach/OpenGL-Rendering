@@ -531,6 +531,7 @@
     <ClInclude Include="src\Core\Renderer\Generators\ShapeGenerator.h" />
     <ClInclude Include="src\Core\Renderer\Lights\Light.h" />
     <ClInclude Include="src\Core\Renderer\Lights\Material.h" />
+    <ClInclude Include="src\Core\Renderer\Lights\ShadowInfo.h" />
     <ClInclude Include="src\Core\Renderer\Loaders\HeightMapLoader.h" />
     <ClInclude Include="src\Core\Renderer\Mesh.h" />
     <ClInclude Include="src\Core\Renderer\Loaders\ObjLoader.h" />

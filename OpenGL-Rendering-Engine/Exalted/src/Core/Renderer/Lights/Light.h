@@ -20,6 +20,7 @@
 
 #include "Core/SceneGraph/GameTransform.h"
 #include "Core/Renderer/UniformBuffer.h"
+#include "ShadowInfo.h"
 
 namespace Exalted
 {
@@ -28,19 +29,23 @@ namespace Exalted
 		glm::vec3 Ambient;
 		glm::vec3 Diffuse;
 		glm::vec3 Specular;
-
+		Ref<ShadowInfo> m_ShadowInfo; // used to specify whether or not light casts shadows
+		
 		virtual ~Light() = default;
 		virtual void UpdateUniformBuffer(Bytes& offset, Ref<UniformBuffer>& ub) = 0;
+		inline Ref<ShadowInfo>& GetShadowInfo() { return m_ShadowInfo; };
 	protected:
 		Light()
-			: Ambient(0), Diffuse(0), Specular(0)
+			: Ambient(0), Diffuse(0), Specular(0), m_ShadowInfo(nullptr)
 		{
 		}
 
 		Light(const glm::vec3& ambient, const glm::vec3& diffuse, const glm::vec3& specular)
-			: Ambient(ambient), Diffuse(diffuse), Specular(specular)
+			: Ambient(ambient), Diffuse(diffuse), Specular(specular), m_ShadowInfo(nullptr)
 		{
 		}
+
+		//void SetShadowInfo(Ref<ShadowInfo>& shadowInfo) { m_ShadowInfo = shadowInfo; }
 	};
 	
 	///////////////////////////////////////////////////////////////////////////////////
@@ -144,16 +149,19 @@ namespace Exalted
 		DirectionalLight()
 			: Light(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f)), Direction(1.f)
 		{
+			m_ShadowInfo = Exalted::CreateRef<ShadowInfo>(glm::mat4(glm::ortho(-40.f, 40.0f, -40.0f, 40.0f, -40.f, 40.f)));
 		}
 		DirectionalLight(const glm::vec3& direction, 
 			const glm::vec3& ambient = glm::vec3(1.0f), const glm::vec3& diffuse = glm::vec3(1.0f), const glm::vec3& specular = glm::vec3(1.0f))
 			: Light(ambient, diffuse, specular), Direction(direction)
 		{
+			m_ShadowInfo = Exalted::CreateRef<ShadowInfo>(glm::mat4(glm::ortho(-40.f, 40.0f, -40.0f, 40.0f, -40.f, 40.f)));
 		}
 
 		DirectionalLight(const DirectionalLight& other)
 			: Light(other.Ambient, other.Diffuse, other.Specular), Direction(other.Direction)
 		{
+			m_ShadowInfo = Exalted::CreateRef<ShadowInfo>(glm::mat4(glm::ortho(-40.f, 40.0f, -40.0f, 40.0f, -40.f, 40.f)));
 		}
 
 		virtual ~DirectionalLight() = default;

@@ -45,6 +45,6 @@ void main()
 	OUT.v_FragPosition = vec3(u_Model * vec4(a_Position, 1.0));
 	OUT.v_Normal = mat3(transpose(inverse(u_Model))) * a_Normal;
 	OUT.v_TexCoord = a_TexCoord;
-	OUT.v_LightSpaceFragCoord = u_LightSpaceMatrix * vec4(OUT.v_FragPosition, 1.0); //shadows
+	OUT.v_LightSpaceFragCoord = u_LightSpaceMatrix * vec4(OUT.v_FragPosition, 1.0);//OUT.v_FragPosition, 1.0); //shadows
 	gl_Position = ViewProjectionMatrix * u_Model * vec4(a_Position, 1.0);
 }

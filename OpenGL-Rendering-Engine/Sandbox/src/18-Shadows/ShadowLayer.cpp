@@ -45,8 +45,8 @@ namespace Sandbox
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f,
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
 			0.1f,
-			100.f);
-		m_EditorCamera->SetMouseSpeed(10.f);
+			1000.f);
+		m_EditorCamera->SetMouseSpeed(100.f);
 	}
 
 	void ShadowLayer::OnAttach()
@@ -72,7 +72,9 @@ namespace Sandbox
 		m_DirectionalLightA->Ambient = glm::vec3(0.2);
 		m_DirectionalLightA->Diffuse = glm::vec3(0.5);
 		m_DirectionalLightA->Specular = glm::vec3(1.0);
-		m_DirectionalLightA->Direction = glm::vec3(-10.f, 10.0f, -10.f);
+		m_DirectionalLightA->Direction = glm::vec3(0.1f, -30.f, -550.f);
+		m_DirectionalLightTransform = Exalted::GameTransform::Create();
+		m_DirectionalLightTransform->Position = m_DirectionalLightA->Direction;
 
 		// --------- Spot Light ------------ //
 		//m_SpotLightA = Exalted::SpotLight::Create();
@@ -90,13 +92,13 @@ namespace Sandbox
 		// ---------------- Setup Object A (effected by light) ------------------- //
 		m_ObjectShader = Exalted::Shader::Create(LIGHTING_SHADER_VERTEX, LIGHTING_SHADER_FRAGMENT);
 		m_ObjectMesh = Exalted::Mesh::Create();
-		m_ObjectMesh->SetVertexArray(Exalted::ObjLoader::Load(LIGHT_SOURCE_MESH));
+		m_ObjectMesh->SetVertexArray(Exalted::ObjLoader::Load(SUZANNE));
 
 		// --------------------- Setup Scene objects --------------------- //
 		glm::vec3 color = glm::vec3(1.0f, 0.5f, 0.31f);
 		const float shininess = 32.f;
-		std::string diffusePath = TEXTURE_DIFFUSE_CUBE;
-		std::string specularPath = TEXTURE_SPECULAR_CUBE;
+		std::string diffusePath = TEXTURE_DIFFUSE_SURFACE;//TEXTURE_DIFFUSE_CUBE;
+		std::string specularPath = TEXTURE_SPECULAR_SURFACE;//TEXTURE_SPECULAR_CUBE;
 		std::string emissionPath = TEXTURE_EMISSION_CUBE;
 
 		unsigned row = 0;
@@ -109,7 +111,7 @@ namespace Sandbox
 				row = 0;
 			}
 			m_ObjectMaterials.emplace_back(Exalted::Material::Create(color, color, color, shininess, diffusePath, specularPath, emissionPath));
-			m_ObjectTransformations.emplace_back(glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(3 * row++, 2 * column, 0)), glm::vec3(2.f)));
+			m_ObjectTransformations.emplace_back(glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(2.f + i * i * row++ , 4 + 2 * i + i * column, 2.f + i * i * row++)), glm::vec3( 2.f + column * 2.f)));
 		}
 
 		// ---------------- Floor Setup ----------------
@@ -119,7 +121,7 @@ namespace Sandbox
 		m_FloorMesh = Exalted::Mesh::Create();
 		m_FloorMesh->SetVertexArray(Exalted::ObjLoader::Load(SURFACE_MESH));
 		m_FloorMaterial = Exalted::Material::Create(color, color, color, shininess, floorDiffusePath, floorSpecularPath, floorEmissionPath);
-		m_FloorTransformation = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(0, 0, 0)), glm::vec3(0.1f));
+		m_FloorTransformation = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(0, 0, 0)), glm::vec3(2.f, 0.1f, 2.f));
 
 		// -------------- Scene manager/root ------------------ //
 		m_SceneManager = Exalted::CreateRef<Exalted::Scene>(m_EditorCamera, true);
@@ -149,7 +151,7 @@ namespace Sandbox
 		///////////////////////////////////////////////
 		//// Shadow Data Setup ////////////////////////
 		///////////////////////////////////////////////
-		m_DepthFrameBuffer = Exalted::FrameBuffer::Create(1024, 1024, true);
+		m_DepthFrameBuffer = Exalted::FrameBuffer::Create(2048, 2048, true);
 		m_ObjectDepthShader = Exalted::Shader::Create(DEPTH_RENDER_VERTEX, DEPTH_RENDER_FRAGMENT); //todo: render models into this
 		m_QuadDepthShader = Exalted::Shader::Create(DEPTH_RENDER_QUAD_VERTEX, DEPTH_RENDER_QUAD_FRAGMENT); //todo: render quad into this
 		m_QuadMesh = Exalted::Mesh::Create();
@@ -164,31 +166,28 @@ namespace Sandbox
 	void ShadowLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
 		m_EditorCamera->UpdateCamera(deltaTime);
+		m_EditorCamera->UpdateUBO(m_MatUniformBuffer);
 		m_SceneManager->UpdateScene(deltaTime);
 
-		// ------------------------------------------------------------------------------- //		
-		//Exalted::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
-		//Exalted::RenderCommand::ClearColorDepthBuffers();
+		if(m_IncreaseSunHeight)
+		{
+			if(m_DirectionalLightA->Direction.z < 0)
+				m_DirectionalLightA->Direction = m_DirectionalLightA->Direction + glm::vec3(0, 150*deltaTime, 150 * deltaTime);
+			else
+				m_DirectionalLightA->Direction = m_DirectionalLightA->Direction + glm::vec3(0, -150 * deltaTime, 150 * deltaTime);
+
+			if(m_DirectionalLightA->Direction.z > 550)
+			{
+				m_DirectionalLightA->Direction = glm::vec3(0.1f, -30.f, -550.f);
+
+				m_IncreaseSunHeight = false;
+			}
+			m_DirectionalLightTransform->Position = m_DirectionalLightA->Direction;
+		}
+		// ------------------------------------------------------------------------------- //	
 		Exalted::Renderer::BeginScene(*m_EditorCamera);
 
-		// ----------------------------- Set camera matrices data ----------------------------- // todo: Abstract this into the camera object (Camera->UpdateUniformBuffer)
-		m_MatUniformBuffer->Bind();
-		Exalted::Bytes offset = 0;
-		Exalted::Bytes size = sizeof(glm::mat4);
-		Exalted::Bytes sizeofVec4 = sizeof(glm::vec4);
-		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(m_EditorCamera->GetViewMatrix()));
-		offset += sizeof(glm::mat4);
-		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(glm::mat4(glm::mat3(m_EditorCamera->GetViewMatrix()))));
-		offset += sizeof(glm::mat4);
-		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(m_EditorCamera->GetProjectionMatrix()));
-		offset += sizeof(glm::mat4);
-		m_MatUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(m_EditorCamera->GetViewProjectionMatrix()));
-		offset += sizeof(glm::mat4);
-		m_MatUniformBuffer->SetBufferSubData(offset, sizeofVec4, glm::value_ptr(m_EditorCamera->GetPosition()));
-		offset += sizeof(glm::vec4);
-		m_MatUniformBuffer->Unbind();
-
-		// --------------------------- Set Light uniform data ------------------------------- // Iterate over this for each light source THAT CAN CHANGE during runtime
+		// --------------------------- Set Light uniform data ------------------------------- // 
 		m_LightUniformBuffer->Bind();
 		Exalted::Bytes lightBufferOffset = 0;
 		//m_PointLightA->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer);
@@ -196,20 +195,24 @@ namespace Sandbox
 		//m_SpotLightA->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer);
 		m_LightUniformBuffer->Unbind();
 
-		// ----------------------------- Render Scene ----------------------------- //
+		///////////////////////////////////////////////////////////////////////////////////////
+		//// Prepare lighting matrix data for shadow depth rendering (do this for every light) 
+		///////////////////////////////////////////////////////////////////////////////////////
 
-		// light data preparation
-		float near_plane = 1.f;
-		float far_plane = 100.f;
-		glm::mat4 lightProjection = glm::ortho(-15.0f, 15.0f, -15.0f, 15.0f, near_plane, far_plane); // no perspective deform for directional light 
-		glm::mat4 lightView = glm::lookAt(m_DirectionalLightA->Direction, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // direction assigned as position, looking towards center.
+		float near_plane = 0.1f;
+		float far_plane = 1000.f;
+		glm::mat4 lightProjection = glm::ortho(-600.f, 600.f, -200.0f, 200.0f, near_plane, far_plane);//glm::perspective(glm::radians(90.f), 1.f, 0.1f, 1000.f); // no perspective deform for directional light 
+		glm::mat4 lightView = glm::lookAt(m_DirectionalLightA->Direction, glm::vec3(0,0,0), glm::vec3(0, 1, 0)); // glm::lookAt(m_DirectionalLightA->Direction, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // direction assigned as position, looking towards center.
 		glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+
+
+		
 		/////////////////////////////////////////////////////////////////
 		//// Initial render to depth map for shadow mapping ///////////// 
 		/////////////////////////////////////////////////////////////////
 		Exalted::OpenGLConfigurations::EnableFaceCulling();
 		Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::FRONT);
-		
+
 		m_DepthFrameBuffer->Bind();
 		m_ObjectDepthShader->Bind();
 		Exalted::RenderCommand::ClearDepthBuffer();
@@ -265,24 +268,33 @@ namespace Sandbox
 		Exalted::Renderer::Submit(m_FloorMesh);
 		m_DepthFrameBuffer->Unbind();
 		m_ObjectShader->Unbind();
-		
+
+		// draw the sun 
+		m_LightSourceShader->Bind();
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_DirectionalLightTransform->SetAndGetWorldTransform());
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse",m_DirectionalLightA->Diffuse);
+		Exalted::Renderer::Submit(m_LightSourceMesh);
+		m_LightSourceShader->Unbind();
+		// --------------------------- Render Skybox --------------------------- //
+		//m_SceneManager->RenderSkybox();
+
 		/////////////////////////////////////////////////////////////////////////////////////
 		//// Render scene as normal with shadow mapping using depth map (DEBUG) ///////////// 
 		/////////////////////////////////////////////////////////////////////////////////////
+
+		Exalted::OpenGLConfigurations::SetViewport(0, 0, 1024, 512);
 		//Exalted::RenderCommand::ClearColorDepthBuffers();
 
-		// //prepare to render to draw framebuffer
+		 //prepare to render to draw framebuffer
 
-		//m_QuadDepthShader->Bind();
-		//m_DepthFrameBuffer->BindTexture(0);
-		//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("near_plane", near_plane);
-		//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("far_plane", far_plane);
-		//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformInt1("depthMap", 0);
-		//Exalted::Renderer::Submit(m_QuadMesh);
-		//m_QuadDepthShader->Unbind();
-
-		// --------------------------- Render Skybox --------------------------- //
-		m_SceneManager->RenderSkybox();
+		m_QuadDepthShader->Bind();
+		m_DepthFrameBuffer->BindTexture(0);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("near_plane", near_plane);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("far_plane", far_plane);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformInt1("depthMap", 0);
+		Exalted::Renderer::Submit(m_QuadMesh);
+		m_QuadDepthShader->Unbind();
+		Exalted::OpenGLConfigurations::SetViewport(0, 0, Exalted::Application::Get().GetWindow().GetWindowWidth(), Exalted::Application::Get().GetWindow().GetWindowHeight());
 
 		Exalted::Renderer::EndScene();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
@@ -338,10 +350,10 @@ namespace Sandbox
 		//{
 		//	m_BlinnPhong = true;
 		//}
-		//if (ImGui::Button("Blinn-Phong Specular OFF"))
-		//{
-		//	m_BlinnPhong = false;
-		//}
+		if (ImGui::Button("Toggle Sun Movement"))
+		{
+			m_IncreaseSunHeight = !m_IncreaseSunHeight;
+		}
 		ImGui::End();
 	}
 

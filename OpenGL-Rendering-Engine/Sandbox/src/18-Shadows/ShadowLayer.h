@@ -55,6 +55,7 @@ namespace Sandbox
 
 		// directional light
 		Exalted::Ref<Exalted::DirectionalLight> m_DirectionalLightA;
+		Exalted::Ref<Exalted::GameTransform> m_DirectionalLightTransform;
 
 		// spot light
 		//Exalted::Ref<Exalted::SpotLight> m_SpotLightA;
@@ -65,14 +66,11 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Shader> m_ObjectDepthShader;
 		Exalted::Ref<Exalted::Shader> m_QuadDepthShader;
 		Exalted::Ref<Exalted::Mesh> m_QuadMesh;
-
+		
 		/////////////////////////////////////////////////////////
-		int m_ObjectCount = 5;
-		//bool m_RotateLight = false;
-		//bool m_ChangeLightColor = false;
-		//bool m_ActivateEmission = false;
-		//bool m_EmissionTransform = false;
-		//bool m_FlashlightMode = false;
-		//bool m_BlinnPhong = true;
+		int m_ObjectCount = 7;
+
+		bool m_IncreaseSunHeight = false;
+
 	};
 }
