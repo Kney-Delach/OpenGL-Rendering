@@ -102,7 +102,7 @@ namespace Sandbox
 				row = 0;
 			}
 			m_ObjectMaterials.emplace_back(Exalted::Material::Create(color, color, color, shininess, diffusePath, specularPath, emissionPath));
-			m_ObjectTransformations.emplace_back(glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(3 * row++, 2* column, 0)), glm::vec3(2.f)));
+			m_ObjectTransformations.emplace_back(glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(2 + 3 * row++, 2* column, 0)), glm::vec3(2.f)));
 		}
 
 		// ---------------- Floor Setup ----------------
@@ -112,7 +112,7 @@ namespace Sandbox
 		m_FloorMesh = Exalted::Mesh::Create();
 		m_FloorMesh->SetVertexArray(Exalted::ObjLoader::Load(CRYTEK_SPONZA));
 		m_FloorMaterial = Exalted::Material::Create(color, color, color, shininess, floorDiffusePath, floorSpecularPath, floorEmissionPath);
-		m_FloorTransformation = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(0, 0, 0)), glm::vec3(1.f));
+		m_FloorTransformation = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(0, 1, 0)), glm::vec3(1.f));
 		
 		// -------------- Scene manager/root ------------------ //
 		m_SceneManager = Exalted::CreateRef<Exalted::Scene>(m_EditorCamera, true);

@@ -26,6 +26,32 @@ namespace Exalted
 		Resize(width, height);
 	}
 
+	// framebuffer specifically for point light shadows
+	OpenGLFrameBuffer::OpenGLFrameBuffer(uint32_t width, uint32_t height)
+		: m_Width(width), m_Height(height)
+	{
+		// Generate depth cubemap
+		glGenTextures(1, &m_ColorAttachment);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, m_ColorAttachment);
+		for (unsigned int i = 0; i < 6; ++i) // for each face
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, m_Width, m_Height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+		// Generate and bind frame buffer
+		glGenFramebuffers(1, &m_RendererID);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_ColorAttachment, 0);
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	
+	// framebuffer specifically for directional light shadows
 	OpenGLFrameBuffer::OpenGLFrameBuffer(uint32_t width, uint32_t height, bool generateBorderColor)
 		: m_Width(width), m_Height(height), m_Format(FrameBufferFormat::RGBA16F)
 	{
@@ -133,5 +159,9 @@ namespace Exalted
 		glBindTexture(GL_TEXTURE_2D, m_ColorAttachment);
 	}
 
-	
+	void OpenGLFrameBuffer::BindTextureCube(uint32_t slot) const
+	{
+		glActiveTexture(GL_TEXTURE0 + slot);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, m_ColorAttachment);
+	}
 }

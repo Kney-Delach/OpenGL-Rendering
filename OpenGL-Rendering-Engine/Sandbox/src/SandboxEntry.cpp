@@ -27,9 +27,13 @@
 #include "13-Texture_Cubes_Skybox/SkyboxLayer.h"
 #include "14-GLSL_Exploration/GLSLExplorationLayer.h"
 #include "15-Instancing/InstancingLayer.h"
+
+// never run these layers simultaneously
 #include "16-Tesselation/TessellationLayer.h"
 #include "17-Lighting/LightingLayer.h"
 #include "18-Shadows/ShadowLayer.h"
+#include "19-Multiple_Shadows/MultipleShadowsLayer.h"
+#include "20-Bump_Mapping/BumpMapping.h"
 
 #include "Core/EntryPoint.h"
 
@@ -55,9 +59,13 @@ namespace Sandbox
 			//PushLayer(new SkyboxLayer());
 			//PushLayer(new GLSLExplorationLayer); 
 			//PushLayer(new InstancingLayer());
-			//PushLayer(new TessellationLayer()); //todo: Note, don't run this simultaneously with the lighting layer because of the camera matrices.
+			//
+			////todo: Note, don't run the following layers simultaneously matrices.
+			//PushLayer(new TessellationLayer()); 
 			//PushLayer(new LightingLayer());
-			PushLayer(new ShadowLayer());
+			//PushLayer(new ShadowLayer());
+			//PushLayer(new MultipleShadowsLayer());
+			PushLayer(new BumpMappingLayer());
 		}
 		virtual ~OpenGLRenderingApplication()
 		{

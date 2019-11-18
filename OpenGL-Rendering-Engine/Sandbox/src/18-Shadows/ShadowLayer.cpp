@@ -40,7 +40,7 @@
 namespace Sandbox
 {
 	ShadowLayer::ShadowLayer()
-		: Layer("Shadow Layer", true)
+		: Layer("Shadow Layer", false)
 	{
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f,
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
@@ -71,7 +71,7 @@ namespace Sandbox
 		m_DirectionalLightA = Exalted::DirectionalLight::Create(); //todo: change to a spot light
 		m_DirectionalLightA->Ambient = glm::vec3(0.2);
 		m_DirectionalLightA->Diffuse = glm::vec3(0.5);
-		m_DirectionalLightA->Specular = glm::vec3(1.0);
+		m_DirectionalLightA->Specular = glm::vec3(1.f);
 		m_DirectionalLightA->Direction = glm::vec3(0.1f, -30.f, -550.f);
 		m_DirectionalLightTransform = Exalted::GameTransform::Create();
 		m_DirectionalLightTransform->Position = m_DirectionalLightA->Direction;
@@ -151,7 +151,7 @@ namespace Sandbox
 		///////////////////////////////////////////////
 		//// Shadow Data Setup ////////////////////////
 		///////////////////////////////////////////////
-		m_DepthFrameBuffer = Exalted::FrameBuffer::Create(2048, 2048, true);
+		m_DepthFrameBuffer = Exalted::FrameBuffer::Create(4096, 4096, true);
 		m_ObjectDepthShader = Exalted::Shader::Create(DEPTH_RENDER_VERTEX, DEPTH_RENDER_FRAGMENT); //todo: render models into this
 		m_QuadDepthShader = Exalted::Shader::Create(DEPTH_RENDER_QUAD_VERTEX, DEPTH_RENDER_QUAD_FRAGMENT); //todo: render quad into this
 		m_QuadMesh = Exalted::Mesh::Create();
@@ -198,10 +198,10 @@ namespace Sandbox
 		///////////////////////////////////////////////////////////////////////////////////////
 		//// Prepare lighting matrix data for shadow depth rendering (do this for every light) 
 		///////////////////////////////////////////////////////////////////////////////////////
-
+		//glm::ortho(-600.f, 600.f, -200.0f, 200.0f, near_plane, far_plane);//
 		float near_plane = 0.1f;
 		float far_plane = 1000.f;
-		glm::mat4 lightProjection = glm::ortho(-600.f, 600.f, -200.0f, 200.0f, near_plane, far_plane);//glm::perspective(glm::radians(90.f), 1.f, 0.1f, 1000.f); // no perspective deform for directional light 
+		glm::mat4 lightProjection = glm::perspective(glm::radians(90.f), 1.f, 0.1f, 1000.f); // no perspective deform for directional light 
 		glm::mat4 lightView = glm::lookAt(m_DirectionalLightA->Direction, glm::vec3(0,0,0), glm::vec3(0, 1, 0)); // glm::lookAt(m_DirectionalLightA->Direction, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // direction assigned as position, looking towards center.
 		glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 

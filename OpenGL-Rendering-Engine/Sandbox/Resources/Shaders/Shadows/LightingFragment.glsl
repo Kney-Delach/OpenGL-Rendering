@@ -182,7 +182,7 @@ uniform Material u_Material;
  	vec3 diffuse = light.Diffuse * diff * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
  	vec3 specular = light.Specular * spec * vec3(texture(u_Material.TextureSpecular, IN.v_TexCoord));
 
- 	return (ambient * (1 - shadow) + diffuse + specular);
+ 	return (ambient + (1 - shadow) * (diffuse + specular)); //(ambient + (1 - shadow)) * (diffuse + specular) * tempColor;
  }
 
 
@@ -318,7 +318,7 @@ void main()
 	float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005); 
 
 	// calculate shadow
-    float shadow = ShadowCalculation(IN.v_LightSpaceFragCoord, bias);  
+    float shadow = ShadowCalculation(IN.v_LightSpaceFragCoord, 0);  
 	
 	//color = vec4(shadow,0,0, 1);
     //vec3 lighting = (ambient + (1 - shadow)) * (diffuse + specular) * tempColor;    //+ (1.0 - shadow)

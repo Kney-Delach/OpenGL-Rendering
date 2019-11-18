@@ -141,7 +141,9 @@
     <ClInclude Include="src\16-Tesselation\TessellationLayer.h" />
     <ClInclude Include="src\17-Lighting\LightingLayer.h" />
     <ClInclude Include="src\18-Shadows\ShadowLayer.h" />
+    <ClInclude Include="src\19-Multiple_Shadows\MultipleShadowsLayer.h" />
     <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h" />
+    <ClInclude Include="src\20-Bump_Mapping\BumpMapping.h" />
     <ClInclude Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.h" />
     <ClInclude Include="src\4-Texture_Mapping\TextureMappingLayer.h" />
     <ClInclude Include="src\5-Depth_Testing\DepthTestingLayer.h" />
@@ -161,7 +163,9 @@
     <ClCompile Include="src\16-Tesselation\TessellationLayer.cpp" />
     <ClCompile Include="src\17-Lighting\LightingLayer.cpp" />
     <ClCompile Include="src\18-Shadows\ShadowLayer.cpp" />
+    <ClCompile Include="src\19-Multiple_Shadows\MultipleShadowsLayer.cpp" />
     <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp" />
+    <ClCompile Include="src\20-Bump_Mapping\BumpMapping.cpp" />
     <ClCompile Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.cpp" />
     <ClCompile Include="src\4-Texture_Mapping\TextureMappingLayer.cpp" />
     <ClCompile Include="src\5-Depth_Testing\DepthTestingLayer.cpp" />
@@ -185,6 +189,7 @@
     <None Include="Resources\Shaders\GLSL-Exploration\NormalsVertex.glsl" />
     <None Include="Resources\Shaders\ModelShaders\ModelLoadFragment.glsl" />
     <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />
+    <None Include="Resources\Shaders\MultipleShadows\ShadowDepthGeometry.glsl" />
     <None Include="Resources\Shaders\Shadows\ShadowDepthFragment.glsl" />
     <None Include="Resources\Shaders\Shadows\ShadowDepthVertex.glsl" />
     <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapFragment.glsl" />

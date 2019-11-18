@@ -76,6 +76,8 @@
     <ClInclude Include="src\16-Tesselation\TessellationLayer.h" />
     <ClInclude Include="src\17-Lighting\LightingLayer.h" />
     <ClInclude Include="src\18-Shadows\ShadowLayer.h" />
+    <ClInclude Include="src\19-Multiple_Shadows\MultipleShadowsLayer.h" />
+    <ClInclude Include="src\20-Bump_Mapping\BumpMapping.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -119,6 +121,8 @@
     <ClCompile Include="src\16-Tesselation\TessellationLayer.cpp" />
     <ClCompile Include="src\17-Lighting\LightingLayer.cpp" />
     <ClCompile Include="src\18-Shadows\ShadowLayer.cpp" />
+    <ClCompile Include="src\19-Multiple_Shadows\MultipleShadowsLayer.cpp" />
+    <ClCompile Include="src\20-Bump_Mapping\BumpMapping.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />
@@ -135,5 +139,6 @@
     <None Include="Resources\Shaders\GLSL-Exploration\NormalsVertex.glsl" />
     <None Include="Resources\Shaders\Shadows\ShadowDepthVertex.glsl" />
     <None Include="Resources\Shaders\Shadows\ShadowDepthFragment.glsl" />
+    <None Include="Resources\Shaders\MultipleShadows\ShadowDepthGeometry.glsl" />
   </ItemGroup>
 </Project>
