@@ -15,6 +15,7 @@
 ***************************************************************************/
 #pragma once
 #include <glm/gtc/matrix_transform.hpp>
+#include "Core/Renderer/UniformBuffer.h"
 
 //todo: Optimize this class
 
@@ -22,10 +23,12 @@ namespace Exalted
 {
 	struct GameTransform
 	{
+		glm::vec3 Position;
 		glm::mat4 WorldTransform;
-		glm::vec3 Position; 
 		glm::vec3 Scale;
 		glm::vec3 Rotation; 
+
+		static Ref<GameTransform> Create() { return Exalted::CreateRef<GameTransform>(); }
 
 		GameTransform() 
 		: 
@@ -51,5 +54,18 @@ namespace Exalted
 			WorldTransform = tempTransform;
 		}
 		glm::mat4& GetWorldTransform() { return WorldTransform; }
+
+		glm::mat4& SetAndGetWorldTransform()
+		{
+			SetWorldTransform();
+			return WorldTransform;
+		}
+
+		//todo: implement this
+		Bytes UBSize()
+		{
+			EX_CORE_CRITICAL("GameTransform UBSize attempting to use unimplemented function!");
+			return 0;
+		}
 	};
 }

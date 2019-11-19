@@ -46,6 +46,18 @@
     <Filter Include="src\Core\Renderer">
       <UniqueIdentifier>{EB009555-5717-93EB-A08E-1E0D0CE46373}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Core\Renderer\Generators">
+      <UniqueIdentifier>{3429F401-20E4-E3AD-C99B-5CF8B5352E3E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Core\Renderer\Lights">
+      <UniqueIdentifier>{85F34257-7118-92D7-9A63-776786E790F5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Core\Renderer\Loaders">
+      <UniqueIdentifier>{E453314D-5016-65D7-99C6-F36305C83DB5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Core\Renderer\Skybox">
+      <UniqueIdentifier>{9A05C567-862A-14E8-AF75-F9779BF91206}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Core\SceneGraph">
       <UniqueIdentifier>{34445DDA-A0A5-3AE8-2913-819A957371A7}</UniqueIdentifier>
     </Filter>
@@ -1224,6 +1236,27 @@
     <ClInclude Include="src\Core\Renderer\EditorCamera.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Renderer\FrameBuffer.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Generators\ShapeGenerator.h">
+      <Filter>src\Core\Renderer\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Lights\Light.h">
+      <Filter>src\Core\Renderer\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Lights\Material.h">
+      <Filter>src\Core\Renderer\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Lights\ShadowInfo.h">
+      <Filter>src\Core\Renderer\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Loaders\HeightMapLoader.h">
+      <Filter>src\Core\Renderer\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Loaders\ObjLoader.h">
+      <Filter>src\Core\Renderer\Loaders</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Renderer\Mesh.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
@@ -1242,7 +1275,13 @@
     <ClInclude Include="src\Core\Renderer\Shader.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Skybox\Skybox.h">
+      <Filter>src\Core\Renderer\Skybox</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Renderer\Texture.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\UniformBuffer.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\VertexArray.h">
@@ -1281,6 +1320,9 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFrameBuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLMesh.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
@@ -1291,6 +1333,12 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture2D.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTextureCube.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
@@ -1305,15 +1353,6 @@
     <ClInclude Include="src\expch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Renderer\Loaders\ObjLoader.h" />
-    <ClInclude Include="src\Core\Renderer\Loaders\HeightMapLoader.h" />
-    <ClInclude Include="src\Core\Renderer\Generators\ShapeGenerator.h" />
-    <ClInclude Include="src\Core\Renderer\FrameBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLFrameBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLTextureCube.h" />
-    <ClInclude Include="src\Core\Renderer\UniformBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
-    <ClInclude Include="src\Core\Renderer\Skybox\Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1343,6 +1382,18 @@
     <ClCompile Include="src\Core\Renderer\EditorCamera.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Renderer\FrameBuffer.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\Generators\ShapeGenerator.cpp">
+      <Filter>src\Core\Renderer\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\Loaders\HeightMapLoader.cpp">
+      <Filter>src\Core\Renderer\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\Loaders\ObjLoader.cpp">
+      <Filter>src\Core\Renderer\Loaders</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Renderer\Mesh.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
@@ -1361,7 +1412,13 @@
     <ClCompile Include="src\Core\Renderer\Shader.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Renderer\Skybox\Skybox.cpp">
+      <Filter>src\Core\Renderer\Skybox</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Renderer\Texture.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\UniformBuffer.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp">
@@ -1385,6 +1442,9 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLMesh.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1395,6 +1455,12 @@
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture2D.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTextureCube.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
@@ -1410,14 +1476,5 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\tinyobjloader\tiny_obj_loader.cpp" />
-    <ClCompile Include="src\Core\Renderer\Loaders\ObjLoader.cpp" />
-    <ClCompile Include="src\Core\Renderer\Loaders\HeightMapLoader.cpp" />
-    <ClCompile Include="src\Core\Renderer\Generators\ShapeGenerator.cpp" />
-    <ClCompile Include="src\Core\Renderer\FrameBuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLTextureCube.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
-    <ClCompile Include="src\Core\Renderer\UniformBuffer.cpp" />
-    <ClCompile Include="src\Core\Renderer\Skybox\Skybox.cpp" />
   </ItemGroup>
 </Project>

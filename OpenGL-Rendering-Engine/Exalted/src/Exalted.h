@@ -35,6 +35,10 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
 
+//todo: maybe move these?
+#include "Core/Renderer/Lights/Light.h"
+#include "Core/Renderer/Lights/Material.h"
+
 #include "Core/Renderer/UniformBuffer.h"
 #include "Core/Renderer/FrameBuffer.h"
 #include "Core/Renderer/Buffer.h"
@@ -80,6 +84,10 @@
 #define SYMMETRA "Resources/Meshes/Symmetra/symmetra.obj"
 #define DABROVIC_SPONZA "Resources/Meshes/Dabrovic-Sponza/sponza.obj"
 #define CRYTEK_SPONZA "Resources/Meshes/Crytek-Sponza/sponza.obj"
+#define HALLWAY "Resources/Meshes/Hallway.obj"
+
+#define TERRAIN "Resources/Meshes/Terrain/Model/Terrain_50000.obj"
+#define TERRAIN_COLOR "Resources/Meshes/Terrain/Textures/Color.tif"
 
 // ------------- Skydome macros ---------------- // todo: move from here
 

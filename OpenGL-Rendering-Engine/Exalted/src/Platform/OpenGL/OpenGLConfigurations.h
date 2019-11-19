@@ -86,6 +86,8 @@ namespace Exalted
 		OpenGLConfigurations() = default;
 		~OpenGLConfigurations() = default;
 
+		static inline void SetViewport(float offsetX, float offsetY, float width, float height) { glViewport(offsetX, offsetY, width, height); }
+
 		static inline void SetPolygonMode(PolygonMode polygonMode) { glPolygonMode(GL_FRONT_AND_BACK, polygonMode); }
 		static inline void SetPointSize(unsigned int pointSize) { if(pointSize > 0) glPointSize(static_cast<GLfloat>(pointSize)); }
 

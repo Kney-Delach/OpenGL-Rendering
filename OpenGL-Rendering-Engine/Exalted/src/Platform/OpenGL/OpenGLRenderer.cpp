@@ -28,6 +28,7 @@ namespace Exalted
 		glGetIntegerv(GL_MAX_SAMPLES, &capabilities.MaxSamples);
 		glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY, &capabilities.MaxAnisotropy);
 		glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &capabilities.MaxVertexUniformComponents);
+		glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS, &capabilities.MaxUniformBufferComponents);
 	}
 
 	void OpenGLRendererAPI::SetViewport(const int xOffset, const int yOffset, const unsigned windowWidth, const unsigned windowHeight)
@@ -55,6 +56,11 @@ namespace Exalted
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
+	void OpenGLRendererAPI::ClearDepthBuffer()
+	{
+		glClear(GL_DEPTH_BUFFER_BIT);
+	}
+	
 	void OpenGLRendererAPI::ClearColorDepthBuffers()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

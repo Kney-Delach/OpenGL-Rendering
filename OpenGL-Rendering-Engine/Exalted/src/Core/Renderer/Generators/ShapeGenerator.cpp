@@ -29,6 +29,57 @@ namespace Exalted
 		return nullptr;
 	}
 
+	Ref<VertexArray> ShapeGenerator::GenerateCubeIT(float texturedScale) // indexed and textured
+	{
+		Ref<VertexArray> va = VertexArray::Create();
+		float vertices[8 * 5] = {
+			// front
+			-0.5, -0.5,  0.5, texturedScale * 0.f, texturedScale * 0.f,
+			 0.5, -0.5,  0.5, texturedScale * 1.f, texturedScale * 0.f,
+			 0.5,  0.5,  0.5, texturedScale * 1.f, texturedScale * 1.f,
+			-0.5,  0.5,  0.5, texturedScale * 0.f, texturedScale * 1.f,
+
+			// back
+			-0.5, -0.5, -0.5, texturedScale * 0.f, texturedScale * 0.f,
+			 0.5, -0.5, -0.5, texturedScale * 1.f, texturedScale * 0.f,
+			 0.5,  0.5, -0.5, texturedScale * 1.f, texturedScale * 1.f,
+			-0.5,  0.5, -0.5, texturedScale * 0.f, texturedScale * 1.f,
+		};
+		Ref<VertexBuffer> vertexBuffer;
+		vertexBuffer = VertexBuffer::Create(vertices, 8 * 5);
+		const BufferLayout layout =
+		{
+			{ShaderDataType::Float3, "a_Position"},
+			{ShaderDataType::Float2, "a_TexCoord" }
+		};
+		vertexBuffer->SetLayout(layout);
+		va->AddVertexBuffer(vertexBuffer);
+		uint32_t indices[12 * 3] = {
+			// front
+			0, 1, 2,
+			2, 3, 0,
+			// right
+			1, 5, 6,
+			6, 2, 1,
+			// back
+			7, 6, 5,
+			5, 4, 7,
+			// left
+			4, 0, 3,
+			3, 7, 4,
+			// bottom
+			4, 5, 1,
+			1, 0, 4,
+			// top
+			3, 2, 6,
+			6, 7, 3
+		};
+		Ref<IndexBuffer> indexBuffer;
+		indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+		va->AddIndexBuffer(indexBuffer);
+		return va;
+	}
+
 	Ref<VertexArray> ShapeGenerator::GenerateQuad()
 	{
 		Ref<VertexArray> va = VertexArray::Create();

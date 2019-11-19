@@ -28,6 +28,7 @@ namespace Exalted
 		int MaxSamples;
 		float MaxAnisotropy;
 		int MaxVertexUniformComponents;
+		int MaxUniformBufferComponents;
 	};
 
 	class RendererAPI
@@ -44,6 +45,7 @@ namespace Exalted
 		virtual void SetClearStencil(const float stencilValue) = 0;
 		virtual void Clear() = 0;
 		virtual void ClearColorBuffer() = 0;
+		virtual void ClearDepthBuffer() = 0;
 		virtual void ClearColorDepthBuffers() = 0;
 		virtual void ClearColorDepthStencilBuffers() = 0;
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) = 0;

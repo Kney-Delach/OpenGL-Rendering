@@ -16,11 +16,13 @@
 #include "ObjLoader.h"
 
 #include <tiny_obj_loader.h>
+#include "glm/vec3.hpp"
+#include "glm/gtx/normal.hpp"
 
 //todo: Implement material loading
 namespace Exalted
 {
-	Ref<VertexArray> ObjLoader::Load(const std::string& path)
+	Ref<VertexArray> ObjLoader::Load(const std::string& path, bool calculateTangents)
 	{
 		tinyobj::attrib_t attributes;
 		std::vector<tinyobj::shape_t> shapes;
@@ -50,11 +52,74 @@ namespace Exalted
 			uint8_t vertexDataLayout = (uint8_t)0;
 			BufferLayout bufferLayout;
 
-			for (unsigned int verticesInFace : shape.mesh.num_face_vertices) 
+			for (unsigned int verticesInFace : shape.mesh.num_face_vertices)   // += 3 for each index 
 			{
-				for (size_t vertexIndex = 0; vertexIndex < verticesInFace; vertexIndex++) 
+				glm::vec3 tangent;
+				glm::vec3 bitangent;
+
+				
+				tinyobj::index_t index0 = shape.mesh.indices[offset];
+				tinyobj::index_t index1 = shape.mesh.indices[offset + 1];
+				tinyobj::index_t index2 = shape.mesh.indices[offset + 2];
+
+				if (calculateTangents && !attributes.texcoords.empty()) // calculate tangents and bitangents
 				{
-					tinyobj::index_t index = shape.mesh.indices[offset + vertexIndex];
+					// vertex 0
+					// positions
+					float vx0 = attributes.vertices[0 + 3 * index0.vertex_index];
+					float vy0 = attributes.vertices[1 + 3 * index0.vertex_index];
+					float vz0 = attributes.vertices[2 + 3 * index0.vertex_index];
+					glm::vec3 pos0(vx0, vy0, vz0);
+					// texture co-ordinates
+					float tx0 = attributes.texcoords[0 + 2 * index0.texcoord_index];
+					float ty0 = attributes.texcoords[1 + 2 * index0.texcoord_index];
+
+					// vertex 1
+					// positions
+					float vx1 = attributes.vertices[0 + 3 *  index1.vertex_index];
+					float vy1 = attributes.vertices[1 + 3 *  index1.vertex_index];
+					float vz1 = attributes.vertices[2 + 3 *  index1.vertex_index];
+					glm::vec3 pos1(vx1, vy1, vz1);
+					// texture co-ordinates
+					float tx1 = attributes.texcoords[0 + 2 * index1.texcoord_index];
+					float ty1 = attributes.texcoords[1 + 2 * index1.texcoord_index];
+
+					//vertex 2
+					// positions
+					float vx2 = attributes.vertices[0 + 3 *  index2.vertex_index];
+					float vy2 = attributes.vertices[1 + 3 *  index2.vertex_index];
+					float vz2 = attributes.vertices[2 + 3 *  index2.vertex_index];
+					glm::vec3 pos2(vx2, vy2, vz2);
+					// texture co-ordinates
+					float tx2 = attributes.texcoords[0 + 2 * index2.texcoord_index];
+					float ty2 = attributes.texcoords[1 + 2 * index2.texcoord_index];
+
+					glm::vec3 edge1 = pos1 - pos0;
+					glm::vec3 edge2 = pos2 - pos0;
+
+					float deltaU1 = tx1 - tx0;
+					float deltaV1 = ty1 - ty0;
+					float deltaU2 = tx2 - tx0;
+					float deltaV2 = ty2 - ty0;
+
+					float f = 1.0f / (deltaU1 * deltaV2 - deltaU2 * deltaV1);
+
+					tangent.x = f * (deltaV2 * edge1.x - deltaV1 * edge2.x);
+					tangent.y = f * (deltaV2 * edge1.y - deltaV1 * edge2.y);
+					tangent.z = f * (deltaV2 * edge1.z - deltaV1 * edge2.z);
+
+					bitangent.x = f * (-deltaU2 * edge1.x - deltaU1 * edge2.x);
+					bitangent.y = f * (-deltaU2 * edge1.y - deltaU1 * edge2.y);
+					bitangent.z = f * (-deltaU2 * edge1.z - deltaU1 * edge2.z);
+
+					tangent = glm::normalize(tangent);
+					bitangent = glm::normalize(bitangent);
+				}
+
+				
+				for (size_t vertexIndex = 0; vertexIndex < verticesInFace; vertexIndex++)  // iterate for each vertex in face (3 each time)
+				{
+					tinyobj::index_t index = shape.mesh.indices[offset + vertexIndex]; // use this to calculate offsets above
 
 					if(!attributes.vertices.empty())
 					{
@@ -80,7 +145,18 @@ namespace Exalted
 
 						meshData.push_back(attributes.texcoords[0 + 2 * index.texcoord_index]);
 						meshData.push_back(attributes.texcoords[1 + 2 * index.texcoord_index]);
-					}					
+					}
+
+					if(calculateTangents && !attributes.texcoords.empty())
+					{
+						meshData.push_back(tangent.x);
+						meshData.push_back(tangent.y);
+						meshData.push_back(tangent.z);
+
+						meshData.push_back(bitangent.x);
+						meshData.push_back(bitangent.y);
+						meshData.push_back(bitangent.z);
+					}
 					indexBuffer.push_back(indexCount++);
 				}
 				offset += verticesInFace;
@@ -91,6 +167,12 @@ namespace Exalted
 				bufferLayout.AddElement(ShaderDataType::Float3, "a_Normal");
 			if (vertexDataLayout & (uint8_t)4)
 				bufferLayout.AddElement(ShaderDataType::Float2, "a_TexCoord");
+
+			if (calculateTangents)
+			{
+				bufferLayout.AddElement(ShaderDataType::Float3, "a_Tangent");
+				bufferLayout.AddElement(ShaderDataType::Float3, "a_Bitangent");
+			}
 			
 			bufferLayout.CalculateOffsetsAndStride();
 			Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(meshData.data(), meshData.size());

@@ -23,7 +23,7 @@
 namespace Sandbox
 {
 	TessellationLayer::TessellationLayer()
-		: Layer("Tessellation Layer", true)
+		: Layer("Tessellation Layer", false)
 	{
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f,
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),

@@ -47,6 +47,10 @@ namespace Exalted
 		{
 			s_RendererAPI->ClearColorBuffer();
 		}
+		inline static void ClearDepthBuffer()
+		{
+			s_RendererAPI->ClearDepthBuffer();
+		}
 		inline static void ClearColorDepthBuffers()
 		{
 			s_RendererAPI->ClearColorDepthBuffers();

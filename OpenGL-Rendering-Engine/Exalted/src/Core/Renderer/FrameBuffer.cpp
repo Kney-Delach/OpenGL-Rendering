@@ -20,6 +20,17 @@
 
 namespace Exalted
 {
+	Ref<FrameBuffer> FrameBuffer::Create(uint32_t width, uint32_t height)
+	{
+		switch (RendererAPI::GetAPI())
+		{
+			case RendererAPI::API::None:	return nullptr;
+			case RendererAPI::API::OpenGL:	return CreateRef<OpenGLFrameBuffer>(width, height);
+		}
+		EX_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
+
 	Ref<FrameBuffer> FrameBuffer::Create(uint32_t width, uint32_t height, FrameBufferFormat format)
 	{
 		switch (RendererAPI::GetAPI())
@@ -30,4 +41,16 @@ namespace Exalted
 		EX_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
+
+	Ref<FrameBuffer> FrameBuffer::Create(uint32_t width, uint32_t height, bool generateBorderColor)
+	{
+		switch (RendererAPI::GetAPI())
+		{
+			case RendererAPI::API::None:	return nullptr;
+			case RendererAPI::API::OpenGL:	return CreateRef<OpenGLFrameBuffer>(width, height, generateBorderColor);
+		}
+		EX_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
+
 }

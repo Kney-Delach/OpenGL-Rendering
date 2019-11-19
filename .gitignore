@@ -9,3 +9,7 @@ assimp/
 *.user
 
 # OpenGL Specific dependencies 
+
+# large mesh data 
+City/ 
+TerrainModel/

@@ -21,13 +21,16 @@ namespace Exalted
 	class OpenGLFrameBuffer : public FrameBuffer
 	{
 	public:
+		OpenGLFrameBuffer(uint32_t width, uint32_t height); // framebuffer for point light shadows
 		OpenGLFrameBuffer(uint32_t width, uint32_t height, FrameBufferFormat format);
+		OpenGLFrameBuffer(uint32_t width, uint32_t height, bool generateBorderColor); // framebuffer for directional light shadows
 		virtual ~OpenGLFrameBuffer();
 		virtual void Resize(uint32_t width, uint32_t height) override;
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 		virtual void UnbindMiniFrame() const override;
 		virtual void BindTexture(uint32_t slot = 0) const override;
+		virtual void BindTextureCube(uint32_t slot = 0) const override;
 		virtual uint32_t GetRendererID() const override { return m_RendererID; }
 		virtual uint32_t GetColorAttachmentRendererID() const override { return m_ColorAttachment; }
 		virtual uint32_t GetRenderBufferAttachmentRendererID() const override { return m_RenderBufferID; }
