@@ -1,7 +1,7 @@
 /***************************************************************************
  * Filename		: LightingFragment.glsl
  * Name			: Ori Lazar
- * Date			: 12/11/2019
+ * Date			: 19/11/2019
  * Description	: Fragment shader for Phong & Blinn-Phong lighting exploration.
      .---.
    .'_:___".
@@ -101,12 +101,13 @@ layout (std140) uniform Camera_Matrices
 in ShaderData 
 {
 	vec3 v_FragPosition;
-	//vec3 v_Normal;
 	vec2 v_TexCoord;
 	mat3 v_TBN;
 } IN;
 
+
 uniform sampler2D u_NormalMap; // move to material
+
 uniform Material u_Material; 
 uniform bool u_BlinnPhong;
 uniform bool u_ActivateEmission;
@@ -194,8 +195,8 @@ vec3 CalculatePointLights(PointLight light, vec3 normal, vec3 fragPosition, vec3
 	float spec = CalculateSpecularMultiplier(lightDirection, normal, viewDirection); 
 
 	// combine results
-	vec3 ambient = light.Ambient * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
-	vec3 diffuse = light.Diffuse * diff * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
+	vec3 ambient = light.Ambient * vec3(texture(u_Material.TextureDiffuse,IN.v_TexCoord));
+	vec3 diffuse = light.Diffuse * diff * vec3(texture(u_Material.TextureDiffuse,IN.v_TexCoord));
 	vec3 specular = light.Specular * spec * vec3(texture(u_Material.TextureSpecular, IN.v_TexCoord));
 
 	// attenuation
@@ -232,7 +233,7 @@ vec3 CalculateSpotLights(SpotLight light, vec3 normal, vec3 fragPosition, vec3 v
 		emission = diff * texture(u_Material.TextureEmission, IN.v_TexCoord).rgb;
 		if (u_EmissionTransform)
 		{
-			emission = texture(u_Material.TextureEmission, IN.v_TexCoord + vec2(0.0, u_Time)).rgb; // translate over time
+			emission = texture(u_Material.TextureEmission, IN.v_TexCoord + vec2(0.0, u_Time)).rgb;// translate over time
 			emission = emission * (sin(u_Time) * 0.5 + 0.5) * 2.0; // fading 
 		}
 	}
@@ -243,16 +244,14 @@ vec3 CalculateSpotLights(SpotLight light, vec3 normal, vec3 fragPosition, vec3 v
 /////////////////////////////////////////////////////////////////////////
 ///////////////// Main //////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
+
 void main()
 {
-	// Performing all lighting calculations in world space
-	//vec3 normal = normalize(IN.v_Normal);
+	vec3 viewDirection = normalize(CameraPosition - IN.v_FragPosition); 
 
 	vec3 normal = texture(u_NormalMap, IN.v_TexCoord).rgb;
 	normal = normalize(normal * 2.0 - 1.0);
 	normal = normalize(IN.v_TBN * normal);
-
-	vec3 viewDirection = normalize(CameraPosition - IN.v_FragPosition);
 
 	// Directional light calculation
 	vec3 result = CalculateDirectionalLight(DirectionalLights, normal, viewDirection);

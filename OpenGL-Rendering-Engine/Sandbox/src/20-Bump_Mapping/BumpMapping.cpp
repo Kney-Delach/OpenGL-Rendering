@@ -22,8 +22,16 @@
 
 #define LIGHT_SOURCE_MESH "Resources/Meshes/cube.obj"
 
-#define TEXTURE_DIFFUSE_CUBE	"Resources/Textures/HD/Brick/Bricks01_COL_VAR1_3K.jpg";//GroundForest003_COL_VAR1_6K.jpg" //Lights/CubeDiffuse.png";
-#define TEXTURE_SPECULAR_CUBE	"Resources/Textures/HD/Brick/Bricks01_GLOSS_3K.jpg"
+#define TEXTURE_DIFFUSE_BRICK	"Resources/Textures/HD/Brick/Bricks01_COL_VAR1_3K.jpg";
+#define TEXTURE_SPECULAR_BRICK	"Resources/Textures/HD/Brick/Bricks01_GLOSS_3K.jpg"
+#define TEXTURE_NORMAL_BRICK	"Resources/Textures/HD/Brick/Bricks01_NRM_3K.jpg"
+#define TEXTURE_DEPTH_BRICK	"Resources/Textures/HD/Brick/Bricks01_DISP_3K.jpg"
+
+#define TEXTURE_DIFFUSE_GRASS	"Resources/Textures/HD/ForestGround/GroundForest003_COL_VAR1_6K.jpg";
+#define TEXTURE_SPECULAR_GRASS	"Resources/Textures/HD/ForestGround/GroundForest003_GLOSS_6K.jpg"
+#define TEXTURE_NORMAL_GRASS	"Resources/Textures/HD/ForestGround/GroundForest003_NRM_6K.jpg"
+#define TEXTURE_DEPTH_GRASS	"Resources/Textures/HD/ForestGround/GroundForest003_DISP_6K.jpg"
+
 #define TEXTURE_EMISSION_CUBE	"Resources/Textures/Lights/CubeEmission.png";
 
 #define SURFACE_MESH				"Resources/Meshes/Surfaces/Rugs/Rug.obj"
@@ -89,8 +97,8 @@ namespace Sandbox
 		// --------------------- Setup Scene objects --------------------- //
 		glm::vec3 color = glm::vec3(1.0f, 0.5f, 0.31f);
 		const float shininess = 32.f;
-		std::string diffusePath = TEXTURE_DIFFUSE_CUBE;
-		std::string specularPath = TEXTURE_SPECULAR_CUBE;
+		std::string diffusePath = TEXTURE_DIFFUSE_BRICK;
+		std::string specularPath = TEXTURE_SPECULAR_BRICK;
 		std::string emissionPath = TEXTURE_EMISSION_CUBE;
 
 		unsigned row = 0;
@@ -107,13 +115,13 @@ namespace Sandbox
 		}
 
 		// ---------------- Floor Setup ----------------
-		std::string floorDiffusePath = TEXTURE_DIFFUSE_OTHER;
-		std::string floorSpecularPath = TEXTURE_SPECULAR_CUBE;
+		std::string floorDiffusePath = TEXTURE_DIFFUSE_GRASS;
+		std::string floorSpecularPath = TEXTURE_SPECULAR_GRASS;
 		std::string floorEmissionPath = TEXTURE_EMISSION_OTHER;
 		m_FloorMesh = Exalted::Mesh::Create();
 		m_FloorMesh->SetVertexArray(Exalted::ObjLoader::Load(SURFACE_MESH));
 		m_FloorMaterial = Exalted::Material::Create(color, color, color, shininess, floorDiffusePath, floorSpecularPath, floorEmissionPath);
-		m_FloorTransformation = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(0, 0, 0)), glm::vec3(2.f,1.f,2.f));
+		m_FloorTransformation = glm::scale(glm::translate(glm::mat4(1.f), glm::vec3(0, 0, 0)), glm::vec3(0.1f,0.1f,0.1f));
 
 		// -------------- Scene manager/root ------------------ //
 		m_SceneManager = Exalted::CreateRef<Exalted::Scene>(m_EditorCamera, true);
@@ -141,10 +149,17 @@ namespace Sandbox
 		m_LightUniformBuffer->BindBufferRange(lightsBBI, lightsOffset, lightsBufferSize);
 
 
-
 		//todo: move to material
 		// normal map
-		m_NormalMap = Exalted::Texture2D::Create("Resources/Textures/HD/Brick/Bricks01_NRM_3K.jpg",
+		m_BrickNormalMap = Exalted::Texture2D::Create(TEXTURE_NORMAL_BRICK,
+			Exalted::TextureFormat::RGB,
+			Exalted::TextureWrap::CLAMP,
+			Exalted::TextureMagFilter::LINEAR,
+			Exalted::TextureMinFilter::LINEAR_LINEAR,
+			true,
+			0, true);
+
+		m_ForestNormalMap = Exalted::Texture2D::Create(TEXTURE_NORMAL_GRASS,
 			Exalted::TextureFormat::RGB,
 			Exalted::TextureWrap::CLAMP,
 			Exalted::TextureMagFilter::LINEAR,
@@ -237,14 +252,14 @@ namespace Sandbox
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformBool1("u_BlinnPhong", m_BlinnPhong);
 		if (m_EmissionTransform)
 			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformFloat1("u_Time", TIME);
-
+	
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureDiffuse", 0);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureSpecular", 1);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureEmission", 2);
 
-		//----------------normap mapping texture binding
+		//----------------normal mapping texture binding
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_NormalMap", 4);
-		m_NormalMap->Bind(4);
+		m_BrickNormalMap->Bind(4);
 		//-----------------
 		for (int i = 0; i < m_ObjectCount; i++) //todo: Group by material / shader ID for instancing
 		{
@@ -256,6 +271,7 @@ namespace Sandbox
 			Exalted::Renderer::Submit(m_ObjectMesh);
 		}
 		// draw floor
+		m_ForestNormalMap->Bind(4);
 		m_FloorMaterial->DiffuseTexture->Bind(0);
 		m_FloorMaterial->SpecularTexture->Bind(1);
 		m_FloorMaterial->EmissionTexture->Bind(2);

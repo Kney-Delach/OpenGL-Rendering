@@ -1,7 +1,7 @@
 /***************************************************************************
  * Filename		: LightingVertex.glsl
  * Name			: Ori Lazar
- * Date			: 12/11/2019
+ * Date			: 19/11/2019
  * Description	: Vertex shader for lighting exploration.
      .---.
    .'_:___".
@@ -37,7 +37,6 @@ layout (std140) uniform Camera_Matrices
 out ShaderData 
 {
 	vec3 v_FragPosition;
-	//vec3 v_Normal;
 	vec2 v_TexCoord;
 	mat3 v_TBN;
 } OUT;
@@ -47,12 +46,19 @@ uniform mat4 u_Model;
 void main()
 {
 	vec3 T = normalize(vec3(u_Model * vec4(a_Tangent, 0.0)));
-	vec3 B = normalize(vec3(u_Model * vec4(cross(a_Tangent, a_Normal), 0.0)));
+	//vec3 B = normalize(vec3(u_Model * vec4(cross(a_Tangent, a_Normal), 0.0)));
 	vec3 N = normalize(vec3(u_Model * vec4(a_Normal, 0.0)));
-	OUT.v_TBN = transpose(mat3(T, B, N));
+	// gram schmidt process for re-orthogonalization
+	// re-orthogonalize T with respect to N
+	T = normalize(T - dot(T, N) * N);
+	// then retrieve perpendicular vector B with the cross product of T and N
+	vec3 B = cross(N, T);
+	OUT.v_TBN = mat3(T, B, N);
 
 	OUT.v_FragPosition = vec3(u_Model * vec4(a_Position, 1.0));
-	//OUT.v_Normal = mat3(transpose(inverse(u_Model))) * a_Normal; // generate the normal matrix  (necessary when model is scales / translated)
 	OUT.v_TexCoord = a_TexCoord;
+
 	gl_Position = ViewProjectionMatrix * u_Model * vec4(a_Position, 1.0);
+
+
 }

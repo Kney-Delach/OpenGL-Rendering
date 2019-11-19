@@ -65,10 +65,10 @@ namespace Sandbox
 		bool m_ActivateEmission = false;
 		bool m_EmissionTransform = false;
 		bool m_FlashlightMode = true;
-		bool m_BlinnPhong = false;
+		bool m_BlinnPhong = true;
 
-		// normal map
-		Exalted::Ref<Exalted::Texture2D> m_NormalMap;
-
+		// normal maps
+		Exalted::Ref<Exalted::Texture2D> m_BrickNormalMap;
+		Exalted::Ref<Exalted::Texture2D> m_ForestNormalMap;
 	};
 }
