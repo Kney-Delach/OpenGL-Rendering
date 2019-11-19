@@ -33,7 +33,6 @@ namespace Sandbox
 		Exalted::Ref<Exalted::EditorCamera> m_EditorCamera;
 		Exalted::Ref<Exalted::UniformBuffer> m_MatUniformBuffer;
 		Exalted::Ref<Exalted::UniformBuffer> m_LightUniformBuffer;
-
 		Exalted::Ref<Exalted::Shader> m_ObjectShader;
 		Exalted::Ref<Exalted::Shader> m_LightSourceShader;
 
@@ -67,5 +66,9 @@ namespace Sandbox
 		bool m_EmissionTransform = false;
 		bool m_FlashlightMode = true;
 		bool m_BlinnPhong = false;
+
+		// normal map
+		Exalted::Ref<Exalted::Texture2D> m_NormalMap;
+
 	};
 }

@@ -23,6 +23,6 @@ namespace Exalted
 	class ObjLoader 
 	{
 	public:
-		static Ref<VertexArray> Load(const std::string& path);
+		static Ref<VertexArray> Load(const std::string& path, bool calculateTangents = false);
 	};
 }

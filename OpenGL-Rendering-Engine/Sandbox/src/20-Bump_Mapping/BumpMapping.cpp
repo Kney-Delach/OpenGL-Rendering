@@ -14,8 +14,8 @@
 ***************************************************************************/
 #include "BumpMapping.h"
 
-#define LIGHTING_SHADER_VERTEX		"Resources/Shaders/Lighting/LightingVertex.glsl"
-#define LIGHTING_SHADER_FRAGMENT	"Resources/Shaders/Lighting/LightingFragment.glsl"
+#define LIGHTING_SHADER_VERTEX		"Resources/Shaders/BumpMapping/LightingVertex.glsl"
+#define LIGHTING_SHADER_FRAGMENT	"Resources/Shaders/BumpMapping/LightingFragment.glsl"
 
 #define LIGHT_ORIGIN_VERTEX "Resources/Shaders/Lighting/LightOriginVertex.glsl"
 #define LIGHT_ORIGIN_FRAGMENT "Resources/Shaders/Lighting/LightOriginFragment.glsl"
@@ -84,7 +84,7 @@ namespace Sandbox
 		// ---------------- Setup Object A (effected by light) ------------------- //
 		m_ObjectShader = Exalted::Shader::Create(LIGHTING_SHADER_VERTEX, LIGHTING_SHADER_FRAGMENT);
 		m_ObjectMesh = Exalted::Mesh::Create();
-		m_ObjectMesh->SetVertexArray(Exalted::ObjLoader::Load(LIGHT_SOURCE_MESH));
+		m_ObjectMesh->SetVertexArray(Exalted::ObjLoader::Load(LIGHT_SOURCE_MESH, true));
 
 		// --------------------- Setup Scene objects --------------------- //
 		glm::vec3 color = glm::vec3(1.0f, 0.5f, 0.31f);
@@ -139,6 +139,18 @@ namespace Sandbox
 		Exalted::Bytes lightsBufferSize = noPointLights * Exalted::PointLight::UBSize() + noDirectionalLights * Exalted::DirectionalLight::UBSize() + noSpotLights * Exalted::SpotLight::UBSize();
 		m_LightUniformBuffer = Exalted::UniformBuffer::Create(lightsBufferSize);
 		m_LightUniformBuffer->BindBufferRange(lightsBBI, lightsOffset, lightsBufferSize);
+
+
+
+		//todo: move to material
+		// normal map
+		m_NormalMap = Exalted::Texture2D::Create("Resources/Textures/HD/ForestGround/GroundForest003_NRM_6K.jpg",
+			Exalted::TextureFormat::RGB,
+			Exalted::TextureWrap::CLAMP,
+			Exalted::TextureMagFilter::LINEAR,
+			Exalted::TextureMinFilter::LINEAR_LINEAR,
+			true,
+			0);
 	}
 
 	void BumpMappingLayer::OnDetach()
@@ -229,6 +241,11 @@ namespace Sandbox
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureDiffuse", 0);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureSpecular", 1);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_Material.TextureEmission", 2);
+
+		//----------------normap mapping texture binding
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectShader)->SetUniformInt1("u_NormalMap", 4);
+		m_NormalMap->Bind(4);
+		//-----------------
 		for (int i = 0; i < m_ObjectCount; i++) //todo: Group by material / shader ID for instancing
 		{
 			m_ObjectMaterials[i]->DiffuseTexture->Bind(0);
