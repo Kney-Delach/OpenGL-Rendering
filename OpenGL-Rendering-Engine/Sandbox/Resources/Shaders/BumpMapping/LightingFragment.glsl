@@ -101,7 +101,7 @@ layout (std140) uniform Camera_Matrices
 in ShaderData 
 {
 	vec3 v_FragPosition;
-	vec3 v_Normal;
+	//vec3 v_Normal;
 	vec2 v_TexCoord;
 	mat3 v_TBN;
 } IN;
@@ -250,8 +250,7 @@ void main()
 
 	vec3 normal = texture(u_NormalMap, IN.v_TexCoord).rgb;
 	normal = normalize(normal * 2.0 - 1.0);
-	normal = normalize(IN.v_TBN * IN.v_Normal);
-
+	normal = normalize(IN.v_TBN * normal);
 
 	vec3 viewDirection = normalize(CameraPosition - IN.v_FragPosition);
 

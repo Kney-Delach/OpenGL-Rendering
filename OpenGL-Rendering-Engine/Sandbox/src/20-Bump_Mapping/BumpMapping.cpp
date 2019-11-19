@@ -22,8 +22,8 @@
 
 #define LIGHT_SOURCE_MESH "Resources/Meshes/cube.obj"
 
-#define TEXTURE_DIFFUSE_CUBE	"Resources/Textures/HD/ForestGround/GroundForest003_COL_VAR1_6K.jpg" //Lights/CubeDiffuse.png";
-#define TEXTURE_SPECULAR_CUBE	"Resources/Textures/HD/ForestGround/GroundForest003_GLOSS_6K.jpg" //Lights/CubeSpecular.png";
+#define TEXTURE_DIFFUSE_CUBE	"Resources/Textures/HD/Brick/Bricks01_COL_VAR1_3K.jpg";//GroundForest003_COL_VAR1_6K.jpg" //Lights/CubeDiffuse.png";
+#define TEXTURE_SPECULAR_CUBE	"Resources/Textures/HD/Brick/Bricks01_GLOSS_3K.jpg"
 #define TEXTURE_EMISSION_CUBE	"Resources/Textures/Lights/CubeEmission.png";
 
 #define SURFACE_MESH				"Resources/Meshes/Surfaces/Rugs/Rug.obj"
@@ -144,13 +144,13 @@ namespace Sandbox
 
 		//todo: move to material
 		// normal map
-		m_NormalMap = Exalted::Texture2D::Create("Resources/Textures/HD/ForestGround/GroundForest003_NRM_6K.jpg",
+		m_NormalMap = Exalted::Texture2D::Create("Resources/Textures/HD/Brick/Bricks01_NRM_3K.jpg",
 			Exalted::TextureFormat::RGB,
 			Exalted::TextureWrap::CLAMP,
 			Exalted::TextureMagFilter::LINEAR,
 			Exalted::TextureMinFilter::LINEAR_LINEAR,
 			true,
-			0);
+			0, true);
 	}
 
 	void BumpMappingLayer::OnDetach()

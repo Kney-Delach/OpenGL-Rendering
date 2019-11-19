@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>expch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;EX_BUILD_DLL;EX_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Dependencies\tinyobjloader;src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Dependencies\tinyobjloader;src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;Dependencies\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -97,7 +97,7 @@
       <PrecompiledHeaderFile>expch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;EX_BUILD_DLL;EX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Dependencies\tinyobjloader;src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Dependencies\tinyobjloader;src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;Dependencies\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -121,7 +121,7 @@
       <PrecompiledHeaderFile>expch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;EX_BUILD_DLL;EX_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;Dependencies\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -533,8 +533,8 @@
     <ClInclude Include="src\Core\Renderer\Lights\Material.h" />
     <ClInclude Include="src\Core\Renderer\Lights\ShadowInfo.h" />
     <ClInclude Include="src\Core\Renderer\Loaders\HeightMapLoader.h" />
-    <ClInclude Include="src\Core\Renderer\Mesh.h" />
     <ClInclude Include="src\Core\Renderer\Loaders\ObjLoader.h" />
+    <ClInclude Include="src\Core\Renderer\Mesh.h" />
     <ClInclude Include="src\Core\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Core\Renderer\Renderer.h" />
     <ClInclude Include="src\Core\Renderer\RendererAPI.h" />
@@ -581,8 +581,8 @@
     <ClCompile Include="src\Core\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Core\Renderer\Generators\ShapeGenerator.cpp" />
     <ClCompile Include="src\Core\Renderer\Loaders\HeightMapLoader.cpp" />
-    <ClCompile Include="src\Core\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Core\Renderer\Loaders\ObjLoader.cpp" />
+    <ClCompile Include="src\Core\Renderer\Mesh.cpp" />
     <ClCompile Include="src\Core\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Core\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Core\Renderer\RendererAPI.cpp" />

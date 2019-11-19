@@ -10,8 +10,35 @@
     <Filter Include="11-Model_Loading">
       <UniqueIdentifier>{A289A33D-8E82-C28F-B7B4-A714A30CA29B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="12-Frame_Buffers">
+      <UniqueIdentifier>{4C3697B5-382F-B607-6161-9B8C4DB99513}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="13-Texture_Cubes_Skybox">
+      <UniqueIdentifier>{17871662-83BE-5EF9-8CC8-C21CF87E85F2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="14-GLSL_Exploration">
+      <UniqueIdentifier>{5D9A27F1-C9FB-04FF-5269-4BB1BEC93BBE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="15-Instancing">
+      <UniqueIdentifier>{E6748F53-5235-0B8A-1B70-540787EF4F66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="16-Tesselation">
+      <UniqueIdentifier>{045B58EE-F028-4CF4-D9BC-BC1AC5292859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="17-Lighting">
+      <UniqueIdentifier>{F0585A78-5C0E-D36D-E502-CD4451B7C971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="18-Shadows">
+      <UniqueIdentifier>{14054DED-00BD-8E3A-69C4-6796559B292B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="19-Multiple_Shadows">
+      <UniqueIdentifier>{E0918ED3-4CF3-6BE1-D560-B29341C1A2A0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="2-Vertex_Transformations">
       <UniqueIdentifier>{4B774CCE-379C-9B4E-60E7-80DE4C6B9A6C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="20-Bump_Mapping">
+      <UniqueIdentifier>{D3DB068C-3F67-7450-4878-F744B482D050}</UniqueIdentifier>
     </Filter>
     <Filter Include="3-Editor_Camera_Showcase">
       <UniqueIdentifier>{10DEA3B8-FC02-F338-254E-D8C811D2F156}</UniqueIdentifier>
@@ -45,8 +72,35 @@
     <ClInclude Include="src\11-Model_Loading\ModelLoadingLayer.h">
       <Filter>11-Model_Loading</Filter>
     </ClInclude>
+    <ClInclude Include="src\12-Frame_Buffers\FrameBufferLayer.h">
+      <Filter>12-Frame_Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.h">
+      <Filter>13-Texture_Cubes_Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\14-GLSL_Exploration\GLSLExplorationLayer.h">
+      <Filter>14-GLSL_Exploration</Filter>
+    </ClInclude>
+    <ClInclude Include="src\15-Instancing\InstancingLayer.h">
+      <Filter>15-Instancing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\16-Tesselation\TessellationLayer.h">
+      <Filter>16-Tesselation</Filter>
+    </ClInclude>
+    <ClInclude Include="src\17-Lighting\LightingLayer.h">
+      <Filter>17-Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\18-Shadows\ShadowLayer.h">
+      <Filter>18-Shadows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\19-Multiple_Shadows\MultipleShadowsLayer.h">
+      <Filter>19-Multiple_Shadows</Filter>
+    </ClInclude>
     <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h">
       <Filter>2-Vertex_Transformations</Filter>
+    </ClInclude>
+    <ClInclude Include="src\20-Bump_Mapping\BumpMapping.h">
+      <Filter>20-Bump_Mapping</Filter>
     </ClInclude>
     <ClInclude Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.h">
       <Filter>3-Editor_Camera_Showcase</Filter>
@@ -69,15 +123,6 @@
     <ClInclude Include="src\9-Scene_Class\SceneClassLayer.h">
       <Filter>9-Scene_Class</Filter>
     </ClInclude>
-    <ClInclude Include="src\12-Frame_Buffers\FrameBufferLayer.h" />
-    <ClInclude Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.h" />
-    <ClInclude Include="src\14-GLSL_Exploration\GLSLExplorationLayer.h" />
-    <ClInclude Include="src\15-Instancing\InstancingLayer.h" />
-    <ClInclude Include="src\16-Tesselation\TessellationLayer.h" />
-    <ClInclude Include="src\17-Lighting\LightingLayer.h" />
-    <ClInclude Include="src\18-Shadows\ShadowLayer.h" />
-    <ClInclude Include="src\19-Multiple_Shadows\MultipleShadowsLayer.h" />
-    <ClInclude Include="src\20-Bump_Mapping\BumpMapping.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
@@ -89,8 +134,35 @@
     <ClCompile Include="src\11-Model_Loading\ModelLoadingLayer.cpp">
       <Filter>11-Model_Loading</Filter>
     </ClCompile>
+    <ClCompile Include="src\12-Frame_Buffers\FrameBufferLayer.cpp">
+      <Filter>12-Frame_Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.cpp">
+      <Filter>13-Texture_Cubes_Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="src\14-GLSL_Exploration\GLSLExplorationLayer.cpp">
+      <Filter>14-GLSL_Exploration</Filter>
+    </ClCompile>
+    <ClCompile Include="src\15-Instancing\InstancingLayer.cpp">
+      <Filter>15-Instancing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\16-Tesselation\TessellationLayer.cpp">
+      <Filter>16-Tesselation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\17-Lighting\LightingLayer.cpp">
+      <Filter>17-Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\18-Shadows\ShadowLayer.cpp">
+      <Filter>18-Shadows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\19-Multiple_Shadows\MultipleShadowsLayer.cpp">
+      <Filter>19-Multiple_Shadows</Filter>
+    </ClCompile>
     <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp">
       <Filter>2-Vertex_Transformations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\20-Bump_Mapping\BumpMapping.cpp">
+      <Filter>20-Bump_Mapping</Filter>
     </ClCompile>
     <ClCompile Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.cpp">
       <Filter>3-Editor_Camera_Showcase</Filter>
@@ -114,31 +186,5 @@
       <Filter>9-Scene_Class</Filter>
     </ClCompile>
     <ClCompile Include="src\SandboxEntry.cpp" />
-    <ClCompile Include="src\12-Frame_Buffers\FrameBufferLayer.cpp" />
-    <ClCompile Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.cpp" />
-    <ClCompile Include="src\14-GLSL_Exploration\GLSLExplorationLayer.cpp" />
-    <ClCompile Include="src\15-Instancing\InstancingLayer.cpp" />
-    <ClCompile Include="src\16-Tesselation\TessellationLayer.cpp" />
-    <ClCompile Include="src\17-Lighting\LightingLayer.cpp" />
-    <ClCompile Include="src\18-Shadows\ShadowLayer.cpp" />
-    <ClCompile Include="src\19-Multiple_Shadows\MultipleShadowsLayer.cpp" />
-    <ClCompile Include="src\20-Bump_Mapping\BumpMapping.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />
-    <None Include="Resources\Shaders\ModelShaders\ModelLoadFragment.glsl" />
-    <None Include="Resources\Shaders\FrameBufferShaders\Vertex.glsl" />
-    <None Include="Resources\Shaders\FrameBufferShaders\Fragment.glsl" />
-    <None Include="Resources\Shaders\SkyboxShaders\SkyboxVertex.glsl" />
-    <None Include="Resources\Shaders\SkyboxShaders\SkyboxFragment.glsl" />
-    <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapVertex.glsl" />
-    <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapFragment.glsl" />
-    <None Include="Resources\Shaders\GLSL-Exploration\ModelFragment2.glsl" />
-    <None Include="Resources\Shaders\GLSL-Exploration\NormalsGeometry.glsl" />
-    <None Include="Resources\Shaders\GLSL-Exploration\NormalsFragment.glsl" />
-    <None Include="Resources\Shaders\GLSL-Exploration\NormalsVertex.glsl" />
-    <None Include="Resources\Shaders\Shadows\ShadowDepthVertex.glsl" />
-    <None Include="Resources\Shaders\Shadows\ShadowDepthFragment.glsl" />
-    <None Include="Resources\Shaders\MultipleShadows\ShadowDepthGeometry.glsl" />
   </ItemGroup>
 </Project>

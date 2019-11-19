@@ -180,23 +180,6 @@
       <Project>{8C8535E2-F864-B47D-017D-3F546DDB1ADF}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Shaders\FrameBufferShaders\Fragment.glsl" />
-    <None Include="Resources\Shaders\FrameBufferShaders\Vertex.glsl" />
-    <None Include="Resources\Shaders\GLSL-Exploration\NormalsFragment.glsl" />
-    <None Include="Resources\Shaders\GLSL-Exploration\NormalsGeometry.glsl" />
-    <None Include="Resources\Shaders\GLSL-Exploration\ModelFragment2.glsl" />
-    <None Include="Resources\Shaders\GLSL-Exploration\NormalsVertex.glsl" />
-    <None Include="Resources\Shaders\ModelShaders\ModelLoadFragment.glsl" />
-    <None Include="Resources\Shaders\ModelShaders\ModelLoadVertex.glsl" />
-    <None Include="Resources\Shaders\MultipleShadows\ShadowDepthGeometry.glsl" />
-    <None Include="Resources\Shaders\Shadows\ShadowDepthFragment.glsl" />
-    <None Include="Resources\Shaders\Shadows\ShadowDepthVertex.glsl" />
-    <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapFragment.glsl" />
-    <None Include="Resources\Shaders\SkyboxShaders\ModelSkymapVertex.glsl" />
-    <None Include="Resources\Shaders\SkyboxShaders\SkyboxFragment.glsl" />
-    <None Include="Resources\Shaders\SkyboxShaders\SkyboxVertex.glsl" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
