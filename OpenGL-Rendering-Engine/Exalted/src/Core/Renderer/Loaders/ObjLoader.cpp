@@ -113,6 +113,7 @@ namespace Exalted
 					bitangent.z = f * (-deltaU2 * edge1.z - deltaU1 * edge2.z);
 
 					tangent = glm::normalize(tangent);
+					bitangent = glm::normalize(bitangent);
 				}
 
 				

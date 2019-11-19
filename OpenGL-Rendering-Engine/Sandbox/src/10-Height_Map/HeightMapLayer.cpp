@@ -45,7 +45,7 @@ namespace Sandbox
 			0);
 
 		m_HeightMap = Exalted::Mesh::Create();
-		m_HeightMap->SetVertexArray(Exalted::HeightMapLoader::Load("Resources/Textures/terrain.raw"));
+		m_HeightMap->SetVertexArray(Exalted::HeightMapLoader::Load("Resources/Textures/HeightMap.raw"));
 		//m_HeightMap->CreateHeightMap("Resources/Textures/terrain.raw");
 
 		Exalted::GameObject* terrainGameObject = new Exalted::GameObject("Terrain");

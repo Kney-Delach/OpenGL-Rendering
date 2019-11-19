@@ -65,7 +65,7 @@ namespace Sandbox
 			//PushLayer(new LightingLayer());
 			//PushLayer(new ShadowLayer());
 			//PushLayer(new MultipleShadowsLayer());
-			PushLayer(new BumpMappingLayer());
+			//PushLayer(new BumpMappingLayer());
 		}
 		virtual ~OpenGLRenderingApplication()
 		{
