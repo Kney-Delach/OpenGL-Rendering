@@ -32,7 +32,7 @@ namespace Exalted
 		Ref<ShadowInfo> m_ShadowInfo; // used to specify whether or not light casts shadows
 		
 		virtual ~Light() = default;
-		virtual void UpdateUniformBuffer(Bytes& offset, Ref<UniformBuffer>& ub) = 0;
+		virtual void UpdateUniformBuffer(Bytes& offset, Ref<UniformBuffer>& ub) {};
 		inline Ref<ShadowInfo>& GetShadowInfo() { return m_ShadowInfo; };
 	protected:
 		Light()
@@ -62,20 +62,20 @@ namespace Exalted
 		
 		PointLight()
 			: Light(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f)), 
-			Position(0), AttenuationConstant(1), AttenuationLinear(0.7), AttenuationQuadratic(1.8)
+			AttenuationConstant(1), AttenuationLinear(0.7), AttenuationQuadratic(1.8), Position(0)
 		{
 		}
 		PointLight(const glm::vec3& position, 
 			const glm::vec3& ambient = glm::vec3(1.0f), const glm::vec3& diffuse = glm::vec3(1.0f), const glm::vec3& specular = glm::vec3(1.0f),
 			const float constant = 1.f, const float linear = 0.7, const float quadratic = 1.8)
-			: Light(ambient, diffuse, specular), 
-			Position(position), AttenuationConstant(constant), AttenuationLinear(linear), AttenuationQuadratic(quadratic)
+			: Light(ambient, diffuse, specular), Position(position),
+			AttenuationConstant(constant), AttenuationLinear(linear), AttenuationQuadratic(quadratic)
 		{
 		}
 
 		PointLight(const PointLight& other)
-			: Light(other.Ambient, other.Diffuse, other.Specular), 
-			Position(other.Position), AttenuationConstant(other.AttenuationConstant), AttenuationLinear(other.AttenuationLinear), AttenuationQuadratic(other.AttenuationQuadratic)
+			: Light(other.Ambient, other.Diffuse, other.Specular), Position(other.Position),
+			AttenuationConstant(other.AttenuationConstant), AttenuationLinear(other.AttenuationLinear), AttenuationQuadratic(other.AttenuationQuadratic)
 		{
 		}
 
@@ -142,7 +142,7 @@ namespace Exalted
 	//	Directional Light /////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////
 	
-	struct DirectionalLight : public Light
+	struct DirectionalLight : public Light // we set its position as its direction
 	{
 		glm::vec3 Direction;
 
@@ -213,7 +213,7 @@ namespace Exalted
 		
 		SpotLight()
 			: Light(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f)),
-				Position(0.f), Direction(1.f),
+				Position(1.f), Direction(1.f),
 				CutoffInner(glm::cos(glm::radians(12.5f))), CutoffOuter(glm::cos(glm::radians(17.5f))),
 				AttenuationConstant(1), AttenuationLinear(0.7), AttenuationQuadratic(1.8)
 		{

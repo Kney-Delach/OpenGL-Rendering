@@ -20,10 +20,40 @@
 
 namespace Exalted
 {
+	//void Scene::CompleteSceneSetup() const
+	//{
+	//	if (m_StaticLightManager)
+	//	{
+	//		m_StaticLightManager->SetupUniformBuffer();
+	//		m_StaticLightManager->UpdateUniformBufferData();
+	//	}
+
+	//	if (m_DynamicLightManager)
+	//	{
+	//		m_DynamicLightManager->SetupUniformBuffer();
+	//		m_DynamicLightManager->UpdateUniformBufferData();
+	//	}
+	//}
+
 	void Scene::UpdateScene(Timestep deltaTime)
 	{
 		m_Frustum.FromVPMatrix(m_Camera->GetViewProjectionMatrix());
 		m_SceneRoot->Update(deltaTime);
+		//todo: Update the dynamic light uniform buffers
+		//m_DynamicLightManager->UpdateUniformBufferData();
+		//m_StaticLightManager->UpdateUniformBufferData();
+	}
+
+	void Scene::DrawOpaqueObjects()
+	{
+		for (std::vector<GameObject*>::const_iterator i = m_OpaqueObjects.begin(); i != m_OpaqueObjects.end(); ++i)
+			DrawObject(*i);
+	}
+
+	void Scene::DrawTransparentObjects()
+	{
+		for (std::vector<GameObject*>::const_reverse_iterator i = m_TransparentObjects.rbegin(); i != m_TransparentObjects.rend(); ++i)
+			DrawObject(*i);
 	}
 
 	void Scene::BuildObjectLists(GameObject* gameObject)
@@ -54,10 +84,11 @@ namespace Exalted
 			GameObject::CompareByCameraDistance);
 	}
 
-	void Scene::DrawObjectLists()
+	void Scene::DrawObjectLists() //todo: Draw skybox inbetween here? 
 	{
 		for(std::vector<GameObject*>::const_iterator i = m_OpaqueObjects.begin(); i != m_OpaqueObjects.end();++i)
 			DrawObject(*i);
+		RenderSkybox(); //todo: verify this doesn't break everything
 		for (std::vector<GameObject*>::const_reverse_iterator i = m_TransparentObjects.rbegin(); i != m_TransparentObjects.rend(); ++i)
 			DrawObject(*i);
 	}

@@ -549,6 +549,7 @@
     <ClInclude Include="src\Core\SceneGraph\GameComponent.h" />
     <ClInclude Include="src\Core\SceneGraph\GameObject.h" />
     <ClInclude Include="src\Core\SceneGraph\GameTransform.h" />
+    <ClInclude Include="src\Core\SceneGraph\LightManager.h" />
     <ClInclude Include="src\Core\SceneGraph\Scene.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\Exalted.h" />

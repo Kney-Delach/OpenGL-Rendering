@@ -43,6 +43,8 @@ namespace Exalted
 			ProcessKeyboardEvent(CameraMovement::UP, deltaTime);
 		if (Input::IsKeyPressed(EX_KEY_E))
 			ProcessKeyboardEvent(CameraMovement::DOWN, deltaTime);
+
+		UpdateUBO();
 	}
 
 	void EditorCamera::OnImGuiRender() //todo: Give each camera a unique id (as in game component)
@@ -128,7 +130,7 @@ namespace Exalted
 		}
 	}
 
-	void EditorCamera::UpdateUBO(Ref<UniformBuffer>& ubo) const
+	void EditorCamera::UpdateUBO(Ref<UniformBuffer>& ubo) const //todo: exists only for backwards compatibility with previous example scenes
 	{
 		ubo->Bind();
 		Bytes offset = 0;
@@ -146,6 +148,26 @@ namespace Exalted
 		offset += sizeof(glm::vec4);
 		ubo->Unbind();
 	}
+
+	void EditorCamera::UpdateUBO() const
+	{
+		m_CameraUniformBuffer->Bind();
+		Bytes offset = 0;
+		Bytes size = sizeof(glm::mat4);
+		Bytes sizeofVec4 = sizeof(glm::vec4);
+		m_CameraUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(GetViewMatrix()));
+		offset += sizeof(glm::mat4);
+		m_CameraUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(glm::mat4(glm::mat3(GetViewMatrix()))));
+		offset += sizeof(glm::mat4);
+		m_CameraUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(GetProjectionMatrix()));
+		offset += sizeof(glm::mat4);
+		m_CameraUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(GetViewProjectionMatrix()));
+		offset += sizeof(glm::mat4);
+		m_CameraUniformBuffer->SetBufferSubData(offset, sizeofVec4, glm::value_ptr(GetPosition()));
+		offset += sizeof(glm::vec4);
+		m_CameraUniformBuffer->Unbind();
+	}
+	
 
 	void EditorCamera::ProcessRotationEvent(float xOffset, float yOffset)
 	{

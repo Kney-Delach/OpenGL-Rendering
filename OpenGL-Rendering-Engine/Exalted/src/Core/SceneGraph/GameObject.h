@@ -27,6 +27,8 @@
 #include "Core/Renderer/Renderer.h"
 
 #include "FrustumCulling/FrustumPlane.h"
+#include "Core/Renderer/Lights/Material.h"
+#include "Core/Renderer/Lights/Light.h"
 
 //todo: Implement a check for if a mesh should be drawn with or without indicies.
 //todo: Implement a better gui hierarchy
@@ -83,14 +85,26 @@ namespace Exalted
 		{
 			if (m_Mesh)
 			{
-				if (m_Texture)
+				m_Shader->Bind();
+
+				if (m_Material)
 				{
-					m_Texture->Bind();
-					Renderer::Submit(m_Shader, m_Mesh, m_Transform->WorldTransform);
-					m_Texture->Unbind();
+					std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureDiffuse", 0);
+					std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureSpecular", 1);
+					std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureEmission", 2);
+					std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureNormal", 3);
+					m_Material->Bind();
+					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_Model", m_Transform->WorldTransform);
+					Renderer::Submit(m_Mesh);
+					m_Material->Unbind();
 				}
 				else
-					Renderer::Submit(m_Shader, m_Mesh, m_Transform->WorldTransform);
+				{
+					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_Model", m_Transform->WorldTransform);
+					Renderer::Submit(m_Mesh);
+				}
+				m_Shader->Unbind();
+
 			}
 		}
 
@@ -100,15 +114,24 @@ namespace Exalted
 
 		inline void SetTexture(Ref<Texture2D>& texture)
 		{
-			if(!m_IsTransparent)
-				m_IsTransparent = texture->IsTransparent();
-			m_Texture = texture;
+			//if(!m_IsTransparent)
+			//	m_IsTransparent = texture->IsTransparent();
+			//m_Texture = texture;
 		}
+		
+
+		inline void SetMaterial(Ref<Material>& material) { m_Material = material; }
+		inline Ref<Material>& GetMaterial() { return m_Material; }
 
 		void SetMesh(Ref<Mesh>& mesh) { m_Mesh = mesh; }
 		inline Ref<Mesh>& GetMesh() { return m_Mesh; }
 
+		//void SetSpotLight(Ref<SpotLight>& light) { m_SpotLight = light; }
+		//void SetPointLight(Ref<PointLight>& light) { m_PointLight = light; }
+		//
 		inline bool IsTransparent() const { return m_IsTransparent; }
+		inline void SetTransparency(bool transparent) { m_IsTransparent = transparent; }
+		
 		inline bool IsActive() const { return m_Active; }
 		inline void SetActive(bool active) { m_Active = active; }
 
@@ -140,8 +163,12 @@ namespace Exalted
 	private:
 		Ref<GameTransform> m_Transform;
 		Ref<Mesh> m_Mesh;
-		Ref<Texture2D> m_Texture;  //todo: Replace with material once that's implemented.
-		Ref<Shader> m_Shader; //todo: Replace with material once that's implemented.
+		//Ref<Texture2D> m_Texture;  //todo: Replace with material once that's implemented.
+		Ref<Material> m_Material; 
+		Ref<Shader> m_Shader;
+		//Ref<SpotLight> m_SpotLight;
+		//Ref<PointLight> m_PointLight;
+
 		GameObject* m_pParent = nullptr;
 		std::vector<GameComponent*> m_GameComponents;
 		std::vector<GameObject*> m_ChildrenObjectsList;

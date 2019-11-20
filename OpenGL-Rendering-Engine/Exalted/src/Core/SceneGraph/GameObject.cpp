@@ -46,13 +46,24 @@ namespace Exalted
 
 	void GameObject::Update(Timestep deltaTime)
 	{
+		//todo: verify setting the light source's location dependent on world position works correctly
 		// 1 - Set the transforms relative to parent GameObjects
 		if (m_pParent)
+		{
 			m_Transform->SetWorldTransform(m_pParent->GetTransform()->WorldTransform);
+		}
 		else
+		{
 			m_Transform->SetWorldTransform();
+		}
 
-		//todo: Uncomment this when game components are useful.
+		//if (m_PointLight)
+		//	m_PointLight->Position = m_Transform->Position; //glm::vec3(m_Transform->WorldTransform[3]);
+		//if (m_SpotLight)
+		//	m_SpotLight->Position = m_Transform->Position ;// = m_Transform->Position;// glm::vec3(m_Transform->WorldTransform[3]);
+
+
+		//todo: Uncomment this when game components are useful, MOVE THIS BEFORE TRANSFORMATIONS
 		// 2 - process all component objects of this object
 		//for (std::vector<GameComponent*>::iterator i = m_GameComponents.begin(); i != m_GameComponents.end(); ++i)
 		//	(*i)->Update(deltaTime);
