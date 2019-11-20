@@ -21,6 +21,9 @@ namespace Sandbox
 		
 		Exalted::Ref<Exalted::UniformBuffer> m_LightUniformBuffer;
 
+		Exalted::Ref<Exalted::DirectionalLight> m_DirectionalLight;
+		Exalted::Ref<Exalted::GameTransform> m_DirectionalLightTransform;
+		
 		std::vector<Exalted::Ref<Exalted::PointLight>> m_PointLights;
 		std::vector<Exalted::Ref<Exalted::GameTransform>> m_PointLightTransforms;
 

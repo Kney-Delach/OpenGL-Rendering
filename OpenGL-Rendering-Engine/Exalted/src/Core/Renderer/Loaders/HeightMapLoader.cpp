@@ -18,6 +18,7 @@
 
 #include <string>
 #include <fstream>
+#include "glm/vec3.hpp"
 
 namespace Exalted
 {
@@ -50,11 +51,19 @@ namespace Exalted
 		{
 			for (int z = 0; z < RAW_HEIGHT; ++z)
 			{
+				// vertex position
 				allVertices.push_back((float)	x * HEIGHTMAP_X);
 				allVertices.push_back((float)	data[x * RAW_WIDTH + z] * HEIGHTMAP_Y);
 				allVertices.push_back((float)	z * HEIGHTMAP_Z);
-				allVertices.push_back((float)	x * HEIGHTMAP_TEX_X * 10);
-				allVertices.push_back((float)	z * HEIGHTMAP_TEX_Z * 10);
+
+				// normal
+				allVertices.push_back(0);
+				allVertices.push_back(1);
+				allVertices.push_back(0);
+
+				// texture co-ordinate
+				allVertices.push_back((float)	x * HEIGHTMAP_TEX_X);
+				allVertices.push_back((float)	z * HEIGHTMAP_TEX_Z);
 			}
 		}
 
@@ -79,6 +88,7 @@ namespace Exalted
 		const BufferLayout layout =
 		{
 			{ShaderDataType::Float3, "a_Position" },
+			{ShaderDataType::Float3, "a_Normal" },
 			{ShaderDataType::Float2, "a_TexCoord" }
 		};
 		vb->SetLayout(layout);

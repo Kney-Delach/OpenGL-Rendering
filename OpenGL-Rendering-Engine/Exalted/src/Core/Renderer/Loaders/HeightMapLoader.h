@@ -23,6 +23,6 @@ namespace Exalted
 	class HeightMapLoader
 	{
 	public:
-		static Ref<VertexArray> Load(const std::string& path);
+		static Ref<VertexArray> Load(const std::string& path = "Resources/Defaults/Terrain/terrain.raw");
 	};
 }

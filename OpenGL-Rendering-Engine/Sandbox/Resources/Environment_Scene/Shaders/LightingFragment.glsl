@@ -82,8 +82,8 @@ struct SpotLight
 
 layout (std140) uniform Light_Uniforms
 {
-	PointLight PointLights[NUMBER_OF_POINT_LIGHTS];
-	//DirectionalLight DirectionalLights;
+	//PointLight PointLights[NUMBER_OF_POINT_LIGHTS];
+	DirectionalLight DirectionalLights;
 	//SpotLight SpotLights[NUMBER_OF_SPOT_LIGHTS_STATIC];
 };
 
@@ -114,7 +114,7 @@ uniform Material u_Material;
 //uniform bool u_BlinnPhong;
 //uniform bool u_ActivateEmission;
 //uniform bool u_EmissionTransform;
-uniform float u_Time; // glfwGetTime()
+//uniform float u_Time; // glfwGetTime()
 
 // ------------------ Main Shader Routines ------------------ //
 
@@ -255,15 +255,15 @@ void main()
 	normal = normalize(normal * 2.0 - 1.0);
 	normal = normalize(IN.v_TBN * normal);
 
-	vec3 result = vec3(0);
+	//vec3 result = vec3(0);
 	// Directional light calculation
-	//vec3 result = CalculateDirectionalLight(DirectionalLights, normal, viewDirection); //todo: Uncomment this
+	vec3 result = CalculateDirectionalLight(DirectionalLights, normal, viewDirection);
 
 	//Point Light Calculations
-	for (int i = 1; i < NUMBER_OF_POINT_LIGHTS; i++) 
-	{
-		result += CalculatePointLights(PointLights[i], normal, IN.v_FragPosition, viewDirection);
-	}
+	//for (int i = 1; i < NUMBER_OF_POINT_LIGHTS; i++) 
+	//{
+	//	result += CalculatePointLights(PointLights[i], normal, IN.v_FragPosition, viewDirection);
+	//}
 
 	// Spot Light Calculations
 	//for (int i = 0; i < NUMBER_OF_SPOT_LIGHTS_STATIC; i++)
