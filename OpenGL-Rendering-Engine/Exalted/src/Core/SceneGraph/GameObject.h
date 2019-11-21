@@ -86,20 +86,13 @@ namespace Exalted
 			if (m_Mesh)
 			{
 				m_Shader->Bind();
-				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_LightSpaceMatrix", LightSpaceMatrix);
-				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureDiffuse", 0);
-				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureSpecular", 1);
-				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureEmission", 2);
-				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureNormal", 3);
-				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_ShadowMap", 4); //todo: verify this works
-
-				m_Material->Bind();
+				m_Material->Bind(m_Shader);
+				std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1("u_ShadowMap", 4);
+				std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_LightSpaceMatrix", LightSpaceMatrix);
 				std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_Model", m_Transform->WorldTransform);
 				Renderer::Submit(m_Mesh);
 				m_Material->Unbind();
-	
 				m_Shader->Unbind();
-
 			}
 		}
 

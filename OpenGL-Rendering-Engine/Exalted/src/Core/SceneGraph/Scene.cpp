@@ -20,28 +20,10 @@
 
 namespace Exalted
 {
-	//void Scene::CompleteSceneSetup() const
-	//{
-	//	if (m_StaticLightManager)
-	//	{
-	//		m_StaticLightManager->SetupUniformBuffer();
-	//		m_StaticLightManager->UpdateUniformBufferData();
-	//	}
-
-	//	if (m_DynamicLightManager)
-	//	{
-	//		m_DynamicLightManager->SetupUniformBuffer();
-	//		m_DynamicLightManager->UpdateUniformBufferData();
-	//	}
-	//}
-
 	void Scene::UpdateScene(Timestep deltaTime)
 	{
 		m_Frustum.FromVPMatrix(m_Camera->GetViewProjectionMatrix());
 		m_SceneRoot->Update(deltaTime);
-		//todo: Update the dynamic light uniform buffers
-		//m_DynamicLightManager->UpdateUniformBufferData();
-		//m_StaticLightManager->UpdateUniformBufferData();
 	}
 
 	void Scene::DrawOpaqueObjects()
@@ -110,7 +92,6 @@ namespace Exalted
 		m_OpaqueObjects.clear();
 		m_TransparentObjects.clear();
 	}
-
 
 	void Scene::OnEvent(Exalted::Event& event)
 	{

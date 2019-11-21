@@ -78,6 +78,7 @@ namespace Exalted
 		glGenFramebuffers(1, &m_RendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_ColorAttachment, 0);
+		//glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_ColorAttachment, 0); //todo: verify this works
 		glDrawBuffer(GL_NONE);
 		glReadBuffer(GL_NONE); // explicitly state that won't be rendering color data
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);

@@ -1,0 +1,77 @@
+///////////////////////////////////////////////////////////////////////////////////////
+//// Directional Light Shadows
+///////////////////////////////////////////////////////////////////////////////////////
+//float near_plane = 0.1f;
+//float far_plane = 2000.f;
+//glm::mat4 lightProjection = glm::perspective(glm::radians(90.f), 1.f, 0.1f, 2000.f); // no perspective deform for directional light 
+//glm::mat4 lightView = glm::lookAt(m_DirectionalLight->Direction, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); // glm::lookAt(m_DirectionalLightA->Direction, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // direction assigned as position, looking towards center.
+//glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+//Exalted::GameObject::LightSpaceMatrix = lightSpaceMatrix; //todo: verify this hack works
+
+/////////////////////////////////////////////////////////////////
+//// Initial render to depth map for shadow mapping ///////////// 
+/////////////////////////////////////////////////////////////////
+
+m_DepthFrameBuffer->BindTexture(4); // assign debth texture
+
+//Exalted::OpenGLConfigurations::EnableFaceCulling();
+//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::FRONT);
+//m_DepthFrameBuffer->Bind();
+//m_ObjectDepthShader->Bind();
+//Exalted::RenderCommand::ClearDepthBuffer();
+//Exalted::OpenGLConfigurations::EnableDepthTesting();
+//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformMatFloat4("lightSpaceMatrix", lightSpaceMatrix);
+
+//m_SceneManager->DrawOpaqueBindless(m_ObjectDepthShader);
+//m_SceneManager->DrawTransparentBindless(m_ObjectDepthShader);
+//
+//m_DepthFrameBuffer->UnbindMiniFrame();
+//m_ObjectDepthShader->Unbind();
+//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::BACK);
+//Exalted::OpenGLConfigurations::DisableFaceCulling();
+
+
+--------------------------------------------------------------------------------------------------------------
+
+
+/////////////////////////////////////////////////////////////////////////////
+//// Directional Light Shadow Debugging ///////////////////////////////////// 
+/////////////////////////////////////////////////////////////////////////////
+
+Exalted::OpenGLConfigurations::SetViewport(0, 0, 1024, 512);
+//Exalted::RenderCommand::ClearColorDepthBuffers();
+
+	//prepare to render to draw framebuffer
+
+m_QuadDepthShader->Bind();
+m_DepthFrameBuffer->BindTexture(4);
+std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("near_plane", near_plane);
+std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("far_plane", far_plane);
+std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformInt1("depthMap", 4);
+Exalted::Renderer::Submit(m_QuadMesh);
+m_QuadDepthShader->Unbind();
+Exalted::OpenGLConfigurations::SetViewport(0, 0, Exalted::Application::Get().GetWindow().GetWindowWidth(), Exalted::Application::Get().GetWindow().GetWindowHeight());
+
+--------------------------------------------------------------------------------------------------------------
+
+
+/////////////////////////////////////////////////
+////// Shadow Data Setup ////////////////////////
+/////////////////////////////////////////////////
+//m_DepthFrameBuffer = Exalted::FrameBuffer::Create(4096, 4096, true);
+//m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT); //todo: render models into this
+//m_ObjectDepthShader = Exalted::Shader::Create(DIRECTIONAL_SHADOW_SHADER_VERTEX_DEPTH, DIRECTIONAL_SHADOW_SHADER_FRAGMENT_DEPTH); //todo: render models into this
+//m_QuadMesh = Exalted::Mesh::Create();
+//m_QuadMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateIndexedQuad());
+
+
+
+--------------------------------------------------------------------------------------------------------------
+		
+/////////////////////////////////////////////////
+////// Directional Shadow Variable Setup ////////
+/////////////////////////////////////////////////
+//Exalted::Ref<Exalted::FrameBuffer> m_DepthFrameBuffer;
+//Exalted::Ref<Exalted::Shader> m_ObjectDepthShader;
+//Exalted::Ref<Exalted::Shader> m_QuadDepthShader;
+//Exalted::Ref<Exalted::Mesh> m_QuadMesh;

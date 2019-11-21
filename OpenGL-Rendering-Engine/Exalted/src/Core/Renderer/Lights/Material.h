@@ -38,7 +38,7 @@ namespace Exalted
 		Ref<Texture2D> NormalTexture;
 
 		Material()
-			: Ambient(0), Diffuse(0), Specular(0), Shininess(0)
+			: Ambient(0), Diffuse(0), Specular(0), Shininess(32)
 		{
 			std::string path = "";
 			SetupTexture(TextureType::DIFFUSE,  path);
@@ -81,8 +81,15 @@ namespace Exalted
 			return Exalted::CreateRef<Material>(ambient, diffuse, specular, shininess, diffusePath, specularPath, emissionPath, normalPath);
 		}
 
-		void Bind() const
+		// attatch shininess
+		void Bind(const Ref<Shader>& shader) const
 		{
+			std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformInt1("u_Material.TextureDiffuse", 0);
+			std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformInt1("u_Material.TextureSpecular", 1);
+			std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformInt1("u_Material.TextureEmission", 2);
+			std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformInt1("u_Material.TextureNormal", 3);
+			std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformFloat1("u_Material.Shininess", Shininess); //todo: verify this goes through
+
 			DiffuseTexture->Bind(0);
 			SpecularTexture->Bind(1);
 			EmissionTexture->Bind(2);

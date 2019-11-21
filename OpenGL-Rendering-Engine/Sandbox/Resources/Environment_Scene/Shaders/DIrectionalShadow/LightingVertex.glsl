@@ -29,7 +29,6 @@ layout(std140) uniform Camera_Uniforms
 	float _BoundaryPadding;
 };
 
-
 out ShaderData 
 {
 	vec3 v_FragPosition;

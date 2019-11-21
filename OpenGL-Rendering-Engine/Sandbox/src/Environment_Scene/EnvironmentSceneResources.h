@@ -25,20 +25,6 @@
 #define SHADOW_QUAD_TEST_SHADER_VERTEX "Resources/Environment_Scene/Shaders/DirectionalShadow/ShadowDepthQUADVertex.glsl"
 #define SHADOW_QUAD_TEST_SHADER_FRAGMENT "Resources/Environment_Scene/Shaders/DirectionalShadow/ShadowDepthQUADFragment.glsl"
 
-
-
-//////////////////////////////////////////////////////////
-//// MAIN ISLAND /////////////////////////////////////////
-//////////////////////////////////////////////////////////
-#define ISLAND_MAIN_MESH "Resources/Environment_Scene/Meshes/IslandMain.obj"
-
-#define LIGHTING_NNNS_VERTEX	"Resources/Environment_Scene/Shaders/No_Normals/LightingNNNSVertex.glsl"
-#define LIGHTING_NNNS_FRAGMENT	"Resources/Environment_Scene/Shaders/No_Normals/LightingNNNSFragment.glsl"
-
-#define TEXTURE_DIFFUSE_ISLAND "Resources/Environment_Scene/Textures/Island/Island_Diffuse.png"
-#define TEXTURE_SPECULAR_ISLAND "Resources/Environment_Scene/Textures/Island/Island_Spec.png"
-#define TEXTURE_NORMAL_ISLAND "Resources/Environment_Scene/Textures/Island/Island_Normal.png"
-
 //////////////////////////////////////////////////////////
 //// TREE ////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
@@ -67,6 +53,37 @@
 
 
 //////////////////////////////////////////////////////////
-//// Misc ////////////////////////////////////////////////
+//// MISC ////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 #define ROCKS_MESH "Resources/Environment_Scene/Meshes/Rocks.obj"
+
+//////////////////////////////////////////////////////////
+//// Debugging Utilities 
+//////////////////////////////////////////////////////////
+
+#define DEBUG_TEXTURE_GRID_D "Resources/Environment_Scene/Debug/DebugTextureDiffuse.png"
+#define DEBUG_TEXTURE_GRID_S "Resources/Environment_Scene/Debug/DebugTextureSpecular.jpg"
+
+//////////////////////////////////////////////////////////
+//// SCENE 1 
+//////////////////////////////////////////////////////////
+
+// Shader that can take its color from multiple lights using blinn phong with energy conservation
+#define MULTIPLE_LIGHTS_VERTEX "Resources/Environment_Scene/Shaders/MultipleLights/MultipleLightsVertex.glsl"
+#define MULTIPLE_LIGHTS_FRAGMENT "Resources/Environment_Scene/Shaders/MultipleLights/MultipleLightsFragment.glsl"
+
+
+// Mesh's and textures for the main island
+#define ISLAND_MAIN_MESH "Resources/Environment_Scene/Meshes/IslandMain.obj"
+
+#define TEXTURE_DIFFUSE_ISLAND "Resources/Environment_Scene/Textures/Island/Island_Diffuse.png"
+#define TEXTURE_SPECULAR_ISLAND "Resources/Environment_Scene/Textures/Island/Island_Spec.png"
+#define TEXTURE_NORMAL_ISLAND "Resources/Environment_Scene/Textures/Island/Island_Normal.png"
+
+// spot light mesh
+#define SPOT_LIGHTHOUSE_MESH "Resources/Environment_Scene/Meshes/Lighthouse.obj"
+
+
+/////////////////////////////////////////////////////////////
+//// SCENE 2
+//////////////////////////////////////////////////////////

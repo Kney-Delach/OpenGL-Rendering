@@ -83,16 +83,76 @@ namespace Exalted
 		{
 			switch (distance)
 			{
+				case 7:
+				{
+					AttenuationLinear = 0.7f;
+					AttenuationQuadratic = 1.8f;
+					return;
+				}
+				case 13:
+				{
+					AttenuationLinear = 0.35f;
+					AttenuationQuadratic = 0.44f;
+					return;
+				}
 				case 20:
 				{
 					AttenuationLinear = 0.22f;
 					AttenuationQuadratic = 0.20f;
 					return;
 				}
+				case 32:
+				{
+					AttenuationLinear = 0.14f;
+					AttenuationQuadratic = 0.07f;
+					return;
+				}
+				case 50:
+				{
+					AttenuationLinear = 0.09f;
+					AttenuationQuadratic = 0.032f;
+					return;
+				}
+				case 65:
+				{
+					AttenuationLinear = 0.07f;
+					AttenuationQuadratic = 0.017f;
+					return;
+				}
+				case 100:
+				{
+					AttenuationLinear = 0.045f;
+					AttenuationQuadratic = 0.0075f;
+					return;
+				}
+				case 160:
+				{
+					AttenuationLinear = 0.027f;
+					AttenuationQuadratic = 0.0028f;
+					return;
+				}
 				case 200:
 				{
 					AttenuationLinear = 0.022f;
 					AttenuationQuadratic = 0.0019f;
+					return;
+				}
+				case 325:
+				{
+					AttenuationLinear = 0.014;
+					AttenuationQuadratic = 0.0007f;
+					return;
+				}
+				case 600:
+				{
+					AttenuationLinear = 0.007f;
+					AttenuationQuadratic = 0.0002f;
+					return;
+				}
+				case 3250:
+				{
+					AttenuationLinear = 0.0014f;
+					AttenuationQuadratic = 0.000007f;
 					return;
 				}
 			}
@@ -269,16 +329,76 @@ namespace Exalted
 		{
 			switch (distance)
 			{
+				case 7:
+				{
+					AttenuationLinear = 0.7f;
+					AttenuationQuadratic = 1.8f;
+					return;
+				}
+				case 13:
+				{
+					AttenuationLinear = 0.35f;
+					AttenuationQuadratic = 0.44f;
+					return;
+				}
 				case 20:
 				{
 					AttenuationLinear = 0.22f;
 					AttenuationQuadratic = 0.20f;
 					return;
 				}
+				case 32:
+				{
+					AttenuationLinear = 0.14f;
+					AttenuationQuadratic = 0.07f;
+					return;
+				}
+				case 50:
+				{
+					AttenuationLinear = 0.09f;
+					AttenuationQuadratic = 0.032f;
+					return;
+				}
+				case 65:
+				{
+					AttenuationLinear = 0.07f;
+					AttenuationQuadratic = 0.017f;
+					return;
+				}
+				case 100:
+				{
+					AttenuationLinear = 0.045f;
+					AttenuationQuadratic = 0.0075f;
+					return;
+				}
+				case 160:
+				{
+					AttenuationLinear = 0.027f;
+					AttenuationQuadratic = 0.0028f;
+					return;
+				}
 				case 200:
 				{
 					AttenuationLinear = 0.022f;
 					AttenuationQuadratic = 0.0019f;
+					return;
+				}
+				case 325:
+				{
+					AttenuationLinear = 0.014;
+					AttenuationQuadratic = 0.0007f;
+					return;
+				}
+				case 600:
+				{
+					AttenuationLinear = 0.007f;
+					AttenuationQuadratic = 0.0002f;
+					return;
+				}
+				case 3250:
+				{
+					AttenuationLinear = 0.0014f;
+					AttenuationQuadratic = 0.000007f;
 					return;
 				}
 			}
