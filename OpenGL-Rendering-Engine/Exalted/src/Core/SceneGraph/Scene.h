@@ -64,6 +64,11 @@ namespace Exalted
 		//////////////////// USE THESE //////////////////
 		void DrawOpaqueObjects();
 		void DrawTransparentObjects();
+
+		// used for shadow mapping
+		void DrawOpaqueBindless(const Ref<Shader>& shadowShader);
+		void DrawTransparentBindless(const Ref<Shader>& shadowShader);
+		
 		void ClearObjectLists();
 		void RenderSkybox() const { m_Skybox->Draw(); } //todo: use this internally?
 		void SetCamera(Ref<EditorCamera>& camera) { m_Camera = camera; }
@@ -78,6 +83,7 @@ namespace Exalted
 		
 		void DrawObjectLists();
 		static __forceinline void DrawObject(GameObject* gameObject) { gameObject->Draw(); }
+		static __forceinline void DrawObjectBindless(GameObject* gameObject, const Ref<Shader>& shadowShader) { gameObject->DrawBindless(shadowShader); }
 	private:
 		Ref<EditorCamera> m_Camera;
 		Ref<GameObject> m_SceneRoot;

@@ -12,6 +12,21 @@
 
 #define CUBE_MESH "Resources/Environment_Scene/Meshes/cube.obj"
 
+
+//////////////////////////////////////////////////////////
+//// Directional Shadows /////////////////////////////////
+//////////////////////////////////////////////////////////
+#define DIRECTIONAL_SHADOW_SHADER_VERTEX "Resources/Environment_Scene/Shaders/DirectionalShadow/LightingVertex.glsl"
+#define DIRECTIONAL_SHADOW_SHADER_FRAGMENT "Resources/Environment_Scene/Shaders/DirectionalShadow/LightingFragment.glsl"
+
+#define DIRECTIONAL_SHADOW_SHADER_VERTEX_DEPTH "Resources/Environment_Scene/Shaders/DirectionalShadow/ShadowDepthVertex.glsl"
+#define DIRECTIONAL_SHADOW_SHADER_FRAGMENT_DEPTH "Resources/Environment_Scene/Shaders/DirectionalShadow/ShadowDepthFragment.glsl"
+
+#define SHADOW_QUAD_TEST_SHADER_VERTEX "Resources/Environment_Scene/Shaders/DirectionalShadow/ShadowDepthQUADVertex.glsl"
+#define SHADOW_QUAD_TEST_SHADER_FRAGMENT "Resources/Environment_Scene/Shaders/DirectionalShadow/ShadowDepthQUADFragment.glsl"
+
+
+
 //////////////////////////////////////////////////////////
 //// MAIN ISLAND /////////////////////////////////////////
 //////////////////////////////////////////////////////////

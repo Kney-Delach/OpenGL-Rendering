@@ -53,13 +53,13 @@ namespace Sandbox
 		m_LightSourceMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateCubeIT(1.f));
 		
 		// 4. Create Shaders
-		Exalted::Ref<Exalted::Shader> terrainShaderNNNS = Exalted::Shader::Create(LIGHTING_NNNS_VERTEX, LIGHTING_NNNS_FRAGMENT);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(terrainShaderNNNS)->SetUniformBlockIndex("Light_Uniforms", 1);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(terrainShaderNNNS)->SetUniformBlockIndex("Camera_Uniforms", 2);
+		Exalted::Ref<Exalted::Shader> directionalShadowShader = Exalted::Shader::Create(DIRECTIONAL_SHADOW_SHADER_VERTEX, DIRECTIONAL_SHADOW_SHADER_FRAGMENT);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(directionalShadowShader)->SetUniformBlockIndex("Light_Uniforms", 1);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(directionalShadowShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
 
-		Exalted::Ref<Exalted::Shader> basicLightingShader = Exalted::Shader::Create(BASIC_LIGHTING_SHADER_VERTEX, BASIC_LIGHTING_SHADER_FRAGMENT);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(basicLightingShader)->SetUniformBlockIndex("Light_Uniforms", 1);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(basicLightingShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
+		//Exalted::Ref<Exalted::Shader> basicLightingShader = Exalted::Shader::Create(BASIC_LIGHTING_SHADER_VERTEX, BASIC_LIGHTING_SHADER_FRAGMENT);
+		//std::dynamic_pointer_cast<Exalted::OpenGLShader>(basicLightingShader)->SetUniformBlockIndex("Light_Uniforms", 1);
+		//std::dynamic_pointer_cast<Exalted::OpenGLShader>(basicLightingShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
 
 		m_LightSourceShader = Exalted::Shader::Create(LIGHT_SOURCE_SHADER_VERTEX, LIGHT_SOURCE_SHADER_FRAGMENT);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
@@ -91,7 +91,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> treeMesh = Exalted::Mesh::Create();
 		treeMesh->SetVertexArray(Exalted::ObjLoader::Load(TREE_MESH, true));
 		treeObject->SetMesh(treeMesh);
-		treeObject->SetShader(terrainShaderNNNS);
+		treeObject->SetShader(directionalShadowShader);
 		treeObject->SetMaterial(treeBarkMaterial);
 		treeObject->SetTransparency(true);
 		treeObject->SetBoundingRadius(200.f);
@@ -104,7 +104,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> leafMesh = Exalted::Mesh::Create();
 		leafMesh->SetVertexArray(Exalted::ObjLoader::Load(LEAF_MESH, true));
 		leafObject->SetMesh(leafMesh);
-		leafObject->SetShader(terrainShaderNNNS);
+		leafObject->SetShader(directionalShadowShader);
 		leafObject->SetMaterial(leafMaterial);
 		leafObject->SetTransparency(true);
 		leafObject->SetBoundingRadius(200.f);
@@ -121,7 +121,7 @@ namespace Sandbox
 		terrainObject->GetTransform()->Scale = glm::vec3(10);
 		terrainObject->GetTransform()->Position = glm::vec3(0,0,0);
 		terrainObject->SetMesh(terrainMesh);
-		terrainObject->SetShader(basicLightingShader);
+		terrainObject->SetShader(directionalShadowShader);
 		terrainObject->SetMaterial(islandMaterial);
 		terrainObject->SetTransparency(false);
 		terrainObject->SetBoundingRadius(FLT_MAX);
@@ -133,7 +133,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> hutMainMesh = Exalted::Mesh::Create();
 		hutMainMesh->SetVertexArray(Exalted::ObjLoader::Load(HUT_MESH_MAIN));
 		hutMain->SetMesh(hutMainMesh);
-		hutMain->SetShader(terrainShaderNNNS);
+		hutMain->SetShader(directionalShadowShader);
 		hutMain->SetMaterial(brickMaterial);
 		hutMain->SetTransparency(false); 
 		hutMain->SetBoundingRadius(500.f);
@@ -145,7 +145,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> hutRoofMesh = Exalted::Mesh::Create();
 		hutRoofMesh->SetVertexArray(Exalted::ObjLoader::Load(HUT_MESH_ROOF));
 		hutRoof->SetMesh(hutRoofMesh);
-		hutRoof->SetShader(terrainShaderNNNS);
+		hutRoof->SetShader(directionalShadowShader);
 		hutRoof->SetMaterial(brickMaterial);
 		hutRoof->SetTransparency(false); //todo: make the roof slightly transparent? or maybe the doorway
 		hutRoof->SetBoundingRadius(500.f);
@@ -154,7 +154,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> hutFloorMesh = Exalted::Mesh::Create();
 		hutFloorMesh->SetVertexArray(Exalted::ObjLoader::Load(HUT_MESH_FLOOR));
 		hutFloor->SetMesh(hutFloorMesh);
-		hutFloor->SetShader(terrainShaderNNNS);
+		hutFloor->SetShader(directionalShadowShader);
 		hutFloor->SetMaterial(brickMaterial);
 		hutFloor->SetTransparency(false);
 		hutFloor->SetBoundingRadius(500.f);
@@ -163,7 +163,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> hutBottomMesh = Exalted::Mesh::Create();
 		hutBottomMesh->SetVertexArray(Exalted::ObjLoader::Load(HUT_MESH_BOTTOM));
 		hutBottom->SetMesh(hutBottomMesh);
-		hutBottom->SetShader(terrainShaderNNNS);
+		hutBottom->SetShader(directionalShadowShader);
 		hutBottom->SetMaterial(brickMaterial);
 		hutBottom->SetTransparency(false);
 		hutBottom->SetBoundingRadius(500.f);
@@ -178,7 +178,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> sculptureMesh = Exalted::Mesh::Create();
 		sculptureMesh->SetVertexArray(Exalted::ObjLoader::Load(SCULPTURE_MESH));
 		sculpture->SetMesh(sculptureMesh);
-		sculpture->SetShader(terrainShaderNNNS);
+		sculpture->SetShader(directionalShadowShader);
 		sculpture->SetMaterial(islandMaterial);
 		sculpture->SetTransparency(false);
 		sculpture->SetBoundingRadius(500.f);
@@ -202,7 +202,17 @@ namespace Sandbox
 		const Exalted::Bytes lightsOffset = 0;
 		Exalted::Bytes lightsBufferSize = noPointLights * Exalted::PointLight::UBSize() + noDirectionalLights * Exalted::DirectionalLight::UBSize() + noSpotLights * Exalted::SpotLight::UBSize();
 		m_LightUniformBuffer = Exalted::UniformBuffer::Create(lightsBufferSize);
-		m_LightUniformBuffer->BindBufferRange(lightsBBI, lightsOffset, lightsBufferSize);		
+		m_LightUniformBuffer->BindBufferRange(lightsBBI, lightsOffset, lightsBufferSize);
+
+
+		///////////////////////////////////////////////
+		//// Shadow Data Setup ////////////////////////
+		///////////////////////////////////////////////
+		m_DepthFrameBuffer = Exalted::FrameBuffer::Create(4096, 4096, true);
+		m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT); //todo: render models into this
+		m_ObjectDepthShader = Exalted::Shader::Create(DIRECTIONAL_SHADOW_SHADER_VERTEX_DEPTH, DIRECTIONAL_SHADOW_SHADER_FRAGMENT_DEPTH); //todo: render models into this
+		m_QuadMesh = Exalted::Mesh::Create();
+		m_QuadMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateIndexedQuad());
 	}
 	
 	void EnvironmentSceneLayer::OnUpdate(Exalted::Timestep deltaTime)
@@ -223,41 +233,85 @@ namespace Sandbox
 		m_DirectionalLightTransform->Position = m_DirectionalLight->Direction; //todo: move this from here if it won't move
 		//m_SpotLightA->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer);
 		m_LightUniformBuffer->Unbind();
+
+		/////////////////////////////////////////
+		//// Sort the scene objects for rendering
+		/////////////////////////////////////////
+		m_SceneManager->RenderScene();
+
+		///////////////////////////////////////////////////////////////////////////////////////
+		//// Directional Light Shadows
+		///////////////////////////////////////////////////////////////////////////////////////
+		float near_plane = 0.1f;
+		float far_plane = 3000.f;
+		glm::mat4 lightProjection = glm::perspective(glm::radians(90.f), 1.f, 0.1f, 3000.f); // no perspective deform for directional light 
+		glm::mat4 lightView = glm::lookAt(m_DirectionalLight->Direction, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); // glm::lookAt(m_DirectionalLightA->Direction, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // direction assigned as position, looking towards center.
+		glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+		Exalted::GameObject::LightSpaceMatrix = lightSpaceMatrix; //todo: verify this hack works
+
+		/////////////////////////////////////////////////////////////////
+		//// Initial render to depth map for shadow mapping ///////////// 
+		/////////////////////////////////////////////////////////////////
+		//Exalted::OpenGLConfigurations::EnableFaceCulling();
+		//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::FRONT);
+		m_DepthFrameBuffer->Bind();
+		m_ObjectDepthShader->Bind();
+		Exalted::RenderCommand::ClearDepthBuffer();
+		Exalted::OpenGLConfigurations::EnableDepthTesting();
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformMatFloat4("lightSpaceMatrix", lightSpaceMatrix);
+
+		m_SceneManager->DrawOpaqueBindless(m_ObjectDepthShader);
+		m_SceneManager->DrawTransparentBindless(m_ObjectDepthShader);
 		
-		Exalted::RenderCommand::SetClearColor({ .05f, 0.2f, 0.5f, 1 });
-		Exalted::RenderCommand::Clear();
+		m_DepthFrameBuffer->UnbindMiniFrame();
+		m_ObjectDepthShader->Unbind();
+		//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::BACK);
+		//Exalted::OpenGLConfigurations::DisableFaceCulling();
+		
+		/////////////////////////////////////////////////////////////////////////////
+		//// Render scene output //////////////////////////////////////////////////// 
+		/////////////////////////////////////////////////////////////////////////////
+		Exalted::RenderCommand::ClearColorDepthBuffers();
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
 		Exalted::OpenGLConfigurations::EnableBlending();
 		Exalted::OpenGLConfigurations::SetBlendFunction(Exalted::BlendFactors::SOURCE_ALPHA, Exalted::BlendFactors::SOURCE_ALPHA_MINUS);
 
 		// 4. Perform a render pass for each light in order to see shadows
+		m_DepthFrameBuffer->BindTexture(4); 
 
 		// render scene
-		m_SceneManager->RenderScene();
 		m_SceneManager->DrawOpaqueObjects();
-
-		m_LightSourceShader->Bind();
-		//// point lights
-		//for (int i = 0; i < m_PointLights.size(); ++i) //todo: instance this
-		//{
-		//	std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_PointLightTransforms[i]->SetAndGetWorldTransform());
-		//	std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_PointLights[i]->Diffuse);
-		//	Exalted::Renderer::Submit(m_LightSourceMesh);
-		//}
-		// directional light
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_DirectionalLightTransform->SetAndGetWorldTransform());
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_DirectionalLight->Diffuse);
-		Exalted::Renderer::Submit(m_LightSourceMesh);
-		m_LightSourceShader->Unbind();
 		m_SceneManager->RenderSkybox();
 
-		Exalted::OpenGLConfigurations::EnableDepthTesting();
-		Exalted::OpenGLConfigurations::EnableBlending();
+
 		m_SceneManager->DrawTransparentObjects();
 		m_SceneManager->ClearObjectLists();
 		
+		m_DepthFrameBuffer->Unbind();
+
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		Exalted::OpenGLConfigurations::DisableBlending();
+
+		/////////////////////////////////////////////////////////////////////////////
+		//// Debug shadows ////////////////////////////////////////////////////////// 
+		/////////////////////////////////////////////////////////////////////////////
+
+		Exalted::OpenGLConfigurations::SetViewport(0, 0, 1024, 512);
+		//Exalted::RenderCommand::ClearColorDepthBuffers();
+
+		 //prepare to render to draw framebuffer
+
+		m_QuadDepthShader->Bind();
+		m_DepthFrameBuffer->BindTexture(4);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("near_plane", near_plane);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("far_plane", far_plane);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformInt1("depthMap", 4);
+		Exalted::Renderer::Submit(m_QuadMesh);
+		m_QuadDepthShader->Unbind();
+		Exalted::OpenGLConfigurations::SetViewport(0, 0, Exalted::Application::Get().GetWindow().GetWindowWidth(), Exalted::Application::Get().GetWindow().GetWindowHeight());
+
+		Exalted::Renderer::EndScene();
+		Exalted::OpenGLConfigurations::DisableDepthTesting();
 	}
 
 	void EnvironmentSceneLayer::OnImGuiRender()

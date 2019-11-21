@@ -30,7 +30,10 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Shader> m_LightSourceShader;
 		Exalted::Ref<Exalted::Mesh> m_LightSourceMesh;
 		
-		//Exalted::Ref<Exalted::LightManager> dynamicLightManager;
-		//Exalted::Ref<Exalted::LightManager> staticLightManager;
+		//// Shadows
+		Exalted::Ref<Exalted::FrameBuffer> m_DepthFrameBuffer;
+		Exalted::Ref<Exalted::Shader> m_ObjectDepthShader;
+		Exalted::Ref<Exalted::Shader> m_QuadDepthShader;
+		Exalted::Ref<Exalted::Mesh> m_QuadMesh;
 	};
 }

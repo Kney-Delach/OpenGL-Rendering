@@ -56,6 +56,18 @@ namespace Exalted
 			DrawObject(*i);
 	}
 
+	void Scene::DrawOpaqueBindless(const Ref<Shader>& shadowShader)
+	{
+		for (std::vector<GameObject*>::const_iterator i = m_OpaqueObjects.begin(); i != m_OpaqueObjects.end(); ++i)
+			DrawObjectBindless(*i, shadowShader);
+	}
+
+	void Scene::DrawTransparentBindless(const Ref<Shader>& shadowShader)
+	{
+		for (std::vector<GameObject*>::const_reverse_iterator i = m_TransparentObjects.rbegin(); i != m_TransparentObjects.rend(); ++i)
+			DrawObjectBindless(*i, shadowShader);
+	}
+	
 	void Scene::BuildObjectLists(GameObject* gameObject)
 	{
 		if (!(gameObject->IsActive()))

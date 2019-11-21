@@ -86,28 +86,32 @@ namespace Exalted
 			if (m_Mesh)
 			{
 				m_Shader->Bind();
+				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_LightSpaceMatrix", LightSpaceMatrix);
+				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureDiffuse", 0);
+				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureSpecular", 1);
+				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureEmission", 2);
+				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureNormal", 3);
+				std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_ShadowMap", 4); //todo: verify this works
 
-				if (m_Material)
-				{
-					std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureDiffuse", 0);
-					std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureSpecular", 1);
-					std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureEmission", 2);
-					std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_Shader)->SetUniformInt1("u_Material.TextureNormal", 3);
-					m_Material->Bind();
-					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_Model", m_Transform->WorldTransform);
-					Renderer::Submit(m_Mesh);
-					m_Material->Unbind();
-				}
-				else
-				{
-					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_Model", m_Transform->WorldTransform);
-					Renderer::Submit(m_Mesh);
-				}
+				m_Material->Bind();
+				std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_Model", m_Transform->WorldTransform);
+				Renderer::Submit(m_Mesh);
+				m_Material->Unbind();
+	
 				m_Shader->Unbind();
 
 			}
 		}
 
+		inline void DrawBindless(const Ref<Shader>& shadowShader) const
+		{
+			if (m_Mesh)
+			{
+				std::dynamic_pointer_cast<OpenGLShader>(shadowShader)->SetUniformMatFloat4("u_Model", m_Transform->WorldTransform);
+				Renderer::Submit(m_Mesh);
+			}
+		}
+		
 		inline Ref<GameTransform>& GetTransform() { return m_Transform; }
 
 		inline void SetShader(Ref<Shader>& shader) { m_Shader = shader; }
@@ -156,6 +160,8 @@ namespace Exalted
 			std::string separator = "##";
 			return (label + separator + id);
 		}
+	public:
+		static inline glm::mat4 LightSpaceMatrix;
 	private:
 		void DestroyGameObject();
 	private:
@@ -178,5 +184,6 @@ namespace Exalted
 		uint32_t m_Id;
 		float m_BoundingRadius; // to keep things simple in initial implementation, using a bounding sphere for each object, represented by single radius -> todo: implement bounding volume class. 
 		float m_DistanceFromCamera; // to sort the gameobjects, this stores their distance from the camera
+
 	};
 }
