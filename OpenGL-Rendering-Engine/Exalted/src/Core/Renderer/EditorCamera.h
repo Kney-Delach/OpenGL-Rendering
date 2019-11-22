@@ -20,6 +20,7 @@
 #include "Core/Core/Timestep.h"
 #include "Core/Events/Event.h"
 #include "UniformBuffer.h"
+#include "CameraTrack.h"
 
 
 namespace Exalted
@@ -43,7 +44,20 @@ namespace Exalted
 			UpdateCameraVectors();
 			RecalculateViewMatrix();
 		}
-		void UpdateCamera(Timestep deltaTime);
+
+		void UpdateCamera(Timestep deltaTime); // manual camera updates
+
+		// have a list of tracks
+		// track functions
+		void AddTrack(const Ref<CameraTrack>& cameraTrack) { m_CameraTracks.emplace_back(cameraTrack); }
+		void UpdateTrack(Timestep deltaTime);  // automatic track camera updates
+		void SetTrack(const int index);
+		void ResetMovementVariables()
+		{
+			m_ProcessingMouseMovement = false;
+			m_MouseMoving = false;
+		}
+		
 		void OnImGuiRender();
 		void OnEvent(Event& event);
 		void UpdateUBO(Ref<UniformBuffer>& ubo) const;
@@ -71,6 +85,8 @@ namespace Exalted
 		float m_MovementSpeed = 2.5f;
 		float m_MouseSensitivity = 0.1f;
 	private:
+		Ref<CameraTrack> m_CurrentTrack; 
+		std::vector<Ref<CameraTrack>> m_CameraTracks;
 		Ref<UniformBuffer> m_CameraUniformBuffer; //todo: verify this works correctly.
 	private:
 		//todo: insert camera track variables 

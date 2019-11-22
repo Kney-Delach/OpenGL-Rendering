@@ -1354,6 +1354,7 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\SceneGraph\LightManager.h" />
+    <ClInclude Include="src\Core\Renderer\CameraTrack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1477,5 +1478,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\tinyobjloader\tiny_obj_loader.cpp" />
+    <ClCompile Include="src\Core\Renderer\CameraTrack.cpp" />
   </ItemGroup>
 </Project>

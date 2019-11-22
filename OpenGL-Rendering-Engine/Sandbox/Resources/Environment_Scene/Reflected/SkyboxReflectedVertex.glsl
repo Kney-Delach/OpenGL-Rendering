@@ -32,7 +32,6 @@ uniform mat4 u_Model;
 
 out vec3 o_Position;
 out vec3 o_Normal;
-out vec2 o_TexCoord;
 
 void main() 
 {

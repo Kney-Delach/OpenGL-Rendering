@@ -47,6 +47,22 @@ namespace Exalted
 		UpdateUBO();
 	}
 
+	void EditorCamera::UpdateTrack(Timestep deltaTime) 
+	{
+		EX_CORE_ASSERT(m_CurrentTrack, " Attempting to update the camera track with no currently set track! Set a track first!", true);
+		m_CurrentTrack->Update(deltaTime, m_Position, m_Yaw, m_Pitch);
+		UpdateCameraVectors();
+		RecalculateViewMatrix();
+		UpdateUBO(); // update ubo with camera data
+	}
+
+	void EditorCamera::SetTrack(const int index)
+	{
+		EX_CORE_ASSERT(index < m_CameraTracks.size(), " Attempting to set camera track to invalid index! {0}", 0, true);
+		m_CurrentTrack = m_CameraTracks[index];
+		m_CurrentTrack->PrepareTrack();
+	}
+
 	void EditorCamera::OnImGuiRender() //todo: Give each camera a unique id (as in game component)
 	{
 		ImGui::Begin("Camera Transform");
@@ -81,13 +97,13 @@ namespace Exalted
 
 	void EditorCamera::OnEvent(Exalted::Event& event)
 	{
-		if (event.GetEventType() == Exalted::EventType::WindowResize)
-		{
-			const auto resizeEvent = dynamic_cast<Exalted::WindowResizeEvent&>(event);
-			const auto windowWidth = resizeEvent.GetWidth();
-			const auto windowHeight = resizeEvent.GetHeight();
-			OnWindowResize(windowWidth, windowHeight);
-		}
+		//if (event.GetEventType() == Exalted::EventType::WindowResize)
+		//{
+		//	const auto resizeEvent = dynamic_cast<Exalted::WindowResizeEvent&>(event);
+		//	const auto windowWidth = resizeEvent.GetWidth();
+		//	const auto windowHeight = resizeEvent.GetHeight();
+		//	OnWindowResize(windowWidth, windowHeight);
+		//}
 		if ((event.GetEventType() == Exalted::EventType::MouseButtonPressed) && !m_MouseMoving)
 		{
 			auto& e = dynamic_cast<Exalted::MouseButtonPressedEvent&>(event);

@@ -76,7 +76,7 @@ namespace Exalted
 		//void SetDynamicLightManager(Ref<LightManager>& dynamicLightManager) { m_DynamicLightManager = dynamicLightManager; } // set up uniform buffer once at the start
 		Ref<GameObject>& GetSceneRoot() { return m_SceneRoot; }
 		void SetSceneRoot(Ref<GameObject>& sceneRoot) { m_SceneRoot = sceneRoot; }
-		static void OnEvent(Exalted::Event& event);
+		void OnEvent(Exalted::Event& event);
 	private:
 		void BuildObjectLists(GameObject* gameObject);
 		void SortObjectLists(); 
@@ -85,6 +85,7 @@ namespace Exalted
 		static __forceinline void DrawObject(GameObject* gameObject) { gameObject->Draw(); }
 		static __forceinline void DrawObjectBindless(GameObject* gameObject, const Ref<Shader>& shadowShader) { gameObject->DrawBindless(shadowShader); }
 	private:
+		 bool m_IsCameraFree = true; 
 		Ref<EditorCamera> m_Camera;
 		Ref<GameObject> m_SceneRoot;
 		Ref<Skybox> m_Skybox;

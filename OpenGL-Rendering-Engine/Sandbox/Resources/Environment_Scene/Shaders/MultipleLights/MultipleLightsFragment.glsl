@@ -258,10 +258,10 @@ vec3 CalculateSpotLights(SpotLight light, vec3 normal, vec3 fragPosition, vec3 v
 	shadow = CalcSpotLightShadow(normal, index);
 
 	vec3 emission = vec3(0,0,0); 
-	// if(!(texture(u_Material.TextureEmission, IN.v_TexCoord).rgb == vec3(1,1,1)) && index == 0)
-	// {
-	// 	emission = texture(u_Material.TextureEmission, IN.v_TexCoord).rgb * vec3(0,1,0);
-	// }
+	if(!(texture(u_Material.TextureEmission, IN.v_TexCoord).rgb == vec3(1,1,1)) && index == 0)
+	{
+		emission = texture(u_Material.TextureEmission, IN.v_TexCoord).rgb;
+	}
 		
 	// attenuation
 	return (1 - shadow) * intensity * (CalculateAttenuationResults(ambient, diffuse, specular, light.Position, fragPosition, light.AttenuationConstant, light.AttenuationLinear, light.AttenuationQuadratic)) + emission;
@@ -272,7 +272,7 @@ vec3 CalculateSpotLights(SpotLight light, vec3 normal, vec3 fragPosition, vec3 v
 void main()
 {	
 	vec4 transparency = texture(u_Material.TextureDiffuse, IN.v_TexCoord);
-	if(transparency.a < 0.1)
+	if(transparency.a  == 0)
 		discard; 
 
 	vec3 viewDirection = normalize(CameraPosition - IN.v_FragPosition);
@@ -292,10 +292,10 @@ void main()
 	for (int i = 0; i < NUMBER_OF_SPOT_LIGHTS; i++)
 		result += CalculateSpotLights(SpotLights[i], normal, IN.v_FragPosition, viewDirection, i);
 		
-	if(transparency.a < 1)
-		color = vec4(result, 0.6);
-	else 
-		color = vec4(result, 1);
+//	if(transparency.a < 1)
+		color = vec4(result, transparency.a);
+//	else 
+//		color = vec4(result, 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

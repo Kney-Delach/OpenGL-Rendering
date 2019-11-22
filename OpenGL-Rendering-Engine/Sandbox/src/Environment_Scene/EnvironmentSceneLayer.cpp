@@ -254,6 +254,19 @@ namespace Sandbox
 		m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT);
 		m_QuadMesh = Exalted::Mesh::Create();
 		m_QuadMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateIndexedQuad());
+
+		/////////////////////////////////////////////
+		//// Camera Tracks data /////////////////////
+		/////////////////////////////////////////////
+		Exalted::Ref<Exalted::CameraTrack> mainTrack = Exalted::CreateRef<Exalted::CameraTrack>(1);
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(1000, 30, 1000), -90, -90, 0.f));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(2000, 30, 1000), -90, -90, 10.f));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(3000, 30, 1000), -90, -90, 100.f));
+
+		Exalted::Ref<Exalted::CameraTrack> secondTrack = Exalted::CreateRef<Exalted::CameraTrack>(2);
+
+		m_EditorCamera->AddTrack(mainTrack);
+		m_EditorCamera->AddTrack(secondTrack);
 		
 		/////////////////////////////////////
 		//// DEBUG DATA /////////////////////
@@ -271,7 +284,7 @@ namespace Sandbox
 	void EnvironmentSceneLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
 		// 1. Update the camera transformation and buffer objects, either dependent on lerping motion or manual movement
-		m_EditorCamera->UpdateCamera(deltaTime);
+		//m_EditorCamera->UpdateCamera(deltaTime);
 		m_SceneManager->UpdateScene(deltaTime);
 
 		if(DEBUG_ColorChange)
@@ -459,7 +472,6 @@ namespace Sandbox
 
 	void EnvironmentSceneLayer::OnEvent(Exalted::Event& event)
 	{
-		m_EditorCamera->OnEvent(event);
 		m_SceneManager->OnEvent(event);
 	}
 

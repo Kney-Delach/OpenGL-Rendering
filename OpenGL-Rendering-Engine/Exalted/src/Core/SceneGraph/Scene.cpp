@@ -17,11 +17,16 @@
 #include "Core/Events/KeyEvent.h"
 #include "Core/KeyCodes.h"
 #include "Platform/OpenGL/OpenGLConfigurations.h" //todo: Abstract this into just "Configurations"
+#include "Core/Events/ApplicationEvent.h"
 
 namespace Exalted
 {
 	void Scene::UpdateScene(Timestep deltaTime)
 	{
+		if (m_IsCameraFree)
+			m_Camera->UpdateCamera(deltaTime);
+		else
+			m_Camera->UpdateTrack(deltaTime);
 		m_Frustum.FromVPMatrix(m_Camera->GetViewProjectionMatrix());
 		m_SceneRoot->Update(deltaTime);
 	}
@@ -95,9 +100,34 @@ namespace Exalted
 
 	void Scene::OnEvent(Exalted::Event& event)
 	{
+		if (event.GetEventType() == Exalted::EventType::WindowResize)
+		{
+			const auto resizeEvent = dynamic_cast<Exalted::WindowResizeEvent&>(event);
+			const auto windowWidth = resizeEvent.GetWidth();
+			const auto windowHeight = resizeEvent.GetHeight();
+			m_Camera->OnWindowResize(windowWidth, windowHeight);
+		}
+		
 		if (event.GetEventType() == Exalted::EventType::KeyPressed)
 		{
 			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
+			if (e.GetKeyCode() == EX_KEY_ESCAPE)
+			{
+				m_IsCameraFree = true;
+				m_Camera->ResetMovementVariables();
+			}
+			if (e.GetKeyCode() == EX_KEY_F1) //todo: This should restart the first track
+			{
+				m_IsCameraFree = false;
+				m_Camera->ResetMovementVariables(); //todo: remove this as not necessary
+				m_Camera->SetTrack(0);
+			}
+			if (e.GetKeyCode() == EX_KEY_F2) //todo: This should restart the second track
+			{
+				m_IsCameraFree = false;
+				m_Camera->ResetMovementVariables(); //todo: remove this as not necessary
+				m_Camera->SetTrack(1);
+			}
 			if (e.GetKeyCode() == EX_KEY_I)
 				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::POINT);
 
@@ -107,5 +137,8 @@ namespace Exalted
 			if (e.GetKeyCode() == EX_KEY_P)
 				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::FILL);
 		}
+
+		if (m_IsCameraFree)
+			m_Camera->OnEvent(event);
 	}
 }

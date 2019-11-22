@@ -526,6 +526,7 @@
     <ClInclude Include="src\Core\MouseButtonCodes.h" />
     <ClInclude Include="src\Core\Renderer\Buffer.h" />
     <ClInclude Include="src\Core\Renderer\Cameras.h" />
+    <ClInclude Include="src\Core\Renderer\CameraTrack.h" />
     <ClInclude Include="src\Core\Renderer\EditorCamera.h" />
     <ClInclude Include="src\Core\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Core\Renderer\Generators\ShapeGenerator.h" />
@@ -578,6 +579,7 @@
     <ClCompile Include="src\Core\Log.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Core\Renderer\Cameras.cpp" />
+    <ClCompile Include="src\Core\Renderer\CameraTrack.cpp" />
     <ClCompile Include="src\Core\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Core\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Core\Renderer\Generators\ShapeGenerator.cpp" />

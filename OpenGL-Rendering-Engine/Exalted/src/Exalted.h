@@ -16,6 +16,9 @@
 #pragma once
 
 #include "Core/Application.h"
+
+#define TIME static_cast<float>(Exalted::Application::Get().GetWindow().GetTime())
+
 #include "Core/Log.h"
 
 #include "Core/Core/Timestep.h"
@@ -68,10 +71,6 @@
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
-
-// -------------- Utility Macros -------------- //
-
-#define TIME static_cast<float>(Exalted::Application::Get().GetWindow().GetTime())
 
 // -------------- Object Macros -------------- //
 
