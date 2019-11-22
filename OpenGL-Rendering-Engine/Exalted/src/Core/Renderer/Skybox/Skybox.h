@@ -45,11 +45,11 @@ namespace Exalted
 
 		void Draw() const;
 
-		_NODISCARD inline Ref<TextureCube>& GetTexture() { return m_Texture; }
+		_NODISCARD static inline Ref<TextureCube>& GetTexture() { return m_Texture; }
 		_NODISCARD inline Ref<Mesh>& GetMesh() { return m_Mesh; }
 		_NODISCARD inline Ref<Shader>& GetShader() { return m_Shader; }
 	private:
-		Ref<TextureCube> m_Texture;
+		static inline Ref<TextureCube> m_Texture;
 		Ref<Mesh> m_Mesh;
 		Ref<Shader> m_Shader;
 	public:

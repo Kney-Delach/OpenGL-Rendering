@@ -73,6 +73,9 @@ namespace Sandbox
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Light_Space_Uniforms", 3);
 
+		Exalted::Ref<Exalted::Shader> skyboxReflectiveShader = Exalted::Shader::Create(SKYBOX_MAP_VERTEX, SKYBOX_MAP_FRAGMENT);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(skyboxReflectiveShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
+
 		// 5. Create Materials
 		Exalted::Ref<Exalted::Material> islandMaterial = Exalted::Material::Create(TEXTURE_DIFFUSE_ISLAND, TEXTURE_SPECULAR_ISLAND, "", TEXTURE_NORMAL_ISLAND, 33.f);
 		Exalted::Ref<Exalted::Material> debugMaterial = Exalted::Material::Create(DEBUG_TEXTURE_GRID_D, DEBUG_TEXTURE_GRID_S, "", "", 33.f); //todo: change this
@@ -104,7 +107,7 @@ namespace Sandbox
 		UFOA->SetMesh(ufoMesh);
 		UFOA->SetShader(multipleLightsShader); //todo: make sure near plane is far enough not to take effect from these objects
 		UFOA->SetMaterial(ufoMaterial);
-		UFOA->SetTransparency(true);
+		UFOA->SetTransparency(false); //todo: make these reflective
 		UFOA->SetBoundingRadius(200.f);
 		UFOA->GetTransform()->Scale = glm::vec3(3);
 		UFOA->GetTransform()->Position = glm::vec3(1000.f, 210.f, 1000.f);
@@ -114,11 +117,20 @@ namespace Sandbox
 		UFOB->SetMesh(ufoMesh);
 		UFOB->SetShader(multipleLightsShader); //todo: make sure near plane is far enough not to take effect from these objects
 		UFOB->SetMaterial(ufoMaterial);
-		UFOB->SetTransparency(true);
+		UFOB->SetTransparency(false); //todo: make these reflective
 		UFOB->SetBoundingRadius(200.f);
 		UFOB->GetTransform()->Scale = glm::vec3(3);
-		UFOB->GetTransform()->Position = m_SpotLights[1]->Position;
 		UFOB->GetTransform()->Position = glm::vec3(-1000.f, 210.f, 1000.f);
+
+		//todo: This UFO maps the skybox onto it
+		Exalted::GameObject* reflectiveUFO = new Exalted::GameObject("UFO-Reflective");
+
+		reflectiveUFO->SetMesh(ufoMesh);
+		reflectiveUFO->SetShader(skyboxReflectiveShader); 
+		reflectiveUFO->SetTransparency(true);
+		reflectiveUFO->SetBoundingRadius(FLT_MAX);
+		reflectiveUFO->GetTransform()->Scale = glm::vec3(10);
+		reflectiveUFO->GetTransform()->Position = glm::vec3(-50, 600.f, -500);
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//// TREES
@@ -198,7 +210,7 @@ namespace Sandbox
 		// 5. Add all gameobjects to scene manager
 		m_SceneManager->GetSceneRoot()->AddChildObject(UFOA);
 		m_SceneManager->GetSceneRoot()->AddChildObject(UFOB);
-		
+		m_SceneManager->GetSceneRoot()->AddChildObject(reflectiveUFO);
 		m_SceneManager->GetSceneRoot()->AddChildObject(treeObject);
 		m_SceneManager->GetSceneRoot()->AddChildObject(treeObject2);
 		m_SceneManager->GetSceneRoot()->AddChildObject(terrainObject);

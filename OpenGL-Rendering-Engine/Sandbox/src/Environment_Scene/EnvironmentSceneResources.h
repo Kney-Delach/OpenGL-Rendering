@@ -91,6 +91,11 @@
 #define TEXTURE_SPECULAR_UFO "Resources/Environment_Scene/UFO/Ufo_Specular.png"
 #define TEXTURE_NORMAL_UFO "Resources/Environment_Scene/UFO/Ufo_Normal.png"
 
+// skybox mapping stuff
+
+#define SKYBOX_MAP_VERTEX "Resources/Environment_Scene/Reflected/SkyboxReflectedVertex.glsl"
+#define SKYBOX_MAP_FRAGMENT "Resources/Environment_Scene/Reflected/SkyboxReflectedFragment.glsl"
+
 /////////////////////////////////////////////////////////////
 //// SCENE 2
 //////////////////////////////////////////////////////////

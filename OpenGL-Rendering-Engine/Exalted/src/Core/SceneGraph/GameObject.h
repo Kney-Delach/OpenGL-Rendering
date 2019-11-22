@@ -29,6 +29,7 @@
 #include "FrustumCulling/FrustumPlane.h"
 #include "Core/Renderer/Lights/Material.h"
 #include "Core/Renderer/Lights/Light.h"
+#include "Core/Renderer/Skybox/Skybox.h"
 
 //todo: Implement a check for if a mesh should be drawn with or without indicies.
 //todo: Implement a better gui hierarchy
@@ -86,18 +87,28 @@ namespace Exalted
 			if (m_Mesh)
 			{
 				m_Shader->Bind();
-				m_Material->Bind(m_Shader);
-				for (int i = 0; i < NumberOfPointLights; i++) //todo: move this from here maybe ?
-				{
-					std::string number = std::to_string(i);
-					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_ShadowMap[" + number + "]").c_str(), (4 + i));
-
-				}
-				//std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_LightSpaceMatrices", LightSpaceMatrix); //todo: move this to uniform buffer
 				std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_Model", m_Transform->WorldTransform);
-				Renderer::Submit(m_Mesh);
-				m_Material->Unbind();
+				if(m_Material)
+				{
+					m_Material->Bind(m_Shader);
+					for (int i = 0; i < NumberOfPointLights; i++) //todo: move this from here maybe ?
+					{
+						std::string number = std::to_string(i);
+						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_ShadowMap[" + number + "]").c_str(), (4 + i));
+
+					}
+					Renderer::Submit(m_Mesh);
+					m_Material->Unbind();
+				}
+				else //todo: Assuming that if there is no material, it reflects the skybox
+				{
+					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1("u_Skybox", 0);
+					Skybox::GetTexture()->Bind(0);
+					Renderer::Submit(m_Mesh);
+					Skybox::GetTexture()->Unbind();
+				}
 				m_Shader->Unbind();
+
 			}
 		}
 
