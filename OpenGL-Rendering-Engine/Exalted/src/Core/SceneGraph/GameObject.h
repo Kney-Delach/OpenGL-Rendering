@@ -55,6 +55,11 @@ namespace Exalted
 		~GameObject()
 		{
 			DestroyGameObject();
+			const unsigned int gameComponentsSize = m_GameComponents.size();
+
+			for (unsigned int i = 0; i < gameComponentsSize; i++)
+				delete m_GameComponents[i];
+			
 			EX_CORE_WARN("Destroyed {0} GamObject.", m_ObjectName);
 		}
 		void AddChildObject(GameObject* pGameObject)
@@ -139,9 +144,9 @@ namespace Exalted
 		void SetMesh(Ref<Mesh>& mesh) { m_Mesh = mesh; }
 		inline Ref<Mesh>& GetMesh() { return m_Mesh; }
 
-		//void SetSpotLight(Ref<SpotLight>& light) { m_SpotLight = light; }
-		//void SetPointLight(Ref<PointLight>& light) { m_PointLight = light; }
-		//
+		void SetSpotLight(Ref<SpotLight>& light) { m_SpotLight = light; }
+		void SetPointLight(Ref<PointLight>& light) { m_PointLight = light; }
+		
 		inline bool IsTransparent() const { return m_IsTransparent; }
 		inline void SetTransparency(bool transparent) { m_IsTransparent = transparent; }
 		
@@ -182,8 +187,8 @@ namespace Exalted
 		//Ref<Texture2D> m_Texture;  //todo: Replace with material once that's implemented.
 		Ref<Material> m_Material; 
 		Ref<Shader> m_Shader;
-		//Ref<SpotLight> m_SpotLight;
-		//Ref<PointLight> m_PointLight;
+		Ref<SpotLight> m_SpotLight;
+		Ref<PointLight> m_PointLight;
 
 		GameObject* m_pParent = nullptr;
 		std::vector<GameComponent*> m_GameComponents;

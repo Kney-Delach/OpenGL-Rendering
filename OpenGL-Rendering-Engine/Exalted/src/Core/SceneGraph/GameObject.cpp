@@ -46,8 +46,12 @@ namespace Exalted
 
 	void GameObject::Update(Timestep deltaTime)
 	{
+		// 1 - process all component objects of this object
+		for (std::vector<GameComponent*>::iterator i = m_GameComponents.begin(); i != m_GameComponents.end(); ++i)
+			(*i)->Update(deltaTime);
+		
 		//todo: verify setting the light source's location dependent on world position works correctly
-		// 1 - Set the transforms relative to parent GameObjects
+		// 2 - Set the transforms relative to parent GameObjects
 		if (m_pParent)
 		{
 			m_Transform->SetWorldTransform(m_pParent->GetTransform()->WorldTransform);
@@ -59,15 +63,8 @@ namespace Exalted
 
 		//if (m_PointLight)
 		//	m_PointLight->Position = m_Transform->Position; //glm::vec3(m_Transform->WorldTransform[3]);
-		//if (m_SpotLight)
-		//	m_SpotLight->Position = m_Transform->Position ;// = m_Transform->Position;// glm::vec3(m_Transform->WorldTransform[3]);
-
-
-		//todo: Uncomment this when game components are useful, MOVE THIS BEFORE TRANSFORMATIONS
-		// 2 - process all component objects of this object
-		//for (std::vector<GameComponent*>::iterator i = m_GameComponents.begin(); i != m_GameComponents.end(); ++i)
-		//	(*i)->Update(deltaTime);
-		//
+		if (m_SpotLight)
+			m_SpotLight->Position = glm::vec3(m_Transform->WorldTransform[3]); //m_Transform->Position ;// = m_Transform->Position;//todo: verify this works 
 
 		// 3 - process all child objects of this object
 		for (std::vector<GameObject*>::iterator i = m_ChildrenObjectsList.begin(); i != m_ChildrenObjectsList.end(); ++i)

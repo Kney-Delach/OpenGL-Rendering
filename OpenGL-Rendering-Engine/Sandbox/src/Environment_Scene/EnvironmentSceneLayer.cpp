@@ -38,17 +38,6 @@ namespace Sandbox
 		{
 			m_SpotLights.emplace_back(Exalted::SpotLight::Create());
 			glm::vec3 color = glm::vec3(0, 1, 0);
-			if(i == 0)
-			{
-				//color = glm::vec3(0, 1, 0);
-				m_SpotLights[i]->Position = glm::vec3(100, 20, 100);
-			}
-			if(i == 1)
-			{
-				//color = glm::vec3(0, 1, 1);
-				m_SpotLights[i]->Position = glm::vec3(-100, 20, 100);
-
-			}
 			m_SpotLights[i]->Ambient = color;
 			m_SpotLights[i]->Diffuse = color;
 			m_SpotLights[i]->Specular = color;
@@ -110,8 +99,10 @@ namespace Sandbox
 		UFOA->SetTransparency(false); //todo: make these reflective
 		UFOA->SetBoundingRadius(200.f);
 		UFOA->GetTransform()->Scale = glm::vec3(3);
-		UFOA->GetTransform()->Position = glm::vec3(1000.f, 210.f, 1000.f);
-
+		UFOA->GetTransform()->Position = glm::vec3(1000.f, 200.f, 1000.f);
+		UFOA->SetSpotLight(m_SpotLights[0]);
+		UFOA->AddGameComponent(new Exalted::RotateComponent(UFOA->GetTransform(), glm::vec3(0,20,0)));
+		
 		Exalted::GameObject* UFOB = new Exalted::GameObject("UFO-B");
 
 		UFOB->SetMesh(ufoMesh);
@@ -120,7 +111,9 @@ namespace Sandbox
 		UFOB->SetTransparency(false); //todo: make these reflective
 		UFOB->SetBoundingRadius(200.f);
 		UFOB->GetTransform()->Scale = glm::vec3(3);
-		UFOB->GetTransform()->Position = glm::vec3(-1000.f, 210.f, 1000.f);
+		UFOB->GetTransform()->Position = glm::vec3(-1000.f, 200.f, 1000.f);
+		UFOB->SetSpotLight(m_SpotLights[1]);
+		UFOB->AddGameComponent(new Exalted::RotateComponent(UFOB->GetTransform(), glm::vec3(0, -20, 0)));
 
 		//todo: This UFO maps the skybox onto it
 		Exalted::GameObject* reflectiveUFO = new Exalted::GameObject("UFO-Reflective");
@@ -131,6 +124,7 @@ namespace Sandbox
 		reflectiveUFO->SetBoundingRadius(FLT_MAX);
 		reflectiveUFO->GetTransform()->Scale = glm::vec3(10);
 		reflectiveUFO->GetTransform()->Position = glm::vec3(-50, 600.f, -500);
+		reflectiveUFO->AddGameComponent(new Exalted::RotateComponent(reflectiveUFO->GetTransform(), glm::vec3(0, 360, 0)));
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//// TREES
@@ -151,9 +145,10 @@ namespace Sandbox
 		treeObject->SetMaterial(debugMaterial);
 		treeObject->SetTransparency(true);
 		treeObject->SetBoundingRadius(200.f);
-		treeObject->GetTransform()->Scale = glm::vec3(10);
+		treeObject->GetTransform()->Scale = glm::vec3(0.01);
 		treeObject->GetTransform()->Position = glm::vec3(1000.f, 2.1f, 1000.f);
-
+		treeObject->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject->GetTransform(), glm::vec3(0.25f), glm::vec3(15)));
+		
 		//todo: Make a transparent shader for these (manually tweaking their transparency)
 		// tree leaves
 		Exalted::GameObject* leafObject = new Exalted::GameObject("Tree-Leaves-A");
@@ -175,8 +170,9 @@ namespace Sandbox
 		treeObject2->SetMaterial(debugMaterial);
 		treeObject2->SetTransparency(true);
 		treeObject2->SetBoundingRadius(200.f);
-		treeObject2->GetTransform()->Scale = glm::vec3(10);
+		treeObject2->GetTransform()->Scale = glm::vec3(0.01);
 		treeObject2->GetTransform()->Position = glm::vec3(-1000.f, 20.5f, 1000.f);
+		treeObject2->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject2->GetTransform(), glm::vec3(0.25f), glm::vec3(15)));
 
 		//todo: Make a transparent shader for these (manually tweaking their transparency)
 		// tree leaves
