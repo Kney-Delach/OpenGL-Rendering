@@ -56,7 +56,7 @@ namespace Exalted
 			return;
 		if(m_Frustum.InsideFrustum(*gameObject))
 		{
-			const glm::vec3 direction = gameObject->GetTransform()->Position - m_Camera->GetPosition(); //todo: verify this works correctly
+			const glm::vec3 direction = glm::vec3(gameObject->GetTransform()->WorldTransform[3]) - m_Camera->GetPosition(); //todo: verify this works correctly gameObject->GetTransform()->Position
 			gameObject->SetDistanceFromCamera(glm::dot(direction, direction));
 			if(gameObject->IsTransparent())
 				m_TransparentObjects.emplace_back(gameObject);

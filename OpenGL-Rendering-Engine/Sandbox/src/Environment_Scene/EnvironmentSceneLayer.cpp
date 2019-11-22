@@ -90,14 +90,22 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> ufoMesh = Exalted::Mesh::Create();
 		ufoMesh->SetVertexArray(Exalted::ObjLoader::Load(UFO_MESH, true));
 		Exalted::Ref<Exalted::Material> ufoMaterial = Exalted::Material::Create(TEXTURE_DIFFUSE_UFO, TEXTURE_SPECULAR_UFO, TEXTURE_EMISSION_UFO, TEXTURE_NORMAL_UFO, 33.f);
-
+		Exalted::Ref<Exalted::Texture2D> ufoDiffuseRGBA = Exalted::Texture2D::Create(TEXTURE_DIFFUSE_UFO,
+			Exalted::TextureFormat::RGBA,
+			Exalted::TextureWrap::CLAMP,
+			Exalted::TextureMagFilter::LINEAR,
+			Exalted::TextureMinFilter::LINEAR_LINEAR,
+			false,
+			0);
+		ufoMaterial->DiffuseTexture = ufoDiffuseRGBA; 
+		
 		Exalted::GameObject* UFOA = new Exalted::GameObject("UFO-A");
 
 		UFOA->SetMesh(ufoMesh);
 		UFOA->SetShader(multipleLightsShader); //todo: make sure near plane is far enough not to take effect from these objects
 		UFOA->SetMaterial(ufoMaterial);
-		UFOA->SetTransparency(false); //todo: make these reflective
-		UFOA->SetBoundingRadius(200.f);
+		UFOA->SetTransparency(true); //todo: make these reflective
+		UFOA->SetBoundingRadius(30.f);
 		UFOA->GetTransform()->Scale = glm::vec3(3);
 		UFOA->GetTransform()->Position = glm::vec3(1000.f, 200.f, 1000.f);
 		UFOA->SetSpotLight(m_SpotLights[0]);
@@ -108,8 +116,8 @@ namespace Sandbox
 		UFOB->SetMesh(ufoMesh);
 		UFOB->SetShader(multipleLightsShader); //todo: make sure near plane is far enough not to take effect from these objects
 		UFOB->SetMaterial(ufoMaterial);
-		UFOB->SetTransparency(false); //todo: make these reflective
-		UFOB->SetBoundingRadius(200.f);
+		UFOB->SetTransparency(true); //todo: make these reflective
+		UFOB->SetBoundingRadius(30.f);
 		UFOB->GetTransform()->Scale = glm::vec3(3);
 		UFOB->GetTransform()->Position = glm::vec3(-1000.f, 200.f, 1000.f);
 		UFOB->SetSpotLight(m_SpotLights[1]);
@@ -121,7 +129,7 @@ namespace Sandbox
 		reflectiveUFO->SetMesh(ufoMesh);
 		reflectiveUFO->SetShader(skyboxReflectiveShader); 
 		reflectiveUFO->SetTransparency(true);
-		reflectiveUFO->SetBoundingRadius(FLT_MAX);
+		reflectiveUFO->SetBoundingRadius(100.f);
 		reflectiveUFO->GetTransform()->Scale = glm::vec3(10);
 		reflectiveUFO->GetTransform()->Position = glm::vec3(-50, 600.f, -500);
 		reflectiveUFO->AddGameComponent(new Exalted::RotateComponent(reflectiveUFO->GetTransform(), glm::vec3(0, 360, 0)));
@@ -144,7 +152,7 @@ namespace Sandbox
 		treeObject->SetShader(multipleLightsShader);
 		treeObject->SetMaterial(debugMaterial);
 		treeObject->SetTransparency(true);
-		treeObject->SetBoundingRadius(200.f);
+		treeObject->SetBoundingRadius(10.f);
 		treeObject->GetTransform()->Scale = glm::vec3(0.01);
 		treeObject->GetTransform()->Position = glm::vec3(1000.f, 2.1f, 1000.f);
 		treeObject->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject->GetTransform(), glm::vec3(0.25f), glm::vec3(15)));
@@ -156,8 +164,7 @@ namespace Sandbox
 		leafObject->SetShader(multipleLightsShader);
 		leafObject->SetMaterial(leafMaterial);
 		leafObject->SetTransparency(true);
-		leafObject->SetBoundingRadius(200.f);
-		leafObject->SetActive(false);
+		leafObject->SetBoundingRadius(15.f);
 
 		treeObject->AddChildObject(leafObject);
 
@@ -181,9 +188,8 @@ namespace Sandbox
 		leafObject2->SetShader(multipleLightsShader);
 		leafObject2->SetMaterial(leafMaterial);
 		leafObject2->SetTransparency(true);
-		leafObject2->SetBoundingRadius(200.f);
-		leafObject2->SetActive(false);
-		//
+		leafObject2->SetBoundingRadius(15.f);
+		
 		// add leaves to tree
 		treeObject2->AddChildObject(leafObject2);
 
@@ -359,21 +365,12 @@ namespace Sandbox
 
 		// Render scene lights
 		m_LightSourceShader->Bind();
-
 		for (int i = 0; i < m_PointLights.size(); ++i)
 		{
 			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_PointLightTransforms[i]->SetAndGetWorldTransform());
 			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_PointLights[i]->Diffuse);
 			Exalted::Renderer::Submit(m_LightSourceMesh);
 		}
-
-		//// render all spot lights except the flashlight
-		//for (int i = 0; i < m_SpotLights.size(); ++i)
-		//{
-		//	std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_SpotLightTransforms[i]->SetAndGetWorldTransform());
-		//	std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_SpotLights[i]->Diffuse);
-		//	Exalted::Renderer::Submit(m_LightSourceMesh);
-		//}
 		m_LightSourceShader->Unbind();
 
 		// render the rest of the scene, skyboxes and transparent objects
@@ -382,11 +379,10 @@ namespace Sandbox
 		Exalted::OpenGLConfigurations::EnableBlending();
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
 		Exalted::OpenGLConfigurations::SetBlendFunction(Exalted::BlendFactors::SOURCE_ALPHA, Exalted::BlendFactors::SOURCE_ALPHA_MINUS);
-		m_SceneManager->DrawTransparentObjects();
-		Exalted::OpenGLConfigurations::DisableBlending();
-		
+		m_SceneManager->DrawTransparentObjects();		
 		m_SceneManager->ClearObjectLists();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
+		Exalted::OpenGLConfigurations::DisableBlending();
 
 		/////////////////////////////////////////////////////////////////////////////
 		//// Spot Light Debugging /////////////////////////////////////////////////// 
