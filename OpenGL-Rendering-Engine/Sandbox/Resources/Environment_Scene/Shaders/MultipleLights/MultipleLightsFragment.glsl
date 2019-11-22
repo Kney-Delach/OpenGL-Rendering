@@ -86,13 +86,17 @@ layout (std140) uniform Camera_Uniforms
 	float _BoundaryPadding;
 };
 
+layout (std140) uniform Light_Space_Uniforms 
+{
+	mat4 LightSpaceMatrix[NUMBER_OF_SPOT_LIGHTS]; //todo: change the number of spot lights dynamically?
+};
 
 in ShaderData 
 {
 	vec3 v_FragPosition;
 	vec3 v_Normal;
 	vec2 v_TexCoord;
-	vec4 v_LightSpaceFragCoord; // for directional shadows
+	//vec4 v_LightSpaceFragCoord; // for directional shadows
 } IN;
 
 uniform Material u_Material; 
@@ -167,7 +171,7 @@ vec3 CalculatePointLights(PointLight light, vec3 normal, vec3 fragPosition, vec3
 //// Spot Light Shadow
 /////////////////////////////////////////////
 
-float CalcSpotLightShadow(vec3 normal)
+float CalcSpotLightShadow(vec3 normal, int index)
 {
 	/////////////////////////////////////////////////////////
 	/////////////////// METHOD 1 ////////////////////////////
@@ -196,7 +200,8 @@ float CalcSpotLightShadow(vec3 normal)
 	/////////////////// METHOD 2 ////////////////////////////
 	/////////////////////////////////////////////////////////
 	//perform perspective divide
-    vec3 projCoords = IN.v_LightSpaceFragCoord.xyz / IN.v_LightSpaceFragCoord.w;
+	vec4 lightSpaceFragCoord = LightSpaceMatrix[index] * vec4(IN.v_FragPosition, 1.0);
+    vec3 projCoords = lightSpaceFragCoord.xyz / lightSpaceFragCoord.w;
     // transform to [0,1] range
 	projCoords = projCoords * 0.5 + 0.5;
 
@@ -206,21 +211,21 @@ float CalcSpotLightShadow(vec3 normal)
 		return 0.0;
 	}
     // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-    float closestDepth = texture(u_ShadowMap, projCoords.xy).r; 
+    float closestDepth = texture(u_ShadowMap[index], projCoords.xy).r; 
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z; 
 
 	float shadow = 0.0;
 
 	// fixing jagged edges using PCF (percentage-closer filtering)  
-	vec2 texelSize = 1.0 / textureSize(u_ShadowMap, 0);
-	float bias = max(0.05 * (1.0 - dot(normal, DirectionalLights.Direction)), 0.005);
+	vec2 texelSize = 1.0 / textureSize(u_ShadowMap[index], 0);
+	//float bias = max(0.005 * (1.0 - dot(normal, DirectionalLights.Direction)), 0.00001);
 	for(int x = -1; x <= 1; ++x)
 	{
 		for(int y = -1; y <= 1; ++y)
 		{
-			float pcfDepth = texture(u_ShadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
-			shadow += currentDepth - 0.00001 > pcfDepth ? 1.0 : 0.0;
+			float pcfDepth = texture(u_ShadowMap[index], projCoords.xy + vec2(x, y) * texelSize).r; 
+			shadow += currentDepth -  0.00001 > pcfDepth ? 1.0 : 0.0;
 		} 
 	}
 
@@ -250,11 +255,16 @@ vec3 CalculateSpotLights(SpotLight light, vec3 normal, vec3 fragPosition, vec3 v
 	vec3 specular = light.Specular * spec * vec3(texture(u_Material.TextureSpecular, IN.v_TexCoord));
 
 	float shadow = 0.0; 
-	if(index == 1) 
-		shadow = CalcSpotLightShadow(normal);
+	shadow = CalcSpotLightShadow(normal, index);
 
+	vec3 emission = vec3(0,0,0); 
+	if(!(texture(u_Material.TextureEmission, IN.v_TexCoord).rgb == vec3(1,1,1)) && index == 0)
+	{
+		emission = texture(u_Material.TextureEmission, IN.v_TexCoord).rgb * vec3(0,1,0);
+	}
+		
 	// attenuation
-	return (1 - shadow) * intensity * (CalculateAttenuationResults(ambient, diffuse, specular, light.Position, fragPosition, light.AttenuationConstant, light.AttenuationLinear, light.AttenuationQuadratic)); //+ emission);
+	return (1 - shadow) * intensity * (CalculateAttenuationResults(ambient, diffuse, specular, light.Position, fragPosition, light.AttenuationConstant, light.AttenuationLinear, light.AttenuationQuadratic)) + emission;
 }
 
 

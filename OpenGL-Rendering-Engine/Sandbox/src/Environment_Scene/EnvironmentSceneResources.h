@@ -83,6 +83,13 @@
 // spot light mesh
 #define SPOT_LIGHTHOUSE_MESH "Resources/Environment_Scene/Meshes/Lighthouse.obj"
 
+// UFO mesh and textures 
+
+#define UFO_MESH "Resources/Environment_Scene/UFO/UFO.obj"
+#define TEXTURE_DIFFUSE_UFO "Resources/Environment_Scene/UFO/Ufo_Diffuse.png"
+#define TEXTURE_EMISSION_UFO "Resources/Environment_Scene/UFO/Ufo_Emission.png"
+#define TEXTURE_SPECULAR_UFO "Resources/Environment_Scene/UFO/Ufo_Specular.png"
+#define TEXTURE_NORMAL_UFO "Resources/Environment_Scene/UFO/Ufo_Normal.png"
 
 /////////////////////////////////////////////////////////////
 //// SCENE 2

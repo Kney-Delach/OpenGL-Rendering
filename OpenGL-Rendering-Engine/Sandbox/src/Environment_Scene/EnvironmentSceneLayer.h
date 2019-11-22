@@ -19,8 +19,6 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Scene> m_SceneManager;
 		Exalted::Ref<Exalted::EditorCamera> m_EditorCamera;
 		
-		Exalted::Ref<Exalted::UniformBuffer> m_LightUniformBuffer;
-		
 		//////////////////////////////////////////////
 		/////////////////// lights ///////////////////
 		//////////////////////////////////////////////
@@ -37,10 +35,18 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> m_LightSourceMesh;
 		Exalted::Ref<Exalted::Mesh> m_SpotLightMesh;
 
+
+		//////////////////////////////////////////////
+		////todo: Stuff that needs to go to the scene graph
+		//////////////////////////////////////////////
+		/////todo: uniform buffers
+		Exalted::Ref<Exalted::UniformBuffer> m_LightUniformBuffer;
+		Exalted::Ref<Exalted::UniformBuffer> m_LightSpaceDataUniformBuffer;
+
 		/////////////////////////////////////////////////
 		////// Directional Shadow Variable Setup ////////
 		/////////////////////////////////////////////////
-		Exalted::Ref<Exalted::FrameBuffer> m_DepthFrameBuffer;
+		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_DepthFrameBuffers; 
 		Exalted::Ref<Exalted::Shader> m_ObjectDepthShader;
 		Exalted::Ref<Exalted::Shader> m_QuadDepthShader;
 		Exalted::Ref<Exalted::Mesh> m_QuadMesh;
@@ -48,9 +54,10 @@ namespace Sandbox
 		/////////////////////////////////
 		//// Debugging Utilities
 		/////////////////////////////////
-		bool DEBUG_FlashlightMode = false;
 		bool DEBUG_ColorChange = false;
 
-		
+		float DEBUG_FOV = 90.f;
+		float DEBUG_NEAR = 0.1f;
+		float DEBUG_FAR = 20.f;
 	};
 }

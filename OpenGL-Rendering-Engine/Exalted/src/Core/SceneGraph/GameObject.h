@@ -87,8 +87,13 @@ namespace Exalted
 			{
 				m_Shader->Bind();
 				m_Material->Bind(m_Shader);
-				std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1("u_ShadowMap", 4);
-				std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_LightSpaceMatrix", LightSpaceMatrix);
+				for (int i = 0; i < NumberOfPointLights; i++) //todo: move this from here maybe ?
+				{
+					std::string number = std::to_string(i);
+					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_ShadowMap[" + number + "]").c_str(), (4 + i));
+
+				}
+				//std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_LightSpaceMatrices", LightSpaceMatrix); //todo: move this to uniform buffer
 				std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_Model", m_Transform->WorldTransform);
 				Renderer::Submit(m_Mesh);
 				m_Material->Unbind();
@@ -154,7 +159,8 @@ namespace Exalted
 			return (label + separator + id);
 		}
 	public:
-		static inline glm::mat4 LightSpaceMatrix;
+		//static inline std::vector<glm::mat4> LightSpaceMatrices;
+		static inline int NumberOfPointLights;
 	private:
 		void DestroyGameObject();
 	private:

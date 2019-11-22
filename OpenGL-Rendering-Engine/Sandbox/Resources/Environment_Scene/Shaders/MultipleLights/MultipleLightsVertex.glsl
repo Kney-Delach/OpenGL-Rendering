@@ -38,7 +38,7 @@ out ShaderData
 	vec3 v_FragPosition;
 	vec3 v_Normal;
 	vec2 v_TexCoord;
-	vec4 v_LightSpaceFragCoord; // for directional shadows
+	//vec4 v_LightSpaceFragCoord; // for directional shadows
 } OUT;
 
 uniform mat4 u_Model;
@@ -49,7 +49,7 @@ void main()
     mat3 normalMatrix = transpose(inverse(mat3(u_Model))); 
 	OUT.v_Normal = normalize(normalMatrix * normalize (a_Normal)); //mat3(transpose(inverse(u_Model))) * a_Normal; // generate the normal matrix  (necessary when model is scales / translated)
 	OUT.v_FragPosition = vec3(u_Model * vec4(a_Position, 1.0)); 
-	OUT.v_LightSpaceFragCoord = u_LightSpaceMatrix * vec4(vec3(u_Model * vec4(a_Position, 1.0)), 1.0);
+	//OUT.v_LightSpaceFragCoord = u_LightSpaceMatrix * vec4(vec3(u_Model * vec4(a_Position, 1.0)), 1.0);
 	OUT.v_TexCoord = a_TexCoord;
 	gl_Position = ViewProjectionMatrix * u_Model * vec4(a_Position, 1.0);
 }

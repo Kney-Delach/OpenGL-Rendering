@@ -34,31 +34,31 @@ namespace Sandbox
 		m_PointLightTransforms[0]->Position = m_PointLights[0]->Position;
 
 		// 2. spot lights
-		m_SpotLights.emplace_back(Exalted::SpotLight::Create());
-		m_SpotLights[0]->Ambient = glm::vec3(1,1,0);
-		m_SpotLights[0]->Diffuse = glm::vec3(1,1,0);
-		m_SpotLights[0]->Specular = glm::vec3(1,1,0);
-		m_SpotLights[0]->Position = glm::vec3(180, 10, 200);
-		m_SpotLights[0]->SetAttenuationDistance(325);
-		m_SpotLights[0]->CutoffInner = glm::cos(glm::radians(12.5f));
-		m_SpotLights[0]->CutoffOuter = glm::cos(glm::radians(28.f));
-		m_SpotLightTransforms.emplace_back(Exalted::GameTransform::Create());
-		m_SpotLightTransforms[0]->Scale = glm::vec3(1.0);
-		m_SpotLightTransforms[0]->Position = m_SpotLights[0]->Position;
+		for (int i = 0; i < 2; i++)
+		{
+			m_SpotLights.emplace_back(Exalted::SpotLight::Create());
+			glm::vec3 color = glm::vec3(0, 1, 0);
+			if(i == 0)
+			{
+				//color = glm::vec3(0, 1, 0);
+				m_SpotLights[i]->Position = glm::vec3(100, 20, 100);
+			}
+			if(i == 1)
+			{
+				//color = glm::vec3(0, 1, 1);
+				m_SpotLights[i]->Position = glm::vec3(-100, 20, 100);
 
-		m_SpotLights.emplace_back(Exalted::SpotLight::Create());
-		m_SpotLights[1]->Ambient = glm::vec3(1, 1, 0);
-		m_SpotLights[1]->Diffuse = glm::vec3(1, 1, 0);
-		m_SpotLights[1]->Specular = glm::vec3(1, 1, 0);
-		m_SpotLights[1]->Position = glm::vec3(100, 20, 100);
-		m_SpotLights[1]->Direction = glm::vec3(10, -360, 0);
-		m_SpotLights[1]->SetAttenuationDistance(200);
-		m_SpotLights[1]->CutoffInner = glm::cos(glm::radians(12.5f));
-		m_SpotLights[1]->CutoffOuter = glm::cos(glm::radians(30.f));
-		m_SpotLightTransforms.emplace_back(Exalted::GameTransform::Create());
-		m_SpotLightTransforms[1]->Scale = glm::vec3(1);
-		m_SpotLightTransforms[1]->Position = m_SpotLights[1]->Position;
-		
+			}
+			m_SpotLights[i]->Ambient = color;
+			m_SpotLights[i]->Diffuse = color;
+			m_SpotLights[i]->Specular = color;
+			m_SpotLights[i]->Direction = glm::vec3(10, -360, 0);
+			m_SpotLights[i]->SetAttenuationDistance(200);
+			m_SpotLights[i]->CutoffInner = glm::cos(glm::radians(12.5f));
+			m_SpotLights[i]->CutoffOuter = 0.8f;
+			m_SpotLightTransforms.emplace_back(Exalted::GameTransform::Create());
+			m_SpotLightTransforms[i]->Position = m_SpotLights[i]->Position;
+		}
 		
 		// 3. directional light
 		m_DirectionalLight = Exalted::DirectionalLight::Create();
@@ -71,6 +71,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Shader> multipleLightsShader = Exalted::Shader::Create(MULTIPLE_LIGHTS_VERTEX, MULTIPLE_LIGHTS_FRAGMENT);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Light_Uniforms", 1);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Light_Space_Uniforms", 3);
 
 		// 5. Create Materials
 		Exalted::Ref<Exalted::Material> islandMaterial = Exalted::Material::Create(TEXTURE_DIFFUSE_ISLAND, TEXTURE_SPECULAR_ISLAND, "", TEXTURE_NORMAL_ISLAND, 33.f);
@@ -91,13 +92,48 @@ namespace Sandbox
 		leafMaterial->NormalTexture = leafTexture;
 		
 		// 4. Create Gameobjects
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//// UFOs
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		Exalted::Ref<Exalted::Mesh> ufoMesh = Exalted::Mesh::Create();
+		ufoMesh->SetVertexArray(Exalted::ObjLoader::Load(UFO_MESH, true));
+		Exalted::Ref<Exalted::Material> ufoMaterial = Exalted::Material::Create(TEXTURE_DIFFUSE_UFO, TEXTURE_SPECULAR_UFO, TEXTURE_EMISSION_UFO, TEXTURE_NORMAL_UFO, 33.f);
 
-		////////////////////////////////////////////////////////////////////////
-		//// ALL THE TREES 
-		////////////////////////////////////////////////////////////////////////
-		Exalted::GameObject* treeObject = new Exalted::GameObject("Tree-A");
+		Exalted::GameObject* UFOA = new Exalted::GameObject("UFO-A");
+
+		UFOA->SetMesh(ufoMesh);
+		UFOA->SetShader(multipleLightsShader); //todo: make sure near plane is far enough not to take effect from these objects
+		UFOA->SetMaterial(ufoMaterial);
+		UFOA->SetTransparency(true);
+		UFOA->SetBoundingRadius(200.f);
+		UFOA->GetTransform()->Scale = glm::vec3(3);
+		UFOA->GetTransform()->Position = glm::vec3(1000.f, 210.f, 1000.f);
+
+		Exalted::GameObject* UFOB = new Exalted::GameObject("UFO-B");
+
+		UFOB->SetMesh(ufoMesh);
+		UFOB->SetShader(multipleLightsShader); //todo: make sure near plane is far enough not to take effect from these objects
+		UFOB->SetMaterial(ufoMaterial);
+		UFOB->SetTransparency(true);
+		UFOB->SetBoundingRadius(200.f);
+		UFOB->GetTransform()->Scale = glm::vec3(3);
+		UFOB->GetTransform()->Position = m_SpotLights[1]->Position;
+		UFOB->GetTransform()->Position = glm::vec3(-1000.f, 210.f, 1000.f);
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//// TREES
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
 		Exalted::Ref<Exalted::Mesh> treeMesh = Exalted::Mesh::Create();
 		treeMesh->SetVertexArray(Exalted::ObjLoader::Load(TREE_MESH, true));
+		Exalted::Ref<Exalted::Mesh> leafMesh = Exalted::Mesh::Create();
+		leafMesh->SetVertexArray(Exalted::ObjLoader::Load(LEAF_MESH, true));
+		
+		////////////////////////////////////////////////////////////////////////
+		//// TREE 1
+		////////////////////////////////////////////////////////////////////////
+		Exalted::GameObject* treeObject = new Exalted::GameObject("Tree-A");
+		
 		treeObject->SetMesh(treeMesh);
 		treeObject->SetShader(multipleLightsShader);
 		treeObject->SetMaterial(debugMaterial);
@@ -109,17 +145,41 @@ namespace Sandbox
 		//todo: Make a transparent shader for these (manually tweaking their transparency)
 		// tree leaves
 		Exalted::GameObject* leafObject = new Exalted::GameObject("Tree-Leaves-A");
-		Exalted::Ref<Exalted::Mesh> leafMesh = Exalted::Mesh::Create();
-		leafMesh->SetVertexArray(Exalted::ObjLoader::Load(LEAF_MESH, true));
 		leafObject->SetMesh(leafMesh);
 		leafObject->SetShader(multipleLightsShader);
 		leafObject->SetMaterial(leafMaterial);
 		leafObject->SetTransparency(true);
 		leafObject->SetBoundingRadius(200.f);
-		leafObject->SetActive(false); //todo: remove this
-		
-		// add leaves to tree
+		leafObject->SetActive(false);
+
 		treeObject->AddChildObject(leafObject);
+
+		////////////////////////////////////////////////////////////////////////
+		//// TREE 2
+		////////////////////////////////////////////////////////////////////////
+		Exalted::GameObject* treeObject2 = new Exalted::GameObject("Tree-B");
+		treeObject2->SetMesh(treeMesh);
+		treeObject2->SetShader(multipleLightsShader);
+		treeObject2->SetMaterial(debugMaterial);
+		treeObject2->SetTransparency(true);
+		treeObject2->SetBoundingRadius(200.f);
+		treeObject2->GetTransform()->Scale = glm::vec3(10);
+		treeObject2->GetTransform()->Position = glm::vec3(-1000.f, 20.5f, 1000.f);
+
+		//todo: Make a transparent shader for these (manually tweaking their transparency)
+		// tree leaves
+		Exalted::GameObject* leafObject2 = new Exalted::GameObject("Tree-Leaves-B");
+		leafObject2->SetMesh(leafMesh);
+		leafObject2->SetShader(multipleLightsShader);
+		leafObject2->SetMaterial(leafMaterial);
+		leafObject2->SetTransparency(true);
+		leafObject2->SetBoundingRadius(200.f);
+		leafObject2->SetActive(false);
+		//
+		// add leaves to tree
+		treeObject2->AddChildObject(leafObject2);
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		////////////////////////////////////////////////////////////////////////
 		//// Terrain A and its children 
@@ -134,76 +194,14 @@ namespace Sandbox
 		terrainObject->SetMaterial(islandMaterial);
 		terrainObject->SetTransparency(false);
 		terrainObject->SetBoundingRadius(FLT_MAX);
-
-		////////////////////////////////////////////////////////////////////////
-		//// The Hut
-		////////////////////////////////////////////////////////////////////////
-		//Exalted::GameObject* hutMain = new Exalted::GameObject("Hut-Main");
-		//Exalted::Ref<Exalted::Mesh> hutMainMesh = Exalted::Mesh::Create();
-		//hutMainMesh->SetVertexArray(Exalted::ObjLoader::Load(HUT_MESH_MAIN));
-		//hutMain->SetMesh(hutMainMesh);
-		//hutMain->SetShader(multipleLightsShader);
-		//hutMain->SetMaterial(debugMaterial);
-		//hutMain->SetTransparency(false); 
-		//hutMain->SetBoundingRadius(500.f);
-		//hutMain->GetTransform()->Scale = glm::vec3(10);
-		//hutMain->GetTransform()->Position = glm::vec3(0, 200, 400);
-		//hutMain->GetTransform()->Rotation = glm::vec3(0, -45.f, 0);
-
-		//Exalted::GameObject* hutRoof = new Exalted::GameObject("Hut-Roof");
-		//Exalted::Ref<Exalted::Mesh> hutRoofMesh = Exalted::Mesh::Create();
-		//hutRoofMesh->SetVertexArray(Exalted::ObjLoader::Load(HUT_MESH_ROOF));
-		//hutRoof->SetMesh(hutRoofMesh);
-		//hutRoof->SetShader(multipleLightsShader);
-		//hutRoof->SetMaterial(debugMaterial);
-		//hutRoof->SetTransparency(false); //todo: make the roof slightly transparent? or maybe the doorway
-		//hutRoof->SetBoundingRadius(500.f);
-
-		Exalted::GameObject* hutFloor = new Exalted::GameObject("Hut-Floor");
-		Exalted::Ref<Exalted::Mesh> hutFloorMesh = Exalted::Mesh::Create();
-		hutFloorMesh->SetVertexArray(Exalted::ObjLoader::Load(HUT_MESH_FLOOR));
-		hutFloor->SetMesh(hutFloorMesh);
-		hutFloor->SetShader(multipleLightsShader);
-		hutFloor->SetMaterial(debugMaterial);
-		hutFloor->SetTransparency(false);
-		hutFloor->SetBoundingRadius(500.f);
-
-		Exalted::GameObject* hutBottom = new Exalted::GameObject("Hut-Bottom");
-		Exalted::Ref<Exalted::Mesh> hutBottomMesh = Exalted::Mesh::Create();
-		hutBottomMesh->SetVertexArray(Exalted::ObjLoader::Load(HUT_MESH_BOTTOM));
-		hutBottom->SetMesh(hutBottomMesh);
-		hutBottom->SetShader(multipleLightsShader);
-		hutBottom->SetMaterial(debugMaterial);
-		hutBottom->SetTransparency(false);
-		hutBottom->SetBoundingRadius(500.f);
-		hutBottom->GetTransform()->Scale = glm::vec3(10);
-		hutBottom->GetTransform()->Position = glm::vec3(0, 200, 400);
-		hutBottom->GetTransform()->Rotation = glm::vec3(0, -45.f, 0);
-		
-		// parent hut objects
-		hutBottom->AddChildObject(hutFloor);
-		//hutMain->AddChildObject(hutRoof);
-		//hutMain->AddChildObject(hutFloor);
-		//hutMain->AddChildObject(hutBottom);
-		//hutMain->SetActive(false); //todo; reactivate this
-		
-		Exalted::GameObject* symmetra = new Exalted::GameObject("Sculpture");
-		Exalted::Ref<Exalted::Mesh> sculptureMesh = Exalted::Mesh::Create();
-		sculptureMesh->SetVertexArray(Exalted::ObjLoader::Load(SYMMETRA));
-		symmetra->SetMesh(sculptureMesh);
-		symmetra->SetShader(multipleLightsShader);
-		symmetra->SetMaterial(debugMaterial);
-		symmetra->SetTransparency(false);
-		symmetra->SetBoundingRadius(500.f);
-		symmetra->GetTransform()->Scale = glm::vec3(40);
-		symmetra->GetTransform()->Position = glm::vec3(-30.f, 364.f, 290.f);
-		//sculpture->SetActive(false);
 		
 		// 5. Add all gameobjects to scene manager
+		m_SceneManager->GetSceneRoot()->AddChildObject(UFOA);
+		m_SceneManager->GetSceneRoot()->AddChildObject(UFOB);
+		
 		m_SceneManager->GetSceneRoot()->AddChildObject(treeObject);
+		m_SceneManager->GetSceneRoot()->AddChildObject(treeObject2);
 		m_SceneManager->GetSceneRoot()->AddChildObject(terrainObject);
-		m_SceneManager->GetSceneRoot()->AddChildObject(hutBottom);
-		m_SceneManager->GetSceneRoot()->AddChildObject(symmetra);
 		m_SceneManager->GetSceneRoot()->GetTransform()->Scale = glm::vec3(.1f); //todo: !
 		
 		// lighting UBO setup 
@@ -216,22 +214,38 @@ namespace Sandbox
 		m_LightUniformBuffer = Exalted::UniformBuffer::Create(lightsBufferSize);
 		m_LightUniformBuffer->BindBufferRange(lightsBBI, lightsOffset, lightsBufferSize);
 
-		/////////////////////////////////////////////////
-		////// Shadow Data Setup ////////////////////////
-		/////////////////////////////////////////////////
-		m_DepthFrameBuffer = Exalted::FrameBuffer::Create(4096, 4096, true);
-		m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT); //todo: render models into this
+		//////////////////////////////////////////////////////////////////////
+		////todo: Stuff that needs to go into the scene graph ////////////////
+		//////////////////////////////////////////////////////////////////////
+		// number of point lights reference in gameobject draw 
+		Exalted::GameObject::NumberOfPointLights = noSpotLights;
+
+		/////////////////todo: Light space data uniform buffers
+		//todo: move this to the scene graph, contains the light space matrices data.
+		const Exalted::Bytes lightsSpaceOffset = 0;
+		const Exalted::Bytes lightSpaceDataBBI = 3; //todo: move this to light manager static lights section
+		Exalted::Bytes lightSpaceBufferSize = sizeof(glm::mat4) * noSpotLights;
+		m_LightSpaceDataUniformBuffer = Exalted::UniformBuffer::Create(lightSpaceBufferSize);
+		m_LightSpaceDataUniformBuffer->BindBufferRange(lightSpaceDataBBI, lightsSpaceOffset, lightSpaceBufferSize);
+
+		//todo: move to shadow manager --> Shadow Data Setup
+		for (int i = 0; i < noSpotLights; i++)
+		{
+			m_DepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
+		}
 		m_ObjectDepthShader = Exalted::Shader::Create(DIRECTIONAL_SHADOW_SHADER_VERTEX_DEPTH, DIRECTIONAL_SHADOW_SHADER_FRAGMENT_DEPTH); //todo: render models into this
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformBlockIndex("Light_Space_Uniforms", 3);
+
+		//todo: render debug quad to this
+		m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT);
 		m_QuadMesh = Exalted::Mesh::Create();
 		m_QuadMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateIndexedQuad());
-
-
-		//todo: instance this? 
+		
 		/////////////////////////////////////
 		//// DEBUG DATA /////////////////////
 		/////////////////////////////////////
 		m_LightSourceMesh = Exalted::Mesh::Create();
-		m_LightSourceMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateCubeIT(1.f));
+		m_LightSourceMesh->SetVertexArray(Exalted::ObjLoader::Load(UFO_MESH));//Exalted::ShapeGenerator::GenerateCubeIT(1.f));
 
 		m_SpotLightMesh = Exalted::Mesh::Create();
 		m_SpotLightMesh->SetVertexArray(Exalted::ObjLoader::Load(SPOT_LIGHTHOUSE_MESH));
@@ -246,12 +260,6 @@ namespace Sandbox
 		m_EditorCamera->UpdateCamera(deltaTime);
 		m_SceneManager->UpdateScene(deltaTime);
 
-		if (DEBUG_FlashlightMode)
-		{
-			m_SpotLights[0]->Position = m_EditorCamera->GetPosition();
-			m_SpotLights[0]->Direction = m_EditorCamera->GetFront();
-		}
-
 		if(DEBUG_ColorChange)
 		{
 			glm::vec3 lightColor;
@@ -259,13 +267,9 @@ namespace Sandbox
 			lightColor.y = sin(TIME * 0.5f);
 			lightColor.z = sin(TIME * 1.5f);
 
-			glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
-			glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
-			glm::vec3 specularColor = lightColor;
-
-			m_SpotLights[0]->Diffuse = diffuseColor;
-			m_SpotLights[0]->Ambient = ambientColor;
-			m_SpotLights[0]->Specular = specularColor;
+			m_SpotLights[0]->Diffuse = lightColor;
+			m_SpotLights[0]->Ambient = lightColor * glm::vec3(0.5);
+			m_SpotLights[0]->Specular = lightColor;
 		}
 		
 		/////////////////////////////////////////////////////////////////////////////
@@ -292,41 +296,55 @@ namespace Sandbox
 		m_SceneManager->RenderScene();
 
 		///////////////////////////////////////////////////////////////////////////////////////
-		//// Directional Light Shadows
+		////todo: If static, don't loop
+		////todo: move from here -> Directional Light projection calculation
 		/////////////////////////////////////////////////////////////////////////////////////
-		float near_plane = 1.f;
-		float far_plane = 200.f;
-		glm::mat4 lightProjection = glm::perspective<float>(glm::radians(45.0f), 1.0f, near_plane, far_plane);
-		glm::mat4 lightView = glm::lookAt(m_SpotLights[1]->Position, m_SpotLights[1]->Position + m_SpotLights[1]->Direction, glm::vec3(0, 1, 0)); //glm::normalize(
-		glm::mat4 lightSpaceMatrix = lightProjection * lightView;
-		Exalted::GameObject::LightSpaceMatrix = lightSpaceMatrix;
+		float near_plane = DEBUG_NEAR;
+		float far_plane = DEBUG_FAR;
+		glm::mat4 lightProjection = glm::perspective<float>(glm::radians(DEBUG_FOV), 1.0f, near_plane, far_plane);
+
+		m_LightSpaceDataUniformBuffer->Bind();
+		Exalted::Bytes offset = 0;
+		Exalted::Bytes sizeOfMat4 = sizeof(glm::mat4);
+		for (int i = 0; i < m_SpotLights.size(); i++)
+		{
+			glm::mat4 lightView = glm::lookAt(m_SpotLights[i]->Position, m_SpotLights[i]->Position + m_SpotLights[i]->Direction, glm::vec3(0, 1, 0)); //glm::normalize(
+			glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+			m_LightSpaceDataUniformBuffer->SetBufferSubData(offset, sizeOfMat4, glm::value_ptr(lightSpaceMatrix));
+			offset += sizeof(glm::mat4);
+		}
+		m_LightSpaceDataUniformBuffer->Unbind();
 
 		/////////////////////////////////////////////////////////////////
 		//// Initial render to depth map for shadow mapping ///////////// 
 		/////////////////////////////////////////////////////////////////
+		
 		Exalted::OpenGLConfigurations::EnableFaceCulling();
 		//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::FRONT);
-		m_DepthFrameBuffer->Bind();
 		m_ObjectDepthShader->Bind();
-		Exalted::RenderCommand::ClearColorDepthBuffers();//ClearDepthBuffer();
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
-
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformMatFloat4("lightSpaceMatrix", lightSpaceMatrix);
-		
-		m_SceneManager->DrawOpaqueBindless(m_ObjectDepthShader);
-		m_SceneManager->DrawTransparentBindless(m_ObjectDepthShader);
-		
-		m_DepthFrameBuffer->UnbindMiniFrame();
+		for (int i = 0; i < m_DepthFrameBuffers.size(); i++)
+		{
+			m_DepthFrameBuffers[i]->Bind();
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformInt1("u_ShadowIndex", i);
+			Exalted::RenderCommand::ClearColorDepthBuffers();
+			m_SceneManager->DrawOpaqueBindless(m_ObjectDepthShader);
+			m_SceneManager->DrawTransparentBindless(m_ObjectDepthShader);
+			m_DepthFrameBuffers[i]->UnbindMiniFrame();
+		}
 		m_ObjectDepthShader->Unbind();
 		//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::BACK);
-		Exalted::OpenGLConfigurations::DisableFaceCulling();
+		Exalted::OpenGLConfigurations::DisableFaceCulling();		
 
 		
 		/////////////////////////////////////////////////////////////////////////////
 		//// Render scene output //////////////////////////////////////////////////// 
 		/////////////////////////////////////////////////////////////////////////////
 		Exalted::RenderCommand::ClearColorDepthBuffers();
-		m_DepthFrameBuffer->BindTexture(4); // assign depth texture
+		for (int i = 0; i < m_DepthFrameBuffers.size(); i++)
+		{
+			m_DepthFrameBuffers[i]->BindTexture(4 + i);
+		}
 
 		// render scene
 		m_SceneManager->DrawOpaqueObjects();
@@ -341,20 +359,13 @@ namespace Sandbox
 			Exalted::Renderer::Submit(m_LightSourceMesh);
 		}
 
-		// render all spot lights except the flashlight
-		for (int i = 1; i < m_SpotLights.size(); ++i)
-		{
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_SpotLightTransforms[i]->SetAndGetWorldTransform());
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_SpotLights[i]->Diffuse);
-			Exalted::Renderer::Submit(m_LightSourceMesh);
-		}
-		// render the flashlight spotlight
-		if (!DEBUG_FlashlightMode)
-		{
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_SpotLightTransforms[0]->SetAndGetWorldTransform());
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_SpotLights[0]->Diffuse);
-			Exalted::Renderer::Submit(m_LightSourceMesh);
-		}
+		//// render all spot lights except the flashlight
+		//for (int i = 0; i < m_SpotLights.size(); ++i)
+		//{
+		//	std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_SpotLightTransforms[i]->SetAndGetWorldTransform());
+		//	std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_SpotLights[i]->Diffuse);
+		//	Exalted::Renderer::Submit(m_LightSourceMesh);
+		//}
 		m_LightSourceShader->Unbind();
 
 		// render the rest of the scene, skyboxes and transparent objects
@@ -370,18 +381,27 @@ namespace Sandbox
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
 
 		/////////////////////////////////////////////////////////////////////////////
-		//// Directional Light Shadow Debugging ///////////////////////////////////// 
+		//// Spot Light Debugging /////////////////////////////////////////////////// 
 		/////////////////////////////////////////////////////////////////////////////
 
-		Exalted::OpenGLConfigurations::SetViewport(0, 0, 1024, 512);
 		m_QuadDepthShader->Bind();
-		m_DepthFrameBuffer->BindTexture(4);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("near_plane", near_plane);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("far_plane", far_plane);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformInt1("depthMap", 4);
+
+		// spot light 1
+		Exalted::OpenGLConfigurations::SetViewport(0, 0, 512, 512);
+		m_DepthFrameBuffers[0]->BindTexture(4);
 		Exalted::Renderer::Submit(m_QuadMesh);
+		m_DepthFrameBuffers[0]->Unbind();
+
+		//spot light 2
+		Exalted::OpenGLConfigurations::SetViewport(512, 0, 512, 512);
+		m_DepthFrameBuffers[1]->BindTexture(4);
+		Exalted::Renderer::Submit(m_QuadMesh);
+		m_DepthFrameBuffers[1]->Unbind();
+
 		m_QuadDepthShader->Unbind();
-		m_DepthFrameBuffer->Unbind();
 		Exalted::OpenGLConfigurations::SetViewport(0, 0, Exalted::Application::Get().GetWindow().GetWindowWidth(), Exalted::Application::Get().GetWindow().GetWindowHeight());
 
 	}
@@ -394,9 +414,12 @@ namespace Sandbox
 		ImGui::Text("----------------------------");
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
-		ImGui::Text("Directional Light Settings");
+		ImGui::Text("---- SHADOWS FOV SETTINGS ------");
+		ImGui::InputFloat("FOV", &DEBUG_FOV);
+		ImGui::InputFloat("NEAR", &DEBUG_NEAR);
+		ImGui::InputFloat("FAR", &DEBUG_FAR);
 		ImGui::Text("----------------------------");
-		ImGui::InputFloat3("Direction", glm::value_ptr(m_DirectionalLight->Direction));
+
 		ImGui::Text("----------------------------");
 		ImGui::Text("Point Light Settings");
 		ImGui::Text("----------------------------");
@@ -415,11 +438,6 @@ namespace Sandbox
 		ImGui::InputFloat3("LH - Specular", glm::value_ptr(m_SpotLights[1]->Specular));
 		ImGui::InputFloat("LH - RADIUS INNER", &m_SpotLights[1]->CutoffInner);
 		ImGui::InputFloat("LH - RADIUS OUTER", &m_SpotLights[1]->CutoffOuter);
-
-		if (ImGui::Button("Toggle Flashlight Mode"))
-		{
-			DEBUG_FlashlightMode = !DEBUG_FlashlightMode;
-		}
 		if (ImGui::Button("Toggle Flashlight Color"))
 		{
 			DEBUG_ColorChange = !DEBUG_ColorChange;
