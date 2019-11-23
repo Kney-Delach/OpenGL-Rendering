@@ -35,21 +35,16 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> m_LightSourceMesh;
 		Exalted::Ref<Exalted::Mesh> m_SpotLightMesh;
 
-
-		//////////////////////////////////////////////
-		////todo: Stuff that needs to go to the scene graph
-		//////////////////////////////////////////////
-		/////todo: uniform buffers
-		Exalted::Ref<Exalted::UniformBuffer> m_LightUniformBuffer;
-		Exalted::Ref<Exalted::UniformBuffer> m_LightSpaceDataUniformBuffer;
-
 		/////////////////////////////////////////////////
 		////// Directional Shadow Variable Setup ////////
 		/////////////////////////////////////////////////
-		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_DepthFrameBuffers; 
+		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_DepthFrameBuffers;  //todo: Note that this is only for spot lights
 		Exalted::Ref<Exalted::Shader> m_ObjectDepthShader;
 		Exalted::Ref<Exalted::Shader> m_QuadDepthShader;
 		Exalted::Ref<Exalted::Mesh> m_QuadMesh;
+		
+		// directional light
+		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_SunlightDepthFrameBuffers;
 
 		/////////////////////////////////
 		//// Debugging Utilities

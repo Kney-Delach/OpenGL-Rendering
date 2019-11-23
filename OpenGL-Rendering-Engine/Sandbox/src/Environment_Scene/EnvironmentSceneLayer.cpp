@@ -39,7 +39,7 @@ namespace Sandbox
 			m_SpotLights.emplace_back(Exalted::SpotLight::Create());
 			m_SpotLights[i]->Ambient = glm::vec3(0.1f, 0.4f, 0.1f);
 			m_SpotLights[i]->Diffuse = glm::vec3(0.f, 0.8f, 0.f);
-			m_SpotLights[i]->Specular = cglm::vec3(0.f, 1.f, 0.f);
+			m_SpotLights[i]->Specular = glm::vec3(0.f, 1.f, 0.f);
 			m_SpotLights[i]->Direction = glm::vec3(10, -360, 0.f);
 			m_SpotLights[i]->SetAttenuationDistance(200);
 			m_SpotLights[i]->CutoffInner = glm::cos(glm::radians(12.5f));
@@ -53,14 +53,15 @@ namespace Sandbox
 		m_DirectionalLight->Ambient = glm::vec3(0.2);
 		m_DirectionalLight->Diffuse = glm::vec3(0.5);
 		m_DirectionalLight->Specular = glm::vec3(0.0);
-		m_DirectionalLight->Direction = glm::vec3(0.1f, 0.f, 0.f);
+		m_DirectionalLight->Direction = glm::vec3(8.8f, 22.3f, -22.3f);
 		
 		// 4. Create Shaders
 		Exalted::Ref<Exalted::Shader> multipleLightsShader = Exalted::Shader::Create(MULTIPLE_LIGHTS_VERTEX, MULTIPLE_LIGHTS_FRAGMENT);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Light_Uniforms", 1);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Light_Space_Uniforms", 3);
-
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 4);
+		
 		Exalted::Ref<Exalted::Shader> skyboxReflectiveShader = Exalted::Shader::Create(SKYBOX_MAP_VERTEX, SKYBOX_MAP_FRAGMENT);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(skyboxReflectiveShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
 
@@ -336,6 +337,9 @@ namespace Sandbox
 		}
 		m_ObjectDepthShader = Exalted::Shader::Create(DIRECTIONAL_SHADOW_SHADER_VERTEX_DEPTH, DIRECTIONAL_SHADOW_SHADER_FRAGMENT_DEPTH); //todo: render models into this
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformBlockIndex("Light_Space_Uniforms", 3);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 4);
+		m_SunlightDepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
+
 
 		//todo: render debug quad to this
 		m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT);
@@ -348,9 +352,11 @@ namespace Sandbox
 		//// Camera Tracks data /////////////////////
 		/////////////////////////////////////////////
 		Exalted::Ref<Exalted::CameraTrack> mainTrack = Exalted::CreateRef<Exalted::CameraTrack>(1);
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 10, 0), 89,89, 0.f));
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 10, 10), 89,89, 10.f));
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, , 30), 89,89, 100.f));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-131, 34.6, -105.3), 7.6, -35, 0.f));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-127, 34.6, -88.3), -23, -35, 10.f));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 0, 0), 0, 0, 10.f)); // dummy
+
+		//mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-124, 34.6, -276.3), 637,-35, 10.f));
 
 		Exalted::Ref<Exalted::CameraTrack> secondTrack = Exalted::CreateRef<Exalted::CameraTrack>(2);
 		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 10, 0), 89, 89, 0.f));
@@ -448,10 +454,20 @@ namespace Sandbox
 		{
 			m_DepthFrameBuffers[i]->Bind();
 			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformInt1("u_ShadowIndex", i);
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformBool1("IsDirectional", false);
 			Exalted::RenderCommand::ClearColorDepthBuffers();
 			m_SceneManager->DrawOpaqueBindless(m_ObjectDepthShader);
 			m_SceneManager->DrawTransparentBindless(m_ObjectDepthShader);
 			m_DepthFrameBuffers[i]->UnbindMiniFrame();
+		}
+		for (int i = 0; i < m_SunlightDepthFrameBuffers.size(); i++)
+		{
+			m_SunlightDepthFrameBuffers[i]->Bind();
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformBool1("IsDirectional", true);
+			Exalted::RenderCommand::ClearColorDepthBuffers();
+			m_SceneManager->DrawOpaqueBindless(m_ObjectDepthShader);
+			m_SceneManager->DrawTransparentBindless(m_ObjectDepthShader);
+			m_SunlightDepthFrameBuffers[i]->UnbindMiniFrame();
 		}
 		m_ObjectDepthShader->Unbind();
 		//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::BACK);
@@ -462,10 +478,13 @@ namespace Sandbox
 		//// Render scene output //////////////////////////////////////////////////// 
 		/////////////////////////////////////////////////////////////////////////////
 		Exalted::RenderCommand::ClearColorDepthBuffers();
+		int count = 0;
 		for (int i = 0; i < m_DepthFrameBuffers.size(); i++)
 		{
 			m_DepthFrameBuffers[i]->BindTexture(4 + i);
+			count++;
 		}
+		m_SunlightDepthFrameBuffers[0]->BindTexture(count + 4); //todo; iterate this for all directional lights
 
 		// render scene
 		m_SceneManager->DrawOpaqueObjects();
@@ -492,37 +511,54 @@ namespace Sandbox
 		Exalted::OpenGLConfigurations::DisableBlending();
 
 		/////////////////////////////////////////////////////////////////////////////
+		//// Sunlight Light Debugging /////////////////////////////////////////////////// 
+		/////////////////////////////////////////////////////////////////////////////
+		m_QuadDepthShader->Bind();
+		float n = -200.f;
+		float f = 200.f;
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("near_plane", n);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("far_plane", f);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformBool1("IsDirectional", false);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformInt1("depthMap", 4);
+		Exalted::OpenGLConfigurations::SetViewport(0, 256, 512, 512);
+		m_SunlightDepthFrameBuffers[0]->BindTexture(4); 
+		Exalted::Renderer::Submit(m_QuadMesh);
+		m_SunlightDepthFrameBuffers[0]->Unbind();
+		m_QuadDepthShader->Unbind();
+		Exalted::OpenGLConfigurations::SetViewport(0, 0, Exalted::Application::Get().GetWindow().GetWindowWidth(), Exalted::Application::Get().GetWindow().GetWindowHeight());
+
+		/////////////////////////////////////////////////////////////////////////////
 		//// Spot Light Debugging /////////////////////////////////////////////////// 
 		/////////////////////////////////////////////////////////////////////////////
-
 		m_QuadDepthShader->Bind();
-		float near_plane = 1.f
-		float far_plane = 20.f
+		float near_plane = 0.1f;
+		float far_plane = 20.f;
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("near_plane", near_plane);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("far_plane", far_plane);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformInt1("depthMap", 4);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformBool1("IsDirectional", true);
 
 
 		// spot light 1
-		Exalted::OpenGLConfigurations::SetViewport(0, 0, 512, 512);
+		Exalted::OpenGLConfigurations::SetViewport(0, 0, 256, 256);
 		m_DepthFrameBuffers[0]->BindTexture(4);
 		Exalted::Renderer::Submit(m_QuadMesh);
 		m_DepthFrameBuffers[0]->Unbind();
 
 		//spot light 2
-		Exalted::OpenGLConfigurations::SetViewport(512, 0, 512, 512);
+		Exalted::OpenGLConfigurations::SetViewport(256, 0, 256, 256);
 		m_DepthFrameBuffers[1]->BindTexture(4);
 		Exalted::Renderer::Submit(m_QuadMesh);
 		m_DepthFrameBuffers[1]->Unbind();
 
 		//spot light 3
-		Exalted::OpenGLConfigurations::SetViewport(1024, 0, 512, 512);
+		Exalted::OpenGLConfigurations::SetViewport(512, 0, 256, 256);
 		m_DepthFrameBuffers[2]->BindTexture(4);
 		Exalted::Renderer::Submit(m_QuadMesh);
 		m_DepthFrameBuffers[2]->Unbind();
 		
 		// spot light 4
-		Exalted::OpenGLConfigurations::SetViewport(1536, 0, 512, 512);
+		Exalted::OpenGLConfigurations::SetViewport(768, 0, 256, 256);
 		m_DepthFrameBuffers[3]->BindTexture(4);
 		Exalted::Renderer::Submit(m_QuadMesh);
 		m_DepthFrameBuffers[3]->Unbind();
@@ -540,10 +576,11 @@ namespace Sandbox
 		ImGui::Text("----------------------------");
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
-		ImGui::Text("---- SHADOWS FOV SETTINGS ------");
-		ImGui::InputFloat("FOV", &DEBUG_FOV);
-		ImGui::InputFloat("NEAR", &DEBUG_NEAR);
-		ImGui::InputFloat("FAR", &DEBUG_FAR);
+		ImGui::Text("---- Directional Light ------");
+		ImGui::InputFloat3("D-Direction", glm::value_ptr(m_DirectionalLight->Direction));
+		ImGui::InputFloat3("D-Ambient", glm::value_ptr(m_DirectionalLight->Ambient));
+		ImGui::InputFloat3("D-Diffuse", glm::value_ptr(m_DirectionalLight->Diffuse));
+		ImGui::InputFloat3("D-Specular", glm::value_ptr(m_DirectionalLight->Specular));
 		ImGui::Text("----------------------------");
 
 		ImGui::Text("----------------------------");

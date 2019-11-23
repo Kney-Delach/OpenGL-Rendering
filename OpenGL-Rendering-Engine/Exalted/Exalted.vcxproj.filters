@@ -1230,6 +1230,9 @@
     <ClInclude Include="src\Core\Renderer\Buffer.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Renderer\CameraTrack.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Renderer\Cameras.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
@@ -1302,6 +1305,9 @@
     <ClInclude Include="src\Core\SceneGraph\GameTransform.h">
       <Filter>src\Core\SceneGraph</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\SceneGraph\LightManager.h">
+      <Filter>src\Core\SceneGraph</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\SceneGraph\Scene.h">
       <Filter>src\Core\SceneGraph</Filter>
     </ClInclude>
@@ -1353,8 +1359,6 @@
     <ClInclude Include="src\expch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\SceneGraph\LightManager.h" />
-    <ClInclude Include="src\Core\Renderer\CameraTrack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">
@@ -1376,6 +1380,9 @@
       <Filter>src\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Renderer\Buffer.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\CameraTrack.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Renderer\Cameras.cpp">
@@ -1478,6 +1485,5 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\tinyobjloader\tiny_obj_loader.cpp" />
-    <ClCompile Include="src\Core\Renderer\CameraTrack.cpp" />
   </ItemGroup>
 </Project>

@@ -6,8 +6,8 @@ namespace Exalted
 	class LightManager
 	{
 	public:
-		LightManager(const Bytes& bufferIndex = 1, const Bytes& lsmBufferIndex = 3) 
-			: m_BufferIndex(bufferIndex), m_LsmBufferIndex(lsmBufferIndex) 
+		LightManager(const Bytes& bufferIndex = 1, const Bytes& lsmBufferIndex = 3, const Bytes& dirLsmBufferIndex = 4) 
+			: m_BufferIndex(bufferIndex), m_LsmBufferIndex(lsmBufferIndex), m_DirLsmBufferIndex(dirLsmBufferIndex)
 			{}
 		~LightManager() = default;
 
@@ -24,10 +24,15 @@ namespace Exalted
 			m_LightUniformBuffer = UniformBuffer::Create(bufferSize);			
 			m_LightUniformBuffer->BindBufferRange(m_BufferIndex, offset, bufferSize);
 
-			Bytes lsmBufferSize = m_SpotLights.size() * sizeof(glm::mat4); //todo: add data for more than just spot lights
+			Bytes lsmBufferSize = m_SpotLights.size() * sizeof(glm::mat4);
 			const Bytes lsmOffset = 0;
 			m_LsmUniformBuffer = UniformBuffer::Create(lsmBufferSize);			
 			m_LsmUniformBuffer->BindBufferRange(m_LsmBufferIndex, lsmOffset, lsmBufferSize);
+
+			Bytes dirLsmBufferSize = m_DirectionalLights.size() * sizeof(glm::mat4);
+			const Bytes dirLsmOffset = 0;
+			m_DirectionalLsmUniformBuffer = UniformBuffer::Create(dirLsmBufferSize);
+			m_DirectionalLsmUniformBuffer->BindBufferRange(m_DirLsmBufferIndex, dirLsmOffset, dirLsmBufferSize);
 		}
 		void UpdateUniformBufferData() //todo: verify this is the same format as in the shaders
 		{
@@ -47,6 +52,9 @@ namespace Exalted
 			}
 			m_LightUniformBuffer->Unbind();
 
+			////////////////////////////////////
+			//// Spot light light uniforms 
+			////////////////////////////////////
 			//todo: verify this updates light projection data, update for more than just spot lights
 			m_LsmUniformBuffer->Bind();
 			Exalted::Bytes offset = 0;
@@ -61,6 +69,25 @@ namespace Exalted
 				offset += sizeof(glm::mat4);
 			}
 			m_LsmUniformBuffer->Unbind();
+
+			////////////////////////////////////
+			//// Directional light uniforms 
+			////////////////////////////////////
+
+			m_DirectionalLsmUniformBuffer->Bind();
+			Exalted::Bytes dOffset = 0;
+
+			float ORTHO_SIZE = 100.f;
+			for (int i = 0; i < m_DirectionalLights.size(); i++)
+			{
+				//todo: make this light projection matrix configurable
+				glm::mat4 lightProjection = glm::ortho<float>(-150.f, 150.f, -200.f, 400.f, -200.f, 200.f); //todo: make orthographic glm::perspective<float>(glm::radians(90.f), 1.0f, -300.f, 300.f);//
+				glm::mat4 lightView = glm::lookAt(m_DirectionalLights[i]->Direction, glm::vec3(0,0,0), glm::vec3(0, 1, 0));
+				glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+				m_DirectionalLsmUniformBuffer->SetBufferSubData(dOffset, sizeOfMat4, glm::value_ptr(lightSpaceMatrix));
+				dOffset += sizeof(glm::mat4);
+			}
+			m_DirectionalLsmUniformBuffer->Unbind();
 		}
 	private:
 		std::vector<Ref<PointLight>> m_PointLights;
@@ -68,7 +95,9 @@ namespace Exalted
 		std::vector<Ref<SpotLight>> m_SpotLights;
 		Ref<UniformBuffer> m_LightUniformBuffer;
 		Ref<UniformBuffer> m_LsmUniformBuffer;
+		Ref<UniformBuffer> m_DirectionalLsmUniformBuffer;
 		Bytes m_BufferIndex;
 		Bytes m_LsmBufferIndex;
+		Bytes m_DirLsmBufferIndex;
 	};
 }

@@ -67,7 +67,7 @@ struct SpotLight
 // ------------------ Buffer Layouts ------------------ //
 
 #define NUMBER_OF_POINT_LIGHTS 1 
-#define NUMBER_OF_SPOT_LIGHTS 2
+#define NUMBER_OF_SPOT_LIGHTS 4
 
 layout (std140) uniform Light_Uniforms
 {
@@ -86,6 +86,11 @@ layout (std140) uniform Camera_Uniforms
 	float _BoundaryPadding;
 };
 
+layout (std140) uniform Directional_Light_Space_Uniforms 
+{
+	mat4 DirectionalLightSpaceMatrix; //todo: change the number of spot lights dynamically?
+};
+
 layout (std140) uniform Light_Space_Uniforms 
 {
 	mat4 LightSpaceMatrix[NUMBER_OF_SPOT_LIGHTS]; //todo: change the number of spot lights dynamically?
@@ -101,6 +106,7 @@ in ShaderData
 
 uniform Material u_Material; 
 uniform sampler2D u_ShadowMap[NUMBER_OF_SPOT_LIGHTS];
+uniform sampler2D u_DirectionalShadowMap; 
 
 // Diffuse Multiplier 
 float Pi = 3.14159265;
@@ -128,10 +134,39 @@ vec3 CalculateAttenuationResults(vec3 ambient, vec3 diffuse, vec3 specular, vec3
 	return (ambient + diffuse + specular);
 }
 
+float CalcDirectionalLightShadow(vec3 normal)
+{
+	vec4 lightSpaceFragCoord = DirectionalLightSpaceMatrix * vec4(IN.v_FragPosition, 1.0);
+
+	/////////////////////////////////////////////////////////
+	/////////////////// METHOD 1 ////////////////////////////
+	/////////////////////////////////////////////////////////
+	 // perform perspective divide
+	 vec3 projCoords = lightSpaceFragCoord.xyz / lightSpaceFragCoord.w;
+	 // transform to [0,1] range
+	 projCoords = projCoords * 0.5 + 0.5;
+
+	 // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+	 float closestDepth = texture(u_DirectionalShadowMap, projCoords.xy).r;
+
+	 // get depth of current fragment from light's perspective
+	 float currentDepth = projCoords.z;
+
+	 // check whether current frag pos is in shadow
+	 //float bias = max(0.05 * (1.0 - dot(normal, DirectionalLights.Direction)), 0.005);
+	 float shadow = currentDepth - 0.005 > closestDepth ? 1.0 : 0.0; // 0.005
+
+	 if (projCoords.z > 1.0)
+	 	shadow = 0.0;
+
+	 return shadow;
+
+}
+
 // DIRECTIONAL LIGHT CALCULATION 
 vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDirection)
 {
-	vec3 lightDirection = normalize(light.Direction); //normalize(-light.Direction);
+	vec3 lightDirection = normalize(-light.Direction); //normalize(-light.Direction);
 
 	// diffuse
 	float diff = CalculateDiffuseMultiplier(normal, lightDirection); // correct
@@ -139,12 +174,16 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir
 	// specular 
 	float spec = CalculateSpecularMultiplier(lightDirection, normal, viewDirection);
 
+	// shadow
+	float shadow = 0.0; 
+	shadow = CalcDirectionalLightShadow(normal);
+
 	// combine results 
 	vec3 ambient = light.Ambient * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
 	vec3 diffuse = light.Diffuse * diff * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
 	vec3 specular = light.Specular * spec * vec3(texture(u_Material.TextureSpecular, IN.v_TexCoord));
 
-	return (ambient + diffuse + specular);
+	return (ambient + (1 - shadow) * (diffuse + specular));
 }
 
 // POINT LIGHT CALCULATION 

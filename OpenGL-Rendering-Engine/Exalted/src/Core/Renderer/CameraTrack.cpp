@@ -34,7 +34,7 @@ namespace Exalted
 			}
 		}
 
-		EX_CORE_TRACE("Index Position {0}", indexPos);
+		//EX_CORE_TRACE("Index Position {0}", indexPos);
 		if (indexPos == -1) 
 		{
 			return;

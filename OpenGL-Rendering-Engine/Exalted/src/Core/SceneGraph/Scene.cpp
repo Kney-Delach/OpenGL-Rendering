@@ -149,7 +149,7 @@ namespace Exalted
 				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::FILL);
 		}
 
-		if (m_IsCameraFree)
+		if (s_IsCameraFree)
 			m_Camera->OnEvent(event);
 	}
 }

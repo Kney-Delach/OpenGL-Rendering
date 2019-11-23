@@ -121,7 +121,7 @@
       <PrecompiledHeaderFile>expch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;EX_BUILD_DLL;EX_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;Dependencies\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Dependencies\tinyobjloader;src;Dependencies\spdlog\include;Dependencies\stb\include;..\Resources;Dependencies\GLFW\include;Dependencies\Glad\include;Dependencies\imgui;Dependencies\glm;Dependencies\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -525,8 +525,8 @@
     <ClInclude Include="src\Core\Log.h" />
     <ClInclude Include="src\Core\MouseButtonCodes.h" />
     <ClInclude Include="src\Core\Renderer\Buffer.h" />
-    <ClInclude Include="src\Core\Renderer\Cameras.h" />
     <ClInclude Include="src\Core\Renderer\CameraTrack.h" />
+    <ClInclude Include="src\Core\Renderer\Cameras.h" />
     <ClInclude Include="src\Core\Renderer\EditorCamera.h" />
     <ClInclude Include="src\Core\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Core\Renderer\Generators\ShapeGenerator.h" />
@@ -578,8 +578,8 @@
     <ClCompile Include="src\Core\Layers\LayerStack.cpp" />
     <ClCompile Include="src\Core\Log.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffer.cpp" />
-    <ClCompile Include="src\Core\Renderer\Cameras.cpp" />
     <ClCompile Include="src\Core\Renderer\CameraTrack.cpp" />
+    <ClCompile Include="src\Core\Renderer\Cameras.cpp" />
     <ClCompile Include="src\Core\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Core\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Core\Renderer\Generators\ShapeGenerator.cpp" />

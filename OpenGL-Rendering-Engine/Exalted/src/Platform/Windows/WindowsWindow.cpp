@@ -20,7 +20,7 @@
 #include "Platform/OpenGL/OpenGLContext.h"
 #include "Core/MouseButtonCodes.h"
 #include <GLFW/glfw3.h>
-
+#include "Core/KeyCodes.h"
 
 #include "Core/SceneGraph/Scene.h" // for mouse visibility
 namespace Exalted

@@ -42,7 +42,7 @@ out ShaderData
 } OUT;
 
 uniform mat4 u_Model;
-uniform mat4 u_LightSpaceMatrix; // for directional shadows
+//uniform mat4 u_LightSpaceMatrix; // for directional shadows
 
 void main()
 {

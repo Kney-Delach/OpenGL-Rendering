@@ -7,7 +7,7 @@ in vec2 TexCoords;
 uniform sampler2D depthMap;
 uniform float near_plane;
 uniform float far_plane;
-
+uniform bool IsDirectional;
 
 // required when using a perspective projection matrix
 float LinearizeDepth(float depth)
@@ -19,6 +19,9 @@ float LinearizeDepth(float depth)
 void main()
 {
 	float depthValue = texture(depthMap, TexCoords).r;
-	color = vec4(vec3(LinearizeDepth(depthValue) / far_plane), 1.0); // perspective
-	//color = texture(depthMap, TexCoords); // vec4(vec3(depthValue), 1.0); // orthographic
+	if(IsDirectional)
+		color = texture(depthMap, TexCoords); // ortho
+	else 
+		color = vec4(vec3(LinearizeDepth(depthValue) / far_plane), 1.0); // perspective
+
 }

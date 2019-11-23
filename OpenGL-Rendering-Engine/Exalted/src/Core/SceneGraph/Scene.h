@@ -78,6 +78,8 @@ namespace Exalted
 		Ref<GameObject>& GetSceneRoot() { return m_SceneRoot; }
 		void SetSceneRoot(Ref<GameObject>& sceneRoot) { m_SceneRoot = sceneRoot; }
 		void OnEvent(Exalted::Event& event);
+	public:
+		static inline bool s_IsCameraFree = true;
 	private:
 		void BuildObjectLists(GameObject* gameObject);
 		void SortObjectLists(); 
@@ -86,7 +88,6 @@ namespace Exalted
 		static __forceinline void DrawObject(GameObject* gameObject) { gameObject->Draw(); }
 		static __forceinline void DrawObjectBindless(GameObject* gameObject, const Ref<Shader>& shadowShader) { gameObject->DrawBindless(shadowShader); }
 	private:
-		static inline bool s_IsCameraFree = true; 
 		Ref<EditorCamera> m_Camera;
 		Ref<GameObject> m_SceneRoot;
 		Ref<Skybox> m_Skybox;

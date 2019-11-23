@@ -96,12 +96,15 @@ namespace Exalted
 				if(m_Material)
 				{
 					m_Material->Bind(m_Shader);
+					int count = 0;
 					for (int i = 0; i < NumberOfSpotLights; i++) //todo: move this from here maybe ?
 					{
 						std::string number = std::to_string(i);
 						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_ShadowMap[" + number + "]").c_str(), (4 + i));
-
+						count++;
 					}
+					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1("u_DirectionalShadowMap", count + 4);
+
 					Renderer::Submit(m_Mesh);
 					m_Material->Unbind();
 				}
