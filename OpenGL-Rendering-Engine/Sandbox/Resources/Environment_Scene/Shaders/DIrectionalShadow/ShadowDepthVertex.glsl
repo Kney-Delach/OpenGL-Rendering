@@ -4,7 +4,7 @@ layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec3 a_Normal;
 layout(location = 2) in vec2 a_TexCoord;
 
-#define NUMBER_OF_SPOT_LIGHTS 2
+#define NUMBER_OF_SPOT_LIGHTS 4
 
 layout(std140) uniform Light_Space_Uniforms
 {

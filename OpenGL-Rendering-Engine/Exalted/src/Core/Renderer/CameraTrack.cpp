@@ -24,7 +24,8 @@ namespace Exalted
 
 		for (int i = 0; i < m_TrackPoints.size(); ++i) 
 		{
-			if (currentTime <= combinedTime) {
+			if (currentTime <= combinedTime) 
+			{
 				indexPos = i - 1;
 				break;
 			}

@@ -21,6 +21,8 @@
 #include "Core/MouseButtonCodes.h"
 #include <GLFW/glfw3.h>
 
+
+#include "Core/SceneGraph/Scene.h" // for mouse visibility
 namespace Exalted
 {
 	static uint8_t s_GLFWWindowCount = 0;
@@ -133,6 +135,11 @@ namespace Exalted
 			{
 				case GLFW_PRESS:
 				{
+					if(key == EX_KEY_F1 || EX_KEY_F2) //todo: verify this works
+						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+					if(key == EX_KEY_ESCAPE)
+						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+					
 					KeyPressedEvent event(key, 0);
 					windowData.EventCallback(event);
 					break;
@@ -164,29 +171,32 @@ namespace Exalted
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
 		{
 			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-
-			switch (action)
+			
+			if(Scene::s_IsCameraFree)
 			{
-			case GLFW_PRESS:
-			{
-				if(button == EX_MOUSE_BUTTON_2)
+				switch (action)
 				{
-					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+					case GLFW_PRESS:
+					{
+						if(button == EX_MOUSE_BUTTON_2)
+						{
+							glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+						}
+						MouseButtonPressedEvent event(button, 0);
+						data.EventCallback(event);
+						break;
+					}
+					case GLFW_RELEASE:
+					{
+						if (button == EX_MOUSE_BUTTON_2)
+						{
+							glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+						}
+						MouseButtonReleasedEvent event(button);
+						data.EventCallback(event);
+						break;
+					}
 				}
-				MouseButtonPressedEvent event(button, 0);
-				data.EventCallback(event);
-				break;
-			}
-			case GLFW_RELEASE:
-			{
-				if (button == EX_MOUSE_BUTTON_2)
-				{
-					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-				}
-				MouseButtonReleasedEvent event(button);
-				data.EventCallback(event);
-				break;
-			}
 			}
 		});
 

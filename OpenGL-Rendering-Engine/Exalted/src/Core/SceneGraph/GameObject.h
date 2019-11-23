@@ -96,7 +96,7 @@ namespace Exalted
 				if(m_Material)
 				{
 					m_Material->Bind(m_Shader);
-					for (int i = 0; i < NumberOfPointLights; i++) //todo: move this from here maybe ?
+					for (int i = 0; i < NumberOfSpotLights; i++) //todo: move this from here maybe ?
 					{
 						std::string number = std::to_string(i);
 						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_ShadowMap[" + number + "]").c_str(), (4 + i));
@@ -176,7 +176,7 @@ namespace Exalted
 		}
 	public:
 		//static inline std::vector<glm::mat4> LightSpaceMatrices;
-		static inline int NumberOfPointLights;
+		static inline int NumberOfSpotLights; //todo: move this
 	private:
 		void DestroyGameObject();
 	private:

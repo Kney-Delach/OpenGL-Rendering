@@ -17,7 +17,7 @@
 
 #include "Core/Application.h"
 
-#define TIME static_cast<float>(Exalted::Application::Get().GetWindow().GetTime())
+#define TIME static_cast<float>(Exalted::Application::Get().GetWindow().GetTime()) //todo: move this from here
 
 #include "Core/Log.h"
 

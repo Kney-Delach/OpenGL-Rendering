@@ -52,12 +52,13 @@ namespace Exalted
 			}
 		}
 		~Scene() = default;
-		//void CompleteSceneSetup() const;// sets up static scene ubos
+		void SetupSceneLightUBOs() const;
 		void UpdateScene(Timestep deltaTime);
 		void RenderScene()
 		{
 			BuildObjectLists(m_SceneRoot.get());
 			SortObjectLists();
+			// render to shadow framebuffers todo: this
 			//DrawObjectLists();
 			//ClearObjectLists();
 		}
@@ -72,7 +73,7 @@ namespace Exalted
 		void ClearObjectLists();
 		void RenderSkybox() const { m_Skybox->Draw(); } //todo: use this internally?
 		void SetCamera(Ref<EditorCamera>& camera) { m_Camera = camera; }
-		//void SetStaticLightManager(Ref<LightManager>& staticLightManager) { m_StaticLightManager = staticLightManager; } // update uniform buffer data once a frame
+		void SetLightManager(Ref<LightManager>& lightManager) { m_LightsManager = lightManager; } //todo: verify this works now....
 		//void SetDynamicLightManager(Ref<LightManager>& dynamicLightManager) { m_DynamicLightManager = dynamicLightManager; } // set up uniform buffer once at the start
 		Ref<GameObject>& GetSceneRoot() { return m_SceneRoot; }
 		void SetSceneRoot(Ref<GameObject>& sceneRoot) { m_SceneRoot = sceneRoot; }
@@ -85,11 +86,11 @@ namespace Exalted
 		static __forceinline void DrawObject(GameObject* gameObject) { gameObject->Draw(); }
 		static __forceinline void DrawObjectBindless(GameObject* gameObject, const Ref<Shader>& shadowShader) { gameObject->DrawBindless(shadowShader); }
 	private:
-		 bool m_IsCameraFree = true; 
+		static inline bool s_IsCameraFree = true; 
 		Ref<EditorCamera> m_Camera;
 		Ref<GameObject> m_SceneRoot;
 		Ref<Skybox> m_Skybox;
-		//Ref<LightManager> m_StaticLightManager;
+		Ref<LightManager> m_LightsManager;
 		//Ref<LightManager> m_DynamicLightManager;
 		Frustum m_Frustum;
 		std::vector<GameObject*> m_OpaqueObjects;

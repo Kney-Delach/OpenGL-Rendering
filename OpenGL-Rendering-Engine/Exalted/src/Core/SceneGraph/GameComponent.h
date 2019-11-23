@@ -32,6 +32,7 @@ namespace Exalted
 		Ref<GameTransform> m_Transform;
 		std::string m_ComponentName = "Game Component Interface";
 		std::string m_Description = "This is an abstract interface for game components.";
+		//todo: implement interface to communicate to gameobject parent when done with task so can be removed.
 	};
 
 	/////////////////////////////////////////////

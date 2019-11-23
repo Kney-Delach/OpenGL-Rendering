@@ -21,14 +21,25 @@
 
 namespace Exalted
 {
+	void Scene::SetupSceneLightUBOs() const 
+	{
+		if(m_LightsManager)
+		{
+			m_LightsManager->SetupUniformBuffer();
+			m_LightsManager->UpdateUniformBufferData();
+		}
+	}
+
 	void Scene::UpdateScene(Timestep deltaTime)
 	{
-		if (m_IsCameraFree)
+		if (s_IsCameraFree)
 			m_Camera->UpdateCamera(deltaTime);
 		else
 			m_Camera->UpdateTrack(deltaTime);
+
 		m_Frustum.FromVPMatrix(m_Camera->GetViewProjectionMatrix());
 		m_SceneRoot->Update(deltaTime);
+		m_LightsManager->UpdateUniformBufferData();
 	}
 
 	void Scene::DrawOpaqueObjects()
@@ -73,7 +84,7 @@ namespace Exalted
 			BuildObjectLists(*i);
 	}
 
-	void Scene::SortObjectLists()
+	void Scene::SortObjectLists() //todo: check if it makes a difference whether or not sorting the opaque objects
 	{
 		std::sort(m_TransparentObjects.begin(), 
 			m_TransparentObjects.end(), 
@@ -113,18 +124,18 @@ namespace Exalted
 			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
 			if (e.GetKeyCode() == EX_KEY_ESCAPE)
 			{
-				m_IsCameraFree = true;
+				s_IsCameraFree = true;
 				m_Camera->ResetMovementVariables();
 			}
 			if (e.GetKeyCode() == EX_KEY_F1) //todo: This should restart the first track
 			{
-				m_IsCameraFree = false;
+				s_IsCameraFree = false;
 				m_Camera->ResetMovementVariables(); //todo: remove this as not necessary
 				m_Camera->SetTrack(0);
 			}
 			if (e.GetKeyCode() == EX_KEY_F2) //todo: This should restart the second track
 			{
-				m_IsCameraFree = false;
+				s_IsCameraFree = false;
 				m_Camera->ResetMovementVariables(); //todo: remove this as not necessary
 				m_Camera->SetTrack(1);
 			}
