@@ -62,7 +62,7 @@ namespace Exalted
 			for (int i = 0; i < m_SpotLights.size(); i++)
 			{
 				//todo: make this light projection matrix configurable
-				glm::mat4 lightProjection = glm::perspective<float>(glm::radians(90.f), 1.0f, 0.1f, 20.f);
+				glm::mat4 lightProjection = glm::perspective<float>(glm::radians(90.f), 1.0f, 1.f, 25.f);//0.1f, 20.f);
 				glm::mat4 lightView = glm::lookAt(m_SpotLights[i]->Position, m_SpotLights[i]->Position + m_SpotLights[i]->Direction, glm::vec3(0, 1, 0));
 				glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 				m_LsmUniformBuffer->SetBufferSubData(offset, sizeOfMat4, glm::value_ptr(lightSpaceMatrix));

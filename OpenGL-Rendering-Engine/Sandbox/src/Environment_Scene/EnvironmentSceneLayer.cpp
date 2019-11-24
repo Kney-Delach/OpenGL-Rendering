@@ -37,8 +37,8 @@ namespace Sandbox
 		for (int i = 0; i < 4; i++)
 		{
 			m_SpotLights.emplace_back(Exalted::SpotLight::Create());
-			m_SpotLights[i]->Ambient = glm::vec3(0.1f, 0.4f, 0.1f);
-			m_SpotLights[i]->Diffuse = glm::vec3(0.f, 0.8f, 0.f);
+			m_SpotLights[i]->Ambient = glm::vec3(0.f, 1.f, 0.4f);
+			m_SpotLights[i]->Diffuse = glm::vec3(0.f, 0.5f, 0.f);
 			m_SpotLights[i]->Specular = glm::vec3(0.f, 1.f, 0.f);
 			m_SpotLights[i]->Direction = glm::vec3(10, -360, 0.f);
 			m_SpotLights[i]->SetAttenuationDistance(200);
@@ -50,10 +50,10 @@ namespace Sandbox
 		
 		// 3. directional light
 		m_DirectionalLight = Exalted::DirectionalLight::Create();
-		m_DirectionalLight->Ambient = glm::vec3(0.2);
+		m_DirectionalLight->Ambient = glm::vec3(0.15, 0.1, 0.3);
 		m_DirectionalLight->Diffuse = glm::vec3(0.5);
-		m_DirectionalLight->Specular = glm::vec3(0.0);
-		m_DirectionalLight->Direction = glm::vec3(8.8f, 22.3f, -22.3f);
+		m_DirectionalLight->Specular = glm::vec3(1.0);
+		m_DirectionalLight->Direction = glm::vec3(0.1f, 20.f, -6.f);
 		
 		// 4. Create Shaders
 		Exalted::Ref<Exalted::Shader> multipleLightsShader = Exalted::Shader::Create(MULTIPLE_LIGHTS_VERTEX, MULTIPLE_LIGHTS_FRAGMENT);
@@ -132,7 +132,7 @@ namespace Sandbox
 		UFOC->GetTransform()->Scale = glm::vec3(3);
 		UFOC->GetTransform()->Position = glm::vec3(-1000.f, 200.f, -1000.f);
 		UFOC->SetSpotLight(m_SpotLights[2]);
-		UFOC->AddGameComponent(new Exalted::RotateComponent(UFOB->GetTransform(), glm::vec3(0, 20, 0)));
+		UFOC->AddGameComponent(new Exalted::RotateComponent(UFOC->GetTransform(), glm::vec3(0, 20, 0)));
 
 		Exalted::GameObject* UFOD = new Exalted::GameObject("UFO-D");
 		UFOD->SetMesh(ufoMesh);
@@ -143,7 +143,7 @@ namespace Sandbox
 		UFOD->GetTransform()->Scale = glm::vec3(3);
 		UFOD->GetTransform()->Position = glm::vec3(1000.f, 200.f, -1000.f);
 		UFOD->SetSpotLight(m_SpotLights[3]);
-		UFOD->AddGameComponent(new Exalted::RotateComponent(UFOB->GetTransform(), glm::vec3(0, -20, 0)));
+		UFOD->AddGameComponent(new Exalted::RotateComponent(UFOD->GetTransform(), glm::vec3(0, -20, 0)));
 
 		//todo: This UFO maps the skybox onto it
 		Exalted::GameObject* reflectiveUFO = new Exalted::GameObject("UFO-Reflective");
@@ -176,7 +176,7 @@ namespace Sandbox
 		treeObject->SetTransparency(false);
 		treeObject->SetBoundingRadius(10.f);
 		treeObject->GetTransform()->Scale = glm::vec3(0.01);
-		treeObject->GetTransform()->Position = glm::vec3(1000.f, 2.1f, 1000.f);
+		treeObject->GetTransform()->Position = glm::vec3(1000.f, 1.5f, 1000.f);
 		treeObject->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject->GetTransform(), glm::vec3(0.25f), glm::vec3(15)));
 
 		Exalted::GameObject* leafObject = new Exalted::GameObject("Tree-Leaves-A");
@@ -199,7 +199,7 @@ namespace Sandbox
 		treeObject2->SetTransparency(true);
 		treeObject2->SetBoundingRadius(200.f);
 		treeObject2->GetTransform()->Scale = glm::vec3(0.01);
-		treeObject2->GetTransform()->Position = glm::vec3(-1000.f, 20.5f, 1000.f);
+		treeObject2->GetTransform()->Position = glm::vec3(-1000.f, 19.5f, 1000.f);
 		treeObject2->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject2->GetTransform(), glm::vec3(0.25f), glm::vec3(15)));
 
 		Exalted::GameObject* leafObject2 = new Exalted::GameObject("Tree-Leaves-B");
@@ -222,7 +222,7 @@ namespace Sandbox
 		treeObject3->SetTransparency(true);
 		treeObject3->SetBoundingRadius(200.f);
 		treeObject3->GetTransform()->Scale = glm::vec3(0.01);
-		treeObject3->GetTransform()->Position = glm::vec3(-1000.f, 20.5f, -1000.f);
+		treeObject3->GetTransform()->Position = glm::vec3(-1000.f, 3.f, -1000.f);
 		treeObject3->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject3->GetTransform(), glm::vec3(0.25f), glm::vec3(15)));
 
 		Exalted::GameObject* leafObject3 = new Exalted::GameObject("Tree-Leaves-C");
@@ -245,7 +245,7 @@ namespace Sandbox
 		treeObject4->SetTransparency(true);
 		treeObject4->SetBoundingRadius(200.f);
 		treeObject4->GetTransform()->Scale = glm::vec3(0.01);
-		treeObject4->GetTransform()->Position = glm::vec3(1000.f, 20.5f, -1000.f);
+		treeObject4->GetTransform()->Position = glm::vec3(1000.f, 9.4f, -1000.f);
 		treeObject4->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject4->GetTransform(), glm::vec3(0.25f), glm::vec3(15)));
 
 		Exalted::GameObject* leafObject4 = new Exalted::GameObject("Tree-Leaves-D");
@@ -514,13 +514,9 @@ namespace Sandbox
 		//// Sunlight Light Debugging /////////////////////////////////////////////////// 
 		/////////////////////////////////////////////////////////////////////////////
 		m_QuadDepthShader->Bind();
-		float n = -200.f;
-		float f = 200.f;
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("near_plane", n);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("far_plane", f);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformBool1("IsDirectional", false);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformBool1("IsDirectional", true);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformInt1("depthMap", 4);
-		Exalted::OpenGLConfigurations::SetViewport(0, 256, 512, 512);
+		Exalted::OpenGLConfigurations::SetViewport(0, 256, 256, 256);
 		m_SunlightDepthFrameBuffers[0]->BindTexture(4); 
 		Exalted::Renderer::Submit(m_QuadMesh);
 		m_SunlightDepthFrameBuffers[0]->Unbind();
@@ -531,12 +527,12 @@ namespace Sandbox
 		//// Spot Light Debugging /////////////////////////////////////////////////// 
 		/////////////////////////////////////////////////////////////////////////////
 		m_QuadDepthShader->Bind();
-		float near_plane = 0.1f;
-		float far_plane = 20.f;
+		float near_plane = 1.f;
+		float far_plane = 25.f;
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("near_plane", near_plane);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("far_plane", far_plane);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformInt1("depthMap", 4);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformBool1("IsDirectional", true);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformBool1("IsDirectional", false);
 
 
 		// spot light 1
