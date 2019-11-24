@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Filename		: EnvironmentSceneLayer.cpp
+ * Name			: Ori Lazar
+ * Date			: 20/11/2019
+ * Description	: Contains the implementation for the environment layer used to
+                  demonstrate the capabilities of this engine.
+     .---.
+   .'_:___".
+   |__ --==|
+   [  ]  :[|
+   |__| I=[|
+   / / ____|
+  |-/.____.'
+ /___\ /___\
+***************************************************************************/
 #include "EnvironmentSceneLayer.h"
 #include "EnvironmentSceneResources.h"
 
@@ -52,7 +67,7 @@ namespace Sandbox
 		m_DirectionalLight = Exalted::DirectionalLight::Create();
 		m_DirectionalLight->Ambient = glm::vec3(0.15, 0.1, 0.3);
 		m_DirectionalLight->Diffuse = glm::vec3(0.5);
-		m_DirectionalLight->Specular = glm::vec3(1.0);
+		m_DirectionalLight->Specular = glm::vec3(0.1,0.3,0.2);
 		m_DirectionalLight->Direction = glm::vec3(0.1f, 20.f, -6.f);
 		
 		// 4. Create Shaders

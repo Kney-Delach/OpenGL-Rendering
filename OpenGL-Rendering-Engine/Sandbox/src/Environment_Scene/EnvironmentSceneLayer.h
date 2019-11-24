@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Filename		: EnvironmentSceneLayer.h
+ * Name			: Ori Lazar
+ * Date			: 20/11/2019
+ * Description	: Contains the declaration for the environment layer used to 
+                  demonstrate the capabilities of this engine. 
+     .---.
+   .'_:___".
+   |__ --==|
+   [  ]  :[|
+   |__| I=[|
+   / / ____|
+  |-/.____.'
+ /___\ /___\
+***************************************************************************/
 #pragma once
 
 #include "Exalted.h"
@@ -31,7 +46,9 @@ namespace Sandbox
 		std::vector<Exalted::Ref<Exalted::SpotLight>> m_SpotLights;
 		std::vector<Exalted::Ref<Exalted::GameTransform>> m_SpotLightTransforms;
 		// shaders
-		Exalted::Ref<Exalted::Shader> m_LightSourceShader;
+		Exalted::Ref<Exalted::Shader> m_LightSourceShader; // source shader 
+
+		//todo: remove these
 		Exalted::Ref<Exalted::Mesh> m_LightSourceMesh;
 		Exalted::Ref<Exalted::Mesh> m_SpotLightMesh;
 
@@ -44,7 +61,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> m_QuadMesh;
 		
 		// directional light
-		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_SunlightDepthFrameBuffers;
+		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_SunlightDepthFrameBuffers; //todo: Instead of this being a vector, make it a single framebuffer
 
 		/////////////////////////////////
 		//// Debugging Utilities
