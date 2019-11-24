@@ -135,7 +135,7 @@ namespace Exalted
 			{
 				case GLFW_PRESS:
 				{
-					if(key == EX_KEY_F1 || EX_KEY_F2) //todo: verify this works
+					if(key == EX_KEY_F1 || EX_KEY_F2) //todo: remove this after coursework hand-in
 						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 					if(key == EX_KEY_ESCAPE)
 						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

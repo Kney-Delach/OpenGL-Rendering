@@ -86,27 +86,33 @@ layout (std140) uniform Camera_Uniforms
 	float _BoundaryPadding;
 };
 
+//todo: implement a maximum number, then choose N current lights less than the maximum
 layout (std140) uniform Directional_Light_Space_Uniforms 
 {
-	mat4 DirectionalLightSpaceMatrix; //todo: change the number of spot lights dynamically?
+	mat4 DirectionalLightSpaceMatrix;
 };
 
 layout (std140) uniform Light_Space_Uniforms 
 {
-	mat4 LightSpaceMatrix[NUMBER_OF_SPOT_LIGHTS]; //todo: change the number of spot lights dynamically?
+	mat4 LightSpaceMatrix[NUMBER_OF_SPOT_LIGHTS];
 };
 
+layout (std140) uniform Point_Light_Space_Uniforms 
+{
+	WRITE_SOME_USEFUL_STUFF_HERE_ORI!
+	float
+};
 in ShaderData 
 {
 	vec3 v_FragPosition;
 	vec3 v_Normal;
 	vec2 v_TexCoord;
-	//vec4 v_LightSpaceFragCoord; // for directional shadows
 } IN;
 
 uniform Material u_Material; 
-uniform sampler2D u_ShadowMap[NUMBER_OF_SPOT_LIGHTS];
+uniform sampler2D u_PointShadowMap[NUMBER_OF_POINT_LIGHTS];
 uniform sampler2D u_DirectionalShadowMap; 
+uniform sampler2D u_ShadowMap[NUMBER_OF_SPOT_LIGHTS]; //todo: rename this
 
 // Diffuse Multiplier 
 float Pi = 3.14159265;
@@ -195,8 +201,38 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir
 	return (ambient + (1 - shadow) * (diffuse + specular));
 }
 
+
+float CalcPointLightShadow(int index)
+{
+	//  OUT.v_FragPosition 
+	vec3 fragToLightDirection = OUT.v_FragPosition - PointLights[index].Position; // vector between fragment position and light position
+
+	float currentDepth = length(fragToLightDirection); // translate linear depth as the length between the fragment and light position
+
+	float shadow = 0.0;
+	float bias = 0.05;
+	float samples = 4.0;
+	float offset = 0.1;
+	for (float x = -offset; x < offset; x += offset / (samples * 0.5))
+	{
+		for (float y = -offset; y < offset; y += offset / (samples * 0.5))
+		{
+			for (float z = -offset; z < offset; z += offset / (samples * 0.5))
+			{
+				float closestDepth = texture(u_PointShadowMap[index], fragToLightDirection + vec3(x, y, z)).r;
+				closestDepth *= u_FarPlane; //todo: pre-set this uniform (THIS SHADER WILL NOT COMPILE UNTIL THIS IS DONE!)
+				if (currentDepth - bias > closestDepth)
+					shadow += 1.0;
+			}
+		}
+	}
+	shadow /= (samples * samples * samples);
+
+	return shadow;
+}
+
 // POINT LIGHT CALCULATION 
-vec3 CalculatePointLights(PointLight light, vec3 normal, vec3 fragPosition, vec3 viewDirection)
+vec3 CalculatePointLights(PointLight light, vec3 normal, vec3 fragPosition, vec3 viewDirection, int index)
 {
 	vec3 lightDirection = normalize(light.Position - fragPosition);
 
@@ -206,13 +242,16 @@ vec3 CalculatePointLights(PointLight light, vec3 normal, vec3 fragPosition, vec3
 	// specular shading
 	float spec = CalculateSpecularMultiplier(lightDirection, normal, viewDirection); 
 
+	// shadows 
+	float shadow  = 0.0; 
+	shadow = ShadowCalculation(index);
 	// combine results
 	vec3 ambient = light.Ambient * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
 	vec3 diffuse = light.Diffuse * diff * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
 	vec3 specular = light.Specular * spec * vec3(texture(u_Material.TextureSpecular, IN.v_TexCoord));
 
 	// attenuation
-	return (CalculateAttenuationResults(ambient, diffuse, specular, light.Position, fragPosition, light.AttenuationConstant, light.AttenuationLinear, light.AttenuationQuadratic));
+	return (1 - shadow) * (CalculateAttenuationResults(ambient, diffuse, specular, light.Position, fragPosition, light.AttenuationConstant, light.AttenuationLinear, light.AttenuationQuadratic));
 }
 
 /////////////////////////////////////////////
@@ -308,7 +347,7 @@ void main()
 
 	// Point Light Calculations
 	for (int i = 0; i < NUMBER_OF_POINT_LIGHTS; i++)
-		result += CalculatePointLights(PointLights[i], normal, IN.v_FragPosition, viewDirection);
+		result += CalculatePointLights(PointLights[i], normal, IN.v_FragPosition, viewDirection, i);
 
 	// Spot Light Calculations
 	for (int i = 0; i < NUMBER_OF_SPOT_LIGHTS; i++)

@@ -96,19 +96,22 @@ namespace Exalted
 				if(m_Material)
 				{
 					m_Material->Bind(m_Shader);
-					int count = 0;
+					int count = 4;
 					for (int i = 0; i < NumberOfSpotLights; i++) //todo: move this from here maybe ?
 					{
 						std::string number = std::to_string(i);
-						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_ShadowMap[" + number + "]").c_str(), (4 + i));
-						count++;
+						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_ShadowMap[" + number + "]").c_str(), (count++));
 					}
-					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1("u_DirectionalShadowMap", count + 4);
-
+					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1("u_DirectionalShadowMap", count++);
+					for (int i = 0; i < NumberOfPointLights; i++) //todo: move this from here maybe ?
+					{
+						std::string number = std::to_string(i);
+						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_PointShadowMap[" + number + "]").c_str(), (count++));
+					}
 					Renderer::Submit(m_Mesh);
 					m_Material->Unbind();
 				}
-				else //todo: Assuming that if there is no material, it reflects the skybox
+				else //todo: Assuming that if there is no material, it reflects the skybox cubemap
 				{
 					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1("u_Skybox", 0);
 					Skybox::GetTexture()->Bind(0);
@@ -116,7 +119,6 @@ namespace Exalted
 					Skybox::GetTexture()->Unbind();
 				}
 				m_Shader->Unbind();
-
 			}
 		}
 
@@ -135,11 +137,7 @@ namespace Exalted
 
 		inline void SetTexture(Ref<Texture2D>& texture)
 		{
-			//if(!m_IsTransparent)
-			//	m_IsTransparent = texture->IsTransparent();
-			//m_Texture = texture;
-		}
-		
+		}//todo: remove me
 
 		inline void SetMaterial(Ref<Material>& material) { m_Material = material; }
 		inline Ref<Material>& GetMaterial() { return m_Material; }
@@ -177,9 +175,9 @@ namespace Exalted
 			std::string separator = "##";
 			return (label + separator + id);
 		}
-	public:
-		//static inline std::vector<glm::mat4> LightSpaceMatrices;
+	public: //todo: change naming conventions 
 		static inline int NumberOfSpotLights; //todo: move this
+		static inline int NumberOfPointLights; //todo: move this
 	private:
 		void DestroyGameObject();
 	private:
@@ -192,7 +190,6 @@ namespace Exalted
 		Ref<Shader> m_Shader;
 		Ref<SpotLight> m_SpotLight;
 		Ref<PointLight> m_PointLight;
-
 		GameObject* m_pParent = nullptr;
 		std::vector<GameComponent*> m_GameComponents;
 		std::vector<GameObject*> m_ChildrenObjectsList;

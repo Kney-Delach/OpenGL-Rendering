@@ -53,18 +53,26 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> m_SpotLightMesh;
 
 		/////////////////////////////////////////////////
-		////// Directional Shadow Variable Setup ////////
+		////// Shadows  /////////////////////////////////
 		/////////////////////////////////////////////////
-		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_DepthFrameBuffers;  //todo: Note that this is only for spot lights
-		Exalted::Ref<Exalted::Shader> m_ObjectDepthShader;
-		Exalted::Ref<Exalted::Shader> m_QuadDepthShader;
-		Exalted::Ref<Exalted::Mesh> m_QuadMesh;
 		
-		// directional light
-		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_SunlightDepthFrameBuffers; //todo: Instead of this being a vector, make it a single framebuffer
+		// spot light shadow data 
+		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_DepthFrameBuffers; 
+		Exalted::Ref<Exalted::Shader> m_ObjectDepthShader;
+		
+		// sun directional light
+		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_SunlightDepthFrameBuffers;
+
+		// Point light shadow framebuffers
+		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_PointlightDepthFrameBuffers;
+		Exalted::Ref<Exalted::Shader> m_PointLightDepthShader;
+		
+		// shadow debug data
+		Exalted::Ref<Exalted::Mesh> m_QuadMesh;
+		Exalted::Ref<Exalted::Shader> m_QuadDepthShader;
 
 		/////////////////////////////////
-		//// Debugging Utilities
+		//// Debugging Utilities ///////
 		/////////////////////////////////
 		bool DEBUG_ColorChange = false;
 

@@ -61,18 +61,22 @@ namespace Exalted
 		EX_CORE_ASSERT(index < m_CameraTracks.size(), " Attempting to set camera track to invalid index! {0}", 0, true);
 		m_CurrentTrack = m_CameraTracks[index];
 		m_CurrentTrack->PrepareTrack();
+		
+		//todo: maybe make this configurable ||  reset fov to initial value 
+		m_FOV = 45.f; 
 	}
 
+	//todo: uncomment the flags
 	void EditorCamera::OnImGuiRender() //todo: Give each camera a unique id (as in game component)
 	{
 		ImGui::Begin("Camera Transform");
-		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
+		//ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+		//ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
 		ImGui::InputFloat3("Position", (float*)& m_Position);
 		ImGui::InputFloat("Yaw", &m_Yaw);
 		ImGui::InputFloat("Pitch", &m_Pitch);
-		ImGui::PopItemFlag();
-		ImGui::PopStyleVar();
+		//ImGui::PopItemFlag();
+		//ImGui::PopStyleVar();
 		ImGui::InputFloat("Movement Speed", &m_MovementSpeed, 0.01f, 10.f);
 		ImGui::InputFloat("Mouse Sensitivity", &m_MouseSensitivity, 0.01f, 10.f);
 		ImGui::End();

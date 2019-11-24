@@ -346,15 +346,23 @@ namespace Sandbox
 // ----------------------------------------------------------------------------------------------------------------
 
 		//todo: THIS REFERENCES THE NUMBER OF SPOT LIGHTS, MAKE THIS VALUE DYNAMIC IN THE SHADOW MANAGER
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < m_SpotLights.size(); i++)
 		{
 			m_DepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
 		}
 		m_ObjectDepthShader = Exalted::Shader::Create(DIRECTIONAL_SHADOW_SHADER_VERTEX_DEPTH, DIRECTIONAL_SHADOW_SHADER_FRAGMENT_DEPTH); //todo: render models into this
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformBlockIndex("Light_Space_Uniforms", 3);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 4);
+	
 		m_SunlightDepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
 
+		for(int i = 0; i < m_PointLights.size(); i++)
+		{
+			EX_CORE_CRITICAL("INITIALIZE SHADERS AND MATRICES FOR THE POINT LIGHT SHADOWS!");
+			m_PointlightDepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
+		}
+		m_PointLightDepthShader = Exalted::Shader::Create(, );
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_PointLightDepthShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 5);
 
 		//todo: render debug quad to this
 		m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT);

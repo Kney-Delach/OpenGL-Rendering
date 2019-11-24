@@ -14,7 +14,7 @@
 
 
 //////////////////////////////////////////////////////////
-//// Directional Shadows /////////////////////////////////
+//// Shadows /////////////////////////////////
 //////////////////////////////////////////////////////////
 #define DIRECTIONAL_SHADOW_SHADER_VERTEX "Resources/Environment_Scene/Shaders/DirectionalShadow/LightingVertex.glsl"
 #define DIRECTIONAL_SHADOW_SHADER_FRAGMENT "Resources/Environment_Scene/Shaders/DirectionalShadow/LightingFragment.glsl"

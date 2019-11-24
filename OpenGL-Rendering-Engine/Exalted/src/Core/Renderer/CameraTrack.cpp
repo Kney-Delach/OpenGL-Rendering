@@ -17,7 +17,7 @@ namespace Exalted
 		float interpolatePitch1, interpolatePitch2;
 		float interpolateYaw1, interpolateYaw2;
 
-		int indexPos = -1;
+		int trackPointIndex = -1;
 
 		float currentTime = TIME - m_StartTime;
 		float combinedTime = 0.0f;
@@ -26,7 +26,7 @@ namespace Exalted
 		{
 			if (currentTime <= combinedTime) 
 			{
-				indexPos = i - 1;
+				trackPointIndex = i - 1;
 				break;
 			}
 			else {
@@ -35,22 +35,21 @@ namespace Exalted
 		}
 
 		//EX_CORE_TRACE("Index Position {0}", indexPos);
-		if (indexPos == -1) 
-		{
+		if (trackPointIndex == -1) 
 			return;
-		}
+		
 
 
-		interpolatePos1 = m_TrackPoints[indexPos - 1].Position;
-		interpolatePos2 = m_TrackPoints[indexPos].Position;
+		interpolatePos1 = m_TrackPoints[trackPointIndex - 1].Position;
+		interpolatePos2 = m_TrackPoints[trackPointIndex].Position;
 
-		interpolatePitch1 = m_TrackPoints[indexPos - 1].Pitch;
-		interpolatePitch2 = m_TrackPoints[indexPos].Pitch;
+		interpolatePitch1 = m_TrackPoints[trackPointIndex - 1].Pitch;
+		interpolatePitch2 = m_TrackPoints[trackPointIndex].Pitch;
 
-		interpolateYaw1 = m_TrackPoints[indexPos - 1].Yaw;
-		interpolateYaw2 = m_TrackPoints[indexPos].Yaw;
+		interpolateYaw1 = m_TrackPoints[trackPointIndex - 1].Yaw;
+		interpolateYaw2 = m_TrackPoints[trackPointIndex].Yaw;
 
-		float t = (currentTime - combinedTime) / m_TrackPoints[indexPos].Time;
+		float t = (currentTime - combinedTime) / m_TrackPoints[trackPointIndex].Time;
 		t *= -1;
 
 		position = ((interpolatePos1 * t) + (interpolatePos2 * (1.0f - t)));  //todo: Implement a method to access the camera from here

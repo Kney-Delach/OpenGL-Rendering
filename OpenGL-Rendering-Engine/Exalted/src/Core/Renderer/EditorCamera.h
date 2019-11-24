@@ -88,8 +88,6 @@ namespace Exalted
 		Ref<CameraTrack> m_CurrentTrack; 
 		std::vector<Ref<CameraTrack>> m_CameraTracks;
 		Ref<UniformBuffer> m_CameraUniformBuffer; //todo: verify this works correctly.
-	private:
-		//todo: insert camera track variables 
 	private: // Mouse Event Handling Variables
 		bool m_ProcessingMouseMovement = false;
 		bool m_MouseMoving = false;
