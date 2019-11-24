@@ -87,6 +87,7 @@ namespace Exalted
 			m_ImGuiLayer->Begin();
 			ImGui::Begin("Renderer");
 			ImGui::Text("Application Runtime: %.2fms", static_cast<float>(m_LastFrameTime));
+			ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 			auto& caps = RendererAPI::GetCapabilities();
 			ImGui::Text("GPU Vendor: %s", caps.Vendor.c_str());
 			ImGui::Text("GPU Renderer: %s", caps.Renderer.c_str());
