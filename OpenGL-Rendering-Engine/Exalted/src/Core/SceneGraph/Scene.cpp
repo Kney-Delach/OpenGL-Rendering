@@ -116,6 +116,7 @@ namespace Exalted
 			const auto resizeEvent = dynamic_cast<Exalted::WindowResizeEvent&>(event);
 			const auto windowWidth = resizeEvent.GetWidth();
 			const auto windowHeight = resizeEvent.GetHeight();
+			//m_PostProcessingFrameBuffer->Resize(windowWidth, windowHeight);
 			m_Camera->OnWindowResize(windowWidth, windowHeight);
 		}
 		

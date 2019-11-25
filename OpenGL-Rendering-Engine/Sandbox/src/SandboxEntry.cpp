@@ -1,4 +1,4 @@
-/***************************************************************************
+ /***************************************************************************
  * Filename		: SandboxEntity.cpp
  * Name			: Ori Lazar
  * Date			: 31/10/2019
@@ -34,7 +34,6 @@
 //#include "18-Shadows/ShadowLayer.h"
 //#include "19-Multiple_Shadows/MultipleShadowsLayer.h"
 //#include "20-Bump_Mapping/BumpMapping.h"
-
 
 #include "Environment_Scene/EnvironmentSceneLayer.h" //todo: remove rest of layers as this is purely the coursework layer
 

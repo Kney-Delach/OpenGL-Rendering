@@ -383,9 +383,9 @@ namespace Sandbox
 		//mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-124, 34.6, -276.3), 637,-35, 10.f));
 
 		Exalted::Ref<Exalted::CameraTrack> secondTrack = Exalted::CreateRef<Exalted::CameraTrack>(2);
-		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 10, 0), 89, 89, 0.f));
-		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(10, 10, 0), 89, 89, 10.f));
-		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(30, 10, 0), 89, 89, 200.f));
+		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-131, 34.6, -105.3), 7.6, -35, 0.f));
+		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-127, 34.6, -88.3), -23, -35, 2.f));
+		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 0, 0), 0, 0, 10.f)); // dummy
 
 		m_EditorCamera->AddTrack(mainTrack);
 		m_EditorCamera->AddTrack(secondTrack);
@@ -401,6 +401,14 @@ namespace Sandbox
 
 		m_LightSourceShader = Exalted::Shader::Create(LIGHT_SOURCE_SHADER_VERTEX, LIGHT_SOURCE_SHADER_FRAGMENT);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
+
+		/////////////////////////////////////////////////
+		////// Post Processing //////////////////////////
+		/////////////////////////////////////////////////
+		// using the m_QuadMesh model
+		m_PostProcessingFrameBuffer = Exalted::FrameBuffer::Create(static_cast<uint32_t>(Exalted::Application::Get().GetWindow().GetWindowWidth()), static_cast<uint32_t>(Exalted::Application::Get().GetWindow().GetWindowHeight()), Exalted::FrameBufferFormat::RGBA8);
+		m_PostProcessingShader = Exalted::Shader::Create("Resources/Environment_Scene/Shaders/PostProcessing/Vertex.glsl", "Resources/Environment_Scene/Shaders/PostProcessing/Fragment.glsl");
+		//m_SceneManager->SetPostProcessingFrameBuffer(m_PostProcessingFrameBuffer);
 	}
 	
 	void EnvironmentSceneLayer::OnUpdate(Exalted::Timestep deltaTime)
@@ -494,6 +502,8 @@ namespace Sandbox
 			m_SunlightDepthFrameBuffers[i]->UnbindMiniFrame();
 		}
 		m_ObjectDepthShader->Unbind();
+		Exalted::RenderCommand::ClearColorDepthBuffers();
+
 		//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::BACK);
 		Exalted::OpenGLConfigurations::DisableFaceCulling();		
 
@@ -501,7 +511,15 @@ namespace Sandbox
 		/////////////////////////////////////////////////////////////////////////////
 		//// Render scene output //////////////////////////////////////////////////// 
 		/////////////////////////////////////////////////////////////////////////////
+
+		// setup post processing frame buffer //
+		//////////////////////////////////////////////////////////////////////////////
+		m_PostProcessingFrameBuffer->Bind();
 		Exalted::RenderCommand::ClearColorDepthBuffers();
+		Exalted::OpenGLConfigurations::EnableDepthTesting();
+		//////////////////////////////////////////////////////////////////////////////
+		// render the scene 
+		//////////////////////////////////////////////////////////////////////////////
 		int count = 0;
 		for (int i = 0; i < m_DepthFrameBuffers.size(); i++)
 		{
@@ -525,22 +543,36 @@ namespace Sandbox
 
 		// render the rest of the scene, skyboxes and transparent objects
 		m_SceneManager->RenderSkybox();
-
 		Exalted::OpenGLConfigurations::EnableBlending();
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
 		Exalted::OpenGLConfigurations::SetBlendFunction(Exalted::BlendFactors::SOURCE_ALPHA, Exalted::BlendFactors::SOURCE_ALPHA_MINUS);
-		m_SceneManager->DrawTransparentObjects();		
+		m_SceneManager->DrawTransparentObjects();
 		m_SceneManager->ClearObjectLists();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		Exalted::OpenGLConfigurations::DisableBlending();
 
+		/////////////////////////////////////////////////
+		////// Post Processing //////////////////////////
+		/////////////////////////////////////////////////
+		// second pass 
+		m_PostProcessingFrameBuffer->UnbindMiniFrame();
+		Exalted::RenderCommand::ClearColorBuffer();
+		Exalted::OpenGLConfigurations::DisableDepthTesting();
+		m_PostProcessingShader->Bind();
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_PostProcessingShader)->SetUniformInt1("u_ScreenTexture", 10);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_PostProcessingShader)->SetUniformInt1("u_PostProcess", m_PostProcessChoice);
+		m_PostProcessingFrameBuffer->BindTexture(10);
+		Exalted::Renderer::Submit(m_QuadMesh);
+		m_PostProcessingShader->Unbind();
+
 		/////////////////////////////////////////////////////////////////////////////
-		//// Sunlight Light Debugging /////////////////////////////////////////////////// 
+		//// Sunlight Light Debugging ///////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////
+		
 		m_QuadDepthShader->Bind();
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformBool1("IsDirectional", true);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformInt1("depthMap", 4);
-		Exalted::OpenGLConfigurations::SetViewport(0, 256, 256, 256);
+		Exalted::OpenGLConfigurations::SetViewport(1024, 0, 256, 256);
 		m_SunlightDepthFrameBuffers[0]->BindTexture(4); 
 		Exalted::Renderer::Submit(m_QuadMesh);
 		m_SunlightDepthFrameBuffers[0]->Unbind();
@@ -550,6 +582,7 @@ namespace Sandbox
 		/////////////////////////////////////////////////////////////////////////////
 		//// Spot Light Debugging /////////////////////////////////////////////////// 
 		/////////////////////////////////////////////////////////////////////////////
+		
 		m_QuadDepthShader->Bind();
 		float near_plane = 1.f;
 		float far_plane = 25.f;
@@ -596,6 +629,15 @@ namespace Sandbox
 		ImGui::Text("----------------------------");
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
+		ImGui::Text("Switch between different post processing techniques by dragging the bar below:");
+		ImGui::Text("0 -> No Effect");
+		ImGui::Text("1 -> Color Inversion");
+		ImGui::Text("2 -> Weighted Gray Scaling");
+		ImGui::Text("3 -> Sharpening");
+		ImGui::Text("4 -> Blurring");
+		ImGui::Text("5 -> Edge Detection");
+		ImGui::DragInt(" ", &m_PostProcessChoice, 1, 0, 5);
+		ImGui::Text("----------------------------");
 		ImGui::Text("---- Directional Light ------");
 		ImGui::InputFloat3("D-Direction", glm::value_ptr(m_DirectionalLight->Direction));
 		ImGui::InputFloat3("D-Ambient", glm::value_ptr(m_DirectionalLight->Ambient));
@@ -639,6 +681,44 @@ namespace Sandbox
 	void EnvironmentSceneLayer::OnEvent(Exalted::Event& event)
 	{
 		m_SceneManager->OnEvent(event);
+		if (event.GetEventType() == Exalted::EventType::KeyPressed)
+		{
+			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
+			if (e.GetKeyCode() == EX_KEY_0)
+			{
+				m_PostProcessChoice = 0;
+			}
+			if (e.GetKeyCode() == EX_KEY_1)
+			{
+				m_PostProcessChoice = 1;
+			}
+			if (e.GetKeyCode() == EX_KEY_2)
+			{
+				m_PostProcessChoice = 2;
+			}
+			if (e.GetKeyCode() == EX_KEY_3)
+			{
+				m_PostProcessChoice = 3;
+			}
+			if (e.GetKeyCode() == EX_KEY_4)
+			{
+				m_PostProcessChoice = 4;
+			}
+			if (e.GetKeyCode() == EX_KEY_5)
+			{
+				m_PostProcessChoice = 5;
+			}
+		}
+		//if (event.GetEventType() == Exalted::EventType::WindowResize)
+		//{
+		//	const auto resizeEvent = dynamic_cast<Exalted::WindowResizeEvent&>(event);
+		//	const auto windowWidth = resizeEvent.GetWidth();
+		//	const auto windowHeight = resizeEvent.GetHeight();
+		//	if (windowWidth != 0 && windowHeight != 0)
+		//		m_PostProcessingFrameBuffer->Resize(static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight));
+		//	event.m_Handled = false;
+		//}
+
 	}
 
 	void EnvironmentSceneLayer::OnDetach()

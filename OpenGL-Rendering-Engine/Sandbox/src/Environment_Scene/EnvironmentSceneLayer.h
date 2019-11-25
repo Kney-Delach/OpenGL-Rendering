@@ -71,6 +71,12 @@ namespace Sandbox
 		Exalted::Ref<Exalted::Mesh> m_QuadMesh;
 		Exalted::Ref<Exalted::Shader> m_QuadDepthShader;
 
+		/////////////////////////////////////////////////
+		////// Post Processing //////////////////////////
+		/////////////////////////////////////////////////
+		Exalted::Ref<Exalted::FrameBuffer> m_PostProcessingFrameBuffer; 
+		Exalted::Ref<Exalted::Shader> m_PostProcessingShader;
+		int m_PostProcessChoice = 0;
 		/////////////////////////////////
 		//// Debugging Utilities ///////
 		/////////////////////////////////

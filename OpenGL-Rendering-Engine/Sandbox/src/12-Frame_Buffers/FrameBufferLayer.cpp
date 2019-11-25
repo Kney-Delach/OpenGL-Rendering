@@ -97,7 +97,6 @@ namespace Sandbox
 
 		// second pass 
 		m_FrameBuffer->Unbind();
-		Exalted::RenderCommand::SetClearColor({ 0.2f, 0.4f, 1.f, 1.f });
 		Exalted::RenderCommand::ClearColorBuffer();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		m_FrameBufferShader->Bind();

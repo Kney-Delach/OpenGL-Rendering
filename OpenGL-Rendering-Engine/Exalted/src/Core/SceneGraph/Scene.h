@@ -20,6 +20,7 @@
 #include "Core/Renderer/EditorCamera.h"
 #include "Core/Renderer/Skybox/Skybox.h"
 #include "Core/Renderer/Loaders/ObjLoader.h"
+#include "Core/Renderer/FrameBuffer.h"
 
 #include <vector>
 #include "LightManager.h"
@@ -78,6 +79,7 @@ namespace Exalted
 		Ref<GameObject>& GetSceneRoot() { return m_SceneRoot; }
 		void SetSceneRoot(Ref<GameObject>& sceneRoot) { m_SceneRoot = sceneRoot; }
 		void OnEvent(Exalted::Event& event);
+		//void SetPostProcessingFrameBuffer(const Ref <FrameBuffer>& frameBuffer) { m_PostProcessingFrameBuffer = frameBuffer; }
 	public:
 		static inline bool s_IsCameraFree = true;
 	private:
@@ -93,6 +95,7 @@ namespace Exalted
 		Ref<Skybox> m_Skybox;
 		Ref<LightManager> m_LightsManager;
 		//Ref<LightManager> m_DynamicLightManager;
+		//Ref<FrameBuffer> m_PostProcessingFrameBuffer; // maybe move this to post processing management? 
 		Frustum m_Frustum;
 		std::vector<GameObject*> m_OpaqueObjects;
 		std::vector<GameObject*> m_TransparentObjects;
