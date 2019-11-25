@@ -92,7 +92,7 @@ namespace Exalted
 		virtual ~ScaleGrowComponent() {}
 		void Update(Timestep deltaTime) override
 		{
-			if(!(m_Transform->Scale.x >= m_MaxScale.x || m_Transform->Scale.y >= m_MaxScale.y || m_Transform->Scale.z >= m_MaxScale.z))
+			if(!(m_Transform->Scale.x >= m_MaxScale.x && m_Transform->Scale.y >= m_MaxScale.y && m_Transform->Scale.z >= m_MaxScale.z))
 				m_Transform->Scale = m_Transform->Scale + m_ScaleRate * deltaTime.GetSeconds(), m_MaxScale;
 		}
 	protected:

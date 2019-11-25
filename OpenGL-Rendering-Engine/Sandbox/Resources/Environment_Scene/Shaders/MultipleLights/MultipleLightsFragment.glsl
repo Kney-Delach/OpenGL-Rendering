@@ -97,11 +97,12 @@ layout (std140) uniform Light_Space_Uniforms
 	mat4 LightSpaceMatrix[NUMBER_OF_SPOT_LIGHTS];
 };
 
-layout (std140) uniform Point_Light_Space_Uniforms 
-{
-	WRITE_SOME_USEFUL_STUFF_HERE_ORI!
-	float
-};
+//layout (std140) uniform Point_Light_Space_Uniforms 
+//{
+//	//WRITE_SOME_USEFUL_STUFF_HERE_ORI!
+//	//float
+//};
+
 in ShaderData 
 {
 	vec3 v_FragPosition;
@@ -205,29 +206,29 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir
 float CalcPointLightShadow(int index)
 {
 	//  OUT.v_FragPosition 
-	vec3 fragToLightDirection = OUT.v_FragPosition - PointLights[index].Position; // vector between fragment position and light position
-
-	float currentDepth = length(fragToLightDirection); // translate linear depth as the length between the fragment and light position
-
+//	vec3 fragToLightDirection = OUT.v_FragPosition - PointLights[index].Position; // vector between fragment position and light position
+//
+//	float currentDepth = length(fragToLightDirection); // translate linear depth as the length between the fragment and light position
+//
+//	float shadow = 0.0;
+//	float bias = 0.05;
+//	float samples = 4.0;
+//	float offset = 0.1;
+//	for (float x = -offset; x < offset; x += offset / (samples * 0.5))
+//	{
+//		for (float y = -offset; y < offset; y += offset / (samples * 0.5))
+//		{
+//			for (float z = -offset; z < offset; z += offset / (samples * 0.5))
+//			{
+//				float closestDepth = texture(u_PointShadowMap[index], fragToLightDirection + vec3(x, y, z)).r;
+//				closestDepth *= u_FarPlane; //todo: pre-set this uniform (THIS SHADER WILL NOT COMPILE UNTIL THIS IS DONE!)
+//				if (currentDepth - bias > closestDepth)
+//					shadow += 1.0;
+//			}
+//		}
+//	}
+//	shadow /= (samples * samples * samples);
 	float shadow = 0.0;
-	float bias = 0.05;
-	float samples = 4.0;
-	float offset = 0.1;
-	for (float x = -offset; x < offset; x += offset / (samples * 0.5))
-	{
-		for (float y = -offset; y < offset; y += offset / (samples * 0.5))
-		{
-			for (float z = -offset; z < offset; z += offset / (samples * 0.5))
-			{
-				float closestDepth = texture(u_PointShadowMap[index], fragToLightDirection + vec3(x, y, z)).r;
-				closestDepth *= u_FarPlane; //todo: pre-set this uniform (THIS SHADER WILL NOT COMPILE UNTIL THIS IS DONE!)
-				if (currentDepth - bias > closestDepth)
-					shadow += 1.0;
-			}
-		}
-	}
-	shadow /= (samples * samples * samples);
-
 	return shadow;
 }
 
@@ -244,7 +245,7 @@ vec3 CalculatePointLights(PointLight light, vec3 normal, vec3 fragPosition, vec3
 
 	// shadows 
 	float shadow  = 0.0; 
-	shadow = ShadowCalculation(index);
+	shadow = CalcPointLightShadow(index);
 	// combine results
 	vec3 ambient = light.Ambient * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
 	vec3 diffuse = light.Diffuse * diff * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));

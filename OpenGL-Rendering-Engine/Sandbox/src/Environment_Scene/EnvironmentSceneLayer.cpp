@@ -280,14 +280,15 @@ namespace Sandbox
 		Exalted::GameObject* terrainObject = new Exalted::GameObject("Terrain");
 		Exalted::Ref<Exalted::Mesh> terrainMesh = Exalted::Mesh::Create();
 		terrainMesh->SetVertexArray(Exalted::ObjLoader::Load(ISLAND_MAIN_MESH));
-		terrainObject->GetTransform()->Scale = glm::vec3(10);
+		terrainObject->GetTransform()->Scale = glm::vec3(10,0,10);
 		terrainObject->GetTransform()->Position = glm::vec3(0,0,0);
 		terrainObject->SetMesh(terrainMesh);
 		terrainObject->SetShader(multipleLightsShader);
 		terrainObject->SetMaterial(islandMaterial);
 		terrainObject->SetTransparency(false);
 		terrainObject->SetBoundingRadius(FLT_MAX);
-		
+		terrainObject->AddGameComponent(new Exalted::ScaleGrowComponent(terrainObject->GetTransform(), glm::vec3(0,0.25,0), glm::vec3(10)));
+
 		// 5. Add all gameobjects to scene manager
 		m_SceneManager->GetSceneRoot()->AddChildObject(UFOA);
 		m_SceneManager->GetSceneRoot()->AddChildObject(UFOB);
@@ -361,8 +362,8 @@ namespace Sandbox
 			EX_CORE_CRITICAL("INITIALIZE SHADERS AND MATRICES FOR THE POINT LIGHT SHADOWS!");
 			m_PointlightDepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
 		}
-		m_PointLightDepthShader = Exalted::Shader::Create(, );
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_PointLightDepthShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 5);
+		//m_PointLightDepthShader = Exalted::Shader::Create(, );
+		//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_PointLightDepthShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 5);
 
 		//todo: render debug quad to this
 		m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT);
