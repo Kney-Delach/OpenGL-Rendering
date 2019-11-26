@@ -20,7 +20,6 @@
 #include "Core/Renderer/EditorCamera.h"
 #include "Core/Renderer/Skybox/Skybox.h"
 #include "Core/Renderer/Loaders/ObjLoader.h"
-#include "Core/Renderer/FrameBuffer.h"
 
 #include <vector>
 #include "LightManager.h"
@@ -63,11 +62,9 @@ namespace Exalted
 			//DrawObjectLists();
 			//ClearObjectLists();
 		}
-		//////////////////// USE THESE //////////////////
 		void DrawOpaqueObjects();
 		void DrawTransparentObjects();
-
-		// used for shadow mapping
+		// the following functions are used for shadow mapping
 		void DrawOpaqueBindless(const Ref<Shader>& shadowShader);
 		void DrawTransparentBindless(const Ref<Shader>& shadowShader);
 		
@@ -92,8 +89,6 @@ namespace Exalted
 		Ref<GameObject> m_SceneRoot;
 		Ref<Skybox> m_Skybox;
 		Ref<LightManager> m_LightsManager;
-		//Ref<LightManager> m_DynamicLightManager;
-		//Ref<FrameBuffer> m_PostProcessingFrameBuffer; // maybe move this to post processing management? 
 		Frustum m_Frustum;
 		std::vector<GameObject*> m_OpaqueObjects;
 		std::vector<GameObject*> m_TransparentObjects;

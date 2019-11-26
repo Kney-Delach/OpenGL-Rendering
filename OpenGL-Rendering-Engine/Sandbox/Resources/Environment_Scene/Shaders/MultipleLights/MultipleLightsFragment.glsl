@@ -66,7 +66,7 @@ struct SpotLight
 
 // ------------------ Buffer Layouts ------------------ //
 
-#define NUMBER_OF_POINT_LIGHTS 1 
+#define NUMBER_OF_POINT_LIGHTS 4 
 #define NUMBER_OF_SPOT_LIGHTS 4
 
 layout (std140) uniform Light_Uniforms

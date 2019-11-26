@@ -25,7 +25,7 @@ namespace Sandbox
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
 			0.1f,
 			10000.f, 2); // sets ubo of camera to index 2
-		m_EditorCamera->SetMouseSpeed(350.f);
+		m_EditorCamera->SetMouseSpeed(50.f);
 	}
 	
 	void EnvironmentSceneLayer::OnAttach()
@@ -42,11 +42,22 @@ namespace Sandbox
 		m_PointLights[0]->Ambient = glm::vec3(0.2);
 		m_PointLights[0]->Diffuse = glm::vec3(0.5);
 		m_PointLights[0]->Specular = glm::vec3(1.0);
-		m_PointLights[0]->Position = glm::vec3(-30,370,400);
-		m_PointLights[0]->SetAttenuationDistance(325);
-		m_PointLightTransforms.emplace_back(Exalted::GameTransform::Create());
-		m_PointLightTransforms[0]->Scale = glm::vec3(5.0);
-		m_PointLightTransforms[0]->Position = m_PointLights[0]->Position;
+		m_PointLights[0]->SetAttenuationDistance(200);
+		m_PointLights.emplace_back(Exalted::PointLight::Create());
+		m_PointLights[1]->Ambient = glm::vec3(0.2);
+		m_PointLights[1]->Diffuse = glm::vec3(0.5);
+		m_PointLights[1]->Specular = glm::vec3(1.0);
+		m_PointLights[1]->SetAttenuationDistance(200);
+		m_PointLights.emplace_back(Exalted::PointLight::Create());
+		m_PointLights[2]->Ambient = glm::vec3(0.2);
+		m_PointLights[2]->Diffuse = glm::vec3(0.5);
+		m_PointLights[2]->Specular = glm::vec3(1.0);
+		m_PointLights[2]->SetAttenuationDistance(200);
+		m_PointLights.emplace_back(Exalted::PointLight::Create());
+		m_PointLights[3]->Ambient = glm::vec3(0.2);
+		m_PointLights[3]->Diffuse = glm::vec3(0.5);
+		m_PointLights[3]->Specular = glm::vec3(1.0);
+		m_PointLights[3]->SetAttenuationDistance(200);
 
 		// 2. spot lights
 		for (int i = 0; i < 4; i++)
@@ -59,8 +70,6 @@ namespace Sandbox
 			m_SpotLights[i]->SetAttenuationDistance(200);
 			m_SpotLights[i]->CutoffInner = glm::cos(glm::radians(12.5f));
 			m_SpotLights[i]->CutoffOuter = 0.8f;
-			// m_SpotLightTransforms.emplace_back(Exalted::GameTransform::Create());
-			// m_SpotLightTransforms[i]->Position = m_SpotLights[i]->Position;
 		}
 		
 		// 3. directional light
@@ -76,9 +85,19 @@ namespace Sandbox
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Light_Space_Uniforms", 3);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 4);
+
+		m_ExplosionShader = Exalted::Shader::Create(MULTIPLE_LIGHTS_VERTEX, MULTIPLE_LIGHTS_FRAGMENT, EXPLOSION_GEOMETRY);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformBlockIndex("Light_Uniforms", 1);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformBlockIndex("Light_Space_Uniforms", 3);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 4);
+
 		
 		Exalted::Ref<Exalted::Shader> skyboxReflectiveShader = Exalted::Shader::Create(SKYBOX_MAP_VERTEX, SKYBOX_MAP_FRAGMENT);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(skyboxReflectiveShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
+
+		Exalted::Ref<Exalted::Shader> pointLightReflectiveShader = Exalted::Shader::Create(SKYBOX_MAP_VERTEX, PL_FRAGMENT);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(pointLightReflectiveShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
 
 		// 5. Create Materials
 		Exalted::Ref<Exalted::Material> islandMaterial = Exalted::Material::Create(TEXTURE_DIFFUSE_ISLAND, TEXTURE_SPECULAR_ISLAND, "", TEXTURE_NORMAL_ISLAND, 33.f);
@@ -138,9 +157,9 @@ namespace Sandbox
 		UFOB->SetSpotLight(m_SpotLights[1]);
 		UFOB->AddGameComponent(new Exalted::RotateComponent(UFOB->GetTransform(), glm::vec3(0, -20, 0)));
 
-		Exalted::GameObject* UFOC = new Exalted::GameObject("UFO-C");
+		UFOC = new Exalted::GameObject("UFO-C");
 		UFOC->SetMesh(ufoMesh);
-		UFOC->SetShader(multipleLightsShader); //todo: make sure near plane is far enough not to take effect from these objects
+		UFOC->SetShader(m_ExplosionShader); //todo: verify explosion shader is working
 		UFOC->SetMaterial(ufoMaterial);
 		UFOC->SetTransparency(true); 
 		UFOC->SetBoundingRadius(30.f);
@@ -148,6 +167,7 @@ namespace Sandbox
 		UFOC->GetTransform()->Position = glm::vec3(-1000.f, 200.f, -1000.f);
 		UFOC->SetSpotLight(m_SpotLights[2]);
 		UFOC->AddGameComponent(new Exalted::RotateComponent(UFOC->GetTransform(), glm::vec3(0, 20, 0)));
+		UFOC->AddGameComponent(new Exalted::TranslateAxisPositiveY(UFOC->GetTransform(), 800, 45, 99.f)); //todo: verify this works
 
 		Exalted::GameObject* UFOD = new Exalted::GameObject("UFO-D");
 		UFOD->SetMesh(ufoMesh);
@@ -171,6 +191,47 @@ namespace Sandbox
 		reflectiveUFO->GetTransform()->Position = glm::vec3(-50, 600.f, -500);
 		reflectiveUFO->AddGameComponent(new Exalted::RotateComponent(reflectiveUFO->GetTransform(), glm::vec3(0, 360, 0)));
 
+		// point light objects
+		Exalted::GameObject* pointLightReflectiveUFOA = new Exalted::GameObject("UFO-PointLight-Reflective-A");
+		pointLightReflectiveUFOA->SetMesh(ufoMesh);
+		pointLightReflectiveUFOA->SetPointLight(m_PointLights[0]);
+		pointLightReflectiveUFOA->SetShader(pointLightReflectiveShader);
+		pointLightReflectiveUFOA->SetTransparency(true);
+		pointLightReflectiveUFOA->SetBoundingRadius(100.f);
+		pointLightReflectiveUFOA->GetTransform()->Scale = glm::vec3(1);
+		pointLightReflectiveUFOA->GetTransform()->Position = glm::vec3(-500, 150.f, -1000);
+		pointLightReflectiveUFOA->AddGameComponent(new Exalted::RotateComponent(pointLightReflectiveUFOA->GetTransform(), glm::vec3(0, 720, 0)));
+
+		Exalted::GameObject* pointLightReflectiveUFOB = new Exalted::GameObject("UFO-PointLight-Reflective-B");
+		pointLightReflectiveUFOB->SetMesh(ufoMesh);
+		pointLightReflectiveUFOB->SetPointLight(m_PointLights[1]);
+		pointLightReflectiveUFOB->SetShader(pointLightReflectiveShader);
+		pointLightReflectiveUFOB->SetTransparency(true);
+		pointLightReflectiveUFOB->SetBoundingRadius(100.f);
+		pointLightReflectiveUFOB->GetTransform()->Scale = glm::vec3(1);
+		pointLightReflectiveUFOB->GetTransform()->Position = glm::vec3(500, 150.f, -1000);
+		pointLightReflectiveUFOB->AddGameComponent(new Exalted::RotateComponent(pointLightReflectiveUFOB->GetTransform(), glm::vec3(0, 720, 0)));
+
+		Exalted::GameObject* pointLightReflectiveUFOC = new Exalted::GameObject("UFO-PointLight-Reflective-C");
+		pointLightReflectiveUFOC->SetMesh(ufoMesh);
+		pointLightReflectiveUFOC->SetPointLight(m_PointLights[2]);
+		pointLightReflectiveUFOC->SetShader(pointLightReflectiveShader);
+		pointLightReflectiveUFOC->SetTransparency(true);
+		pointLightReflectiveUFOC->SetBoundingRadius(100.f);
+		pointLightReflectiveUFOC->GetTransform()->Scale = glm::vec3(1);
+		pointLightReflectiveUFOC->GetTransform()->Position = glm::vec3(500, 150.f, 1000);
+		pointLightReflectiveUFOC->AddGameComponent(new Exalted::RotateComponent(pointLightReflectiveUFOC->GetTransform(), glm::vec3(0, 720, 0)));
+
+		Exalted::GameObject* pointLightReflectiveUFOD = new Exalted::GameObject("UFO-PointLight-Reflective-D");
+		pointLightReflectiveUFOD->SetMesh(ufoMesh);
+		pointLightReflectiveUFOD->SetPointLight(m_PointLights[3]);
+		pointLightReflectiveUFOD->SetShader(pointLightReflectiveShader);
+		pointLightReflectiveUFOD->SetTransparency(true);
+		pointLightReflectiveUFOD->SetBoundingRadius(100.f);
+		pointLightReflectiveUFOD->GetTransform()->Scale = glm::vec3(1);
+		pointLightReflectiveUFOD->GetTransform()->Position = glm::vec3(-500, 150.f, 1000);
+		pointLightReflectiveUFOD->AddGameComponent(new Exalted::RotateComponent(pointLightReflectiveUFOD->GetTransform(), glm::vec3(0, 720, 0)));
+		
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//// TREES
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -295,6 +356,10 @@ namespace Sandbox
 		m_SceneManager->GetSceneRoot()->AddChildObject(UFOC);
 		m_SceneManager->GetSceneRoot()->AddChildObject(UFOD);
 		m_SceneManager->GetSceneRoot()->AddChildObject(reflectiveUFO);
+		m_SceneManager->GetSceneRoot()->AddChildObject(pointLightReflectiveUFOA);
+		m_SceneManager->GetSceneRoot()->AddChildObject(pointLightReflectiveUFOB);
+		m_SceneManager->GetSceneRoot()->AddChildObject(pointLightReflectiveUFOC);
+		m_SceneManager->GetSceneRoot()->AddChildObject(pointLightReflectiveUFOD);
 		m_SceneManager->GetSceneRoot()->AddChildObject(treeObject);
 		m_SceneManager->GetSceneRoot()->AddChildObject(treeObject2);
 		m_SceneManager->GetSceneRoot()->AddChildObject(treeObject3);
@@ -305,7 +370,7 @@ namespace Sandbox
 		Exalted::Ref<Exalted::LightManager> lightManager = Exalted::CreateRef<Exalted::LightManager>(1,3);
 		for (int i = 0; i < m_PointLights.size(); ++i)
 		{
-			lightManager->AddPointLight(m_PointLights[i]); // todo: note the point light will currently not have a mesh as it is not attached to an object
+			lightManager->AddPointLight(m_PointLights[i]); // todo: add shadow calculations to the point lights
 		}
 		lightManager->AddDirectionalLight(m_DirectionalLight);
 		for (int i = 0; i < m_SpotLights.size(); ++i)
@@ -328,13 +393,13 @@ namespace Sandbox
 	
 		m_SunlightDepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
 
+		//todo: note, this currently doesn't do anything
 		for(int i = 0; i < m_PointLights.size(); i++)
 		{
-			EX_CORE_CRITICAL("INITIALIZE SHADERS AND MATRICES FOR THE POINT LIGHT SHADOWS!");
 			m_PointlightDepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
 		}
 
-		//todo: render debug quad to this
+		// debug quads get render to this shader
 		m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT);
 		m_QuadMesh = Exalted::Mesh::Create();
 		m_QuadMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateIndexedQuad());
@@ -387,8 +452,10 @@ namespace Sandbox
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 0, -7, 1.f, 5)); // looking at left corner
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 30.5, 21, 4.f, 5)); // looking at center ship
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 94.3, -8.7, 4.f, 5)); // looking at right corner
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 30.5, 21, 4.f, 5)); // looking at center ship
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 30.5, 21, 0.1f, 0)); // final change, remove post processing
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 30.5, 21, 4.7f, 5)); // looking at center ship
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 90.f, -100.57), 30.5, 0, 13.35f, 5)); // 
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-150.6, 110.f, -120.57), 30.5, -20, 4.f, 5)); // move away from ship
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-150.6, 90.f, -100.57), 30.5, 0, 0.f, 5)); //todo: Insert fireworks reaction, maybe shake? 
 
 		// add track to camera
 		m_EditorCamera->AddTrack(mainTrack);
@@ -421,24 +488,38 @@ namespace Sandbox
 		//m_EditorCamera->UpdateCamera(deltaTime);
 		m_SceneManager->UpdateScene(deltaTime);
 
-		if(DEBUG_ColorChange)
+		//todo: verify this explosion shader setting works
+		if(TIME < 125)
 		{
-			glm::vec3 lightColor;
-			lightColor.x = sin(TIME);
-			lightColor.y = sin(TIME * 0.5f);
-			lightColor.z = sin(TIME * 1.5f);
-
-			m_SpotLights[0]->Diffuse = lightColor;
-			m_SpotLights[0]->Ambient = lightColor * glm::vec3(0.5);
-			m_SpotLights[0]->Specular = lightColor;
+			m_ExplosionShader->Bind();
+			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformFloat1("u_Time", TIME);
+			m_ExplosionShader->Unbind();
+		}
+		else
+		{
+			UFOC->SetActive(false);
+			m_SpotLights[2]->Position = glm::vec3(-1000.f, -1000.f, -1000.f);
 		}
 
+		for (int i = 0; i < m_PointLights.size(); i++)
+		{
+			// dynamically change the color of the spot lights
+			//float random = rand() % 100 + 1;
+			glm::vec3 lightColor;
+			lightColor.x = sin(TIME);
+			lightColor.y = sin(TIME * i);
+			lightColor.z = sin(TIME * 0.5f * i);
 
+			m_PointLights[i]->Diffuse = lightColor * glm::vec3(0.5);
+			m_PointLights[i]->Ambient = lightColor * glm::vec3(0.2);
+			m_PointLights[i]->Specular = lightColor;
+		}
+
+		
 		/////////////////////////////////////////////////////////////////////////////
 		//// Sort the scene objects for rendering ///////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////
 		m_SceneManager->RenderScene(); // sorts scene
-
 
 		/////////////////////////////////////////////////////////////////
 		//// Initial render to depth map for shadow mapping ///////////// 
@@ -495,14 +576,14 @@ namespace Sandbox
 		m_SceneManager->DrawOpaqueObjects();
 
 		// Render scene lights
-		m_LightSourceShader->Bind();
-		for (int i = 0; i < m_PointLights.size(); ++i)
-		{
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_PointLightTransforms[i]->SetAndGetWorldTransform());
-			std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_PointLights[i]->Diffuse);
-			Exalted::Renderer::Submit(m_LightSourceMesh);
-		}
-		m_LightSourceShader->Unbind();
+		//m_LightSourceShader->Bind();
+		//for (int i = 0; i < m_PointLights.size(); ++i)
+		//{
+		//	std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_PointLightTransforms[i]->SetAndGetWorldTransform());
+		//	std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_PointLights[i]->Diffuse);
+		//	Exalted::Renderer::Submit(m_LightSourceMesh);
+		//}
+		//m_LightSourceShader->Unbind();
 
 		// render the rest of the scene, skyboxes and transparent objects
 		m_SceneManager->RenderSkybox();

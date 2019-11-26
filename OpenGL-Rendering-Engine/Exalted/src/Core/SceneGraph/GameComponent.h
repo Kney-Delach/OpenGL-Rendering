@@ -69,6 +69,19 @@ namespace Exalted
 		glm::vec3 m_TranslationRate;
 	};
 
+	class TranslateAxisPositiveY : public GameComponent
+	{
+	public:
+		TranslateAxisPositiveY(Ref<GameTransform>& transform, const float goalPosition, const float translationRate, const float startTime = 0) : GameComponent(transform, "TranslateBetweenPoints Component", "Translates a gameobject over time between 2 points"),
+			m_GoalPosition(goalPosition), m_TranslationRate(translationRate), m_StartTime(startTime)
+			{}
+		virtual ~TranslateAxisPositiveY() {}
+		void Update(Timestep deltaTime) override;
+	protected:
+		float m_GoalPosition;
+		float m_TranslationRate;
+		float m_StartTime;
+	};
 	/////////////////////////////////////////////
 	//// Scaling
 	/////////////////////////////////////////////

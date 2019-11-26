@@ -68,3 +68,9 @@
 
 #define SKYBOX_MAP_VERTEX "Resources/Environment_Scene/Reflected/SkyboxReflectedVertex.glsl"
 #define SKYBOX_MAP_FRAGMENT "Resources/Environment_Scene/Reflected/SkyboxReflectedFragment.glsl"
+
+// Explosion shader
+#define EXPLOSION_GEOMETRY "Resources/Environment_Scene/Shaders/Explosion/ExplosionGeometry.glsl"
+
+// point light skybox mapped shaders 
+#define PL_FRAGMENT "Resources/Environment_Scene/Reflected/PointLightReflectedFragment.glsl"

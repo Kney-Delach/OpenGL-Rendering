@@ -105,13 +105,13 @@ namespace Exalted
 			ImGui::Text("Maximum Vertex Uniform Components: %i", caps.MaxVertexUniformComponents);
 			ImGui::Text("Maximum Uniform Buffer Components: %i", caps.MaxUniformBufferComponents);
 			ImGui::End();
-			//for (Layer* layer : m_LayerStack)
-			//{
-			//	if (layer->IsActive())
-			//		layer->OnImGuiRender();
-			//	else
-			//		layer->OnInactiveImGuiRender();
-			//}
+			for (Layer* layer : m_LayerStack)
+			{
+				if (layer->IsActive())
+					layer->OnImGuiRender();
+				else
+					layer->OnInactiveImGuiRender();
+			}
 			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();

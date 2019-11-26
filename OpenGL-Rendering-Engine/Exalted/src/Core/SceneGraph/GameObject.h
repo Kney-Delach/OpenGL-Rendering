@@ -97,13 +97,13 @@ namespace Exalted
 				{
 					m_Material->Bind(m_Shader);
 					int count = 4;
-					for (int i = 0; i < NumberOfSpotLights; i++) //todo: move this from here maybe ?
+					for (int i = 0; i < NumberOfSpotLights; i++)
 					{
 						std::string number = std::to_string(i);
 						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_ShadowMap[" + number + "]").c_str(), (count++));
 					}
 					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1("u_DirectionalShadowMap", count++);
-					for (int i = 0; i < NumberOfPointLights; i++) //todo: move this from here maybe ?
+					for (int i = 0; i < NumberOfPointLights; i++)
 					{
 						std::string number = std::to_string(i);
 						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_PointShadowMap[" + number + "]").c_str(), (count++));
@@ -113,6 +113,8 @@ namespace Exalted
 				}
 				else //todo: Assuming that if there is no material, it reflects the skybox cubemap
 				{
+					if (m_PointLight)
+						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformFloat3("u_Color", m_PointLight->Diffuse);
 					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1("u_Skybox", 0);
 					Skybox::GetTexture()->Bind(0);
 					Renderer::Submit(m_Mesh);

@@ -51,6 +51,9 @@ namespace Sandbox
 		//todo: remove these
 		Exalted::Ref<Exalted::Mesh> m_LightSourceMesh;
 
+		// explosion effect
+		Exalted::Ref<Exalted::Shader> m_ExplosionShader;
+		Exalted::GameObject* UFOC;
 		/////////////////////////////////////////////////
 		////// Shadows  /////////////////////////////////
 		/////////////////////////////////////////////////
