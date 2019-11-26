@@ -61,13 +61,12 @@ namespace Exalted
 		EX_CORE_ASSERT(index < m_CameraTracks.size(), " Attempting to set camera track to invalid index! {0}", 0, true);
 		m_CurrentTrack = m_CameraTracks[index];
 		m_CurrentTrack->PrepareTrack();
-		
-		//todo: maybe make this configurable ||  reset fov to initial value 
-		m_FOV = 45.f; 
+		m_FOV = 45.f; // note, this manually assigns the field of view of the camera to 45 degrees for every track, set this configurable eventually...
+		RecalculateProjectionMatrix();
 	}
 
-	//todo: uncomment the flags
-	void EditorCamera::OnImGuiRender() //todo: Give each camera a unique id (as in game component)
+	// this was used for debugging camera positions 
+	void EditorCamera::OnImGuiRender()
 	{
 		ImGui::Begin("Camera Transform");
 		//ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
@@ -101,13 +100,6 @@ namespace Exalted
 
 	void EditorCamera::OnEvent(Exalted::Event& event)
 	{
-		//if (event.GetEventType() == Exalted::EventType::WindowResize)
-		//{
-		//	const auto resizeEvent = dynamic_cast<Exalted::WindowResizeEvent&>(event);
-		//	const auto windowWidth = resizeEvent.GetWidth();
-		//	const auto windowHeight = resizeEvent.GetHeight();
-		//	OnWindowResize(windowWidth, windowHeight);
-		//}
 		if ((event.GetEventType() == Exalted::EventType::MouseButtonPressed) && !m_MouseMoving)
 		{
 			auto& e = dynamic_cast<Exalted::MouseButtonPressedEvent&>(event);

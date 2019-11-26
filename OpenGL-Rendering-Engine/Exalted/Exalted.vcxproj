@@ -598,6 +598,7 @@
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Core\SceneGraph\FrustumCulling\Frustum.cpp" />
     <ClCompile Include="src\Core\SceneGraph\FrustumCulling\FrustumPlane.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\GameComponent.cpp" />
     <ClCompile Include="src\Core\SceneGraph\GameObject.cpp" />
     <ClCompile Include="src\Core\SceneGraph\Scene.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />

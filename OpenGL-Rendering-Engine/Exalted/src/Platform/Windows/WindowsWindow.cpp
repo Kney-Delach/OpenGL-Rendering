@@ -80,6 +80,9 @@ namespace Exalted
 		EX_CORE_INFO("Creating window {0} ({1}, {2})", properties.Title, properties.Width, properties.Height);
 		if (s_GLFWWindowCount == 0)
 		{
+			// setup anti-aliasing
+			glfwWindowHint(GLFW_SAMPLES, 4);
+			
 			int success = glfwInit();
 			EX_CORE_ASSERT(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);

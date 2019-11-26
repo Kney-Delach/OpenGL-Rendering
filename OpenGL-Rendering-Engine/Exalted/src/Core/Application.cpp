@@ -83,7 +83,7 @@ namespace Exalted
 						layer->OnUpdate(deltaTime);
 				}
 			}
-
+			/////////////////////////
 			m_ImGuiLayer->Begin();
 			ImGui::Begin("Renderer");
 			ImGui::Text("Application Runtime: %.2fms", static_cast<float>(m_LastFrameTime));

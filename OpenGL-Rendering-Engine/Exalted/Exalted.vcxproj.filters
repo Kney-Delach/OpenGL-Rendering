@@ -1486,5 +1486,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\tinyobjloader\tiny_obj_loader.cpp" />
+    <ClCompile Include="src\Core\SceneGraph\GameComponent.cpp" />
   </ItemGroup>
 </Project>

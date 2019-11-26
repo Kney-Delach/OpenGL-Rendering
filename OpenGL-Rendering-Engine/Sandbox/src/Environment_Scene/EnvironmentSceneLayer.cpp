@@ -192,7 +192,7 @@ namespace Sandbox
 		treeObject->SetBoundingRadius(10.f);
 		treeObject->GetTransform()->Scale = glm::vec3(0.01);
 		treeObject->GetTransform()->Position = glm::vec3(1000.f, 1.5f, 1000.f);
-		treeObject->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject->GetTransform(), glm::vec3(0.25f), glm::vec3(15)));
+		treeObject->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject->GetTransform(), glm::vec3(0.35f), glm::vec3(15), 50.f));
 
 		Exalted::GameObject* leafObject = new Exalted::GameObject("Tree-Leaves-A");
 		leafObject->SetMesh(leafMesh);
@@ -215,7 +215,7 @@ namespace Sandbox
 		treeObject2->SetBoundingRadius(200.f);
 		treeObject2->GetTransform()->Scale = glm::vec3(0.01);
 		treeObject2->GetTransform()->Position = glm::vec3(-1000.f, 19.5f, 1000.f);
-		treeObject2->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject2->GetTransform(), glm::vec3(0.25f), glm::vec3(15)));
+		treeObject2->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject2->GetTransform(), glm::vec3(0.35f), glm::vec3(15), 50.f));
 
 		Exalted::GameObject* leafObject2 = new Exalted::GameObject("Tree-Leaves-B");
 		leafObject2->SetMesh(leafMesh);
@@ -238,7 +238,7 @@ namespace Sandbox
 		treeObject3->SetBoundingRadius(200.f);
 		treeObject3->GetTransform()->Scale = glm::vec3(0.01);
 		treeObject3->GetTransform()->Position = glm::vec3(-1000.f, 3.f, -1000.f);
-		treeObject3->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject3->GetTransform(), glm::vec3(0.25f), glm::vec3(15)));
+		treeObject3->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject3->GetTransform(), glm::vec3(0.35f), glm::vec3(15), 50.f));
 
 		Exalted::GameObject* leafObject3 = new Exalted::GameObject("Tree-Leaves-C");
 		leafObject3->SetMesh(leafMesh);
@@ -261,7 +261,7 @@ namespace Sandbox
 		treeObject4->SetBoundingRadius(200.f);
 		treeObject4->GetTransform()->Scale = glm::vec3(0.01);
 		treeObject4->GetTransform()->Position = glm::vec3(1000.f, 9.4f, -1000.f);
-		treeObject4->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject4->GetTransform(), glm::vec3(0.25f), glm::vec3(15)));
+		treeObject4->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject4->GetTransform(), glm::vec3(0.35f), glm::vec3(15), 50.f));
 
 		Exalted::GameObject* leafObject4 = new Exalted::GameObject("Tree-Leaves-D");
 		leafObject4->SetMesh(leafMesh);
@@ -376,12 +376,52 @@ namespace Sandbox
 		//// Camera Tracks data /////////////////////
 		/////////////////////////////////////////////
 		Exalted::Ref<Exalted::CameraTrack> mainTrack = Exalted::CreateRef<Exalted::CameraTrack>(1);
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-131, 34.6, -105.3), 7.6, -35, 0.f));
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-127, 34.6, -88.3), -23, -35, 4.f, 5));
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-120, 34.6, -88.3), -23, -35, 8.f, 0));
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 0, 0), 0, 0, 10.f)); // dummy
+		// start position 
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-182,30, -182), 45, -15, 0.f)); // 1st corner
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-182,30, -172), 35, -15, 4.f)); // move at 1st corner
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-182,30, 182), -45, -15, 2.f)); // 2nd corner
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-172,30, 182), -55, -15, 4.f)); // move at 2nd corner 
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(182, 30, 182), -135, -15, 2.f)); // 3rd corner 
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(182, 30, 172), -145, -15, 4.f)); // move at 3rd corner
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(190, 30, -190), -225, -15, 2.f)); // 4th corner 
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(190, 30, -195), -235, -15, 4.f)); // move at 4th corner
 
-		//mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-124, 34.6, -276.3), 637,-35, 10.f));
+		// move to middle 
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 175, -200), -275, -60, 2.f));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 575, 0), -275, -90, 3.f)); // rise up
+
+		// in the air
+		// pan around environment mapped spaceship 
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-65, 115, 10), -405, -20, 3.f)); // move towards environment mapped ship
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(50, 115, 85), -475, -20, 3.f, 3)); // move around mapped ship
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(130, 115, -85), -555, -20, 3.f, 2)); // move around mapped ship
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 115, -185), -630, -20, 3.f)); // move around mapped ship
+
+		//// blurringly fast move towards panning tree growth
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-182, 60, -100), -720, -35, 1.f, 4)); //post processed blur  || drop to tree pan
+
+		// pan tree growth
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-145, 60, -182), -650, -35, 2.f, 1));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-34, 60, -113), -550, -40, 2.f, 1));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-70, 55, -40), -480, -40, 2.f, 1));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-120, 15, -65), -415, -20, 4.f, 1)); // lower view of tree growth 
+
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-130, 15, -100), -350, -20, 4.f, 0));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-85, 15, -140), -250, -20, 4.f, 0));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-117, 10, -130), -300, -15, 4.f, 0));		
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-90, 11, -127.4), -250, -15, 4.f, 0));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-74, 11, -100), -180, -20, 4.f, 0));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-90, 12, -75), -105, -20, 4.f, 0));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-112, 14, -75), -60, -25, 4.f, 5));
+		
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-125.5, 15, -95), -5, -30, 4.f, 5));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-102, 23, -99), -16, -89, 2.f, 5));
+		// move towards the ship
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 0, -7, 1.f, 5)); // looking at left corner
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 30.5, 21, 4.f, 5)); // looking at center ship
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 94.3, -8.7, 4.f, 5)); // looking at right corner
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 30.5, 21, 4.f, 5)); // looking at center ship
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 30.5, 21, 0.1f, 0)); // final change, remove post processing
 
 		Exalted::Ref<Exalted::CameraTrack> secondTrack = Exalted::CreateRef<Exalted::CameraTrack>(2);
 		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-131, 34.6, -105.3), 7.6, -35, 0.f));

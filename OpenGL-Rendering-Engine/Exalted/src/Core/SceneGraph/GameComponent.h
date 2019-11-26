@@ -13,8 +13,10 @@
   |-/.____.'
  /___\ /___\
 ***************************************************************************/
-#pragma once 
+#pragma once
 #include "Core/Core/Timestep.h"
+#include "GameTransform.h"
+
 #include <string>
 
 namespace Exalted
@@ -87,16 +89,13 @@ namespace Exalted
 	class ScaleGrowComponent : public GameComponent
 	{
 	public:
-		ScaleGrowComponent(Ref<GameTransform>& transform, const glm::vec3& scaleRate, const glm::vec3& maxScale) : GameComponent(transform, "Scale Grow Component", "Scales a gameobject over time until a limited size"),
-			m_ScaleRate(scaleRate), m_MaxScale(maxScale) {}
+		ScaleGrowComponent(Ref<GameTransform>& transform, const glm::vec3& scaleRate, const glm::vec3& maxScale, const float startTime = 0) : GameComponent(transform, "Scale Grow Component", "Scales a gameobject over time until a limited size"),
+			m_ScaleRate(scaleRate), m_MaxScale(maxScale), m_StartTime(startTime) {}
 		virtual ~ScaleGrowComponent() {}
-		void Update(Timestep deltaTime) override
-		{
-			if(!(m_Transform->Scale.x >= m_MaxScale.x && m_Transform->Scale.y >= m_MaxScale.y && m_Transform->Scale.z >= m_MaxScale.z))
-				m_Transform->Scale = m_Transform->Scale + m_ScaleRate * deltaTime.GetSeconds(), m_MaxScale;
-		}
+		void Update(Timestep deltaTime) override;
 	protected:
 		glm::vec3 m_ScaleRate;
 		glm::vec3 m_MaxScale;
+		float m_StartTime;
 	};
 }
