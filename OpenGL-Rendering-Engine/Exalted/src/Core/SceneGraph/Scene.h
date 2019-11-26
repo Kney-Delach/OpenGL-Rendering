@@ -75,13 +75,11 @@ namespace Exalted
 		void RenderSkybox() const { m_Skybox->Draw(); } //todo: use this internally?
 		void SetCamera(Ref<EditorCamera>& camera) { m_Camera = camera; }
 		void SetLightManager(Ref<LightManager>& lightManager) { m_LightsManager = lightManager; } //todo: verify this works now....
-		//void SetDynamicLightManager(Ref<LightManager>& dynamicLightManager) { m_DynamicLightManager = dynamicLightManager; } // set up uniform buffer once at the start
-		Ref<GameObject>& GetSceneRoot() { return m_SceneRoot; }
 		void SetSceneRoot(Ref<GameObject>& sceneRoot) { m_SceneRoot = sceneRoot; }
 		void OnEvent(Exalted::Event& event);
-		//void SetPostProcessingFrameBuffer(const Ref <FrameBuffer>& frameBuffer) { m_PostProcessingFrameBuffer = frameBuffer; }
+		Ref<GameObject>& GetSceneRoot() { return m_SceneRoot; }
 	public:
-		static inline bool s_IsCameraFree = true;
+		static inline bool s_IsCameraFree = false; // initially camera will be on the track
 	private:
 		void BuildObjectLists(GameObject* gameObject);
 		void SortObjectLists(); 

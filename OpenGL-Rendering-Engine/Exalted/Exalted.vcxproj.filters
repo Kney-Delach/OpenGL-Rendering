@@ -1359,6 +1359,7 @@
     <ClInclude Include="src\expch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Renderer\CameraTrack\CameraTrackFlags.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Application.cpp">

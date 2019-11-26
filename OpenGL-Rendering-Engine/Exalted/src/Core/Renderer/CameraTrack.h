@@ -10,8 +10,9 @@ namespace Exalted
 		float Yaw;
 		float Pitch;
 		float Time;
-		CameraTrackPoint(const glm::vec3& position, float yaw, float pitch, float time)
-			: Position(position), Yaw(yaw), Pitch(pitch), Time(time)
+		int PostProcessingFlag; 
+		CameraTrackPoint(const glm::vec3& position, float yaw, float pitch, float time, int postProcessingFlag = 0)
+			: Position(position), Yaw(yaw), Pitch(pitch), Time(time), PostProcessingFlag(postProcessingFlag)
 			{}
 	};
 	
@@ -24,7 +25,6 @@ namespace Exalted
 		void PrepareTrack();
 		void Update(Timestep deltaTime, glm::vec3& position, float& yaw, float& pitch);
 	private:
-		
 		std::vector<CameraTrackPoint> m_TrackPoints; 
 		int m_TrackID;
 		float m_StartTime;

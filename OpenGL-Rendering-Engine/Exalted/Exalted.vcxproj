@@ -527,6 +527,7 @@
     <ClInclude Include="src\Core\Renderer\Buffer.h" />
     <ClInclude Include="src\Core\Renderer\CameraTrack.h" />
     <ClInclude Include="src\Core\Renderer\Cameras.h" />
+    <ClInclude Include="src\Core\Renderer\CameraTrack\CameraTrackFlags.h" />
     <ClInclude Include="src\Core\Renderer\EditorCamera.h" />
     <ClInclude Include="src\Core\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Core\Renderer\Generators\ShapeGenerator.h" />

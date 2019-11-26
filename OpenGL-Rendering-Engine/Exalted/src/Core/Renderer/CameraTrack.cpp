@@ -1,6 +1,7 @@
 #include "expch.h"
 #include "CameraTrack.h"
 #include "Core/Application.h"
+#include "CameraTrack/CameraTrackFlags.h"
 
 #define TIME static_cast<float>(Exalted::Application::Get().GetWindow().GetTime())
 
@@ -37,7 +38,8 @@ namespace Exalted
 		//EX_CORE_TRACE("Index Position {0}", indexPos);
 		if (trackPointIndex == -1) 
 			return;
-		
+
+		CameraTrackFlags::PostProcessingChoice = m_TrackPoints[trackPointIndex].PostProcessingFlag;
 
 
 		interpolatePos1 = m_TrackPoints[trackPointIndex - 1].Position;

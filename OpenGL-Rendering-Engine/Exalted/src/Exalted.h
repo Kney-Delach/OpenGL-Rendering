@@ -69,6 +69,9 @@
 #include "Core/SceneGraph/FrustumCulling/Frustum.h"
 #include "Core/SceneGraph/FrustumCulling/FrustumPlane.h"
 
+// camera track flags
+#include "Core/Renderer/CameraTrack/CameraTrackFlags.h"
+
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 

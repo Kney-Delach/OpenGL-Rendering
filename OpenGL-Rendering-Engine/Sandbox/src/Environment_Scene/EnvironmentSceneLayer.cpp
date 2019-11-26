@@ -377,7 +377,8 @@ namespace Sandbox
 		/////////////////////////////////////////////
 		Exalted::Ref<Exalted::CameraTrack> mainTrack = Exalted::CreateRef<Exalted::CameraTrack>(1);
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-131, 34.6, -105.3), 7.6, -35, 0.f));
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-127, 34.6, -88.3), -23, -35, 10.f));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-127, 34.6, -88.3), -23, -35, 4.f, 5));
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-120, 34.6, -88.3), -23, -35, 8.f, 0));
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 0, 0), 0, 0, 10.f)); // dummy
 
 		//mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-124, 34.6, -276.3), 637,-35, 10.f));
@@ -387,9 +388,14 @@ namespace Sandbox
 		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-127, 34.6, -88.3), -23, -35, 2.f));
 		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 0, 0), 0, 0, 10.f)); // dummy
 
+		// add tracks to track data
 		m_EditorCamera->AddTrack(mainTrack);
 		m_EditorCamera->AddTrack(secondTrack);
-		
+
+		// preapre track for startup
+		m_EditorCamera->ResetMovementVariables();
+		m_EditorCamera->SetTrack(0);
+
 		/////////////////////////////////////
 		//// DEBUG DATA /////////////////////
 		/////////////////////////////////////
@@ -507,7 +513,6 @@ namespace Sandbox
 		//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::BACK);
 		Exalted::OpenGLConfigurations::DisableFaceCulling();		
 
-		
 		/////////////////////////////////////////////////////////////////////////////
 		//// Render scene output //////////////////////////////////////////////////// 
 		/////////////////////////////////////////////////////////////////////////////
@@ -560,7 +565,7 @@ namespace Sandbox
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		m_PostProcessingShader->Bind();
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_PostProcessingShader)->SetUniformInt1("u_ScreenTexture", 10);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_PostProcessingShader)->SetUniformInt1("u_PostProcess", m_PostProcessChoice);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_PostProcessingShader)->SetUniformInt1("u_PostProcess", Exalted::CameraTrackFlags::PostProcessingChoice);
 		m_PostProcessingFrameBuffer->BindTexture(10);
 		Exalted::Renderer::Submit(m_QuadMesh);
 		m_PostProcessingShader->Unbind();
@@ -636,7 +641,7 @@ namespace Sandbox
 		ImGui::Text("3 -> Sharpening");
 		ImGui::Text("4 -> Blurring");
 		ImGui::Text("5 -> Edge Detection");
-		ImGui::DragInt(" ", &m_PostProcessChoice, 1, 0, 5);
+		ImGui::DragInt(" ", &Exalted::CameraTrackFlags::PostProcessingChoice, 1, 0, 5);
 		ImGui::Text("----------------------------");
 		ImGui::Text("---- Directional Light ------");
 		ImGui::InputFloat3("D-Direction", glm::value_ptr(m_DirectionalLight->Direction));
@@ -686,27 +691,27 @@ namespace Sandbox
 			auto& e = static_cast<Exalted::KeyPressedEvent&>(event);
 			if (e.GetKeyCode() == EX_KEY_0)
 			{
-				m_PostProcessChoice = 0;
+				Exalted::CameraTrackFlags::PostProcessingChoice = 0;
 			}
 			if (e.GetKeyCode() == EX_KEY_1)
 			{
-				m_PostProcessChoice = 1;
+				Exalted::CameraTrackFlags::PostProcessingChoice = 1;
 			}
 			if (e.GetKeyCode() == EX_KEY_2)
 			{
-				m_PostProcessChoice = 2;
+				Exalted::CameraTrackFlags::PostProcessingChoice = 2;
 			}
 			if (e.GetKeyCode() == EX_KEY_3)
 			{
-				m_PostProcessChoice = 3;
+				Exalted::CameraTrackFlags::PostProcessingChoice = 3;
 			}
 			if (e.GetKeyCode() == EX_KEY_4)
 			{
-				m_PostProcessChoice = 4;
+				Exalted::CameraTrackFlags::PostProcessingChoice = 4;
 			}
 			if (e.GetKeyCode() == EX_KEY_5)
 			{
-				m_PostProcessChoice = 5;
+				Exalted::CameraTrackFlags::PostProcessingChoice = 5;
 			}
 		}
 		//if (event.GetEventType() == Exalted::EventType::WindowResize)

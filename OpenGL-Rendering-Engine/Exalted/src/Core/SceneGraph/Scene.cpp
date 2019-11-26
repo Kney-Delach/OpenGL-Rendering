@@ -116,7 +116,6 @@ namespace Exalted
 			const auto resizeEvent = dynamic_cast<Exalted::WindowResizeEvent&>(event);
 			const auto windowWidth = resizeEvent.GetWidth();
 			const auto windowHeight = resizeEvent.GetHeight();
-			//m_PostProcessingFrameBuffer->Resize(windowWidth, windowHeight);
 			m_Camera->OnWindowResize(windowWidth, windowHeight);
 		}
 		
@@ -134,12 +133,12 @@ namespace Exalted
 				m_Camera->ResetMovementVariables(); //todo: remove this as not necessary
 				m_Camera->SetTrack(0);
 			}
-			if (e.GetKeyCode() == EX_KEY_F2) //todo: This should restart the second track
-			{
-				s_IsCameraFree = false;
-				m_Camera->ResetMovementVariables(); //todo: remove this as not necessary
-				m_Camera->SetTrack(1);
-			}
+			//if (e.GetKeyCode() == EX_KEY_F2) //todo: This should restart the second track
+			//{
+			//	s_IsCameraFree = false;
+			//	m_Camera->ResetMovementVariables(); //todo: remove this as not necessary
+			//	m_Camera->SetTrack(1);
+			//}
 			if (e.GetKeyCode() == EX_KEY_I)
 				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::POINT);
 
