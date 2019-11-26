@@ -79,10 +79,7 @@ namespace Exalted
 		m_WindowData.Properties = WindowProperties(properties);
 		EX_CORE_INFO("Creating window {0} ({1}, {2})", properties.Title, properties.Width, properties.Height);
 		if (s_GLFWWindowCount == 0)
-		{
-			// setup anti-aliasing
-			glfwWindowHint(GLFW_SAMPLES, 4);
-			
+		{			
 			int success = glfwInit();
 			EX_CORE_ASSERT(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
@@ -94,17 +91,17 @@ namespace Exalted
 
 	void WindowsWindow::InitGLFWWindow()
 	{
-		m_Window = glfwCreateWindow(static_cast<int>(m_WindowData.Properties.Width), static_cast<int>(m_WindowData.Properties.Height), m_WindowData.Properties.Title.c_str(), nullptr, nullptr);
+		m_Window = glfwCreateWindow(static_cast<int>(m_WindowData.Properties.Width), static_cast<int>(m_WindowData.Properties.Height), m_WindowData.Properties.Title.c_str(), glfwGetPrimaryMonitor(), nullptr); // replcae glfwGetPrimaryMonitor with a nullptr to set it to non-fullscreen
 		s_GLFWWindowCount++;
 		m_RenderingContext = RenderingContext::Create(m_Window);
 		m_RenderingContext->Init();
-
 		glfwSetWindowUserPointer(m_Window, &m_WindowData);
+		//glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
 	void WindowsWindow::SetGLFWConfigurations()
 	{
-		SetVSync(false); //todo: Make this configurable
+		SetVSync(false); 
 	}
 
 	void WindowsWindow::SetGLFWCallbacks() const

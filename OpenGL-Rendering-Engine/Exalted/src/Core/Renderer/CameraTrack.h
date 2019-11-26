@@ -23,7 +23,7 @@ namespace Exalted
 
 		void AddTrackPoint(const CameraTrackPoint& trackPoint) { m_TrackPoints.emplace_back(trackPoint); }
 		void PrepareTrack();
-		void Update(Timestep deltaTime, glm::vec3& position, float& yaw, float& pitch);
+		int Update(Timestep deltaTime, glm::vec3& position, float& yaw, float& pitch);
 	private:
 		std::vector<CameraTrackPoint> m_TrackPoints; 
 		int m_TrackID;

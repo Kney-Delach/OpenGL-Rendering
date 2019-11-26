@@ -12,7 +12,7 @@ namespace Exalted
 		m_StartTime = TIME;
 	}
 
-	void CameraTrack::Update(Timestep deltaTime, glm::vec3& position, float& yaw, float& pitch)
+	int CameraTrack::Update(Timestep deltaTime, glm::vec3& position, float& yaw, float& pitch)
 	{
 		glm::vec3 interpolatePos1, interpolatePos2;
 		float interpolatePitch1, interpolatePitch2;
@@ -37,7 +37,7 @@ namespace Exalted
 
 		//EX_CORE_TRACE("Index Position {0}", indexPos);
 		if (trackPointIndex == -1) 
-			return;
+			return -1;
 
 		CameraTrackFlags::PostProcessingChoice = m_TrackPoints[trackPointIndex].PostProcessingFlag;
 
@@ -57,5 +57,6 @@ namespace Exalted
 		position = ((interpolatePos1 * t) + (interpolatePos2 * (1.0f - t)));  //todo: Implement a method to access the camera from here
 		yaw = ((interpolateYaw1 * t) + (interpolateYaw2 * (1.0f - t)));		  //todo: Implement a method to access the camera from here
 		pitch = ((interpolatePitch1 * t) + (interpolatePitch2 * (1.0f - t))); //todo: Implement a method to access the camera from here
+		return 0;
 	}
 }

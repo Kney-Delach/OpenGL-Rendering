@@ -313,36 +313,7 @@ namespace Sandbox
 			lightManager->AddSpotLight(m_SpotLights[i]);
 		}
 		m_SceneManager->SetLightManager(lightManager);
-		m_SceneManager->SetupSceneLightUBOs(); //todo: verify this works
-		// lighting UBO setup 
-		// // // const Exalted::Bytes noPointLights = 1;
-		// // // const Exalted::Bytes noDirectionalLights = 1;
-		//const Exalted::Bytes noSpotLights = 2;
-		// // // const Exalted::Bytes lightsBBI = 1;
-		// // // const Exalted::Bytes lightsOffset = 0;
-		// // // Exalted::Bytes lightsBufferSize = noPointLights * Exalted::PointLight::UBSize() + noDirectionalLights * Exalted::DirectionalLight::UBSize() + noSpotLights * Exalted::SpotLight::UBSize();
-		// // // m_LightUniformBuffer = Exalted::UniformBuffer::Create(lightsBufferSize);
-		// // // m_LightUniformBuffer->BindBufferRange(lightsBBI, lightsOffset, lightsBufferSize);
-
-		//////////////////////////////////////////////////////////////////////
-		////todo: Stuff that needs to go into the scene graph ////////////////
-		//////////////////////////////////////////////////////////////////////
-		// number of point lights reference in gameobject draw 
-		
-		//todo: move this from here into
-		// const Exalted::Bytes noSpotLights = 2;
-		// Exalted::GameObject::NumberOfSpotLights = noSpotLights;
-
-		/////////////////todo: Light space data uniform buffers
-		//todo: move this to the scene graph, contains the light space matrices data.
-		// // // const Exalted::Bytes lightsSpaceOffset = 0;
-		// // // const Exalted::Bytes lightSpaceDataBBI = 3; //todo: move this to light manager static lights section
-		// // // Exalted::Bytes lightSpaceBufferSize = sizeof(glm::mat4) * noSpotLights;
-		// // // m_LightSpaceDataUniformBuffer = Exalted::UniformBuffer::Create(lightSpaceBufferSize);
-		// // // m_LightSpaceDataUniformBuffer->BindBufferRange(lightSpaceDataBBI, lightsSpaceOffset, lightSpaceBufferSize);
-
-		//todo: create a shadow manager
-		//todo: move to shadow manager --> Shadow Data Setup
+		m_SceneManager->SetupSceneLightUBOs();
 
 // ----------------------------------------------------------------------------------------------------------------
 
@@ -362,8 +333,6 @@ namespace Sandbox
 			EX_CORE_CRITICAL("INITIALIZE SHADERS AND MATRICES FOR THE POINT LIGHT SHADOWS!");
 			m_PointlightDepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
 		}
-		//m_PointLightDepthShader = Exalted::Shader::Create(, );
-		//std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_PointLightDepthShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 5);
 
 		//todo: render debug quad to this
 		m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT);
@@ -406,9 +375,7 @@ namespace Sandbox
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-70, 55, -40), -480, -40, 2.f, 1));
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-120, 15, -65), -415, -20, 4.f, 1)); // lower view of tree growth 
 
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-130, 15, -100), -350, -20, 4.f, 0));
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-85, 15, -140), -250, -20, 4.f, 0));
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-117, 10, -130), -300, -15, 4.f, 0));		
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-125, 13, -140), -300, -15, 4.f, 0));		
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-90, 11, -127.4), -250, -15, 4.f, 0));
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-74, 11, -100), -180, -20, 4.f, 0));
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-90, 12, -75), -105, -20, 4.f, 0));
@@ -423,14 +390,8 @@ namespace Sandbox
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 30.5, 21, 4.f, 5)); // looking at center ship
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 30.5, 21, 0.1f, 0)); // final change, remove post processing
 
-		Exalted::Ref<Exalted::CameraTrack> secondTrack = Exalted::CreateRef<Exalted::CameraTrack>(2);
-		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-131, 34.6, -105.3), 7.6, -35, 0.f));
-		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-127, 34.6, -88.3), -23, -35, 2.f));
-		secondTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 0, 0), 0, 0, 10.f)); // dummy
-
-		// add tracks to track data
+		// add track to camera
 		m_EditorCamera->AddTrack(mainTrack);
-		m_EditorCamera->AddTrack(secondTrack);
 
 		// preapre track for startup
 		m_EditorCamera->ResetMovementVariables();
@@ -440,10 +401,7 @@ namespace Sandbox
 		//// DEBUG DATA /////////////////////
 		/////////////////////////////////////
 		m_LightSourceMesh = Exalted::Mesh::Create();
-		m_LightSourceMesh->SetVertexArray(Exalted::ObjLoader::Load(UFO_MESH));//Exalted::ShapeGenerator::GenerateCubeIT(1.f));
-
-		m_SpotLightMesh = Exalted::Mesh::Create();
-		m_SpotLightMesh->SetVertexArray(Exalted::ObjLoader::Load(SPOT_LIGHTHOUSE_MESH));
+		m_LightSourceMesh->SetVertexArray(Exalted::ObjLoader::Load(UFO_MESH));
 
 		m_LightSourceShader = Exalted::Shader::Create(LIGHT_SOURCE_SHADER_VERTEX, LIGHT_SOURCE_SHADER_FRAGMENT);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
@@ -474,51 +432,13 @@ namespace Sandbox
 			m_SpotLights[0]->Ambient = lightColor * glm::vec3(0.5);
 			m_SpotLights[0]->Specular = lightColor;
 		}
-		
-		/////////////////////////////////////////////////////////////////////////////
-		//// LIGHT UNIFORM DATA /////////////////////////////////////////////////////
-		/////////////////////////////////////////////////////////////////////////////
-		//todo: remove this as implemented in light manager 
-		// // // m_LightUniformBuffer->Bind();
-		// // // Exalted::Bytes lightBufferOffset = 0;
-		// // // for (int i = 0; i < m_PointLights.size(); ++i)
-		// // // {
-		// // // 	m_PointLights[i]->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer);
-		// // // 	m_PointLightTransforms[i]->Position = m_PointLights[i]->Position; 
-		// // // }
-		// // // m_DirectionalLight->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer);
-		// // // for (int i = 0; i < m_SpotLights.size(); ++i)
-		// // // {
-		// // // 	m_SpotLights[i]->UpdateUniformBuffer(lightBufferOffset, m_LightUniformBuffer);
-		// // // 	m_SpotLightTransforms[i]->Position = m_SpotLights[i]->Position;
-		// // // }
-		// // // m_LightUniformBuffer->Unbind();
+
 
 		/////////////////////////////////////////////////////////////////////////////
 		//// Sort the scene objects for rendering ///////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////
 		m_SceneManager->RenderScene(); // sorts scene
 
-		///////////////////////////////////////////////////////////////////////////////////////
-		////todo: If static, don't loop
-		////todo: move from here -> Directional Light projection calculation
-		/////////////////////////////////////////////////////////////////////////////////////
-		//todo: move this to light manager
-		// // // float near_plane = DEBUG_NEAR;
-		// // // float far_plane = DEBUG_FAR;
-		// // // glm::mat4 lightProjection = glm::perspective<float>(glm::radians(DEBUG_FOV), 1.0f, near_plane, far_plane);
-
-		// // // m_LightSpaceDataUniformBuffer->Bind();
-		// // // Exalted::Bytes offset = 0;
-		// // // Exalted::Bytes sizeOfMat4 = sizeof(glm::mat4);
-		// // // for (int i = 0; i < m_SpotLights.size(); i++)
-		// // // {
-		// // // 	glm::mat4 lightView = glm::lookAt(m_SpotLights[i]->Position, m_SpotLights[i]->Position + m_SpotLights[i]->Direction, glm::vec3(0, 1, 0)); //glm::normalize(
-		// // // 	glm::mat4 lightSpaceMatrix = lightProjection * lightView;
-		// // // 	m_LightSpaceDataUniformBuffer->SetBufferSubData(offset, sizeOfMat4, glm::value_ptr(lightSpaceMatrix));
-		// // // 	offset += sizeof(glm::mat4);
-		// // // }
-		// // // m_LightSpaceDataUniformBuffer->Unbind();
 
 		/////////////////////////////////////////////////////////////////
 		//// Initial render to depth map for shadow mapping ///////////// 
@@ -558,13 +478,11 @@ namespace Sandbox
 		/////////////////////////////////////////////////////////////////////////////
 
 		// setup post processing frame buffer //
-		//////////////////////////////////////////////////////////////////////////////
 		m_PostProcessingFrameBuffer->Bind();
 		Exalted::RenderCommand::ClearColorDepthBuffers();
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
-		//////////////////////////////////////////////////////////////////////////////
-		// render the scene 
-		//////////////////////////////////////////////////////////////////////////////
+		
+		// render the scene to the framebuffer
 		int count = 0;
 		for (int i = 0; i < m_DepthFrameBuffers.size(); i++)
 		{
@@ -629,13 +547,12 @@ namespace Sandbox
 		/////////////////////////////////////////////////////////////////////////////
 		
 		m_QuadDepthShader->Bind();
-		float near_plane = 1.f;
-		float far_plane = 25.f;
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("near_plane", near_plane);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("far_plane", far_plane);
+		float nearPlane = 1.f;
+		float farPlane = 25.f;
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("u_NearPlane", nearPlane);
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformFloat1("u_FarPlane", farPlane);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformInt1("depthMap", 4);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_QuadDepthShader)->SetUniformBool1("IsDirectional", false);
-
 
 		// spot light 1
 		Exalted::OpenGLConfigurations::SetViewport(0, 0, 256, 256);

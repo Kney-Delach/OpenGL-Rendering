@@ -15,6 +15,7 @@
 ***************************************************************************/
 #include "expch.h"
 #include "EditorCamera.h"
+#include "Core/SceneGraph/Scene.h"
 
 #include "Core/Input.h"
 #include "Core/KeyCodes.h"
@@ -50,7 +51,11 @@ namespace Exalted
 	void EditorCamera::UpdateTrack(Timestep deltaTime) 
 	{
 		EX_CORE_ASSERT(m_CurrentTrack, " Attempting to update the camera track with no currently set track! Set a track first!", true);
-		m_CurrentTrack->Update(deltaTime, m_Position, m_Yaw, m_Pitch);
+		if(m_CurrentTrack->Update(deltaTime, m_Position, m_Yaw, m_Pitch) == -1)
+		{
+			Exalted::Scene::s_IsCameraFree = true; //todo: verify this works
+			ResetMovementVariables();
+		}
 		UpdateCameraVectors();
 		RecalculateViewMatrix();
 		UpdateUBO(); // update ubo with camera data

@@ -34,30 +34,6 @@
 #define TEXTURE_DIFFUSE_LEAF "Resources/Environment_Scene/Textures/Tree/Leaf3.png"
 
 //////////////////////////////////////////////////////////
-//// HUT ////////////////////////////////////////////////
-//////////////////////////////////////////////////////////
-///
-///
-#define HUT_MESH_MAIN "Resources/Environment_Scene/Meshes/HutMain.obj" // main
-#define HUT_MESH_ROOF "Resources/Environment_Scene/Meshes/HutRoof.obj" // roof
-#define HUT_MESH_FLOOR "Resources/Environment_Scene/Meshes/HutFloor.obj" // floor
-#define HUT_MESH_BASE "Resources/Environment_Scene/Meshes/HutBase.obj" // base
-#define HUT_MESH_BOTTOM "Resources/Environment_Scene/Meshes/HutBottom.obj" // bottom (USE THIS FOR BASE OF SCULPTURE?)
-
-
-//////////////////////////////////////////////////////////
-//// Sculpture ///////////////////////////////////////////
-//////////////////////////////////////////////////////////
-
-#define SCULPTURE_MESH "Resources/Environment_Scene/Meshes/Bird.obj"
-
-
-//////////////////////////////////////////////////////////
-//// MISC ////////////////////////////////////////////////
-//////////////////////////////////////////////////////////
-#define ROCKS_MESH "Resources/Environment_Scene/Meshes/Rocks.obj"
-
-//////////////////////////////////////////////////////////
 //// Debugging Utilities 
 //////////////////////////////////////////////////////////
 
@@ -80,9 +56,6 @@
 #define TEXTURE_SPECULAR_ISLAND "Resources/Environment_Scene/Textures/Island/Island_Spec.png"
 #define TEXTURE_NORMAL_ISLAND "Resources/Environment_Scene/Textures/Island/Island_Normal.png"
 
-// spot light mesh
-#define SPOT_LIGHTHOUSE_MESH "Resources/Environment_Scene/Meshes/Lighthouse.obj"
-
 // UFO mesh and textures 
 
 #define UFO_MESH "Resources/Environment_Scene/UFO/UFO.obj"
@@ -91,11 +64,7 @@
 #define TEXTURE_SPECULAR_UFO "Resources/Environment_Scene/UFO/Ufo_Specular.png"
 #define TEXTURE_NORMAL_UFO "Resources/Environment_Scene/UFO/Ufo_Normal.png"
 
-// skybox mapping stuff
+// skybox mapping shader
 
 #define SKYBOX_MAP_VERTEX "Resources/Environment_Scene/Reflected/SkyboxReflectedVertex.glsl"
 #define SKYBOX_MAP_FRAGMENT "Resources/Environment_Scene/Reflected/SkyboxReflectedFragment.glsl"
-
-/////////////////////////////////////////////////////////////
-//// SCENE 2
-//////////////////////////////////////////////////////////

@@ -133,22 +133,7 @@ namespace Exalted
 				m_Camera->ResetMovementVariables(); //todo: remove this as not necessary
 				m_Camera->SetTrack(0);
 			}
-			//if (e.GetKeyCode() == EX_KEY_F2) //todo: This should restart the second track
-			//{
-			//	s_IsCameraFree = false;
-			//	m_Camera->ResetMovementVariables(); //todo: remove this as not necessary
-			//	m_Camera->SetTrack(1);
-			//}
-			if (e.GetKeyCode() == EX_KEY_I)
-				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::POINT);
-
-			if (e.GetKeyCode() == EX_KEY_O)
-				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::LINE);
-
-			if (e.GetKeyCode() == EX_KEY_P)
-				Exalted::OpenGLConfigurations::SetPolygonMode(Exalted::FILL);
 		}
-
 		if (s_IsCameraFree)
 			m_Camera->OnEvent(event);
 	}

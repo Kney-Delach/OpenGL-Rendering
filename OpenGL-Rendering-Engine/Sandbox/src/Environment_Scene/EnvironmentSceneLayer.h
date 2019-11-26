@@ -50,7 +50,6 @@ namespace Sandbox
 
 		//todo: remove these
 		Exalted::Ref<Exalted::Mesh> m_LightSourceMesh;
-		Exalted::Ref<Exalted::Mesh> m_SpotLightMesh;
 
 		/////////////////////////////////////////////////
 		////// Shadows  /////////////////////////////////
