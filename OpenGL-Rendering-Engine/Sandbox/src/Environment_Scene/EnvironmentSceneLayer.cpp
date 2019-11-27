@@ -25,7 +25,7 @@ namespace Sandbox
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
 			0.1f,
 			10000.f, 2); // sets ubo of camera to index 2
-		m_EditorCamera->SetMouseSpeed(50.f);
+		m_EditorCamera->SetMouseSpeed(30.f);
 	}
 	
 	void EnvironmentSceneLayer::OnAttach()
@@ -37,28 +37,16 @@ namespace Sandbox
 		////////////////////////////////////////////////////////////////////////
 		//// Light Setup 
 		////////////////////////////////////////////////////////////////////////
+		
 		// 1. point lights
-		m_PointLights.emplace_back(Exalted::PointLight::Create());
-		m_PointLights[0]->Ambient = glm::vec3(0.2);
-		m_PointLights[0]->Diffuse = glm::vec3(0.5);
-		m_PointLights[0]->Specular = glm::vec3(1.0);
-		m_PointLights[0]->SetAttenuationDistance(200);
-		m_PointLights.emplace_back(Exalted::PointLight::Create());
-		m_PointLights[1]->Ambient = glm::vec3(0.2);
-		m_PointLights[1]->Diffuse = glm::vec3(0.5);
-		m_PointLights[1]->Specular = glm::vec3(1.0);
-		m_PointLights[1]->SetAttenuationDistance(200);
-		m_PointLights.emplace_back(Exalted::PointLight::Create());
-		m_PointLights[2]->Ambient = glm::vec3(0.2);
-		m_PointLights[2]->Diffuse = glm::vec3(0.5);
-		m_PointLights[2]->Specular = glm::vec3(1.0);
-		m_PointLights[2]->SetAttenuationDistance(200);
-		m_PointLights.emplace_back(Exalted::PointLight::Create());
-		m_PointLights[3]->Ambient = glm::vec3(0.2);
-		m_PointLights[3]->Diffuse = glm::vec3(0.5);
-		m_PointLights[3]->Specular = glm::vec3(1.0);
-		m_PointLights[3]->SetAttenuationDistance(200);
-
+		for (int i = 0; i < 4; i++)
+		{
+			m_PointLights.emplace_back(Exalted::PointLight::Create());
+			m_PointLights[i]->Ambient = glm::vec3(0.2);
+			m_PointLights[i]->Diffuse = glm::vec3(0.5);
+			m_PointLights[i]->Specular = glm::vec3(1.0);
+			m_PointLights[i]->SetAttenuationDistance(200);
+		}				  
 		// 2. spot lights
 		for (int i = 0; i < 4; i++)
 		{
@@ -91,7 +79,6 @@ namespace Sandbox
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformBlockIndex("Light_Space_Uniforms", 3);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ExplosionShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 4);
-
 		
 		Exalted::Ref<Exalted::Shader> skyboxReflectiveShader = Exalted::Shader::Create(SKYBOX_MAP_VERTEX, SKYBOX_MAP_FRAGMENT);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(skyboxReflectiveShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
@@ -101,9 +88,7 @@ namespace Sandbox
 
 		// 5. Create Materials
 		Exalted::Ref<Exalted::Material> islandMaterial = Exalted::Material::Create(TEXTURE_DIFFUSE_ISLAND, TEXTURE_SPECULAR_ISLAND, "", TEXTURE_NORMAL_ISLAND, 33.f);
-		Exalted::Ref<Exalted::Material> debugMaterial = Exalted::Material::Create(DEBUG_TEXTURE_GRID_D, DEBUG_TEXTURE_GRID_S, "", "", 33.f); //todo: change this
-
-		//todo: Allow for this to be manually configured in the engine 
+		Exalted::Ref<Exalted::Material> treeBarkMaterial = Exalted::Material::Create(DEBUG_TEXTURE_GRID_D, DEBUG_TEXTURE_GRID_S, "", "", 33.f);
 		// custom creation of leaf material due to engine back-end specifications
 		Exalted::Ref<Exalted::Material> leafMaterial = Exalted::Material::Create(TEXTURE_DIFFUSE_LEAF, "", "", "", 2.f);
 		Exalted::Ref<Exalted::Texture2D> leafTexture = Exalted::Texture2D::Create(TEXTURE_DIFFUSE_LEAF,
@@ -117,7 +102,7 @@ namespace Sandbox
 		leafMaterial->SpecularTexture = leafTexture;
 		leafMaterial->NormalTexture = leafTexture;
 		
-		// 4. Create Gameobjects
+		// 6. Create Gameobjects
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//// UFOs
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +233,7 @@ namespace Sandbox
 		
 		treeObject->SetMesh(treeMesh);
 		treeObject->SetShader(multipleLightsShader);
-		treeObject->SetMaterial(debugMaterial);
+		treeObject->SetMaterial(treeBarkMaterial);
 		treeObject->SetTransparency(false);
 		treeObject->SetBoundingRadius(10.f);
 		treeObject->GetTransform()->Scale = glm::vec3(0.01);
@@ -271,9 +256,9 @@ namespace Sandbox
 		Exalted::GameObject* treeObject2 = new Exalted::GameObject("Tree-B");
 		treeObject2->SetMesh(treeMesh);
 		treeObject2->SetShader(multipleLightsShader);
-		treeObject2->SetMaterial(debugMaterial);
+		treeObject2->SetMaterial(treeBarkMaterial);
 		treeObject2->SetTransparency(true);
-		treeObject2->SetBoundingRadius(200.f);
+		treeObject2->SetBoundingRadius(10.f);
 		treeObject2->GetTransform()->Scale = glm::vec3(0.01);
 		treeObject2->GetTransform()->Position = glm::vec3(-1000.f, 19.5f, 1000.f);
 		treeObject2->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject2->GetTransform(), glm::vec3(0.35f), glm::vec3(15), 50.f));
@@ -294,9 +279,9 @@ namespace Sandbox
 		Exalted::GameObject* treeObject3 = new Exalted::GameObject("Tree-C");
 		treeObject3->SetMesh(treeMesh);
 		treeObject3->SetShader(multipleLightsShader);
-		treeObject3->SetMaterial(debugMaterial);
+		treeObject3->SetMaterial(treeBarkMaterial);
 		treeObject3->SetTransparency(true);
-		treeObject3->SetBoundingRadius(200.f);
+		treeObject3->SetBoundingRadius(10.f);
 		treeObject3->GetTransform()->Scale = glm::vec3(0.01);
 		treeObject3->GetTransform()->Position = glm::vec3(-1000.f, 3.f, -1000.f);
 		treeObject3->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject3->GetTransform(), glm::vec3(0.35f), glm::vec3(15), 50.f));
@@ -317,9 +302,9 @@ namespace Sandbox
 		Exalted::GameObject* treeObject4 = new Exalted::GameObject("Tree-D");
 		treeObject4->SetMesh(treeMesh);
 		treeObject4->SetShader(multipleLightsShader);
-		treeObject4->SetMaterial(debugMaterial);
+		treeObject4->SetMaterial(treeBarkMaterial);
 		treeObject4->SetTransparency(true);
-		treeObject4->SetBoundingRadius(200.f);
+		treeObject4->SetBoundingRadius(10.f);
 		treeObject4->GetTransform()->Scale = glm::vec3(0.01);
 		treeObject4->GetTransform()->Position = glm::vec3(1000.f, 9.4f, -1000.f);
 		treeObject4->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject4->GetTransform(), glm::vec3(0.35f), glm::vec3(15), 50.f));
@@ -333,7 +318,6 @@ namespace Sandbox
 		
 		// add leaves to tree
 		treeObject4->AddChildObject(leafObject4);
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		////////////////////////////////////////////////////////////////////////
 		//// Terrain
@@ -350,7 +334,7 @@ namespace Sandbox
 		terrainObject->SetBoundingRadius(FLT_MAX);
 		terrainObject->AddGameComponent(new Exalted::ScaleGrowComponent(terrainObject->GetTransform(), glm::vec3(0,0.25,0), glm::vec3(10)));
 
-		// 5. Add all gameobjects to scene manager
+		// 7. Add all gameobjects to scene manager
 		m_SceneManager->GetSceneRoot()->AddChildObject(UFOA);
 		m_SceneManager->GetSceneRoot()->AddChildObject(UFOB);
 		m_SceneManager->GetSceneRoot()->AddChildObject(UFOC);
@@ -366,7 +350,8 @@ namespace Sandbox
 		m_SceneManager->GetSceneRoot()->AddChildObject(treeObject4);
 		m_SceneManager->GetSceneRoot()->AddChildObject(terrainObject);
 		m_SceneManager->GetSceneRoot()->GetTransform()->Scale = glm::vec3(.1f);
-		
+
+		// 8. initialize light managers
 		Exalted::Ref<Exalted::LightManager> lightManager = Exalted::CreateRef<Exalted::LightManager>(1,3);
 		for (int i = 0; i < m_PointLights.size(); ++i)
 		{
@@ -380,31 +365,25 @@ namespace Sandbox
 		m_SceneManager->SetLightManager(lightManager);
 		m_SceneManager->SetupSceneLightUBOs();
 
-// ----------------------------------------------------------------------------------------------------------------
-
-		//todo: THIS REFERENCES THE NUMBER OF SPOT LIGHTS, MAKE THIS VALUE DYNAMIC IN THE SHADOW MANAGER
+		// 9. Setup shadow buffers, this should eventually be added to the scene manager for cleaner implementation, but theoretically it does the same thing as it would within one.
 		for (int i = 0; i < m_SpotLights.size(); i++)
 		{
 			m_DepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
 		}
-		m_ObjectDepthShader = Exalted::Shader::Create(DIRECTIONAL_SHADOW_SHADER_VERTEX_DEPTH, DIRECTIONAL_SHADOW_SHADER_FRAGMENT_DEPTH); //todo: render models into this
+		// shadow shader
+		m_ObjectDepthShader = Exalted::Shader::Create(DIRECTIONAL_SHADOW_SHADER_VERTEX_DEPTH, DIRECTIONAL_SHADOW_SHADER_FRAGMENT_DEPTH); 
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformBlockIndex("Light_Space_Uniforms", 3);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 4);
 	
 		m_SunlightDepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
 
-		//todo: note, this currently doesn't do anything
-		for(int i = 0; i < m_PointLights.size(); i++)
-		{
-			m_PointlightDepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
-		}
-
-		// debug quads get render to this shader
+		// debug quads shader
 		m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT);
+
+		// quad used to render post processing and debug shadow maps
 		m_QuadMesh = Exalted::Mesh::Create();
 		m_QuadMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateIndexedQuad());
 
-// ----------------------------------------------------------------------------------------------------------------
 
 		/////////////////////////////////////////////
 		//// Camera Tracks data /////////////////////
@@ -464,31 +443,18 @@ namespace Sandbox
 		m_EditorCamera->ResetMovementVariables();
 		m_EditorCamera->SetTrack(0);
 
-		/////////////////////////////////////
-		//// DEBUG DATA /////////////////////
-		/////////////////////////////////////
-		m_LightSourceMesh = Exalted::Mesh::Create();
-		m_LightSourceMesh->SetVertexArray(Exalted::ObjLoader::Load(UFO_MESH));
-
-		m_LightSourceShader = Exalted::Shader::Create(LIGHT_SOURCE_SHADER_VERTEX, LIGHT_SOURCE_SHADER_FRAGMENT);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
-
 		/////////////////////////////////////////////////
 		////// Post Processing //////////////////////////
 		/////////////////////////////////////////////////
-		// using the m_QuadMesh model
 		m_PostProcessingFrameBuffer = Exalted::FrameBuffer::Create(static_cast<uint32_t>(Exalted::Application::Get().GetWindow().GetWindowWidth()), static_cast<uint32_t>(Exalted::Application::Get().GetWindow().GetWindowHeight()), Exalted::FrameBufferFormat::RGBA8);
 		m_PostProcessingShader = Exalted::Shader::Create("Resources/Environment_Scene/Shaders/PostProcessing/Vertex.glsl", "Resources/Environment_Scene/Shaders/PostProcessing/Fragment.glsl");
-		//m_SceneManager->SetPostProcessingFrameBuffer(m_PostProcessingFrameBuffer);
 	}
 	
 	void EnvironmentSceneLayer::OnUpdate(Exalted::Timestep deltaTime)
 	{
-		// 1. Update the camera transformation and buffer objects, either dependent on lerping motion or manual movement
-		//m_EditorCamera->UpdateCamera(deltaTime);
 		m_SceneManager->UpdateScene(deltaTime);
 
-		//todo: verify this explosion shader setting works
+		// this segment is necessary for the explosive effect which occurs to the spaceship at the end of the animation 
 		if(TIME < 125)
 		{
 			m_ExplosionShader->Bind();
@@ -501,32 +467,29 @@ namespace Sandbox
 			m_SpotLights[2]->Position = glm::vec3(-1000.f, -1000.f, -1000.f);
 		}
 
+		// dynamically changes the color of the spot lights
 		for (int i = 0; i < m_PointLights.size(); i++)
 		{
-			// dynamically change the color of the spot lights
-			//float random = rand() % 100 + 1;
 			glm::vec3 lightColor;
-			lightColor.x = sin(TIME);
+			lightColor.x = 0.2f + sin(TIME);
 			lightColor.y = sin(TIME * i);
-			lightColor.z = sin(TIME * 0.5f * i);
+			lightColor.z = 0.3f + sin(TIME * 0.5f * i);
 
 			m_PointLights[i]->Diffuse = lightColor * glm::vec3(0.5);
 			m_PointLights[i]->Ambient = lightColor * glm::vec3(0.2);
 			m_PointLights[i]->Specular = lightColor;
 		}
 
-		
 		/////////////////////////////////////////////////////////////////////////////
 		//// Sort the scene objects for rendering ///////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////
-		m_SceneManager->RenderScene(); // sorts scene
+		m_SceneManager->RenderScene();
 
 		/////////////////////////////////////////////////////////////////
 		//// Initial render to depth map for shadow mapping ///////////// 
 		/////////////////////////////////////////////////////////////////
 		
 		Exalted::OpenGLConfigurations::EnableFaceCulling();
-		//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::FRONT);
 		m_ObjectDepthShader->Bind();
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
 		for (int i = 0; i < m_DepthFrameBuffers.size(); i++)
@@ -550,42 +513,24 @@ namespace Sandbox
 		}
 		m_ObjectDepthShader->Unbind();
 		Exalted::RenderCommand::ClearColorDepthBuffers();
-
-		//Exalted::OpenGLConfigurations::SetFaceCullingMode(Exalted::FaceCullMode::BACK);
 		Exalted::OpenGLConfigurations::DisableFaceCulling();		
 
 		/////////////////////////////////////////////////////////////////////////////
-		//// Render scene output //////////////////////////////////////////////////// 
+		//// Render scene output to post processing framebuffer ///////////////////// 
 		/////////////////////////////////////////////////////////////////////////////
-
-		// setup post processing frame buffer //
 		m_PostProcessingFrameBuffer->Bind();
 		Exalted::RenderCommand::ClearColorDepthBuffers();
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
 		
-		// render the scene to the framebuffer
 		int count = 0;
 		for (int i = 0; i < m_DepthFrameBuffers.size(); i++)
 		{
 			m_DepthFrameBuffers[i]->BindTexture(4 + i);
 			count++;
 		}
-		m_SunlightDepthFrameBuffers[0]->BindTexture(count + 4); //todo; iterate this for all directional lights
+		m_SunlightDepthFrameBuffers[0]->BindTexture(count + 4);
 
-		// render scene
 		m_SceneManager->DrawOpaqueObjects();
-
-		// Render scene lights
-		//m_LightSourceShader->Bind();
-		//for (int i = 0; i < m_PointLights.size(); ++i)
-		//{
-		//	std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformMatFloat4("u_Model", m_PointLightTransforms[i]->SetAndGetWorldTransform());
-		//	std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_LightSourceShader)->SetUniformFloat3("u_SourceDiffuse", m_PointLights[i]->Diffuse);
-		//	Exalted::Renderer::Submit(m_LightSourceMesh);
-		//}
-		//m_LightSourceShader->Unbind();
-
-		// render the rest of the scene, skyboxes and transparent objects
 		m_SceneManager->RenderSkybox();
 		Exalted::OpenGLConfigurations::EnableBlending();
 		Exalted::OpenGLConfigurations::EnableDepthTesting();
@@ -595,10 +540,9 @@ namespace Sandbox
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
 		Exalted::OpenGLConfigurations::DisableBlending();
 
-		/////////////////////////////////////////////////
-		////// Post Processing //////////////////////////
-		/////////////////////////////////////////////////
-		// second pass 
+		//////////////////////////////////////////////////////////////////////////////////////////
+		//// Render post processing framebuffer using post processing shader ///////////////////// 
+		//////////////////////////////////////////////////////////////////////////////////////////
 		m_PostProcessingFrameBuffer->UnbindMiniFrame();
 		Exalted::RenderCommand::ClearColorBuffer();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();
@@ -664,6 +608,7 @@ namespace Sandbox
 
 	}
 
+	// note, this isn't currently getting rendered for the coursework output, this is a direct result of attempting to achieve as high fps as possible.
 	void EnvironmentSceneLayer::OnImGuiRender()
 	{
 		m_EditorCamera->OnImGuiRender();
@@ -672,51 +617,14 @@ namespace Sandbox
 		ImGui::Text("----------------------------");
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
-		ImGui::Text("Switch between different post processing techniques by dragging the bar below:");
-		ImGui::Text("0 -> No Effect");
-		ImGui::Text("1 -> Color Inversion");
-		ImGui::Text("2 -> Weighted Gray Scaling");
-		ImGui::Text("3 -> Sharpening");
-		ImGui::Text("4 -> Blurring");
-		ImGui::Text("5 -> Edge Detection");
-		ImGui::DragInt(" ", &Exalted::CameraTrackFlags::PostProcessingChoice, 1, 0, 5);
-		ImGui::Text("----------------------------");
-		ImGui::Text("---- Directional Light ------");
-		ImGui::InputFloat3("D-Direction", glm::value_ptr(m_DirectionalLight->Direction));
-		ImGui::InputFloat3("D-Ambient", glm::value_ptr(m_DirectionalLight->Ambient));
-		ImGui::InputFloat3("D-Diffuse", glm::value_ptr(m_DirectionalLight->Diffuse));
-		ImGui::InputFloat3("D-Specular", glm::value_ptr(m_DirectionalLight->Specular));
-		ImGui::Text("----------------------------");
-
-		ImGui::Text("----------------------------");
-		ImGui::Text("Point Light Settings");
-		ImGui::Text("----------------------------");
-		ImGui::InputFloat3("Position", glm::value_ptr(m_PointLights[0]->Position));
-		ImGui::InputFloat3("Ambient", glm::value_ptr(m_PointLights[0]->Ambient));
-		ImGui::InputFloat3("Diffuse", glm::value_ptr(m_PointLights[0]->Diffuse));
-		ImGui::InputFloat3("Specular", glm::value_ptr(m_PointLights[0]->Specular));
-		ImGui::Text("----------------------------");
-		ImGui::Text("Spot Light Settings");
-		ImGui::Text("----------------------------");
-		ImGui::Text("Lighthouse Settings");
-		ImGui::InputFloat3("LH - Position", glm::value_ptr(m_SpotLights[1]->Position));
-		ImGui::InputFloat3("LH - Direction", glm::value_ptr(m_SpotLights[1]->Direction));
-		ImGui::InputFloat3("LH - Ambient", glm::value_ptr(m_SpotLights[1]->Ambient));
-		ImGui::InputFloat3("LH - Diffuse", glm::value_ptr(m_SpotLights[1]->Diffuse));
-		ImGui::InputFloat3("LH - Specular", glm::value_ptr(m_SpotLights[1]->Specular));
-		ImGui::InputFloat("LH - RADIUS INNER", &m_SpotLights[1]->CutoffInner);
-		ImGui::InputFloat("LH - RADIUS OUTER", &m_SpotLights[1]->CutoffOuter);
-		if (ImGui::Button("Toggle Flashlight Color"))
-		{
-			DEBUG_ColorChange = !DEBUG_ColorChange;
-		}
 		ImGui::End();
 	}
 
+	// note, this isn't currently getting rendered for the coursework output, this is a direct result of attempting to achieve as high fps as possible.
 	void EnvironmentSceneLayer::OnInactiveImGuiRender()
 	{
 		ImGui::Begin("Disabled Scenes Settings");
-		if (ImGui::Button("Enable Scene] -> Environment Showcase"))
+		if (ImGui::Button("[Enable Scene] -> Environment Showcase"))
 			m_IsActive = true;
 		ImGui::End();
 	}
@@ -752,16 +660,6 @@ namespace Sandbox
 				Exalted::CameraTrackFlags::PostProcessingChoice = 5;
 			}
 		}
-		//if (event.GetEventType() == Exalted::EventType::WindowResize)
-		//{
-		//	const auto resizeEvent = dynamic_cast<Exalted::WindowResizeEvent&>(event);
-		//	const auto windowWidth = resizeEvent.GetWidth();
-		//	const auto windowHeight = resizeEvent.GetHeight();
-		//	if (windowWidth != 0 && windowHeight != 0)
-		//		m_PostProcessingFrameBuffer->Resize(static_cast<uint32_t>(windowWidth), static_cast<uint32_t>(windowHeight));
-		//	event.m_Handled = false;
-		//}
-
 	}
 
 	void EnvironmentSceneLayer::OnDetach()

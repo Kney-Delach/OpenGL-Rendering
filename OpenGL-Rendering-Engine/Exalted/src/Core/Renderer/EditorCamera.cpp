@@ -53,7 +53,7 @@ namespace Exalted
 		EX_CORE_ASSERT(m_CurrentTrack, " Attempting to update the camera track with no currently set track! Set a track first!", true);
 		if(m_CurrentTrack->Update(deltaTime, m_Position, m_Yaw, m_Pitch) == -1)
 		{
-			Exalted::Scene::s_IsCameraFree = true; //todo: verify this works
+			Scene::s_IsCameraFree = true;
 			ResetMovementVariables();
 		}
 		UpdateCameraVectors();
@@ -74,13 +74,13 @@ namespace Exalted
 	void EditorCamera::OnImGuiRender()
 	{
 		ImGui::Begin("Camera Transform");
-		//ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-		//ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
+		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.6f);
 		ImGui::InputFloat3("Position", (float*)& m_Position);
 		ImGui::InputFloat("Yaw", &m_Yaw);
 		ImGui::InputFloat("Pitch", &m_Pitch);
-		//ImGui::PopItemFlag();
-		//ImGui::PopStyleVar();
+		ImGui::PopItemFlag();
+		ImGui::PopStyleVar();
 		ImGui::InputFloat("Movement Speed", &m_MovementSpeed, 0.01f, 10.f);
 		ImGui::InputFloat("Mouse Sensitivity", &m_MouseSensitivity, 0.01f, 10.f);
 		ImGui::End();

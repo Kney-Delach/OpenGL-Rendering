@@ -1,3 +1,17 @@
+/***************************************************************************
+ * Filename		: EnvironmentSceneResources.h
+ * Name			: Ori Lazar
+ * Date			: 20/11/2019
+ * Description	: This file contains some of the resources used for the environment showcase scene 
+     .---.
+   .'_:___".
+   |__ --==|
+   [  ]  :[|
+   |__| I=[|
+   / / ____|
+  |-/.____.'
+ /___\ /___\
+***************************************************************************/
 #pragma once
 
 #define BASIC_LIGHTING_SHADER_VERTEX	"Resources/Environment_Scene/Shaders/LightingVertex.glsl"
@@ -5,13 +19,6 @@
 
 #define LIGHT_SOURCE_SHADER_VERTEX		"Resources/Environment_Scene/Shaders/LightSourceVertex.glsl"
 #define LIGHT_SOURCE_SHADER_FRAGMENT	"Resources/Environment_Scene/Shaders/LightSourceFragment.glsl"
-
-#define TEXTURE_DIFFUSE_BRICKS	"Resources/Environment_Scene/Textures/Brick/Bricks01_COL_VAR1_3K.jpg"
-#define TEXTURE_SPECULAR_BRICKS	"Resources/Environment_Scene/Textures/Brick/Bricks01_GLOSS_3K.jpg"
-#define TEXTURE_NORMAL_BRICKS	"Resources/Environment_Scene/Textures/Brick/Bricks01_NRM_3K.jpg"
-
-#define CUBE_MESH "Resources/Environment_Scene/Meshes/cube.obj"
-
 
 //////////////////////////////////////////////////////////
 //// Shadows /////////////////////////////////
@@ -26,7 +33,7 @@
 #define SHADOW_QUAD_TEST_SHADER_FRAGMENT "Resources/Environment_Scene/Shaders/DirectionalShadow/ShadowDepthQUADFragment.glsl"
 
 //////////////////////////////////////////////////////////
-//// TREE ////////////////////////////////////////////////
+//// TREES and Leaves ////////////////////////////////////
 //////////////////////////////////////////////////////////
 
 #define TREE_MESH "Resources/Environment_Scene/Meshes/Tree.obj"
@@ -40,14 +47,9 @@
 #define DEBUG_TEXTURE_GRID_D "Resources/Environment_Scene/Debug/DebugTextureDiffuse.png"
 #define DEBUG_TEXTURE_GRID_S "Resources/Environment_Scene/Debug/DebugTextureSpecular.jpg"
 
-//////////////////////////////////////////////////////////
-//// SCENE 1 
-//////////////////////////////////////////////////////////
-
 // Shader that can take its color from multiple lights using blinn phong with energy conservation
 #define MULTIPLE_LIGHTS_VERTEX "Resources/Environment_Scene/Shaders/MultipleLights/MultipleLightsVertex.glsl"
 #define MULTIPLE_LIGHTS_FRAGMENT "Resources/Environment_Scene/Shaders/MultipleLights/MultipleLightsFragment.glsl"
-
 
 // Mesh's and textures for the main island
 #define ISLAND_MAIN_MESH "Resources/Environment_Scene/Meshes/IslandMain.obj"
@@ -57,7 +59,6 @@
 #define TEXTURE_NORMAL_ISLAND "Resources/Environment_Scene/Textures/Island/Island_Normal.png"
 
 // UFO mesh and textures 
-
 #define UFO_MESH "Resources/Environment_Scene/UFO/UFO.obj"
 #define TEXTURE_DIFFUSE_UFO "Resources/Environment_Scene/UFO/Ufo_Diffuse.png"
 #define TEXTURE_EMISSION_UFO "Resources/Environment_Scene/UFO/Ufo_Emission.png"

@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Filename		: GameComponent.cpp
+ * Name			: Ori Lazar
+ * Date			: 03/11/2019
+ * Description	: Contains the implementations for the game components.
+				  If thinking about this in terms of trees, this is the node components.
+     .---.
+   .'_:___".
+   |__ --==|
+   [  ]  :[|
+   |__| I=[|
+   / / ____|
+  |-/.____.'
+ /___\ /___\
+***************************************************************************/
 #include "expch.h"
 #include "Core/Application.h"
 #include "GameComponent.h"
@@ -20,7 +35,15 @@ namespace Exalted
 		if (glfwGetTime() > m_StartTime)
 		{
 			if (!(m_Transform->Scale.x >= m_MaxScale.x && m_Transform->Scale.y >= m_MaxScale.y && m_Transform->Scale.z >= m_MaxScale.z))
+			{
 				m_Transform->Scale = m_Transform->Scale + m_ScaleRate * deltaTime.GetSeconds();
+				if (m_Transform->Scale.x > m_MaxScale.x)
+					m_Transform->Scale.x = m_MaxScale.x;
+				if (m_Transform->Scale.y > m_MaxScale.y)
+					m_Transform->Scale.y = m_MaxScale.y;
+				if (m_Transform->Scale.z > m_MaxScale.z)
+					m_Transform->Scale.z = m_MaxScale.z;
+			}
 		}
 	}
 }

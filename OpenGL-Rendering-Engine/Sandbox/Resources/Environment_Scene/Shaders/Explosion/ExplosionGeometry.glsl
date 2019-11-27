@@ -1,3 +1,17 @@
+/***************************************************************************
+ * Filename		: ExplosionGeometry.glsl
+ * Name			: Ori Lazar
+ * Date			: 26/10/2019
+ * Description	: Geometry shader used to explode a spaceship for the animation sequence.
+     .---.
+   .'_:___".
+   |__ --==|
+   [  ]  :[|
+   |__| I=[|
+   / / ____|
+  |-/.____.'
+ /___\ /___\
+***************************************************************************/
 #version 330
 
 layout(triangles) in;
@@ -19,6 +33,7 @@ out ShaderData
 
 uniform float u_Time;
 
+// translates the position of the vertex if the time is above 118.5 (used for the spaceship destruction animation)
 vec4 explode(vec4 position, vec3 normal)
 {
 	float magnitude = 6.0;
@@ -29,6 +44,7 @@ vec4 explode(vec4 position, vec3 normal)
 		return position;
 }
 
+// returns the normal direction between the two vertices
 vec3 GetNormal()
 {
 	vec3 a = vec3(gl_in[0].gl_Position) - vec3(gl_in[1].gl_Position);

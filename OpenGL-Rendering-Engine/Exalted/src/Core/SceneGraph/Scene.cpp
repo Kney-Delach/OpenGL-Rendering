@@ -16,7 +16,6 @@
 #include "Scene.h"
 #include "Core/Events/KeyEvent.h"
 #include "Core/KeyCodes.h"
-#include "Platform/OpenGL/OpenGLConfigurations.h" //todo: Abstract this into just "Configurations"
 #include "Core/Events/ApplicationEvent.h"
 
 namespace Exalted
@@ -72,7 +71,7 @@ namespace Exalted
 			return;
 		if(m_Frustum.InsideFrustum(*gameObject))
 		{
-			const glm::vec3 direction = glm::vec3(gameObject->GetTransform()->WorldTransform[3]) - m_Camera->GetPosition(); //todo: verify this works correctly gameObject->GetTransform()->Position
+			const glm::vec3 direction = glm::vec3(gameObject->GetTransform()->WorldTransform[3]) - m_Camera->GetPosition();
 			gameObject->SetDistanceFromCamera(glm::dot(direction, direction));
 			if(gameObject->IsTransparent())
 				m_TransparentObjects.emplace_back(gameObject);
@@ -84,7 +83,7 @@ namespace Exalted
 			BuildObjectLists(*i);
 	}
 
-	void Scene::SortObjectLists() //todo: check if it makes a difference whether or not sorting the opaque objects
+	void Scene::SortObjectLists()
 	{
 		std::sort(m_TransparentObjects.begin(), 
 			m_TransparentObjects.end(), 
@@ -94,16 +93,16 @@ namespace Exalted
 			GameObject::CompareByCameraDistance);
 	}
 
-	void Scene::DrawObjectLists() //todo: Draw skybox inbetween here? 
+	void Scene::DrawObjectLists()
 	{
 		for(std::vector<GameObject*>::const_iterator i = m_OpaqueObjects.begin(); i != m_OpaqueObjects.end();++i)
 			DrawObject(*i);
-		RenderSkybox(); //todo: verify this doesn't break everything
+		RenderSkybox();
 		for (std::vector<GameObject*>::const_reverse_iterator i = m_TransparentObjects.rbegin(); i != m_TransparentObjects.rend(); ++i)
 			DrawObject(*i);
 	}
 
-	void Scene::ClearObjectLists() //todo: Optimization may be removing this? 
+	void Scene::ClearObjectLists()
 	{
 		m_OpaqueObjects.clear();
 		m_TransparentObjects.clear();
@@ -127,10 +126,10 @@ namespace Exalted
 				s_IsCameraFree = true;
 				m_Camera->ResetMovementVariables();
 			}
-			if (e.GetKeyCode() == EX_KEY_F1) //todo: This should restart the first track
+			if (e.GetKeyCode() == EX_KEY_F1)
 			{
 				s_IsCameraFree = false;
-				m_Camera->ResetMovementVariables(); //todo: remove this as not necessary
+				m_Camera->ResetMovementVariables();
 				m_Camera->SetTrack(0);
 			}
 		}

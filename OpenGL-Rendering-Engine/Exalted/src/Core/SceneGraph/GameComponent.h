@@ -2,7 +2,7 @@
  * Filename		: GameComponent.h
  * Name			: Ori Lazar
  * Date			: 03/11/2019
- * Description	: Contains the declaration for the game component interface.
+ * Description	: Contains the declaration for the game components.
                   If thinking about this in terms of trees, this is the node components.
      .---.
    .'_:___".

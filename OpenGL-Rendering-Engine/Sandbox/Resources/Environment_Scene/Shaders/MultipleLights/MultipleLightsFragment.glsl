@@ -2,7 +2,7 @@
  * Filename		: MultipleLightsFragment.glsl
  * Name			: Ori Lazar
  * Date			: 12/11/2019
- * Description	: Fragment shader using Phong & Blinn-Phong lighting with multiple lights.
+ * Description	: Fragment shader using Phong & Blinn-Phong lighting with multiple lights and shadows.
      .---.
    .'_:___".
    |__ --==|
@@ -97,12 +97,6 @@ layout (std140) uniform Light_Space_Uniforms
 	mat4 LightSpaceMatrix[NUMBER_OF_SPOT_LIGHTS];
 };
 
-//layout (std140) uniform Point_Light_Space_Uniforms 
-//{
-//	//WRITE_SOME_USEFUL_STUFF_HERE_ORI!
-//	//float
-//};
-
 in ShaderData 
 {
 	vec3 v_FragPosition;
@@ -113,21 +107,19 @@ in ShaderData
 uniform Material u_Material; 
 uniform sampler2D u_PointShadowMap[NUMBER_OF_POINT_LIGHTS];
 uniform sampler2D u_DirectionalShadowMap; 
-uniform sampler2D u_ShadowMap[NUMBER_OF_SPOT_LIGHTS]; //todo: rename this
+uniform sampler2D u_ShadowMap[NUMBER_OF_SPOT_LIGHTS]; // ended up not using the omnidirectional shadowmaps, but for future work reference these are kept in here so I can implement it at a later date.
 
 // Diffuse Multiplier 
-float Pi = 3.14159265;
 float CalculateDiffuseMultiplier(vec3 normal, vec3 lightDirection)
 {
-	return max(dot(normal, lightDirection), 0.0);// / Pi; // divide by pi to conserve energy
+	return max(dot(normal, lightDirection), 0.0);
 }
 
 // Specular Multiplier with energy conservation for dynamic shininess attachment 
 float CalculateSpecularMultiplier(vec3 lightDirection, vec3 normal, vec3 viewDirection)
 {
-	//float EnergyConservation = (8.0 + u_Material.Shininess) / (8.0 * Pi);
 	vec3 halfwayDirection = normalize(lightDirection + viewDirection);
-	return pow(max(dot(normal, halfwayDirection), 0.0), u_Material.Shininess); //EnergyConservation * 
+	return pow(max(dot(normal, halfwayDirection), 0.0), u_Material.Shininess);
 }
 
 // Attenuation Calculator
@@ -147,22 +139,20 @@ float CalcDirectionalLightShadow(vec3 normal)
 
 	 // perform perspective divide
 	 vec3 projCoords = lightSpaceFragCoord.xyz / lightSpaceFragCoord.w;
+
 	 // transform to [0,1] range
 	 projCoords = projCoords * 0.5 + 0.5;
 
-	 // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+	 // get closest depth value from light's perspective
 	 float closestDepth = texture(u_DirectionalShadowMap, projCoords.xy).r;
 
 	 // get depth of current fragment from light's perspective
 	 float currentDepth = projCoords.z;
 
-//	 // check whether current frag pos is in shadow
-//	 float bias = max(0.05 * (1.0 - dot(IN.v_Normal, normalize(DirectionalLights.Direction))), 0.005);
-//	 float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0; // 0.005
-//
 	float shadow = 0;
 	if (projCoords.z > 1.0)
 		shadow = 0.0;
+
 	// fixing jagged edges using PCF (percentage-closer filtering)  
 	vec2 texelSize = 1.0 / textureSize(u_DirectionalShadowMap, 0);
 	float bias = max(0.05 * (1.0 - dot(IN.v_Normal, normalize(DirectionalLights.Direction))), 0.005);
@@ -171,7 +161,7 @@ float CalcDirectionalLightShadow(vec3 normal)
 		for(int y = -1; y <= 1; ++y)
 		{
 			float pcfDepth = texture(u_DirectionalShadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
-			shadow += currentDepth - bias  > pcfDepth ? 1.0 : 0.0; //0.00001
+			shadow += currentDepth - bias  > pcfDepth ? 1.0 : 0.0;
 		} 
 	}
 
@@ -179,13 +169,13 @@ float CalcDirectionalLightShadow(vec3 normal)
 	return shadow;
 }
 
-// DIRECTIONAL LIGHT CALCULATION 
+// Directional Light Calculation
 vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDirection)
 {
-	vec3 lightDirection = normalize(-light.Direction); //normalize(-light.Direction);
+	vec3 lightDirection = normalize(-light.Direction); 
 
 	// diffuse
-	float diff = CalculateDiffuseMultiplier(normal, lightDirection); // correct
+	float diff = CalculateDiffuseMultiplier(normal, lightDirection);
 
 	// specular 
 	float spec = CalculateSpecularMultiplier(lightDirection, normal, viewDirection);
@@ -202,36 +192,6 @@ vec3 CalculateDirectionalLight(DirectionalLight light, vec3 normal, vec3 viewDir
 	return (ambient + (1 - shadow) * (diffuse + specular));
 }
 
-
-float CalcPointLightShadow(int index)
-{
-	//  OUT.v_FragPosition 
-//	vec3 fragToLightDirection = OUT.v_FragPosition - PointLights[index].Position; // vector between fragment position and light position
-//
-//	float currentDepth = length(fragToLightDirection); // translate linear depth as the length between the fragment and light position
-//
-//	float shadow = 0.0;
-//	float bias = 0.05;
-//	float samples = 4.0;
-//	float offset = 0.1;
-//	for (float x = -offset; x < offset; x += offset / (samples * 0.5))
-//	{
-//		for (float y = -offset; y < offset; y += offset / (samples * 0.5))
-//		{
-//			for (float z = -offset; z < offset; z += offset / (samples * 0.5))
-//			{
-//				float closestDepth = texture(u_PointShadowMap[index], fragToLightDirection + vec3(x, y, z)).r;
-//				closestDepth *= u_FarPlane; //todo: pre-set this uniform (THIS SHADER WILL NOT COMPILE UNTIL THIS IS DONE!)
-//				if (currentDepth - bias > closestDepth)
-//					shadow += 1.0;
-//			}
-//		}
-//	}
-//	shadow /= (samples * samples * samples);
-	float shadow = 0.0;
-	return shadow;
-}
-
 // POINT LIGHT CALCULATION 
 vec3 CalculatePointLights(PointLight light, vec3 normal, vec3 fragPosition, vec3 viewDirection, int index)
 {
@@ -245,7 +205,7 @@ vec3 CalculatePointLights(PointLight light, vec3 normal, vec3 fragPosition, vec3
 
 	// shadows 
 	float shadow  = 0.0; 
-	shadow = CalcPointLightShadow(index);
+	//shadow = CalcPointLightShadow(index); //todo: implement this at a later date
 	// combine results
 	vec3 ambient = light.Ambient * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
 	vec3 diffuse = light.Diffuse * diff * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
@@ -261,9 +221,10 @@ vec3 CalculatePointLights(PointLight light, vec3 normal, vec3 fragPosition, vec3
 
 float CalcSpotLightShadow(vec3 normal, int index)
 {
-	//perform perspective divide
+	// perform perspective divide
 	vec4 lightSpaceFragCoord = LightSpaceMatrix[index] * vec4(IN.v_FragPosition, 1.0);
     vec3 projCoords = lightSpaceFragCoord.xyz / lightSpaceFragCoord.w;
+
     // transform to [0,1] range
 	projCoords = projCoords * 0.5 + 0.5;
 
@@ -272,8 +233,9 @@ float CalcSpotLightShadow(vec3 normal, int index)
 	{
 		return 0.0;
 	}
-    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    // get closest depth value from light's perspective 
     float closestDepth = texture(u_ShadowMap[index], projCoords.xy).r; 
+
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z; 
 
@@ -287,7 +249,7 @@ float CalcSpotLightShadow(vec3 normal, int index)
 		for(int y = -1; y <= 1; ++y)
 		{
 			float pcfDepth = texture(u_ShadowMap[index], projCoords.xy + vec2(x, y) * texelSize).r; 
-			shadow += currentDepth - bias  > pcfDepth ? 1.0 : 0.0; //0.00001
+			shadow += currentDepth - bias  > pcfDepth ? 1.0 : 0.0;
 		} 
 	}
 
@@ -295,7 +257,7 @@ float CalcSpotLightShadow(vec3 normal, int index)
 	return shadow;
 }
 
-// SPOT LIGHT CALCULATION 
+// Spot light calculation
 vec3 CalculateSpotLights(SpotLight light, vec3 normal, vec3 fragPosition, vec3 viewDirection, int index)
 {
 	vec3 lightDirection = normalize(light.Position - fragPosition);
@@ -328,9 +290,7 @@ vec3 CalculateSpotLights(SpotLight light, vec3 normal, vec3 fragPosition, vec3 v
 	// attenuation
 	return (1 - shadow) * intensity * (CalculateAttenuationResults(ambient, diffuse, specular, light.Position, fragPosition, light.AttenuationConstant, light.AttenuationLinear, light.AttenuationQuadratic)) + emission;
 }
-
-
-// Main 
+ 
 void main()
 {	
 	vec4 transparency = texture(u_Material.TextureDiffuse, IN.v_TexCoord);
@@ -354,23 +314,5 @@ void main()
 	for (int i = 0; i < NUMBER_OF_SPOT_LIGHTS; i++)
 		result += CalculateSpotLights(SpotLights[i], normal, IN.v_FragPosition, viewDirection, i);
 		
-		color = vec4(result, transparency.a);
+	color = vec4(result, transparency.a);
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///// Removed stuff 
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Spot Light Extras 
-	// Emission 
-	//vec3 emission = vec3(0);
-
-	// if (u_ActivateEmission && texture(u_Material.TextureSpecular, IN.v_TexCoord).r == 0)
-	// {
-	// 	emission = diff * texture(u_Material.TextureEmission, IN.v_TexCoord).rgb;
-	// 	if (u_EmissionTransform)
-	// 	{
-	// 		emission = texture(u_Material.TextureEmission, IN.v_TexCoord + vec2(0.0, u_Time)).rgb; // translate over time
-	// 		emission = emission * (sin(u_Time) * 0.5 + 0.5) * 2.0; // fading 
-	// 	}
-	// }

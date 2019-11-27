@@ -38,7 +38,6 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
 
-//todo: maybe move these?
 #include "Core/Renderer/Lights/Light.h"
 #include "Core/Renderer/Lights/Material.h"
 
@@ -91,7 +90,7 @@
 #define TERRAIN "Resources/Meshes/Terrain/Model/Terrain_50000.obj"
 #define TERRAIN_COLOR "Resources/Meshes/Terrain/Textures/Color.tif"
 
-// ------------- Skydome macros ---------------- // todo: move from here
+// ------------- Skydome macros ---------------- // 
 
 #define SKYDOME "Resources/Defaults/Skydome/Meshes/Dome.obj"
 #define ATMOSPHERE_VERTEX "Resources/Defaults/Skydome/Shaders/AtmosphereVertex.glsl"

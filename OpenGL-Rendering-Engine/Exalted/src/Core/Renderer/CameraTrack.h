@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Filename		: CameraTrack.h
+ * Name			: Ori Lazar
+ * Date			: 20/10/2019
+ * Description	: Contains the declaration for the camera track points and class
+ *                this is used to move the camera automatically through the scene.
+	 .---.
+   .'_:___".
+   |__ --==|
+   [  ]  :[|
+   |__| I=[|
+   / / ____|
+  |-/.____.'
+ /___\ /___\
+***************************************************************************/
 #pragma once
 #include "Core/Core/Timestep.h"
 #include "glm/vec3.hpp"
@@ -19,14 +34,14 @@ namespace Exalted
 	class CameraTrack
 	{
 	public:
-		CameraTrack(int id) : m_TrackID(id), m_StartTime(0) {}
+		CameraTrack(int id = 0) : m_StartTime(0), m_TrackID(id) {}
 
 		void AddTrackPoint(const CameraTrackPoint& trackPoint) { m_TrackPoints.emplace_back(trackPoint); }
 		void PrepareTrack();
 		int Update(Timestep deltaTime, glm::vec3& position, float& yaw, float& pitch);
 	private:
 		std::vector<CameraTrackPoint> m_TrackPoints; 
-		int m_TrackID;
 		float m_StartTime;
+		int m_TrackID; // not currently using this 
 	};
 }

@@ -31,9 +31,7 @@
 #include "Core/Renderer/Lights/Light.h"
 #include "Core/Renderer/Skybox/Skybox.h"
 
-//todo: Implement a check for if a mesh should be drawn with or without indicies.
 //todo: Implement a better gui hierarchy
-//todo: Implement bounding volume class for the frustum culling mechanism
 
 namespace Exalted
 {
@@ -178,8 +176,8 @@ namespace Exalted
 			return (label + separator + id);
 		}
 	public: //todo: change naming conventions 
-		static inline int NumberOfSpotLights; //todo: move this
-		static inline int NumberOfPointLights; //todo: move this
+		static inline int NumberOfSpotLights; 
+		static inline int NumberOfPointLights;
 	private:
 		void DestroyGameObject();
 	private:
@@ -187,7 +185,6 @@ namespace Exalted
 	private:
 		Ref<GameTransform> m_Transform;
 		Ref<Mesh> m_Mesh;
-		//Ref<Texture2D> m_Texture;  //todo: Replace with material once that's implemented.
 		Ref<Material> m_Material; 
 		Ref<Shader> m_Shader;
 		Ref<SpotLight> m_SpotLight;
@@ -200,7 +197,6 @@ namespace Exalted
 		std::string m_ObjectName;
 		uint32_t m_Id;
 		float m_BoundingRadius; // to keep things simple in initial implementation, using a bounding sphere for each object, represented by single radius -> todo: implement bounding volume class. 
-		float m_DistanceFromCamera; // to sort the gameobjects, this stores their distance from the camera
-
+		float m_DistanceFromCamera;
 	};
 }

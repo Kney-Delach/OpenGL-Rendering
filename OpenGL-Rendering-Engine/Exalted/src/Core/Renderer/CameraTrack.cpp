@@ -1,3 +1,18 @@
+/***************************************************************************
+ * Filename		: CameraTrack.h
+ * Name			: Ori Lazar
+ * Date			: 20/10/2019
+ * Description	: Contains the implementation for the camera track points and class
+ *                this is used to move the camera automatically through the scene.
+     .---.
+   .'_:___".
+   |__ --==|
+   [  ]  :[|
+   |__| I=[|
+   / / ____|
+  |-/.____.'
+ /___\ /___\
+***************************************************************************/
 #include "expch.h"
 #include "CameraTrack.h"
 #include "Core/Application.h"
@@ -14,49 +29,41 @@ namespace Exalted
 
 	int CameraTrack::Update(Timestep deltaTime, glm::vec3& position, float& yaw, float& pitch)
 	{
-		glm::vec3 interpolatePos1, interpolatePos2;
-		float interpolatePitch1, interpolatePitch2;
-		float interpolateYaw1, interpolateYaw2;
+		glm::vec3 tempPosA;
+		glm::vec3 tempPosB;
+		float tempYawA;
+		float tempYawB;
+		float tempPitchA;
+		float tempPitchB;
 
+		const float elapsedTime = TIME - m_StartTime;
+		float totalTime = 0.0f;
 		int trackPointIndex = -1;
 
-		float currentTime = TIME - m_StartTime;
-		float combinedTime = 0.0f;
-
-		for (int i = 0; i < m_TrackPoints.size(); ++i) 
+		for (int i = 0; i < m_TrackPoints.size(); i++) 
 		{
-			if (currentTime <= combinedTime) 
+			if (elapsedTime <= totalTime)
 			{
 				trackPointIndex = i - 1;
 				break;
 			}
-			else {
-				combinedTime += m_TrackPoints[i].Time;
-			}
+			totalTime += m_TrackPoints[i].Time;
 		}
-
-		//EX_CORE_TRACE("Index Position {0}", indexPos);
 		if (trackPointIndex == -1) 
 			return -1;
-
 		CameraTrackFlags::PostProcessingChoice = m_TrackPoints[trackPointIndex].PostProcessingFlag;
+		tempPosA = m_TrackPoints[trackPointIndex - 1].Position;
+		tempPosB = m_TrackPoints[trackPointIndex].Position;
+		tempYawA = m_TrackPoints[trackPointIndex - 1].Yaw;
+		tempYawB = m_TrackPoints[trackPointIndex].Yaw;
+		tempPitchA = m_TrackPoints[trackPointIndex - 1].Pitch;
+		tempPitchB = m_TrackPoints[trackPointIndex].Pitch;
+		const float normalizedTime = ((elapsedTime - totalTime) / m_TrackPoints[trackPointIndex].Time) * -1;
+		//normalizedTime *= -1;
 
-
-		interpolatePos1 = m_TrackPoints[trackPointIndex - 1].Position;
-		interpolatePos2 = m_TrackPoints[trackPointIndex].Position;
-
-		interpolatePitch1 = m_TrackPoints[trackPointIndex - 1].Pitch;
-		interpolatePitch2 = m_TrackPoints[trackPointIndex].Pitch;
-
-		interpolateYaw1 = m_TrackPoints[trackPointIndex - 1].Yaw;
-		interpolateYaw2 = m_TrackPoints[trackPointIndex].Yaw;
-
-		float t = (currentTime - combinedTime) / m_TrackPoints[trackPointIndex].Time;
-		t *= -1;
-
-		position = ((interpolatePos1 * t) + (interpolatePos2 * (1.0f - t)));  //todo: Implement a method to access the camera from here
-		yaw = ((interpolateYaw1 * t) + (interpolateYaw2 * (1.0f - t)));		  //todo: Implement a method to access the camera from here
-		pitch = ((interpolatePitch1 * t) + (interpolatePitch2 * (1.0f - t))); //todo: Implement a method to access the camera from here
+		position = tempPosA * normalizedTime + tempPosB * (1.0f - normalizedTime);
+		pitch = tempPitchA * normalizedTime + tempPitchB * (1.0f - normalizedTime);
+		yaw = tempYawA * normalizedTime + tempYawB * (1.0f - normalizedTime);
 		return 0;
 	}
 }

@@ -21,8 +21,8 @@
 #include "Core/MouseButtonCodes.h"
 #include <GLFW/glfw3.h>
 #include "Core/KeyCodes.h"
+#include "Core/SceneGraph/Scene.h"
 
-#include "Core/SceneGraph/Scene.h" // for mouse visibility
 namespace Exalted
 {
 	static uint8_t s_GLFWWindowCount = 0;
@@ -91,18 +91,16 @@ namespace Exalted
 
 	void WindowsWindow::InitGLFWWindow()
 	{
-		//glfwGetPrimaryMonitor()
-		m_Window = glfwCreateWindow(static_cast<int>(m_WindowData.Properties.Width), static_cast<int>(m_WindowData.Properties.Height), m_WindowData.Properties.Title.c_str(), nullptr, nullptr); // replcae glfwGetPrimaryMonitor with a nullptr to set it to non-fullscreen
+		m_Window = glfwCreateWindow(static_cast<int>(m_WindowData.Properties.Width), static_cast<int>(m_WindowData.Properties.Height), m_WindowData.Properties.Title.c_str(), glfwGetPrimaryMonitor(), nullptr); // replcae glfwGetPrimaryMonitor with a nullptr to set it to non-fullscreen
 		s_GLFWWindowCount++;
 		m_RenderingContext = RenderingContext::Create(m_Window);
 		m_RenderingContext->Init();
 		glfwSetWindowUserPointer(m_Window, &m_WindowData);
-		//glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 
 	void WindowsWindow::SetGLFWConfigurations()
 	{
-		SetVSync(false); 
+		SetVSync(true); 
 	}
 
 	void WindowsWindow::SetGLFWCallbacks() const

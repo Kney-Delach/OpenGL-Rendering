@@ -35,7 +35,7 @@ in vec3 o_Normal;
 void main() 
 {
 	float rir = 1 / 1.52; // make this configurable to different materials (from object index / to object index). Refractive index ratio...
-	vec3 I = normalize(o_Position - CameraPosition); // view vector, 
+	vec3 I = normalize(o_Position - CameraPosition); // view vector
 	vec3 R = refract(I, normalize(o_Normal), rir); // refraction vector around object's normal 
 	vec3 col = texture(u_Skybox, R).rgb * u_Color;
 	color = vec4(col, 0.8);

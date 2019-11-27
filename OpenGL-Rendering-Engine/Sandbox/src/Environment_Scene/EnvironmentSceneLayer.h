@@ -45,47 +45,27 @@ namespace Sandbox
 		// spot
 		std::vector<Exalted::Ref<Exalted::SpotLight>> m_SpotLights;
 		std::vector<Exalted::Ref<Exalted::GameTransform>> m_SpotLightTransforms;
-		// shaders
-		Exalted::Ref<Exalted::Shader> m_LightSourceShader; // source shader 
 
-		//todo: remove these
-		Exalted::Ref<Exalted::Mesh> m_LightSourceMesh;
-
-		// explosion effect
+		// explosion effect data
 		Exalted::Ref<Exalted::Shader> m_ExplosionShader;
 		Exalted::GameObject* UFOC;
-		/////////////////////////////////////////////////
-		////// Shadows  /////////////////////////////////
-		/////////////////////////////////////////////////
 		
 		// spot light shadow data 
 		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_DepthFrameBuffers; 
 		Exalted::Ref<Exalted::Shader> m_ObjectDepthShader;
 		
-		// sun directional light
+		// sun directional light shadow data
 		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_SunlightDepthFrameBuffers;
 
-		// Point light shadow framebuffers
-		std::vector<Exalted::Ref<Exalted::FrameBuffer>> m_PointlightDepthFrameBuffers;
-		Exalted::Ref<Exalted::Shader> m_PointLightDepthShader;
-		
-		// shadow debug data
-		Exalted::Ref<Exalted::Mesh> m_QuadMesh;
-		Exalted::Ref<Exalted::Shader> m_QuadDepthShader;
+		// shadow debug shader
+		Exalted::Ref<Exalted::Shader> m_QuadDepthShader; // used to display the shadow maps to quads, used for debugging.
+
+		Exalted::Ref<Exalted::Mesh> m_QuadMesh; // used for rendering quads to the screen
 
 		/////////////////////////////////////////////////
 		////// Post Processing //////////////////////////
 		/////////////////////////////////////////////////
 		Exalted::Ref<Exalted::FrameBuffer> m_PostProcessingFrameBuffer; 
 		Exalted::Ref<Exalted::Shader> m_PostProcessingShader;
-		int m_PostProcessChoice = 0;
-		/////////////////////////////////
-		//// Debugging Utilities ///////
-		/////////////////////////////////
-		bool DEBUG_ColorChange = false;
-
-		float DEBUG_FOV = 90.f;
-		float DEBUG_NEAR = 0.1f;
-		float DEBUG_FAR = 20.f;
 	};
 }

@@ -58,9 +58,6 @@ namespace Exalted
 		{
 			BuildObjectLists(m_SceneRoot.get());
 			SortObjectLists();
-			// render to shadow framebuffers todo: this
-			//DrawObjectLists();
-			//ClearObjectLists();
 		}
 		void DrawOpaqueObjects();
 		void DrawTransparentObjects();
@@ -69,14 +66,14 @@ namespace Exalted
 		void DrawTransparentBindless(const Ref<Shader>& shadowShader);
 		
 		void ClearObjectLists();
-		void RenderSkybox() const { m_Skybox->Draw(); } //todo: use this internally?
+		void RenderSkybox() const { m_Skybox->Draw(); } 
 		void SetCamera(Ref<EditorCamera>& camera) { m_Camera = camera; }
-		void SetLightManager(Ref<LightManager>& lightManager) { m_LightsManager = lightManager; } //todo: verify this works now....
+		void SetLightManager(Ref<LightManager>& lightManager) { m_LightsManager = lightManager; }
 		void SetSceneRoot(Ref<GameObject>& sceneRoot) { m_SceneRoot = sceneRoot; }
 		void OnEvent(Exalted::Event& event);
 		Ref<GameObject>& GetSceneRoot() { return m_SceneRoot; }
 	public:
-		static inline bool s_IsCameraFree = false; // initially camera will be on the track
+		static inline bool s_IsCameraFree = false; // initially camera is on the track
 	private:
 		void BuildObjectLists(GameObject* gameObject);
 		void SortObjectLists(); 
