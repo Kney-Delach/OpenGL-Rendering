@@ -22,7 +22,7 @@ struct Material
 	sampler2D TextureDiffuse;
 	sampler2D TextureSpecular;
 	sampler2D TextureEmission;
-	sampler2D TextureNormal; // don't use this currently
+	sampler2D TextureNormal;
 };
 
 // POINT LIGHT 
@@ -206,6 +206,7 @@ vec3 CalculatePointLights(PointLight light, vec3 normal, vec3 fragPosition, vec3
 	// shadows 
 	float shadow  = 0.0; 
 	//shadow = CalcPointLightShadow(index); //todo: implement this at a later date
+	
 	// combine results
 	vec3 ambient = light.Ambient * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));
 	vec3 diffuse = light.Diffuse * diff * vec3(texture(u_Material.TextureDiffuse, IN.v_TexCoord));

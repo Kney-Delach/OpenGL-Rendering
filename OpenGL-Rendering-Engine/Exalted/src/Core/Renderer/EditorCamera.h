@@ -46,9 +46,6 @@ namespace Exalted
 		}
 
 		void UpdateCamera(Timestep deltaTime); // manual camera updates
-
-		// have a list of tracks
-		// track functions
 		void AddTrack(const Ref<CameraTrack>& cameraTrack) { m_CameraTracks.emplace_back(cameraTrack); }
 		void UpdateTrack(Timestep deltaTime);  // automatic track camera updates
 		void SetTrack(const int index);
