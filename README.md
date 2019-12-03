@@ -49,7 +49,7 @@ Omnidirectional real-time Shadows:
 
 ##### Orthographic Shadows
 Dynamic directional real-time shadows: 
-[![Dynamic-Directional-Shadows](https://i.gyazo.com/2b6d543d7c08773d9b316df537f93611.gif)](https://gyazo.com/2b6d543d7c08773d9b316df537f93611)
+
 
 ##### Instanced Rendering
 10 million quads rendered at 150fps:
