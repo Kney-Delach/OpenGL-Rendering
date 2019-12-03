@@ -23,32 +23,38 @@ This repo uses *Exalted*, a custom engine I developed as a learning exercise wit
 
 |**Name**|**Description**|
 |:------:|:-------------:|
-| Scene Graph| Used to arrange spatial data in the scenes, for example, to allow for transparency ordering. |![version-1.0.0][version-1.0.0]|
+| Scene Graph| Used to arrange spatial data in the scenes, for example, to allow for transparency ordering |![version-1.0.0][version-1.0.0]|
 | Blinn-Phong Lighting (Energy Conserving) | (Directional - Spot - Point) lighting |![version-1.0.0][version-1.0.0]|
 | Environment Mapping | Skybox environment |![version-1.0.0][version-1.0.0]|
-| Dynamicly Changing Environment | Objects in the scenes change over time. |![version-1.0.0][version-1.0.0]|
+| Dynamicly Changing Environment | Objects in the scenes change over time |![version-1.0.0][version-1.0.0]|
 | Real-Time Soft Shadows | Spot (perspective), Point (cubemapped perspective) and directional (orthographic) multi-sampled shadows |![version-1.0.0][version-1.0.0]|
-| Multi-Viewport Shadowmap Debug Displays | Displays normalized shadowmaps as mini-display views. |![version-1.0.0][version-1.0.0]|
+| Multi-Viewport Shadowmap Debug Displays | Displays normalized shadowmaps as mini-display views |![version-1.0.0][version-1.0.0]|
 | Post Processing | Color Inversion - Grayscale - Sharpening - Blurring - Edge Detection |![version-1.0.0][version-1.0.0]|
+| Anisotropic Filtering | 16x anisotropic texture filtering |![version-1.0.0][version-1.0.0]|
+| Object Instancing | Instance drawing rendering capabilities, can be used for particle systems etc... |![version-1.0.0][version-1.0.0]|
 
 #### Youtube Video
 ![youtube-v](https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be)
 
-<a name="getting-started"></a>
-## Downloading the Project
+#### Feature Screenshots 
 
-You can clone this repository to your local destination using git, you must also clone all its submodules:
+##### Instanced Rendering
+10 million quads rendered at 150fps:
+<a name="anisotropic filtering"></a>
+<p align="center"><img width=100% src="Resources/Images/Instancing/10Mil_Objects_150fps.jpg?raw=true"></p>
 
-```
-git clone --recursive https://github.com/kney-delach/OpenGL-Rendering`
-```
-or if using github-desktop, once you've cloned it locally, open up git bash in its location and do the following:
-```
-git submodule init
-git submodule update
-````
+##### Scene Graph
+Scene graph object transformation as done in Unity: 
+<a name="scene-graph"></a>
+<p align="center"><img width=100% src="Resources/Images/Scene-Graph/Hierarchy-Unity-Comparison-Successfulpng.png?raw=true"></p>
+
+##### Shadows
+Dynamic directional light shadows: 
+
+<video width="480" height="320" controls="controls" autoplay="autoplay">
+  <source src="Resources/Images/Shadows/fake_sun.mp4" type="video/mp4" />
+</video>
 
 <a name="github-issues"></a>
 ## Github Issues
-
 Please use [Github Issues](https://github.com/Kney-Delach/OpenGL-Rendering/issues) to report bugs.
