@@ -4,6 +4,8 @@ A showcase of rendering techniques using OpenGL, intially created to showcase th
 
 This repo uses *Exalted*, a custom engine I developed as a learning exercise with the purposes of learning engine design and architecture.
 
+Youtube Video: https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be
+
 <a name="list-of-features"></a>
 ## List of Features
 [active]:https://img.shields.io/badge/-Active-success
@@ -33,9 +35,6 @@ This repo uses *Exalted*, a custom engine I developed as a learning exercise wit
 | Anisotropic Filtering | 16x anisotropic texture filtering |![version-1.0.0][version-1.0.0]|
 | Object Instancing | Instance drawing rendering capabilities, can be used for particle systems etc... |![version-1.0.0][version-1.0.0]|
 
-#### Youtube Video
-![youtube-v](https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be)
-
 #### Feature Screenshots 
 
 ##### Instanced Rendering
@@ -51,6 +50,7 @@ Scene graph object transformation as done in Unity:
 ##### Shadows
 Dynamic directional light shadows: 
 
+<a name="shadows"></a>
 <video width="480" height="320" controls="controls" autoplay="autoplay">
   <source src="Resources/Images/Shadows/fake_sun.mp4" type="video/mp4" />
 </video>
