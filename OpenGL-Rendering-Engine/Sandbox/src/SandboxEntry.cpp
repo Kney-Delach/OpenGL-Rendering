@@ -22,7 +22,7 @@ namespace Sandbox
 	public:
 		OpenGLRenderingApplication()
 		{
-			PushLayer(new EnvironmentSceneLayer()); // Coursework youtube link https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be
+			PushLayer(new EnvironmentSceneLayer()); // youtube link https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be
 		}
 		virtual ~OpenGLRenderingApplication()
 		{
