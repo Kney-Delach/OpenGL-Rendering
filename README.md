@@ -43,8 +43,10 @@ A screenshot extracted from [this](https://www.youtube.com/watch?v=IS9GLXPMrL8&f
 <p align="center"><img width=100% src="Screenshots/Geometry_Explosion.jpg?raw=true"></p>
 
 ##### Omnidirectional Perspective Shadows
-Omnidirectional (point light) real-time Shadows: 
-[![omnidirectional](https://i.gyazo.com/aa13eec481b35a35721bf18619415c9f.gif)](https://gyazo.com/aa13eec481b35a35721bf18619415c9f)
+Omnidirectional real-time Shadows: 
+[![Dynamic-Directional-Shadows](https://i.gyazo.com/2b6d543d7c08773d9b316df537f93611.gif)](https://gyazo.com/2b6d543d7c08773d9b316df537f93611)
+[![omnidirectional](https://i.gyazo.com/aa13eec481b35a35721bf18619415c9f.gif)]
+(https://gyazo.com/aa13eec481b35a35721bf18619415c9f)
 
 ##### Orthographic Shadows
 Dynamic directional real-time shadows: 
