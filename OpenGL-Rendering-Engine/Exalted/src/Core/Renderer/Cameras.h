@@ -91,7 +91,7 @@ namespace Exalted
 		virtual void RecalculateViewMatrix() override;
 		virtual void RecalculateViewProjectionMatrix() override;
 	protected:
-		float m_FOV;
+		float m_FOV;//todo: add this to camera track? 
 		float m_AspectRatio;
 	};
 }

@@ -61,129 +61,21 @@
     <Filter Include="9-Scene_Class">
       <UniqueIdentifier>{4E29C03B-BAE9-3B72-8324-85EFEFA3804E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Environment_Scene">
+      <UniqueIdentifier>{E7D0B2B1-53E7-B047-9C5E-3C6908B481CF}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\1-Your_First_Triangle\TriangleRenderer.h">
-      <Filter>1-Your_First_Triangle</Filter>
+    <ClInclude Include="src\Environment_Scene\EnvironmentSceneLayer.h">
+      <Filter>Environment_Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\10-Height_Map\HeightMapLayer.h">
-      <Filter>10-Height_Map</Filter>
-    </ClInclude>
-    <ClInclude Include="src\11-Model_Loading\ModelLoadingLayer.h">
-      <Filter>11-Model_Loading</Filter>
-    </ClInclude>
-    <ClInclude Include="src\12-Frame_Buffers\FrameBufferLayer.h">
-      <Filter>12-Frame_Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.h">
-      <Filter>13-Texture_Cubes_Skybox</Filter>
-    </ClInclude>
-    <ClInclude Include="src\14-GLSL_Exploration\GLSLExplorationLayer.h">
-      <Filter>14-GLSL_Exploration</Filter>
-    </ClInclude>
-    <ClInclude Include="src\15-Instancing\InstancingLayer.h">
-      <Filter>15-Instancing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\16-Tesselation\TessellationLayer.h">
-      <Filter>16-Tesselation</Filter>
-    </ClInclude>
-    <ClInclude Include="src\17-Lighting\LightingLayer.h">
-      <Filter>17-Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="src\18-Shadows\ShadowLayer.h">
-      <Filter>18-Shadows</Filter>
-    </ClInclude>
-    <ClInclude Include="src\19-Multiple_Shadows\MultipleShadowsLayer.h">
-      <Filter>19-Multiple_Shadows</Filter>
-    </ClInclude>
-    <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h">
-      <Filter>2-Vertex_Transformations</Filter>
-    </ClInclude>
-    <ClInclude Include="src\20-Bump_Mapping\BumpMapping.h">
-      <Filter>20-Bump_Mapping</Filter>
-    </ClInclude>
-    <ClInclude Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.h">
-      <Filter>3-Editor_Camera_Showcase</Filter>
-    </ClInclude>
-    <ClInclude Include="src\4-Texture_Mapping\TextureMappingLayer.h">
-      <Filter>4-Texture_Mapping</Filter>
-    </ClInclude>
-    <ClInclude Include="src\5-Depth_Testing\DepthTestingLayer.h">
-      <Filter>5-Depth_Testing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\6-Stencil_Testing\StencilTestingLayer.h">
-      <Filter>6-Stencil_Testing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\7-Blending\BlendingLayer.h">
-      <Filter>7-Blending</Filter>
-    </ClInclude>
-    <ClInclude Include="src\8-Scene_Graphs\SceneGraphLayer.h">
-      <Filter>8-Scene_Graphs</Filter>
-    </ClInclude>
-    <ClInclude Include="src\9-Scene_Class\SceneClassLayer.h">
-      <Filter>9-Scene_Class</Filter>
+    <ClInclude Include="src\Environment_Scene\EnvironmentSceneResources.h">
+      <Filter>Environment_Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp">
-      <Filter>1-Your_First_Triangle</Filter>
-    </ClCompile>
-    <ClCompile Include="src\10-Height_Map\HeightMapLayer.cpp">
-      <Filter>10-Height_Map</Filter>
-    </ClCompile>
-    <ClCompile Include="src\11-Model_Loading\ModelLoadingLayer.cpp">
-      <Filter>11-Model_Loading</Filter>
-    </ClCompile>
-    <ClCompile Include="src\12-Frame_Buffers\FrameBufferLayer.cpp">
-      <Filter>12-Frame_Buffers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.cpp">
-      <Filter>13-Texture_Cubes_Skybox</Filter>
-    </ClCompile>
-    <ClCompile Include="src\14-GLSL_Exploration\GLSLExplorationLayer.cpp">
-      <Filter>14-GLSL_Exploration</Filter>
-    </ClCompile>
-    <ClCompile Include="src\15-Instancing\InstancingLayer.cpp">
-      <Filter>15-Instancing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\16-Tesselation\TessellationLayer.cpp">
-      <Filter>16-Tesselation</Filter>
-    </ClCompile>
-    <ClCompile Include="src\17-Lighting\LightingLayer.cpp">
-      <Filter>17-Lighting</Filter>
-    </ClCompile>
-    <ClCompile Include="src\18-Shadows\ShadowLayer.cpp">
-      <Filter>18-Shadows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\19-Multiple_Shadows\MultipleShadowsLayer.cpp">
-      <Filter>19-Multiple_Shadows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp">
-      <Filter>2-Vertex_Transformations</Filter>
-    </ClCompile>
-    <ClCompile Include="src\20-Bump_Mapping\BumpMapping.cpp">
-      <Filter>20-Bump_Mapping</Filter>
-    </ClCompile>
-    <ClCompile Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.cpp">
-      <Filter>3-Editor_Camera_Showcase</Filter>
-    </ClCompile>
-    <ClCompile Include="src\4-Texture_Mapping\TextureMappingLayer.cpp">
-      <Filter>4-Texture_Mapping</Filter>
-    </ClCompile>
-    <ClCompile Include="src\5-Depth_Testing\DepthTestingLayer.cpp">
-      <Filter>5-Depth_Testing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\6-Stencil_Testing\StencilTestingLayer.cpp">
-      <Filter>6-Stencil_Testing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\7-Blending\BlendingLayer.cpp">
-      <Filter>7-Blending</Filter>
-    </ClCompile>
-    <ClCompile Include="src\8-Scene_Graphs\SceneGraphLayer.cpp">
-      <Filter>8-Scene_Graphs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\9-Scene_Class\SceneClassLayer.cpp">
-      <Filter>9-Scene_Class</Filter>
+    <ClCompile Include="src\Environment_Scene\EnvironmentSceneLayer.cpp">
+      <Filter>Environment_Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\SandboxEntry.cpp" />
   </ItemGroup>

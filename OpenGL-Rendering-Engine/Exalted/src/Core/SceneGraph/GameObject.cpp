@@ -16,8 +16,9 @@
 ***************************************************************************/
 #include "expch.h"
 #include "GameObject.h"
-#include <algorithm>
 #include "Core/Renderer/Renderer.h"
+
+#include <algorithm>
 
 #include <imgui.h>
 
@@ -46,23 +47,21 @@ namespace Exalted
 
 	void GameObject::Update(Timestep deltaTime)
 	{
-		// 1 - Set the transforms relative to parent GameObjects
+		for (std::vector<GameComponent*>::iterator i = m_GameComponents.begin(); i != m_GameComponents.end(); ++i)
+			(*i)->Update(deltaTime);
+		
 		if (m_pParent)
 			m_Transform->SetWorldTransform(m_pParent->GetTransform()->WorldTransform);
 		else
 			m_Transform->SetWorldTransform();
 
-		//todo: Uncomment this when game components are useful.
-		// 2 - process all component objects of this object
-		//for (std::vector<GameComponent*>::iterator i = m_GameComponents.begin(); i != m_GameComponents.end(); ++i)
-		//	(*i)->Update(deltaTime);
-		//
+		if (m_PointLight)
+			m_PointLight->Position = glm::vec3(m_Transform->WorldTransform[3]);
+		if (m_SpotLight)
+			m_SpotLight->Position = glm::vec3(m_Transform->WorldTransform[3]);
 
-		// 3 - process all child objects of this object
 		for (std::vector<GameObject*>::iterator i = m_ChildrenObjectsList.begin(); i != m_ChildrenObjectsList.end(); ++i)
-		{
 			(*i)->Update(deltaTime);
-		}
 	}
 
 	void GameObject::RemoveGameComponent(GameComponent* pGameComponent)
@@ -75,7 +74,7 @@ namespace Exalted
 		}
 	}
 
-	void GameObject::RemoveChildObject(GameObject* pGameObject) //todo: verify this functionality works.
+	void GameObject::RemoveChildObject(GameObject* pGameObject)
 	{
 		const std::vector<GameObject*>::iterator objectPosition = std::find(m_ChildrenObjectsList.begin(), m_ChildrenObjectsList.end(), pGameObject);
 		if (objectPosition != m_ChildrenObjectsList.end())
@@ -87,7 +86,7 @@ namespace Exalted
 		else
 			EX_CORE_WARN("Gameobject {0} is not a child of {1}, cannot remove it.", pGameObject->m_ObjectName, m_ObjectName);
 	}
-	void GameObject::DestroyGameObject() //todo: Verify this works correctly.
+	void GameObject::DestroyGameObject()
 	{
 		const unsigned int objectListSize = m_ChildrenObjectsList.size(); 
 		for (unsigned int i = 0; i < objectListSize; i++)

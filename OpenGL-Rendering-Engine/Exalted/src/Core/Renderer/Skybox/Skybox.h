@@ -22,12 +22,12 @@
 
 // -------------- Texture Macros -------------- //
 
-#define DEFAULT_SKYBOX_TOP		"Resources/Defaults/Skybox/Top.tga"
-#define DEFAULT_SKYBOX_BOTTOM	"Resources/Defaults/Skybox/Bottom.tga"
-#define DEFAULT_SKYBOX_FRONT	"Resources/Defaults/Skybox/Front.tga"
-#define DEFAULT_SKYBOX_BACK		"Resources/Defaults/Skybox/Back.tga"
-#define DEFAULT_SKYBOX_RIGHT	"Resources/Defaults/Skybox/Right.tga"
-#define DEFAULT_SKYBOX_LEFT		"Resources/Defaults/Skybox/Left.tga"
+#define DEFAULT_SKYBOX_TOP		"Resources/Defaults/Skybox/Top.png"
+#define DEFAULT_SKYBOX_BOTTOM	"Resources/Defaults/Skybox/Bottom.png"
+#define DEFAULT_SKYBOX_FRONT	"Resources/Defaults/Skybox/Front.png"
+#define DEFAULT_SKYBOX_BACK		"Resources/Defaults/Skybox/Back.png"
+#define DEFAULT_SKYBOX_RIGHT	"Resources/Defaults/Skybox/Right.png"
+#define DEFAULT_SKYBOX_LEFT		"Resources/Defaults/Skybox/Left.png"
 
 #define DEFAULT_SKYBOX_SHADER_VERTEX "Resources/Defaults/Skybox/SkyboxVertex.glsl"
 #define DEFAULT_SKYBOX_SHADER_FRAGMENT "Resources/Defaults/Skybox/SkyboxFragment.glsl"
@@ -45,11 +45,11 @@ namespace Exalted
 
 		void Draw() const;
 
-		_NODISCARD inline Ref<TextureCube>& GetTexture() { return m_Texture; }
+		_NODISCARD static inline Ref<TextureCube>& GetTexture() { return m_Texture; }
 		_NODISCARD inline Ref<Mesh>& GetMesh() { return m_Mesh; }
 		_NODISCARD inline Ref<Shader>& GetShader() { return m_Shader; }
 	private:
-		Ref<TextureCube> m_Texture;
+		static inline Ref<TextureCube> m_Texture;
 		Ref<Mesh> m_Mesh;
 		Ref<Shader> m_Shader;
 	public:

@@ -15,6 +15,7 @@
 ***************************************************************************/
 #include "expch.h"
 #include "EditorCamera.h"
+#include "Core/SceneGraph/Scene.h"
 
 #include "Core/Input.h"
 #include "Core/KeyCodes.h"
@@ -43,9 +44,34 @@ namespace Exalted
 			ProcessKeyboardEvent(CameraMovement::UP, deltaTime);
 		if (Input::IsKeyPressed(EX_KEY_E))
 			ProcessKeyboardEvent(CameraMovement::DOWN, deltaTime);
+
+		UpdateUBO();
 	}
 
-	void EditorCamera::OnImGuiRender() //todo: Give each camera a unique id (as in game component)
+	void EditorCamera::UpdateTrack(Timestep deltaTime) 
+	{
+		EX_CORE_ASSERT(m_CurrentTrack, " Attempting to update the camera track with no currently set track! Set a track first!", true);
+		if(m_CurrentTrack->Update(deltaTime, m_Position, m_Yaw, m_Pitch) == -1)
+		{
+			Scene::s_IsCameraFree = true;
+			ResetMovementVariables();
+		}
+		UpdateCameraVectors();
+		RecalculateViewMatrix();
+		UpdateUBO(); // update ubo with camera data
+	}
+
+	void EditorCamera::SetTrack(const int index)
+	{
+		EX_CORE_ASSERT(index < m_CameraTracks.size(), " Attempting to set camera track to invalid index! {0}", 0, true);
+		m_CurrentTrack = m_CameraTracks[index];
+		m_CurrentTrack->PrepareTrack();
+		m_FOV = 45.f; // note, this manually assigns the field of view of the camera to 45 degrees for every track, set this configurable eventually...
+		RecalculateProjectionMatrix();
+	}
+
+	// this was used for debugging camera positions 
+	void EditorCamera::OnImGuiRender()
 	{
 		ImGui::Begin("Camera Transform");
 		ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
@@ -79,13 +105,6 @@ namespace Exalted
 
 	void EditorCamera::OnEvent(Exalted::Event& event)
 	{
-		if (event.GetEventType() == Exalted::EventType::WindowResize)
-		{
-			const auto resizeEvent = dynamic_cast<Exalted::WindowResizeEvent&>(event);
-			const auto windowWidth = resizeEvent.GetWidth();
-			const auto windowHeight = resizeEvent.GetHeight();
-			OnWindowResize(windowWidth, windowHeight);
-		}
 		if ((event.GetEventType() == Exalted::EventType::MouseButtonPressed) && !m_MouseMoving)
 		{
 			auto& e = dynamic_cast<Exalted::MouseButtonPressedEvent&>(event);
@@ -128,7 +147,7 @@ namespace Exalted
 		}
 	}
 
-	void EditorCamera::UpdateUBO(Ref<UniformBuffer>& ubo) const
+	void EditorCamera::UpdateUBO(Ref<UniformBuffer>& ubo) const //todo: exists only for backwards compatibility with previous example scenes
 	{
 		ubo->Bind();
 		Bytes offset = 0;
@@ -146,6 +165,26 @@ namespace Exalted
 		offset += sizeof(glm::vec4);
 		ubo->Unbind();
 	}
+
+	void EditorCamera::UpdateUBO() const
+	{
+		m_CameraUniformBuffer->Bind();
+		Bytes offset = 0;
+		Bytes size = sizeof(glm::mat4);
+		Bytes sizeofVec4 = sizeof(glm::vec4);
+		m_CameraUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(GetViewMatrix()));
+		offset += sizeof(glm::mat4);
+		m_CameraUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(glm::mat4(glm::mat3(GetViewMatrix()))));
+		offset += sizeof(glm::mat4);
+		m_CameraUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(GetProjectionMatrix()));
+		offset += sizeof(glm::mat4);
+		m_CameraUniformBuffer->SetBufferSubData(offset, size, glm::value_ptr(GetViewProjectionMatrix()));
+		offset += sizeof(glm::mat4);
+		m_CameraUniformBuffer->SetBufferSubData(offset, sizeofVec4, glm::value_ptr(GetPosition()));
+		offset += sizeof(glm::vec4);
+		m_CameraUniformBuffer->Unbind();
+	}
+	
 
 	void EditorCamera::ProcessRotationEvent(float xOffset, float yOffset)
 	{

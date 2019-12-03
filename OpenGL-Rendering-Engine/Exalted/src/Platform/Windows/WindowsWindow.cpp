@@ -20,6 +20,8 @@
 #include "Platform/OpenGL/OpenGLContext.h"
 #include "Core/MouseButtonCodes.h"
 #include <GLFW/glfw3.h>
+#include "Core/KeyCodes.h"
+#include "Core/SceneGraph/Scene.h"
 
 namespace Exalted
 {
@@ -77,7 +79,7 @@ namespace Exalted
 		m_WindowData.Properties = WindowProperties(properties);
 		EX_CORE_INFO("Creating window {0} ({1}, {2})", properties.Title, properties.Width, properties.Height);
 		if (s_GLFWWindowCount == 0)
-		{
+		{			
 			int success = glfwInit();
 			EX_CORE_ASSERT(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
@@ -89,17 +91,16 @@ namespace Exalted
 
 	void WindowsWindow::InitGLFWWindow()
 	{
-		m_Window = glfwCreateWindow(static_cast<int>(m_WindowData.Properties.Width), static_cast<int>(m_WindowData.Properties.Height), m_WindowData.Properties.Title.c_str(), nullptr, nullptr);
+		m_Window = glfwCreateWindow(static_cast<int>(m_WindowData.Properties.Width), static_cast<int>(m_WindowData.Properties.Height), m_WindowData.Properties.Title.c_str(), glfwGetPrimaryMonitor(), nullptr); // replcae glfwGetPrimaryMonitor with a nullptr to set it to non-fullscreen
 		s_GLFWWindowCount++;
 		m_RenderingContext = RenderingContext::Create(m_Window);
 		m_RenderingContext->Init();
-
 		glfwSetWindowUserPointer(m_Window, &m_WindowData);
 	}
 
 	void WindowsWindow::SetGLFWConfigurations()
 	{
-		SetVSync(false); //todo: Make this configurable
+		SetVSync(true); 
 	}
 
 	void WindowsWindow::SetGLFWCallbacks() const
@@ -133,6 +134,11 @@ namespace Exalted
 			{
 				case GLFW_PRESS:
 				{
+					if(key == EX_KEY_F1 || EX_KEY_F2) //todo: remove this after coursework hand-in
+						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+					if(key == EX_KEY_ESCAPE)
+						glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+					
 					KeyPressedEvent event(key, 0);
 					windowData.EventCallback(event);
 					break;
@@ -164,29 +170,32 @@ namespace Exalted
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
 		{
 			WindowData& data = *static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-
-			switch (action)
+			
+			if(Scene::s_IsCameraFree)
 			{
-			case GLFW_PRESS:
-			{
-				if(button == EX_MOUSE_BUTTON_2)
+				switch (action)
 				{
-					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+					case GLFW_PRESS:
+					{
+						if(button == EX_MOUSE_BUTTON_2)
+						{
+							glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+						}
+						MouseButtonPressedEvent event(button, 0);
+						data.EventCallback(event);
+						break;
+					}
+					case GLFW_RELEASE:
+					{
+						if (button == EX_MOUSE_BUTTON_2)
+						{
+							glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+						}
+						MouseButtonReleasedEvent event(button);
+						data.EventCallback(event);
+						break;
+					}
 				}
-				MouseButtonPressedEvent event(button, 0);
-				data.EventCallback(event);
-				break;
-			}
-			case GLFW_RELEASE:
-			{
-				if (button == EX_MOUSE_BUTTON_2)
-				{
-					glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-				}
-				MouseButtonReleasedEvent event(button);
-				data.EventCallback(event);
-				break;
-			}
 			}
 		});
 

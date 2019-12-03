@@ -27,10 +27,11 @@
 #include "Core/Renderer/Renderer.h"
 
 #include "FrustumCulling/FrustumPlane.h"
+#include "Core/Renderer/Lights/Material.h"
+#include "Core/Renderer/Lights/Light.h"
+#include "Core/Renderer/Skybox/Skybox.h"
 
-//todo: Implement a check for if a mesh should be drawn with or without indicies.
 //todo: Implement a better gui hierarchy
-//todo: Implement bounding volume class for the frustum culling mechanism
 
 namespace Exalted
 {
@@ -52,6 +53,11 @@ namespace Exalted
 		~GameObject()
 		{
 			DestroyGameObject();
+			const unsigned int gameComponentsSize = m_GameComponents.size();
+
+			for (unsigned int i = 0; i < gameComponentsSize; i++)
+				delete m_GameComponents[i];
+			
 			EX_CORE_WARN("Destroyed {0} GamObject.", m_ObjectName);
 		}
 		void AddChildObject(GameObject* pGameObject)
@@ -83,32 +89,68 @@ namespace Exalted
 		{
 			if (m_Mesh)
 			{
-				if (m_Texture)
+				m_Shader->Bind();
+				std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformMatFloat4("u_Model", m_Transform->WorldTransform);
+				if(m_Material)
 				{
-					m_Texture->Bind();
-					Renderer::Submit(m_Shader, m_Mesh, m_Transform->WorldTransform);
-					m_Texture->Unbind();
+					m_Material->Bind(m_Shader);
+					int count = 4;
+					for (int i = 0; i < NumberOfSpotLights; i++)
+					{
+						std::string number = std::to_string(i);
+						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_ShadowMap[" + number + "]").c_str(), (count++));
+					}
+					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1("u_DirectionalShadowMap", count++);
+					for (int i = 0; i < NumberOfPointLights; i++)
+					{
+						std::string number = std::to_string(i);
+						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1(("u_PointShadowMap[" + number + "]").c_str(), (count++));
+					}
+					Renderer::Submit(m_Mesh);
+					m_Material->Unbind();
 				}
-				else
-					Renderer::Submit(m_Shader, m_Mesh, m_Transform->WorldTransform);
+				else //todo: Assuming that if there is no material, it reflects the skybox cubemap
+				{
+					if (m_PointLight)
+						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformFloat3("u_Color", m_PointLight->Diffuse);
+					std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->SetUniformInt1("u_Skybox", 0);
+					Skybox::GetTexture()->Bind(0);
+					Renderer::Submit(m_Mesh);
+					Skybox::GetTexture()->Unbind();
+				}
+				m_Shader->Unbind();
 			}
 		}
 
+		inline void DrawBindless(const Ref<Shader>& shadowShader) const
+		{
+			if (m_Mesh)
+			{
+				std::dynamic_pointer_cast<OpenGLShader>(shadowShader)->SetUniformMatFloat4("u_Model", m_Transform->WorldTransform);
+				Renderer::Submit(m_Mesh);
+			}
+		}
+		
 		inline Ref<GameTransform>& GetTransform() { return m_Transform; }
 
 		inline void SetShader(Ref<Shader>& shader) { m_Shader = shader; }
 
 		inline void SetTexture(Ref<Texture2D>& texture)
 		{
-			if(!m_IsTransparent)
-				m_IsTransparent = texture->IsTransparent();
-			m_Texture = texture;
-		}
+		}//todo: remove me
+
+		inline void SetMaterial(Ref<Material>& material) { m_Material = material; }
+		inline Ref<Material>& GetMaterial() { return m_Material; }
 
 		void SetMesh(Ref<Mesh>& mesh) { m_Mesh = mesh; }
 		inline Ref<Mesh>& GetMesh() { return m_Mesh; }
 
+		void SetSpotLight(Ref<SpotLight>& light) { m_SpotLight = light; }
+		void SetPointLight(Ref<PointLight>& light) { m_PointLight = light; }
+		
 		inline bool IsTransparent() const { return m_IsTransparent; }
+		inline void SetTransparency(bool transparent) { m_IsTransparent = transparent; }
+		
 		inline bool IsActive() const { return m_Active; }
 		inline void SetActive(bool active) { m_Active = active; }
 
@@ -133,6 +175,9 @@ namespace Exalted
 			std::string separator = "##";
 			return (label + separator + id);
 		}
+	public: //todo: change naming conventions 
+		static inline int NumberOfSpotLights; 
+		static inline int NumberOfPointLights;
 	private:
 		void DestroyGameObject();
 	private:
@@ -140,8 +185,10 @@ namespace Exalted
 	private:
 		Ref<GameTransform> m_Transform;
 		Ref<Mesh> m_Mesh;
-		Ref<Texture2D> m_Texture;  //todo: Replace with material once that's implemented.
-		Ref<Shader> m_Shader; //todo: Replace with material once that's implemented.
+		Ref<Material> m_Material; 
+		Ref<Shader> m_Shader;
+		Ref<SpotLight> m_SpotLight;
+		Ref<PointLight> m_PointLight;
 		GameObject* m_pParent = nullptr;
 		std::vector<GameComponent*> m_GameComponents;
 		std::vector<GameObject*> m_ChildrenObjectsList;
@@ -150,6 +197,6 @@ namespace Exalted
 		std::string m_ObjectName;
 		uint32_t m_Id;
 		float m_BoundingRadius; // to keep things simple in initial implementation, using a bounding sphere for each object, represented by single radius -> todo: implement bounding volume class. 
-		float m_DistanceFromCamera; // to sort the gameobjects, this stores their distance from the camera
+		float m_DistanceFromCamera;
 	};
 }

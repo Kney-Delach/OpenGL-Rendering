@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_DEBUGGING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Exalted\Dependenciestinyobjloader;src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -95,7 +95,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Exalted\Dependenciestinyobjloader;src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -115,7 +115,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>EX_PLATFORM_WINDOWS;EX_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Exalted\Dependenciestinyobjloader;src;..\Exalted\Dependencies\spdlog\include;..\Exalted\Dependencies\stb\include;..\Exalted\src;..\Resources;..\Exalted\Dependencies;..\Exalted\Dependencies\glm;..\Exalted\Dependencies\Glad\include;..\Exalted\Dependencies\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -131,48 +131,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\1-Your_First_Triangle\TriangleRenderer.h" />
-    <ClInclude Include="src\10-Height_Map\HeightMapLayer.h" />
-    <ClInclude Include="src\11-Model_Loading\ModelLoadingLayer.h" />
-    <ClInclude Include="src\12-Frame_Buffers\FrameBufferLayer.h" />
-    <ClInclude Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.h" />
-    <ClInclude Include="src\14-GLSL_Exploration\GLSLExplorationLayer.h" />
-    <ClInclude Include="src\15-Instancing\InstancingLayer.h" />
-    <ClInclude Include="src\16-Tesselation\TessellationLayer.h" />
-    <ClInclude Include="src\17-Lighting\LightingLayer.h" />
-    <ClInclude Include="src\18-Shadows\ShadowLayer.h" />
-    <ClInclude Include="src\19-Multiple_Shadows\MultipleShadowsLayer.h" />
-    <ClInclude Include="src\2-Vertex_Transformations\VertexTransformRenderer.h" />
-    <ClInclude Include="src\20-Bump_Mapping\BumpMapping.h" />
-    <ClInclude Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.h" />
-    <ClInclude Include="src\4-Texture_Mapping\TextureMappingLayer.h" />
-    <ClInclude Include="src\5-Depth_Testing\DepthTestingLayer.h" />
-    <ClInclude Include="src\6-Stencil_Testing\StencilTestingLayer.h" />
-    <ClInclude Include="src\7-Blending\BlendingLayer.h" />
-    <ClInclude Include="src\8-Scene_Graphs\SceneGraphLayer.h" />
-    <ClInclude Include="src\9-Scene_Class\SceneClassLayer.h" />
+    <ClInclude Include="src\Environment_Scene\EnvironmentSceneLayer.h" />
+    <ClInclude Include="src\Environment_Scene\EnvironmentSceneResources.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\1-Your_First_Triangle\TriangleRenderer.cpp" />
-    <ClCompile Include="src\10-Height_Map\HeightMapLayer.cpp" />
-    <ClCompile Include="src\11-Model_Loading\ModelLoadingLayer.cpp" />
-    <ClCompile Include="src\12-Frame_Buffers\FrameBufferLayer.cpp" />
-    <ClCompile Include="src\13-Texture_Cubes_Skybox\SkyboxLayer.cpp" />
-    <ClCompile Include="src\14-GLSL_Exploration\GLSLExplorationLayer.cpp" />
-    <ClCompile Include="src\15-Instancing\InstancingLayer.cpp" />
-    <ClCompile Include="src\16-Tesselation\TessellationLayer.cpp" />
-    <ClCompile Include="src\17-Lighting\LightingLayer.cpp" />
-    <ClCompile Include="src\18-Shadows\ShadowLayer.cpp" />
-    <ClCompile Include="src\19-Multiple_Shadows\MultipleShadowsLayer.cpp" />
-    <ClCompile Include="src\2-Vertex_Transformations\VertexTransformRenderer.cpp" />
-    <ClCompile Include="src\20-Bump_Mapping\BumpMapping.cpp" />
-    <ClCompile Include="src\3-Editor_Camera_Showcase\EditorShowcaseLayer.cpp" />
-    <ClCompile Include="src\4-Texture_Mapping\TextureMappingLayer.cpp" />
-    <ClCompile Include="src\5-Depth_Testing\DepthTestingLayer.cpp" />
-    <ClCompile Include="src\6-Stencil_Testing\StencilTestingLayer.cpp" />
-    <ClCompile Include="src\7-Blending\BlendingLayer.cpp" />
-    <ClCompile Include="src\8-Scene_Graphs\SceneGraphLayer.cpp" />
-    <ClCompile Include="src\9-Scene_Class\SceneClassLayer.cpp" />
+    <ClCompile Include="src\Environment_Scene\EnvironmentSceneLayer.cpp" />
     <ClCompile Include="src\SandboxEntry.cpp" />
   </ItemGroup>
   <ItemGroup>

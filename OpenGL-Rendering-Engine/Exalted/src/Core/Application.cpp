@@ -55,7 +55,7 @@ namespace Exalted
 		dispatcher.Dispatch<WindowClosedEvent>(EX_BIND_EVENT_FN(Application::OnWindowClosed));
 		dispatcher.Dispatch<WindowResizeEvent>(EX_BIND_EVENT_FN(Application::OnWindowResize));
 
-		/** Iterate through layer stack backwards until the event is handled. */
+		// Iterates through layer stack backwards until the event is handled.
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
 			if((*--it)->IsActive())
@@ -79,14 +79,23 @@ namespace Exalted
 
 				for (Layer* layer : m_LayerStack)
 				{
-					if (layer->IsActive())
-						layer->OnUpdate(deltaTime);
+					//if (layer->IsActive()) //todo: uncomment this for debug mode
+					layer->OnUpdate(deltaTime);
 				}
 			}
-
+			
 			m_ImGuiLayer->Begin();
 			ImGui::Begin("Renderer");
 			ImGui::Text("Application Runtime: %.2fms", static_cast<float>(m_LastFrameTime));
+			ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
+			if(ImGui::Button("Set V-Sync ON"))
+			{
+				m_Window->SetVSync(true);
+			}
+			if (ImGui::Button("Set V-Sync OFF"))
+			{
+				m_Window->SetVSync(false);
+			}
 			auto& caps = RendererAPI::GetCapabilities();
 			ImGui::Text("GPU Vendor: %s", caps.Vendor.c_str());
 			ImGui::Text("GPU Renderer: %s", caps.Renderer.c_str());
@@ -96,13 +105,14 @@ namespace Exalted
 			ImGui::Text("Maximum Vertex Uniform Components: %i", caps.MaxVertexUniformComponents);
 			ImGui::Text("Maximum Uniform Buffer Components: %i", caps.MaxUniformBufferComponents);
 			ImGui::End();
-			for (Layer* layer : m_LayerStack)
-			{
-				if (layer->IsActive())
-					layer->OnImGuiRender();
-				else
-					layer->OnInactiveImGuiRender();
-			}
+			//todo: Uncomment this if not runnig for efficiency, as will run debug imgui data for all layers
+			//for (Layer* layer : m_LayerStack)
+			//{
+			//	if (layer->IsActive())
+			//		layer->OnImGuiRender();
+			//	else
+			//		layer->OnInactiveImGuiRender();
+			//}
 			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();

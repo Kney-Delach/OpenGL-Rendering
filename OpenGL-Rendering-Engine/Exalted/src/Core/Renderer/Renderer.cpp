@@ -17,8 +17,6 @@
 #include "expch.h"
 #include "Renderer.h"
 
-//#include "Platform/OpenGL/OpenGLShader.h"
-
 namespace Exalted 
 {
 	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();

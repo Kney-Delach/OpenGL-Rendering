@@ -32,7 +32,7 @@ namespace Exalted
 		Ref<ShadowInfo> m_ShadowInfo; // used to specify whether or not light casts shadows
 		
 		virtual ~Light() = default;
-		virtual void UpdateUniformBuffer(Bytes& offset, Ref<UniformBuffer>& ub) = 0;
+		virtual void UpdateUniformBuffer(Bytes& offset, Ref<UniformBuffer>& ub) {};
 		inline Ref<ShadowInfo>& GetShadowInfo() { return m_ShadowInfo; };
 	protected:
 		Light()
@@ -62,20 +62,20 @@ namespace Exalted
 		
 		PointLight()
 			: Light(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f)), 
-			Position(0), AttenuationConstant(1), AttenuationLinear(0.7), AttenuationQuadratic(1.8)
+			AttenuationConstant(1), AttenuationLinear(0.7), AttenuationQuadratic(1.8), Position(0)
 		{
 		}
 		PointLight(const glm::vec3& position, 
 			const glm::vec3& ambient = glm::vec3(1.0f), const glm::vec3& diffuse = glm::vec3(1.0f), const glm::vec3& specular = glm::vec3(1.0f),
 			const float constant = 1.f, const float linear = 0.7, const float quadratic = 1.8)
-			: Light(ambient, diffuse, specular), 
-			Position(position), AttenuationConstant(constant), AttenuationLinear(linear), AttenuationQuadratic(quadratic)
+			: Light(ambient, diffuse, specular), Position(position),
+			AttenuationConstant(constant), AttenuationLinear(linear), AttenuationQuadratic(quadratic)
 		{
 		}
 
 		PointLight(const PointLight& other)
-			: Light(other.Ambient, other.Diffuse, other.Specular), 
-			Position(other.Position), AttenuationConstant(other.AttenuationConstant), AttenuationLinear(other.AttenuationLinear), AttenuationQuadratic(other.AttenuationQuadratic)
+			: Light(other.Ambient, other.Diffuse, other.Specular), Position(other.Position),
+			AttenuationConstant(other.AttenuationConstant), AttenuationLinear(other.AttenuationLinear), AttenuationQuadratic(other.AttenuationQuadratic)
 		{
 		}
 
@@ -83,16 +83,76 @@ namespace Exalted
 		{
 			switch (distance)
 			{
+				case 7:
+				{
+					AttenuationLinear = 0.7f;
+					AttenuationQuadratic = 1.8f;
+					return;
+				}
+				case 13:
+				{
+					AttenuationLinear = 0.35f;
+					AttenuationQuadratic = 0.44f;
+					return;
+				}
 				case 20:
 				{
 					AttenuationLinear = 0.22f;
 					AttenuationQuadratic = 0.20f;
 					return;
 				}
+				case 32:
+				{
+					AttenuationLinear = 0.14f;
+					AttenuationQuadratic = 0.07f;
+					return;
+				}
+				case 50:
+				{
+					AttenuationLinear = 0.09f;
+					AttenuationQuadratic = 0.032f;
+					return;
+				}
+				case 65:
+				{
+					AttenuationLinear = 0.07f;
+					AttenuationQuadratic = 0.017f;
+					return;
+				}
+				case 100:
+				{
+					AttenuationLinear = 0.045f;
+					AttenuationQuadratic = 0.0075f;
+					return;
+				}
+				case 160:
+				{
+					AttenuationLinear = 0.027f;
+					AttenuationQuadratic = 0.0028f;
+					return;
+				}
 				case 200:
 				{
 					AttenuationLinear = 0.022f;
 					AttenuationQuadratic = 0.0019f;
+					return;
+				}
+				case 325:
+				{
+					AttenuationLinear = 0.014;
+					AttenuationQuadratic = 0.0007f;
+					return;
+				}
+				case 600:
+				{
+					AttenuationLinear = 0.007f;
+					AttenuationQuadratic = 0.0002f;
+					return;
+				}
+				case 3250:
+				{
+					AttenuationLinear = 0.0014f;
+					AttenuationQuadratic = 0.000007f;
 					return;
 				}
 			}
@@ -142,7 +202,7 @@ namespace Exalted
 	//	Directional Light /////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////
 	
-	struct DirectionalLight : public Light
+	struct DirectionalLight : public Light // we set its position as its direction
 	{
 		glm::vec3 Direction;
 
@@ -213,7 +273,7 @@ namespace Exalted
 		
 		SpotLight()
 			: Light(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f)),
-				Position(0.f), Direction(1.f),
+				Position(1.f), Direction(1.f),
 				CutoffInner(glm::cos(glm::radians(12.5f))), CutoffOuter(glm::cos(glm::radians(17.5f))),
 				AttenuationConstant(1), AttenuationLinear(0.7), AttenuationQuadratic(1.8)
 		{
@@ -269,16 +329,76 @@ namespace Exalted
 		{
 			switch (distance)
 			{
+				case 7:
+				{
+					AttenuationLinear = 0.7f;
+					AttenuationQuadratic = 1.8f;
+					return;
+				}
+				case 13:
+				{
+					AttenuationLinear = 0.35f;
+					AttenuationQuadratic = 0.44f;
+					return;
+				}
 				case 20:
 				{
 					AttenuationLinear = 0.22f;
 					AttenuationQuadratic = 0.20f;
 					return;
 				}
+				case 32:
+				{
+					AttenuationLinear = 0.14f;
+					AttenuationQuadratic = 0.07f;
+					return;
+				}
+				case 50:
+				{
+					AttenuationLinear = 0.09f;
+					AttenuationQuadratic = 0.032f;
+					return;
+				}
+				case 65:
+				{
+					AttenuationLinear = 0.07f;
+					AttenuationQuadratic = 0.017f;
+					return;
+				}
+				case 100:
+				{
+					AttenuationLinear = 0.045f;
+					AttenuationQuadratic = 0.0075f;
+					return;
+				}
+				case 160:
+				{
+					AttenuationLinear = 0.027f;
+					AttenuationQuadratic = 0.0028f;
+					return;
+				}
 				case 200:
 				{
 					AttenuationLinear = 0.022f;
 					AttenuationQuadratic = 0.0019f;
+					return;
+				}
+				case 325:
+				{
+					AttenuationLinear = 0.014;
+					AttenuationQuadratic = 0.0007f;
+					return;
+				}
+				case 600:
+				{
+					AttenuationLinear = 0.007f;
+					AttenuationQuadratic = 0.0002f;
+					return;
+				}
+				case 3250:
+				{
+					AttenuationLinear = 0.0014f;
+					AttenuationQuadratic = 0.000007f;
 					return;
 				}
 			}

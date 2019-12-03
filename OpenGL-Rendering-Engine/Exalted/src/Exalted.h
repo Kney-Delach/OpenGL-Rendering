@@ -16,6 +16,9 @@
 #pragma once
 
 #include "Core/Application.h"
+
+#define TIME static_cast<float>(Exalted::Application::Get().GetWindow().GetTime()) //todo: move this from here
+
 #include "Core/Log.h"
 
 #include "Core/Core/Timestep.h"
@@ -35,7 +38,6 @@
 #include "Core/Renderer/Renderer.h"
 #include "Core/Renderer/RenderCommand.h"
 
-//todo: maybe move these?
 #include "Core/Renderer/Lights/Light.h"
 #include "Core/Renderer/Lights/Material.h"
 
@@ -66,40 +68,7 @@
 #include "Core/SceneGraph/FrustumCulling/Frustum.h"
 #include "Core/SceneGraph/FrustumCulling/FrustumPlane.h"
 
+#include "Core/Renderer/CameraTrack/CameraTrackFlags.h" 
+
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
-
-// -------------- Utility Macros -------------- //
-
-#define TIME static_cast<float>(Exalted::Application::Get().GetWindow().GetTime())
-
-// -------------- Object Macros -------------- //
-
-#define TEAPOT "Resources/Meshes/Teapot.obj"
-#define SUZANNE "Resources/Meshes/Suzanne2.obj"
-#define NANOSUIT "Resources/Meshes/nanosuit.obj"
-#define F16 "Resources/Meshes/f16.obj"
-#define BBIRD "Resources/Meshes/BastionBird.obj"
-#define BUNNY "Resources/Meshes/bunny.obj"
-#define SYMMETRA "Resources/Meshes/Symmetra/symmetra.obj"
-#define DABROVIC_SPONZA "Resources/Meshes/Dabrovic-Sponza/sponza.obj"
-#define CRYTEK_SPONZA "Resources/Meshes/Crytek-Sponza/sponza.obj"
-#define HALLWAY "Resources/Meshes/Hallway.obj"
-
-#define TERRAIN "Resources/Meshes/Terrain/Model/Terrain_50000.obj"
-#define TERRAIN_COLOR "Resources/Meshes/Terrain/Textures/Color.tif"
-
-// ------------- Skydome macros ---------------- // todo: move from here
-
-#define SKYDOME "Resources/Defaults/Skydome/Meshes/Dome.obj"
-#define ATMOSPHERE_VERTEX "Resources/Defaults/Skydome/Shaders/AtmosphereVertex.glsl"
-#define ATMOSPHERE_FRAGMENT "Resources/Defaults/Skydome/Shaders/AtmosphereFragment.glsl"
-
-// -------------- Texture Macros -------------- //
-
-#define SKYBOX_RIGHT	"Resources/Textures/Skyboxes/Crater/Right.tga"
-#define SKYBOX_LEFT	"Resources/Textures/Skyboxes/Crater/Left.tga"
-#define SKYBOX_TOP		"Resources/Textures/Skyboxes/Crater/Top.tga"
-#define SKYBOX_BOTTOM	"Resources/Textures/Skyboxes/Crater/Bottom.tga"
-#define SKYBOX_FRONT	"Resources/Textures/Skyboxes/Crater/Front.tga"
-#define SKYBOX_BACK	"Resources/Textures/Skyboxes/Crater/Back.tga"

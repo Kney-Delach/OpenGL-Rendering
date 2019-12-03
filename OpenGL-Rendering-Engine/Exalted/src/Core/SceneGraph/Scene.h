@@ -22,53 +22,70 @@
 #include "Core/Renderer/Loaders/ObjLoader.h"
 
 #include <vector>
+#include "LightManager.h"
 
 #define DEFAULT_ROOT_MESH "Resources/Defaults/GameObjects/RootMesh.obj"
-//todo: Create the scene root always at location 0,0,0, and contains a mesh sphere which can be toggled visible.
 
 namespace Exalted
 {
 	class Scene
 	{
 	public:
-		Scene(Ref<EditorCamera>& camera, bool generateRoot = false) : m_Camera(camera)
+		Scene(Ref<EditorCamera>& camera, bool generateRoot = false, bool generateMesh = true) : m_Camera(camera)
 		{
 			m_Skybox = Skybox::Create();
 			if(generateRoot)
-			{
-				Ref<Mesh> rootMesh = Mesh::Create();
-				rootMesh->SetVertexArray(ObjLoader::Load(DEFAULT_ROOT_MESH));
+			{			
 				m_SceneRoot = Exalted::CreateRef<GameObject>("Scene Root");
 				m_SceneRoot->SetBoundingRadius(FLT_MAX);
-				m_SceneRoot->SetMesh(rootMesh);
-				m_SceneRoot->SetActive(false);
+				if(!generateMesh)
+				{
+					m_SceneRoot->SetActive(true);
+				}
+				else
+				{
+					Ref<Mesh> rootMesh = Mesh::Create();
+					rootMesh->SetVertexArray(ObjLoader::Load(DEFAULT_ROOT_MESH));
+					m_SceneRoot->SetMesh(rootMesh);
+					m_SceneRoot->SetActive(false);
+				}
 			}
 		}
 		~Scene() = default;
-
+		void SetupSceneLightUBOs() const;
 		void UpdateScene(Timestep deltaTime);
 		void RenderScene()
 		{
 			BuildObjectLists(m_SceneRoot.get());
 			SortObjectLists();
-			DrawObjectLists();
-			ClearObjectLists();
 		}
-		void RenderSkybox() const { m_Skybox->Draw(); } //todo: Make private and add call to RenderScene function.
+		void DrawOpaqueObjects();
+		void DrawTransparentObjects();
+		// the following functions are used for shadow mapping
+		void DrawOpaqueBindless(const Ref<Shader>& shadowShader);
+		void DrawTransparentBindless(const Ref<Shader>& shadowShader);
+		
+		void ClearObjectLists();
+		void RenderSkybox() const { m_Skybox->Draw(); } 
 		void SetCamera(Ref<EditorCamera>& camera) { m_Camera = camera; }
-		Ref<GameObject>& GetSceneRoot() { return m_SceneRoot; }
+		void SetLightManager(Ref<LightManager>& lightManager) { m_LightsManager = lightManager; }
 		void SetSceneRoot(Ref<GameObject>& sceneRoot) { m_SceneRoot = sceneRoot; }
-		static void OnEvent(Exalted::Event& event);
+		void OnEvent(Exalted::Event& event);
+		Ref<GameObject>& GetSceneRoot() { return m_SceneRoot; }
+	public:
+		static inline bool s_IsCameraFree = false; // initially camera is on the track
 	private:
 		void BuildObjectLists(GameObject* gameObject);
 		void SortObjectLists(); 
-		void ClearObjectLists();
+		
 		void DrawObjectLists();
 		static __forceinline void DrawObject(GameObject* gameObject) { gameObject->Draw(); }
+		static __forceinline void DrawObjectBindless(GameObject* gameObject, const Ref<Shader>& shadowShader) { gameObject->DrawBindless(shadowShader); }
 	private:
 		Ref<EditorCamera> m_Camera;
 		Ref<GameObject> m_SceneRoot;
 		Ref<Skybox> m_Skybox;
+		Ref<LightManager> m_LightsManager;
 		Frustum m_Frustum;
 		std::vector<GameObject*> m_OpaqueObjects;
 		std::vector<GameObject*> m_TransparentObjects;

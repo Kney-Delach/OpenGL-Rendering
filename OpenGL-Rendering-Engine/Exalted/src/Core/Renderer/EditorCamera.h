@@ -19,6 +19,8 @@
 #include "Cameras.h"
 #include "Core/Core/Timestep.h"
 #include "Core/Events/Event.h"
+#include "UniformBuffer.h"
+#include "CameraTrack.h"
 
 
 namespace Exalted
@@ -30,16 +32,33 @@ namespace Exalted
 	class EditorCamera : public PerspectiveCamera
 	{
 	public:
-		EditorCamera(float horizontalFOV = 45.f, float aspectRatio = 1280.f/720.f, float zNear = 0.1f, float zFar = 100.f)
+		EditorCamera(float horizontalFOV = 45.f, float aspectRatio = 1280.f/720.f, float zNear = 0.1f, float zFar = 100.f, Bytes bufferIndex = 2)
 			: PerspectiveCamera(horizontalFOV,aspectRatio, zNear, zFar)
 		{
+			// setup ubo
+			Bytes bufferSize = 4 * sizeof(glm::mat4) + sizeof(glm::vec4);;
+			m_CameraUniformBuffer = UniformBuffer::Create(bufferSize);
+			const Bytes offset = 0;
+			m_CameraUniformBuffer->BindBufferRange(bufferIndex, offset, bufferSize);
+			
 			UpdateCameraVectors();
 			RecalculateViewMatrix();
 		}
-		void UpdateCamera(Timestep deltaTime);
+
+		void UpdateCamera(Timestep deltaTime); // manual camera updates
+		void AddTrack(const Ref<CameraTrack>& cameraTrack) { m_CameraTracks.emplace_back(cameraTrack); }
+		void UpdateTrack(Timestep deltaTime);  // automatic track camera updates
+		void SetTrack(const int index);
+		void ResetMovementVariables()
+		{
+			m_ProcessingMouseMovement = false;
+			m_MouseMoving = false;
+		}
+		
 		void OnImGuiRender();
 		void OnEvent(Event& event);
 		void UpdateUBO(Ref<UniformBuffer>& ubo) const;
+		void UpdateUBO() const;
 		void SetMouseSensitivity(const float sensitivity) { m_MouseSensitivity = sensitivity; }
 		void SetMouseSpeed(const float speed) { m_MovementSpeed = speed; }
 		float GetFOV() { return m_FOV; } //todo: move this to parent class
@@ -62,6 +81,10 @@ namespace Exalted
 		float m_Pitch = 0.f;
 		float m_MovementSpeed = 2.5f;
 		float m_MouseSensitivity = 0.1f;
+	private:
+		Ref<CameraTrack> m_CurrentTrack; 
+		std::vector<Ref<CameraTrack>> m_CameraTracks;
+		Ref<UniformBuffer> m_CameraUniformBuffer; //todo: verify this works correctly.
 	private: // Mouse Event Handling Variables
 		bool m_ProcessingMouseMovement = false;
 		bool m_MouseMoving = false;
