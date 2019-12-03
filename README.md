@@ -25,7 +25,7 @@ Youtube Video: https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be
 
 |**Name**|**Description**|
 |:------:|:-------------:|
-| Scene Graph| Used to arrange spatial data in the scenes, for example, to allow for transparency ordering |![version-1.0.0][version-1.0.0]|
+| Scene Graph| Used to arrange spatial data in the scenes, for example, to allow for blended transparency ordering |![version-1.0.0][version-1.0.0]|
 | Blinn-Phong Lighting (Energy Conserving) | (Directional - Spot - Point) lighting |![version-1.0.0][version-1.0.0]|
 | Environment Mapping | Skybox environment |![version-1.0.0][version-1.0.0]|
 | Dynamicly Changing Environment | Objects in the scenes change over time |![version-1.0.0][version-1.0.0]|
@@ -35,7 +35,19 @@ Youtube Video: https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be
 | Anisotropic Filtering | 16x anisotropic texture filtering |![version-1.0.0][version-1.0.0]|
 | Object Instancing | Instance drawing rendering capabilities, can be used for particle systems etc... |![version-1.0.0][version-1.0.0]|
 
-#### Feature Screenshots 
+#### Some Screenshots 
+
+#### Showcase Scene
+A screenshot extracted from [this](https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be) youtube video of the showcase:
+<a name="showcase"></a>
+<p align="center"><img width=100% src="Screenshots/Geometry_Explosion.jpg?raw=true"></p>
+
+##### Shadows
+Dynamic directional light shadows: 
+[![Dynamic-Directional-Shadows](https://i.gyazo.com/2b6d543d7c08773d9b316df537f93611.gif)](https://gyazo.com/2b6d543d7c08773d9b316df537f93611)
+
+Omnidirectional (point light) Shadows: 
+[![Omnidirectional-Shadows](https://i.gyazo.com/aa13eec481b35a35721bf18619415c9f.gif)](https://gyazo.com/aa13eec481b35a35721bf18619415c9f)
 
 ##### Instanced Rendering
 10 million quads rendered at 150fps:
@@ -46,14 +58,6 @@ Youtube Video: https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be
 Scene graph object transformation as done in Unity: 
 <a name="scene-graph"></a>
 <p align="center"><img width=100% src="Resources/Images/Scene-Graph/Hierarchy-Unity-Comparison-Successfulpng.png?raw=true"></p>
-
-##### Shadows
-Dynamic directional light shadows: 
-
-<a name="shadows"></a>
-<video width="480" height="320" controls="controls" autoplay="autoplay">
-  <source src="Resources/Images/Shadows/fake_sun.mp4" type="video/mp4" />
-</video>
 
 <a name="github-issues"></a>
 ## Github Issues
