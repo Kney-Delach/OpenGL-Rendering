@@ -48,7 +48,7 @@ Dynamic directional real-time shadows:
 
 ##### Omnidirectional Perspective Shadows
 Omnidirectional (point light) real-time Shadows: 
-[![Omnidirectional-Shadows](https://i.gyazo.com/aa13eec481b35a35721bf18619415c9f.gif)](https://gyazo.com/aa13eec481b35a35721bf18619415c9f)
+[![Omnidirectional](https://i.gyazo.com/aa13eec481b35a35721bf18619415c9f.gif)](https://gyazo.com/aa13eec481b35a35721bf18619415c9f)
 
 ##### Instanced Rendering
 10 million quads rendered at 150fps:
