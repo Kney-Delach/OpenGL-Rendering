@@ -44,7 +44,8 @@ A screenshot extracted from [this](https://www.youtube.com/watch?v=IS9GLXPMrL8&f
 
 ##### Omnidirectional Perspective Shadows
 Omnidirectional real-time Shadows: 
-[![Image from Gyazo](https://i.gyazo.com/b1e98fb9e85f1e247d8dfcb3449b9a7a.gif)](https://gyazo.com/b1e98fb9e85f1e247d8dfcb3449b9a7a)
+
+[![omnidirectional-shadows](https://i.gyazo.com/b1e98fb9e85f1e247d8dfcb3449b9a7a.gif)](https://gyazo.com/b1e98fb9e85f1e247d8dfcb3449b9a7a)
 
 ##### Orthographic Shadows
 Dynamic directional real-time shadows: 
