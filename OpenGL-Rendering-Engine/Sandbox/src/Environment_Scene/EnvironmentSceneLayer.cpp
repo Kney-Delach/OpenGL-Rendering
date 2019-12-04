@@ -46,7 +46,8 @@ namespace Sandbox
 			m_PointLights[i]->Diffuse = glm::vec3(0.5);
 			m_PointLights[i]->Specular = glm::vec3(1.0);
 			m_PointLights[i]->SetAttenuationDistance(200);
-		}				  
+		}
+		
 		// 2. spot lights
 		for (int i = 0; i < 4; i++)
 		{
@@ -67,7 +68,7 @@ namespace Sandbox
 		m_DirectionalLight->Specular = glm::vec3(0.1,0.3,0.2);
 		m_DirectionalLight->Direction = glm::vec3(0.1f, 20.f, -6.f);
 		
-		// 4. Create Shaders
+		// 4. Shaders
 		Exalted::Ref<Exalted::Shader> multipleLightsShader = Exalted::Shader::Create(MULTIPLE_LIGHTS_VERTEX, MULTIPLE_LIGHTS_FRAGMENT);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Light_Uniforms", 1);
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(multipleLightsShader)->SetUniformBlockIndex("Camera_Uniforms", 2);
@@ -88,9 +89,8 @@ namespace Sandbox
 
 		// 5. Create Materials
 		Exalted::Ref<Exalted::Material> islandMaterial = Exalted::Material::Create(TEXTURE_DIFFUSE_ISLAND, TEXTURE_SPECULAR_ISLAND, "", TEXTURE_NORMAL_ISLAND, 33.f);
-		Exalted::Ref<Exalted::Material> treeBarkMaterial = Exalted::Material::Create(DEBUG_TEXTURE_GRID_D, DEBUG_TEXTURE_GRID_S, "", "", 33.f);
-		// custom creation of leaf material due to engine back-end specifications
-		Exalted::Ref<Exalted::Material> leafMaterial = Exalted::Material::Create(TEXTURE_DIFFUSE_LEAF, "", "", "", 2.f);
+		Exalted::Ref<Exalted::Material> treeBarkMaterial = Exalted::Material::Create(DEBUG_TEXTURE_GRID_D, DEBUG_TEXTURE_GRID_S, "", "", 33.f);		
+		Exalted::Ref<Exalted::Material> leafMaterial = Exalted::Material::Create(TEXTURE_DIFFUSE_LEAF, "", "", "", 2.f); // custom creation of leaf material due to engine back-end specifications
 		Exalted::Ref<Exalted::Texture2D> leafTexture = Exalted::Texture2D::Create(TEXTURE_DIFFUSE_LEAF,
 			Exalted::TextureFormat::RGBA,
 			Exalted::TextureWrap::CLAMP,
@@ -103,6 +103,7 @@ namespace Sandbox
 		leafMaterial->NormalTexture = leafTexture;
 		
 		// 6. Create Gameobjects
+		
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//// UFOs
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -247,7 +248,6 @@ namespace Sandbox
 		leafObject->SetTransparency(true);
 		leafObject->SetBoundingRadius(15.f);
 
-		// add leaves to tree
 		treeObject->AddChildObject(leafObject);
 
 		////////////////////////////////////////////////////////////////////////
@@ -270,7 +270,6 @@ namespace Sandbox
 		leafObject2->SetTransparency(true);
 		leafObject2->SetBoundingRadius(15.f);
 		
-		// add leaves to tree
 		treeObject2->AddChildObject(leafObject2);
 
 		////////////////////////////////////////////////////////////////////////
@@ -293,7 +292,6 @@ namespace Sandbox
 		leafObject3->SetTransparency(true);
 		leafObject3->SetBoundingRadius(15.f);
 		
-		// add leaves to tree
 		treeObject3->AddChildObject(leafObject3);
 
 		////////////////////////////////////////////////////////////////////////
@@ -316,7 +314,6 @@ namespace Sandbox
 		leafObject4->SetTransparency(true);
 		leafObject4->SetBoundingRadius(15.f);
 		
-		// add leaves to tree
 		treeObject4->AddChildObject(leafObject4);
 		
 		////////////////////////////////////////////////////////////////////////
@@ -365,25 +362,24 @@ namespace Sandbox
 		m_SceneManager->SetLightManager(lightManager);
 		m_SceneManager->SetupSceneLightUBOs();
 
-		// 9. Setup shadow buffers, this should eventually be added to the scene manager for cleaner implementation, but theoretically it does the same thing as it would within one.
+		// 9. Setup shadow buffers, this should eventually be added to the scene manager for cleaner implementation, but practically it does the same thing as it would within one.
 		for (int i = 0; i < m_SpotLights.size(); i++)
 		{
 			m_DepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
 		}
+		m_SunlightDepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
+
 		// shadow shader
 		m_ObjectDepthShader = Exalted::Shader::Create(DIRECTIONAL_SHADOW_SHADER_VERTEX_DEPTH, DIRECTIONAL_SHADOW_SHADER_FRAGMENT_DEPTH); 
 		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformBlockIndex("Light_Space_Uniforms", 3);
-		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 4);
-	
-		m_SunlightDepthFrameBuffers.emplace_back(Exalted::FrameBuffer::Create(4096, 4096, true));
+		std::dynamic_pointer_cast<Exalted::OpenGLShader>(m_ObjectDepthShader)->SetUniformBlockIndex("Directional_Light_Space_Uniforms", 4);	
 
 		// debug quads shader
 		m_QuadDepthShader = Exalted::Shader::Create(SHADOW_QUAD_TEST_SHADER_VERTEX, SHADOW_QUAD_TEST_SHADER_FRAGMENT);
-
+		
 		// quad used to render post processing and debug shadow maps
 		m_QuadMesh = Exalted::Mesh::Create();
 		m_QuadMesh->SetVertexArray(Exalted::ShapeGenerator::GenerateIndexedQuad());
-
 
 		/////////////////////////////////////////////
 		//// Camera Tracks data /////////////////////
@@ -403,8 +399,7 @@ namespace Sandbox
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 175, -200), -275, -60, 2.f));
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(0, 575, 0), -275, -90, 3.f)); // rise up
 
-		// in the air
-		// pan around environment mapped spaceship 
+		// in the air + pan around environment mapped spaceship 
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-65, 115, 10), -405, -20, 3.f)); // move towards environment mapped ship
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(50, 115, 85), -475, -20, 3.f, 3)); // move around mapped ship
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(130, 115, -85), -555, -20, 3.f, 2)); // move around mapped ship
@@ -436,11 +431,8 @@ namespace Sandbox
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-150.6, 110.f, -120.57), 30.5, -20, 4.f, 5)); // move away from ship
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-150.6, 90.f, -100.57), 30.5, 0, 0.f, 5)); //todo: Insert fireworks reaction, maybe shake? 
 
-		// add track to camera
 		m_EditorCamera->AddTrack(mainTrack);
-
-		// preapre track for startup
-		m_EditorCamera->ResetMovementVariables();
+		m_EditorCamera->ResetMovementVariables();	// preapre track for startup
 		m_EditorCamera->SetTrack(0);
 
 		/////////////////////////////////////////////////
@@ -543,6 +535,7 @@ namespace Sandbox
 		//////////////////////////////////////////////////////////////////////////////////////////
 		//// Render post processing framebuffer using post processing shader ///////////////////// 
 		//////////////////////////////////////////////////////////////////////////////////////////
+		
 		m_PostProcessingFrameBuffer->UnbindMiniFrame();
 		Exalted::RenderCommand::ClearColorBuffer();
 		Exalted::OpenGLConfigurations::DisableDepthTesting();

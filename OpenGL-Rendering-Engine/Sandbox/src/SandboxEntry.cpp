@@ -2,7 +2,8 @@
  * Filename		: SandboxEntity.cpp
  * Name			: Ori Lazar
  * Date			: 31/10/2019
- * Description	: The entry point for this OpenGL Rendering Application. 
+ * Description	: The entry point for this OpenGL Rendering Application.
+ * Youtube Link : https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be
      .---.
    .'_:___".
    |__ --==|
@@ -22,7 +23,7 @@ namespace Sandbox
 	public:
 		OpenGLRenderingApplication()
 		{
-			PushLayer(new EnvironmentSceneLayer()); // youtube link https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be
+			PushLayer(new EnvironmentSceneLayer());
 		}
 		virtual ~OpenGLRenderingApplication()
 		{

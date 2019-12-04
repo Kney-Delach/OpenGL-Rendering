@@ -91,7 +91,7 @@ namespace Exalted
 
 	void WindowsWindow::InitGLFWWindow()
 	{
-		m_Window = glfwCreateWindow(static_cast<int>(m_WindowData.Properties.Width), static_cast<int>(m_WindowData.Properties.Height), m_WindowData.Properties.Title.c_str(), glfwGetPrimaryMonitor(), nullptr); // replcae glfwGetPrimaryMonitor with a nullptr to set it to non-fullscreen
+		m_Window = glfwCreateWindow(static_cast<int>(m_WindowData.Properties.Width), static_cast<int>(m_WindowData.Properties.Height), m_WindowData.Properties.Title.c_str(), nullptr, nullptr); // glfwGetPrimaryMonitor set it to fullscreen
 		s_GLFWWindowCount++;
 		m_RenderingContext = RenderingContext::Create(m_Window);
 		m_RenderingContext->Init();
