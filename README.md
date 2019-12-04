@@ -40,11 +40,12 @@ Youtube Video: https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be
 #### Showcase Scene
 A screenshot extracted from [this](https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be) youtube video of the showcase:
 <a name="showcase"></a>
-<p align="center"><img width=100% src="Screenshots/Geometry_Explosion.jpg?raw=true"></p>
+<p align="center"><img width=100% src="Resources/Screenshots/Geometry_Explosion.jpg?raw=true"></p>
 
 ##### Omnidirectional Perspective Shadows
 Omnidirectional real-time Shadows:
 <img src="Resources/Images/Shadows/omnidirectional-shadows.gif?raw=true" width="800px">
+<img src="Resources/Images/Shadows/omnidirectional-double.gif?raw=true" width="800px">
 
 ##### Orthographic Shadows
 Dynamic directional real-time shadows: 
@@ -52,8 +53,30 @@ Dynamic directional real-time shadows:
 
 ##### Instanced Rendering
 10 million quads rendered at 150fps:
-<a name="anisotropic filtering"></a>
+<a name="instanced-quads"></a>
 <p align="center"><img width=100% src="Resources/Images/Instancing/10Mil_Objects_150fps.jpg?raw=true"></p>
+
+100k environmently mapped teapots rendered at 100fps: 
+<a name="instanced-teapots"></a>
+<p align="center"><img width=100% src="Resources/Images/Instancing/100kteapots.jpg?raw=true"></p>
+
+
+##### Blinn-Phong lighting with Energy Conservation 
+Blinn lighting:
+<a name="instanced-teapots"></a>
+<p align="center"><img width=100% src="Resources/Images/Lighting/blinn.jpg?raw=true"></p>
+
+Blinn Phong lighting with energy conservation:
+<a name="instanced-teapots"></a>
+<p align="center"><img width=100% src="Resources/Images/Lighting/blinn-phong.jpg?raw=true"></p>
+
+Blinn lighting with normals:
+<a name="instanced-teapots"></a>
+<p align="center"><img width=100% src="Resources/Images/Lighting/blinn-normal.jpg?raw=true"></p>
+
+Blinn Phong lighting with normals and energy conservation:
+<a name="instanced-teapots"></a>
+<p align="center"><img width=100% src="Resources/Images/Lighting/blinn-phong-normal.jpg?raw=true"></p>
 
 ##### Scene Graph
 Scene graph object transformation as done in Unity: 
