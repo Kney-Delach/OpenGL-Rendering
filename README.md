@@ -83,6 +83,11 @@ Scene graph object transformation as done in Unity:
 <a name="scene-graph"></a>
 <p align="center"><img width=100% src="Resources/Images/Scene-Graph/Hierarchy-Unity-Comparison-Successfulpng.png?raw=true"></p>
 
+##### Anisotropic Texture Filtering
+16 x Anisotropic filtered textures:
+
+[![Anisotropic-Filtering](https://i.gyazo.com/690196a61353ad28c30a10ba65a5bf18.png)](https://gyazo.com/690196a61353ad28c30a10ba65a5bf18)
+
 <a name="github-issues"></a>
 ## Github Issues
 Please use [Github Issues](https://github.com/Kney-Delach/OpenGL-Rendering/issues) to report bugs.
