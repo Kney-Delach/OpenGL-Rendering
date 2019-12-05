@@ -79,8 +79,8 @@ namespace Exalted
 
 				for (Layer* layer : m_LayerStack)
 				{
-					//if (layer->IsActive()) //todo: uncomment this for debug mode
-					layer->OnUpdate(deltaTime);
+					if (layer->IsActive())
+						layer->OnUpdate(deltaTime);
 				}
 			}
 			
@@ -106,13 +106,13 @@ namespace Exalted
 			ImGui::Text("Maximum Uniform Buffer Components: %i", caps.MaxUniformBufferComponents);
 			ImGui::End();
 			//todo: Uncomment this if not runnig for efficiency, as will run debug imgui data for all layers
-			//for (Layer* layer : m_LayerStack)
-			//{
-			//	if (layer->IsActive())
-			//		layer->OnImGuiRender();
-			//	else
-			//		layer->OnInactiveImGuiRender();
-			//}
+			for (Layer* layer : m_LayerStack)
+			{
+				if (layer->IsActive())
+					layer->OnImGuiRender();
+				else
+					layer->OnInactiveImGuiRender();
+			}
 			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();
