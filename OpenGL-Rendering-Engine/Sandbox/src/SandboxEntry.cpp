@@ -26,9 +26,9 @@
 #include "12-Frame_Buffers/FrameBufferLayer.h"
 #include "13-Texture_Cubes_Skybox/SkyboxLayer.h"
 #include "14-GLSL_Exploration/GLSLExplorationLayer.h"
-#include "15-Instancing/InstancingLayer.h"
 
 // never run these layers simultaneously
+#include "15-Instancing/InstancingLayer.h"
 #include "16-Tesselation/TessellationLayer.h"
 #include "17-Lighting/LightingLayer.h"
 #include "18-Shadows/ShadowLayer.h"
@@ -44,23 +44,22 @@ namespace Sandbox
 	public:
 		OpenGLRenderingApplication()
 		{
-			//PushLayer(new TriangleLayer());
-			//PushLayer(new VertexTransformLayer());
-			//PushLayer(new EditorShowcaseLayer());
-			//PushLayer(new TextureMappingLayer());
-			//PushLayer(new DepthTestingLayer());
-			//PushLayer(new StencilTestingLayer());
-			//PushLayer(new BlendingLayer());
-			//////PushLayer(new SceneGraphLayer()); //todo: For whoever is reading this, this scene no longer displays anything as the gameobjects themselves are organised by a scene class which is shown in the scene class layer.
-			//PushLayer(new SceneClassLayer());
-			//PushLayer(new HeightMapLayer());
-			//PushLayer(new ModelLoadingLayer());
-			//PushLayer(new FrameBufferLayer());
-			//PushLayer(new SkyboxLayer());
-			//PushLayer(new GLSLExplorationLayer); 
-			//PushLayer(new InstancingLayer());
-			//
-			////todo: Note, don't run the following layers simultaneously matrices.
+			PushLayer(new TriangleLayer());
+			PushLayer(new VertexTransformLayer());
+			PushLayer(new EditorShowcaseLayer());
+			PushLayer(new TextureMappingLayer());
+			PushLayer(new DepthTestingLayer());
+			PushLayer(new StencilTestingLayer());
+			PushLayer(new BlendingLayer());
+			PushLayer(new SceneClassLayer());
+			PushLayer(new HeightMapLayer());
+			PushLayer(new ModelLoadingLayer());
+			PushLayer(new FrameBufferLayer());
+			PushLayer(new SkyboxLayer());
+			PushLayer(new GLSLExplorationLayer);
+			
+			//todo: Note, don't run the following layers simultaneously, this is directly due to the usage of uniform buffers.
+			PushLayer(new InstancingLayer());
 			//PushLayer(new TessellationLayer()); 
 			//PushLayer(new LightingLayer());
 			//PushLayer(new ShadowLayer());

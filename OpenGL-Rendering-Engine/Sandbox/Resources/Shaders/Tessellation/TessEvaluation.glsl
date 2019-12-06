@@ -35,6 +35,7 @@ out ShaderData
 {
 	vec2 e_TexCoord;
 	float e_TerrainScale;
+	vec3 e_Position; 
 	float e_PositionY;
 } OUT;
 
@@ -69,12 +70,14 @@ void main()
 	vec2 texCoordHeightmap = QuadMixVec2(IN[0].c_HeightmapTexCoord, IN[1].c_HeightmapTexCoord, IN[2].c_HeightmapTexCoord, IN[3].c_HeightmapTexCoord);
 	vec2 texCoordColormap = QuadMixVec2(IN[0].c_ColorTexCoord, IN[1].c_ColorTexCoord, IN[2].c_ColorTexCoord, IN[3].c_ColorTexCoord);
 
-	vec3 position = QuadMixVec3(IN[0].c_Position, IN[1].c_Position, IN[2].c_Position, IN[3].c_Position);
+	vec3 position = QuadMixVec3(IN[0].c_Position, IN[1].c_Position * u_TerrainScale, IN[2].c_Position * u_TerrainScale, IN[3].c_Position * u_TerrainScale);
 
-	position.y += u_TerrainScale * texture(u_HeightMap, texCoordHeightmap).r;
+	position.y = 200 * texture(u_HeightMap, texCoordHeightmap).r;
 	 
 	gl_Position = ViewProjectionMatrix * vec4(position, 1.0);
+
 	OUT.e_PositionY = position.y;
+	OUT.e_Position = position;
 	OUT.e_TexCoord = texCoordColormap;
 	OUT.e_TerrainScale = u_TerrainScale;
 }

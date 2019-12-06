@@ -20,6 +20,7 @@ in ShaderData
 {
 	vec2 e_TexCoord;
 	float e_TerrainScale;
+	float e_Position;
 	float e_PositionY;
 } IN;
 

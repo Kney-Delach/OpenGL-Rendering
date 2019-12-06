@@ -17,7 +17,7 @@
 namespace Sandbox
 {
 	InstancingLayer::InstancingLayer()
-		: Layer("Instancing Layer", false)
+		: Layer("Instancing Layer", true)
 	{
 		m_EditorCamera = Exalted::CreateRef<Exalted::EditorCamera>(45.f,
 			static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()) / static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()),
