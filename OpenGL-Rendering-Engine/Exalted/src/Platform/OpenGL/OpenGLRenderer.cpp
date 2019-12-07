@@ -88,12 +88,12 @@ namespace Exalted
 
 	void OpenGLRendererAPI::DrawMeshInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity)
 	{
-		glDrawElementsInstanced(GL_TRIANGLES, mesh->GetVertexArray()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0, quantity);
+		glDrawElementsInstanced(GL_TRIANGLES, mesh->GetVertexArray()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr, static_cast<GLsizei>(quantity));
 	}
 
 	void OpenGLRendererAPI::DrawTrianglesInstanced(const unsigned numberOfVertices, unsigned long long& quantity)
 	{
-		glDrawArraysInstanced(GL_TRIANGLES, 0, numberOfVertices, quantity);
+		glDrawArraysInstanced(GL_TRIANGLES, 0, numberOfVertices, static_cast<GLsizei>(quantity));
 	}
 
 	void OpenGLRendererAPI::DrawTessellatedMesh(const Ref<Mesh>& mesh)
@@ -103,10 +103,10 @@ namespace Exalted
 
 	void OpenGLRendererAPI::DrawTessellatedInstanced(const Ref<Mesh>& mesh, unsigned long long& quantity)
 	{
-		glDrawElementsInstanced(GL_PATCHES, mesh->GetVertexArray()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0, quantity);
+		glDrawElementsInstanced(GL_PATCHES, mesh->GetVertexArray()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr, static_cast<GLsizei>(quantity));
 	}
 	void OpenGLRendererAPI::DrawTessellatedTrianglesInstanced(int numberOfVertices, unsigned long long& quantity)
 	{
-		glDrawArraysInstanced(GL_PATCHES, 0, numberOfVertices, quantity);
+		glDrawArraysInstanced(GL_PATCHES, 0, numberOfVertices, static_cast<GLsizei>(quantity));
 	}
 }

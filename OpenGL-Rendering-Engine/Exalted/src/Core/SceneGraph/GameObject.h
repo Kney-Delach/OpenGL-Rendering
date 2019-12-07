@@ -53,7 +53,7 @@ namespace Exalted
 		~GameObject()
 		{
 			DestroyGameObject();
-			const unsigned int gameComponentsSize = m_GameComponents.size();
+			const unsigned int gameComponentsSize = static_cast<const unsigned int>(m_GameComponents.size());
 
 			for (unsigned int i = 0; i < gameComponentsSize; i++)
 				delete m_GameComponents[i];

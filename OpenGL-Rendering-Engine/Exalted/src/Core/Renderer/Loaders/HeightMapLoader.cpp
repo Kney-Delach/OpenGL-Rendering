@@ -38,13 +38,13 @@ namespace Exalted
 			EX_CORE_ERROR("Attempting to read heightmap from invalid file: {0}", path.c_str());
 			return nullptr;
 		}
-		float vertCount = RAW_WIDTH * RAW_HEIGHT;
+		const float vertCount = RAW_WIDTH * RAW_HEIGHT;
 
 		std::vector<float> allVertices;
 		std::vector<uint32_t> indices;
 
-		unsigned char* data = new unsigned char[(int)vertCount];
-		file.read((char*)data, (float)vertCount * sizeof(unsigned char));
+		const unsigned char* data = new unsigned char[static_cast<int>(vertCount)];
+		file.read((char*)(data), static_cast<float>(vertCount) * sizeof(unsigned char));
 		file.close();
 
 		for (int x = 0; x < RAW_WIDTH; ++x)
@@ -52,9 +52,9 @@ namespace Exalted
 			for (int z = 0; z < RAW_HEIGHT; ++z)
 			{
 				// vertex position
-				allVertices.push_back((float)	x * HEIGHTMAP_X);
-				allVertices.push_back((float)	data[x * RAW_WIDTH + z] * HEIGHTMAP_Y);
-				allVertices.push_back((float)	z * HEIGHTMAP_Z);
+				allVertices.push_back(static_cast<float>(x) * HEIGHTMAP_X);
+				allVertices.push_back(static_cast<float>(data[x * RAW_WIDTH + z]) * HEIGHTMAP_Y);
+				allVertices.push_back(static_cast<float>(z) * HEIGHTMAP_Z);
 
 				// normal
 				allVertices.push_back(0);
@@ -62,8 +62,8 @@ namespace Exalted
 				allVertices.push_back(0);
 
 				// texture co-ordinate
-				allVertices.push_back((float)	x * HEIGHTMAP_TEX_X);
-				allVertices.push_back((float)	z * HEIGHTMAP_TEX_Z);
+				allVertices.push_back(static_cast<float>(x) * HEIGHTMAP_TEX_X);
+				allVertices.push_back(static_cast<float>(z) * HEIGHTMAP_TEX_Z);
 			}
 		}
 
@@ -71,10 +71,10 @@ namespace Exalted
 		{
 			for (int z = 0; z < RAW_HEIGHT - 1; ++z)
 			{
-				int a = (x * (RAW_WIDTH)) + z;
-				int b = ((x + 1) * (RAW_WIDTH)) + z;
-				int c = ((x + 1) * (RAW_WIDTH)) + (z + 1);
-				int  d = (x * (RAW_WIDTH)) + (z + 1);
+				const auto a = (x * (RAW_WIDTH)) + z;
+				const auto b = ((x + 1) * (RAW_WIDTH)) + z;
+				const auto c = ((x + 1) * (RAW_WIDTH)) + (z + 1);
+				const auto d = (x * (RAW_WIDTH)) + (z + 1);
 
 				indices.push_back(c);
 				indices.push_back(b);

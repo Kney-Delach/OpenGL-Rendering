@@ -77,7 +77,7 @@ namespace Exalted
 				ShaderDataTypeToOpenGLBaseType(element.Type),
 				element.Normalized ? GL_TRUE : GL_FALSE,
 				layout.GetStride(),
-				(const void*) element.Offset);
+				reinterpret_cast<const void*>(element.Offset));
 			index++;
 		}
 		m_VertexBuffers.push_back(vertexBuffer);
@@ -106,7 +106,7 @@ namespace Exalted
 				ShaderDataTypeToOpenGLBaseType(element.Type),
 				element.Normalized ? GL_TRUE : GL_FALSE,
 				layout.GetStride(),
-				(const void*)element.Offset);
+				reinterpret_cast<const void*>(element.Offset));
 			vertexBuffer->Unbind();
 			glVertexAttribDivisor(attributeIndex, advancementRate);
 			attributeIndex++;

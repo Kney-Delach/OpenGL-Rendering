@@ -39,7 +39,7 @@ namespace Exalted
 			Bytes bufferSize = 4 * sizeof(glm::mat4) + sizeof(glm::vec4);;
 			m_CameraUniformBuffer = UniformBuffer::Create(bufferSize);
 			const Bytes offset = 0;
-			m_CameraUniformBuffer->BindBufferRange(bufferIndex, offset, bufferSize);
+			m_CameraUniformBuffer->BindBufferRange(static_cast<uint32_t>(bufferIndex), offset, bufferSize);
 			
 			UpdateCameraVectors();
 			RecalculateViewMatrix();

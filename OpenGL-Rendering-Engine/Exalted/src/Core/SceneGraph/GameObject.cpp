@@ -88,7 +88,7 @@ namespace Exalted
 	}
 	void GameObject::DestroyGameObject()
 	{
-		const unsigned int objectListSize = m_ChildrenObjectsList.size(); 
+		const unsigned int objectListSize = static_cast<const unsigned int>(m_ChildrenObjectsList.size());
 		for (unsigned int i = 0; i < objectListSize; i++)
 			delete m_ChildrenObjectsList[i];
 	}

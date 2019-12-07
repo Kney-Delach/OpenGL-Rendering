@@ -175,11 +175,11 @@ namespace Exalted
 			}
 			
 			bufferLayout.CalculateOffsetsAndStride();
-			Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(meshData.data(), meshData.size());
+			Ref<VertexBuffer> vertexBuffer = VertexBuffer::Create(meshData.data(), static_cast<uint32_t>(meshData.size()));
 			vertexBuffer->SetLayout(bufferLayout);
 			va->AddVertexBuffer(vertexBuffer);
 		}
-		va->AddIndexBuffer(IndexBuffer::Create(indexBuffer.data(), indexBuffer.size()));
+		va->AddIndexBuffer(IndexBuffer::Create(indexBuffer.data(), static_cast<uint32_t>(indexBuffer.size())));
 		return va;
 	}
 }

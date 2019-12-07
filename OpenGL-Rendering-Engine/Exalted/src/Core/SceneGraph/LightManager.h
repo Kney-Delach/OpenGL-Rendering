@@ -17,22 +17,22 @@ namespace Exalted
 
 		void SetupUniformBuffer()
 		{
-			Exalted::GameObject::NumberOfSpotLights = m_SpotLights.size();
+			Exalted::GameObject::NumberOfSpotLights = static_cast<int>(m_SpotLights.size());
 
 			Bytes bufferSize = m_PointLights.size() * PointLight::UBSize() + m_DirectionalLights.size() * DirectionalLight::UBSize() + m_SpotLights.size() * SpotLight::UBSize();
 			const Bytes offset = 0;
 			m_LightUniformBuffer = UniformBuffer::Create(bufferSize);			
-			m_LightUniformBuffer->BindBufferRange(m_BufferIndex, offset, bufferSize);
+			m_LightUniformBuffer->BindBufferRange(static_cast<uint32_t>(m_BufferIndex), offset, bufferSize);
 
 			Bytes lsmBufferSize = m_SpotLights.size() * sizeof(glm::mat4);
 			const Bytes lsmOffset = 0;
 			m_LsmUniformBuffer = UniformBuffer::Create(lsmBufferSize);			
-			m_LsmUniformBuffer->BindBufferRange(m_LsmBufferIndex, lsmOffset, lsmBufferSize);
+			m_LsmUniformBuffer->BindBufferRange(static_cast<uint32_t>(m_LsmBufferIndex), lsmOffset, lsmBufferSize);
 
 			Bytes dirLsmBufferSize = m_DirectionalLights.size() * sizeof(glm::mat4);
 			const Bytes dirLsmOffset = 0;
 			m_DirectionalLsmUniformBuffer = UniformBuffer::Create(dirLsmBufferSize);
-			m_DirectionalLsmUniformBuffer->BindBufferRange(m_DirLsmBufferIndex, dirLsmOffset, dirLsmBufferSize);
+			m_DirectionalLsmUniformBuffer->BindBufferRange(static_cast<uint32_t>(m_DirLsmBufferIndex), dirLsmOffset, dirLsmBufferSize);
 		}
 		void UpdateUniformBufferData() //todo: verify this is the same format as in the shaders
 		{

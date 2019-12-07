@@ -42,9 +42,9 @@ namespace Sandbox
 		for (int i = 0; i < 4; i++)
 		{
 			m_PointLights.emplace_back(Exalted::PointLight::Create());
-			m_PointLights[i]->Ambient = glm::vec3(0.2);
-			m_PointLights[i]->Diffuse = glm::vec3(0.5);
-			m_PointLights[i]->Specular = glm::vec3(1.0);
+			m_PointLights[i]->Ambient = glm::vec3(0.2f);
+			m_PointLights[i]->Diffuse = glm::vec3(0.5f);
+			m_PointLights[i]->Specular = glm::vec3(1.0f);
 			m_PointLights[i]->SetAttenuationDistance(200);
 		}
 		
@@ -63,9 +63,9 @@ namespace Sandbox
 		
 		// 3. directional light
 		m_DirectionalLight = Exalted::DirectionalLight::Create();
-		m_DirectionalLight->Ambient = glm::vec3(0.15, 0.1, 0.3);
-		m_DirectionalLight->Diffuse = glm::vec3(0.5);
-		m_DirectionalLight->Specular = glm::vec3(0.1,0.3,0.2);
+		m_DirectionalLight->Ambient = glm::vec3(0.15f, 0.1f, 0.3f);
+		m_DirectionalLight->Diffuse = glm::vec3(0.5f);
+		m_DirectionalLight->Specular = glm::vec3(0.1f,0.3f,0.2f);
 		m_DirectionalLight->Direction = glm::vec3(0.1f, 20.f, -6.f);
 		
 		// 4. Shaders
@@ -237,9 +237,9 @@ namespace Sandbox
 		treeObject->SetMaterial(treeBarkMaterial);
 		treeObject->SetTransparency(false);
 		treeObject->SetBoundingRadius(10.f);
-		treeObject->GetTransform()->Scale = glm::vec3(0.01);
+		treeObject->GetTransform()->Scale = glm::vec3(0.01f);
 		treeObject->GetTransform()->Position = glm::vec3(1000.f, 1.5f, 1000.f);
-		treeObject->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject->GetTransform(), glm::vec3(0.35f), glm::vec3(15), 50.f));
+		treeObject->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject->GetTransform(), glm::vec3(0.35f), glm::vec3(15.f), 50.f));
 
 		Exalted::GameObject* leafObject = new Exalted::GameObject("Tree-Leaves-A");
 		leafObject->SetMesh(leafMesh);
@@ -259,9 +259,9 @@ namespace Sandbox
 		treeObject2->SetMaterial(treeBarkMaterial);
 		treeObject2->SetTransparency(true);
 		treeObject2->SetBoundingRadius(10.f);
-		treeObject2->GetTransform()->Scale = glm::vec3(0.01);
+		treeObject2->GetTransform()->Scale = glm::vec3(0.01f);
 		treeObject2->GetTransform()->Position = glm::vec3(-1000.f, 19.5f, 1000.f);
-		treeObject2->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject2->GetTransform(), glm::vec3(0.35f), glm::vec3(15), 50.f));
+		treeObject2->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject2->GetTransform(), glm::vec3(0.35f), glm::vec3(15.f), 50.f));
 
 		Exalted::GameObject* leafObject2 = new Exalted::GameObject("Tree-Leaves-B");
 		leafObject2->SetMesh(leafMesh);
@@ -281,7 +281,7 @@ namespace Sandbox
 		treeObject3->SetMaterial(treeBarkMaterial);
 		treeObject3->SetTransparency(true);
 		treeObject3->SetBoundingRadius(10.f);
-		treeObject3->GetTransform()->Scale = glm::vec3(0.01);
+		treeObject3->GetTransform()->Scale = glm::vec3(0.01f);
 		treeObject3->GetTransform()->Position = glm::vec3(-1000.f, 3.f, -1000.f);
 		treeObject3->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject3->GetTransform(), glm::vec3(0.35f), glm::vec3(15), 50.f));
 
@@ -303,7 +303,7 @@ namespace Sandbox
 		treeObject4->SetMaterial(treeBarkMaterial);
 		treeObject4->SetTransparency(true);
 		treeObject4->SetBoundingRadius(10.f);
-		treeObject4->GetTransform()->Scale = glm::vec3(0.01);
+		treeObject4->GetTransform()->Scale = glm::vec3(0.01f);
 		treeObject4->GetTransform()->Position = glm::vec3(1000.f, 9.4f, -1000.f);
 		treeObject4->AddGameComponent(new Exalted::ScaleGrowComponent(treeObject4->GetTransform(), glm::vec3(0.35f), glm::vec3(15), 50.f));
 
@@ -425,7 +425,7 @@ namespace Sandbox
 		// move towards the ship
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 0, -7, 1.f, 5)); // looking at left corner
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 30.5, 21, 4.f, 5)); // looking at center ship
-		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 94.3, -8.7, 4.f, 5)); // looking at right corner
+		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6f, 30.43f, -100.57f), 94.3f, -8.7f, 4.f, 5)); // looking at right corner
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 30.43, -100.57), 30.5, 21, 4.7f, 5)); // looking at center ship
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-100.6, 90.f, -100.57), 30.5, 0, 13.35f, 5)); // 
 		mainTrack->AddTrackPoint(Exalted::CameraTrackPoint(glm::vec3(-150.6, 110.f, -120.57), 30.5, -20, 4.f, 5)); // move away from ship
@@ -467,8 +467,8 @@ namespace Sandbox
 			lightColor.y = sin(TIME * i);
 			lightColor.z = 0.3f + sin(TIME * 0.5f * i);
 
-			m_PointLights[i]->Diffuse = lightColor * glm::vec3(0.5);
-			m_PointLights[i]->Ambient = lightColor * glm::vec3(0.2);
+			m_PointLights[i]->Diffuse = lightColor * glm::vec3(0.5f);
+			m_PointLights[i]->Ambient = lightColor * glm::vec3(0.2f);
 			m_PointLights[i]->Specular = lightColor;
 		}
 
@@ -558,7 +558,7 @@ namespace Sandbox
 		Exalted::Renderer::Submit(m_QuadMesh);
 		m_SunlightDepthFrameBuffers[0]->Unbind();
 		m_QuadDepthShader->Unbind();
-		Exalted::OpenGLConfigurations::SetViewport(0, 0, Exalted::Application::Get().GetWindow().GetWindowWidth(), Exalted::Application::Get().GetWindow().GetWindowHeight());
+		Exalted::OpenGLConfigurations::SetViewport(0.f, 0.f, static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()), static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()));
 
 		/////////////////////////////////////////////////////////////////////////////
 		//// Spot Light Debugging /////////////////////////////////////////////////// 
@@ -597,7 +597,7 @@ namespace Sandbox
 		m_DepthFrameBuffers[3]->Unbind();
 
 		m_QuadDepthShader->Unbind();
-		Exalted::OpenGLConfigurations::SetViewport(0, 0, Exalted::Application::Get().GetWindow().GetWindowWidth(), Exalted::Application::Get().GetWindow().GetWindowHeight());
+		Exalted::OpenGLConfigurations::SetViewport(0.f, 0.f, static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowWidth()), static_cast<float>(Exalted::Application::Get().GetWindow().GetWindowHeight()));
 
 	}
 

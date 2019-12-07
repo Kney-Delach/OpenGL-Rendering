@@ -62,7 +62,7 @@ namespace Exalted
 		
 		PointLight()
 			: Light(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f)), 
-			AttenuationConstant(1), AttenuationLinear(0.7), AttenuationQuadratic(1.8), Position(0)
+			Position(0.f), AttenuationConstant(1.f), AttenuationLinear(0.7f), AttenuationQuadratic(1.8f)
 		{
 		}
 		PointLight(const glm::vec3& position, 
@@ -139,7 +139,7 @@ namespace Exalted
 				}
 				case 325:
 				{
-					AttenuationLinear = 0.014;
+					AttenuationLinear = 0.014f;
 					AttenuationQuadratic = 0.0007f;
 					return;
 				}
@@ -275,14 +275,14 @@ namespace Exalted
 			: Light(glm::vec3(1.0f), glm::vec3(1.0f), glm::vec3(1.0f)),
 				Position(1.f), Direction(1.f),
 				CutoffInner(glm::cos(glm::radians(12.5f))), CutoffOuter(glm::cos(glm::radians(17.5f))),
-				AttenuationConstant(1), AttenuationLinear(0.7), AttenuationQuadratic(1.8)
+				AttenuationConstant(1.f), AttenuationLinear(0.7f), AttenuationQuadratic(1.8f)
 		{
 		}
 		SpotLight(const glm::vec3& position, const glm::vec3& direction, 
 			const glm::vec3& ambient = glm::vec3(1.0f), const glm::vec3& diffuse = glm::vec3(1.0f), const glm::vec3& specular = glm::vec3(1.0f))
 			: Light(ambient, diffuse, specular), Position(position), Direction(direction),
 				CutoffInner(glm::cos(glm::radians(12.5f))), CutoffOuter(glm::cos(glm::radians(17.5f))),
-				AttenuationConstant(1), AttenuationLinear(0.7), AttenuationQuadratic(1.8)
+				AttenuationConstant(1.f), AttenuationLinear(0.7f), AttenuationQuadratic(1.8f)
 		{
 		}
 
@@ -385,7 +385,7 @@ namespace Exalted
 				}
 				case 325:
 				{
-					AttenuationLinear = 0.014;
+					AttenuationLinear = 0.014f;
 					AttenuationQuadratic = 0.0007f;
 					return;
 				}
