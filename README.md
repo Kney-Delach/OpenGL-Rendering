@@ -43,7 +43,7 @@ A screenshot extracted from [this](https://www.youtube.com/watch?v=IS9GLXPMrL8&f
 <p align="center"><img width=100% src="Resources/Screenshots/Geometry_Explosion.jpg?raw=true"></p>
 
 #### Cel Shading 
-[![cel shading](https://i.gyazo.com/a36b342ef47ab7b7e0ac20da5d03be49.gif)](https://gyazo.com/a36b342ef47ab7b7e0ac20da5d03be49)
+<img src="Resources/Images/Post-Processing/cel-shading.gif?raw=true" width="800px">
 
 ##### Omnidirectional Perspective Shadows
 Omnidirectional real-time Shadows:
