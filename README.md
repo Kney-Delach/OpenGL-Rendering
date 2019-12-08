@@ -31,7 +31,7 @@ Youtube Video: https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be
 | Dynamicly Changing Environment | Objects in the scenes change over time |![version-1.0.0][version-1.0.0]|
 | Real-Time Soft Shadows | Spot (perspective), Point (cubemapped perspective) and directional (orthographic) multi-sampled shadows |![version-1.0.0][version-1.0.0]|
 | Multi-Viewport Shadowmap Debug Displays | Displays normalized shadowmaps as mini-display views |![version-1.0.0][version-1.0.0]|
-| Post Processing | Color Inversion - Grayscale - Sharpening - Blurring - Edge Detection |![version-1.0.0][version-1.0.0]|
+| Post Processing | Cel Shading - Color Inversion - Grayscale - Sharpening - Blurring - Edge Detection |![version-1.0.0][version-1.0.0]|
 | Anisotropic Filtering | 16x anisotropic texture filtering |![version-1.0.0][version-1.0.0]|
 | Object Instancing | Instance drawing rendering capabilities, can be used for particle systems etc... |![version-1.0.0][version-1.0.0]|
 
@@ -41,6 +41,9 @@ Youtube Video: https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be
 A screenshot extracted from [this](https://www.youtube.com/watch?v=IS9GLXPMrL8&feature=youtu.be) youtube video of the showcase:
 <a name="showcase"></a>
 <p align="center"><img width=100% src="Resources/Screenshots/Geometry_Explosion.jpg?raw=true"></p>
+
+#### Cel Shading 
+[![cel shading](https://i.gyazo.com/a36b342ef47ab7b7e0ac20da5d03be49.gif)](https://gyazo.com/a36b342ef47ab7b7e0ac20da5d03be49)
 
 ##### Omnidirectional Perspective Shadows
 Omnidirectional real-time Shadows:
