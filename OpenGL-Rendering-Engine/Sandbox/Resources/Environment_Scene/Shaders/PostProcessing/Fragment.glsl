@@ -115,4 +115,13 @@ void main()
 			col += sampleTex[i] * kernel[i];
 		color = vec4(col, 1.0);
 	}
+	else if (u_PostProcess == 6) // cel shading
+	{
+		float levels = 17; 
+		color = texture(u_ScreenTexture, TexCoords);
+		float unquantized = dot(color.rgb, vec3(0.3, 0.59, 0.11));
+		float quantized = floor(unquantized * levels) / levels;
+		float adjustment = quantized / max(unquantized, 0.0001);
+		color *= adjustment;
+	}
 }

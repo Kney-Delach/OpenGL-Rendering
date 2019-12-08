@@ -610,6 +610,8 @@ namespace Sandbox
 		ImGui::Text("----------------------------");
 		ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
 		ImGui::Text("----------------------------");
+		ImGui::Text("Sunlight");
+		ImGui::InputFloat3("Direction", glm::value_ptr(m_DirectionalLight->Direction));
 		ImGui::End();
 	}
 
@@ -651,6 +653,10 @@ namespace Sandbox
 			if (e.GetKeyCode() == EX_KEY_5)
 			{
 				Exalted::CameraTrackFlags::PostProcessingChoice = 5;
+			}
+			if (e.GetKeyCode() == EX_KEY_6)
+			{
+				Exalted::CameraTrackFlags::PostProcessingChoice = 6; // cell shading
 			}
 		}
 	}
